@@ -3,6 +3,9 @@ programa-testes
 *.csv
 Resultados/*
 
+# Para testes manuais
+src/testes/*
+
 # Prerequisites
 *.d
 
