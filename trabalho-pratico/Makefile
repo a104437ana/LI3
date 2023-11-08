@@ -17,7 +17,7 @@ clean:
 
 
 #para testes manuais
-OBJFILESTEST=src/testes/testautilizadores.o src/gestorCatalogos.o src/gestorUtilizadores.o src/utilizador.o src/utilidade.o src/hashtable.o
+OBJFILESTEST=src/testes/testausers.o src/catalogsManager.o src/usersManager.o src/user.o src/utility.o src/hashtable.o
 #OBJFILESTEST=src/testes/testahashtable.o src/hashtable.o
 
 teste: test

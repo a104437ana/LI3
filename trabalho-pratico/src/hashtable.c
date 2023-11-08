@@ -3,20 +3,20 @@
 #include <string.h>
 #include "hashtable.h"
 
-struct nodoHashtable {
-    int chave;
+struct hashtableNode {
+    int key;
     void *data;
-    struct nodoHashtable *proximo;
+    struct hashtableNode *next;
 };
 
 struct hashtable {
-    int tamanho;
-    int nodos;
-    NodoHashtable **nodo;
+    int size;
+    int nodes;
+    HashtableNode **node;
 };
 
 //funcao hash simples
-unsigned int funcaoHash(char *id) {
+unsigned int hashFunction(char *id) {
     unsigned int hash = 0;
     for (int i=0; id[i]; i++) 
         hash += id[i];
@@ -24,94 +24,94 @@ unsigned int funcaoHash(char *id) {
     return hash;
 }
 
-NodoHashtable *criaNodoHashtable() {
-    NodoHashtable *nodo = malloc(sizeof(NodoHashtable));
-    nodo->chave = 0;
-    nodo->data = NULL;
-    nodo->proximo = NULL;
+HashtableNode *createHashtableNode() {
+    HashtableNode *node = malloc(sizeof(HashtableNode));
+    node->key = 0;
+    node->data = NULL;
+    node->next = NULL;
 
-    return nodo;
+    return node;
 }
 
-Hashtable *criaHashtable(int tamanho) {
-    Hashtable *novaHashtable = malloc(sizeof(Hashtable));
-    novaHashtable->tamanho = tamanho;
-    novaHashtable->nodos = 0;
-    novaHashtable->nodo = malloc(sizeof(NodoHashtable) * tamanho);
-    for (int i=0; i<tamanho; i++)
-        novaHashtable->nodo[i] = NULL;
+Hashtable *createHashtable(int size) {
+    Hashtable *newHashtable = malloc(sizeof(Hashtable));
+    newHashtable->size = size;
+    newHashtable->nodes = 0;
+    newHashtable->node = malloc(sizeof(HashtableNode) * size);
+    for (int i=0; i<size; i++)
+        newHashtable->node[i] = NULL;
 
-    return novaHashtable;
+    return newHashtable;
 }
 
-NodoHashtable **procuraNodo(Hashtable *hashtable, unsigned int chave) {
-    int indice = chave % hashtable->tamanho;
-    NodoHashtable **nodo = &(hashtable->nodo[indice]);
-    if (*nodo != NULL) {
-        while ((*nodo)->proximo != NULL)
-            nodo = &((*nodo)->proximo);
+HashtableNode **searchNode(Hashtable *hashtable, unsigned int key) {
+    int index = key % hashtable->size;
+    HashtableNode **node = &(hashtable->node[index]);
+    if (*node != NULL) {
+        while ((*node)->next != NULL)
+            node = &((*node)->next);
     }
 
-    return nodo;
+    return node;
 }
 
-NodoHashtable *procuraHashtable(Hashtable *hashtable, unsigned int chave) {
-    return *(procuraNodo(hashtable, chave));
+HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key) {
+    return *(searchNode(hashtable, key));
 }
 
-void adicionaHashtable(Hashtable *hashtable, unsigned int chave, void *data) {
-    int indice = chave % hashtable->tamanho;
-    NodoHashtable **nodo = &(hashtable->nodo[indice]);
-    nodo = procuraNodo(hashtable, chave);
-    if (*nodo != NULL) nodo = &((*nodo)->proximo);
-    *nodo = criaNodoHashtable();
-    (*nodo)->chave = chave;
-    (*nodo)->data = data;
-    hashtable->nodos += 1;
+void addHashtable(Hashtable *hashtable, unsigned int key, void *data) {
+    int index = key % hashtable->size;
+    HashtableNode **node = &(hashtable->node[index]);
+    node = searchNode(hashtable, key);
+    if (*node != NULL) node = &((*node)->next);
+    *node = createHashtableNode();
+    (*node)->key = key;
+    (*node)->data = data;
+    hashtable->nodes += 1;
 }
 
 //fazer remove
-void removeHashtable(Hashtable *hashtable, unsigned int chave) {
+void removeHashtable(Hashtable *hashtable, unsigned int key) {
 }
 
 //gets e sets provisorios para teste
 int getSize(Hashtable *hashtable) {
-    return hashtable->tamanho;
+    return hashtable->size;
 }
 
-int getNodos(Hashtable *hashtable) {
-    return hashtable->nodos;
+int getNodes(Hashtable *hashtable) {
+    return hashtable->nodes;
 }
 
 //gets
-void *getData(Hashtable *hashtable, unsigned int chave) {
-    NodoHashtable *nodo = procuraHashtable(hashtable, chave);
+void *getDate(Hashtable *hashtable, unsigned int key) {
+    HashtableNode *node = searchHashtable(hashtable, key);
 
-    return nodo->data;
+    return node->data;
 }
 
-void setData(Hashtable *hashtable, unsigned int chave, void *data) {
-    NodoHashtable *nodo = procuraHashtable(hashtable, chave);
-    void *dataAntiga = nodo->data;
-    nodo->data = data;
-    free(dataAntiga);
+void setDate(Hashtable *hashtable, unsigned int key, void *data) {
+    HashtableNode *node = searchHashtable(hashtable, key);
+    void *oldData = node->data;
+    node->data = data;
+    free(oldData);
 }
 
 void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {
-    NodoHashtable *nodo;
-    int tamanho = hashtable->tamanho;
-    for (int i=0; i<tamanho; i++) {
-        nodo = hashtable->nodo[i];
+    HashtableNode *node;
+    int size = hashtable->size;
+    for (int i=0; i<size; i++) {
+        node = hashtable->node[i];
         printf("%2d", i);
-        if (nodo == NULL) printf(" ->    0");
-        while (nodo != NULL) {
-            printf(" -> %4d", nodo->chave);
-            (*printFunction)(nodo->data);
-            nodo = nodo->proximo;
+        if (node == NULL) printf(" ->    0");
+        while (node != NULL) {
+            printf(" -> %4d", node->key);
+            (*printFunction)(node->data);
+            node = node->next;
         }
         printf(" -> X\n");
     }
 }
 
-void destroiHashtable(Hashtable *hashtable) {
+void destroyHashtable(Hashtable *hashtable) {
 }

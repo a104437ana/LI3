@@ -1,30 +1,30 @@
 #ifndef _HASHTABLE_
 #define _HASHTABLE_
 
-#include "utilidade.h"
+#include "utility.h"
 
-typedef struct nodoHashtable NodoHashtable;
+typedef struct hashtableNode HashtableNode;
 typedef struct hashtable Hashtable;
 
-unsigned int funcaoHash(char *id);
+unsigned int hashFunction(char *id);
 
-NodoHashtable *criaNodoHashtable();
-Hashtable *criaHashtable(int tamanho);
-NodoHashtable **procuraNodo(Hashtable *hashtable, unsigned int chave);
-NodoHashtable *procuraHashtable(Hashtable *hashtable, unsigned int chave);
-void adicionaHashtable(Hashtable *hashtable, unsigned int chave, void *data);
-void removeHashtable(Hashtable *hashtable, unsigned int chave);
+HashtableNode *createHashtableNode();
+Hashtable *createHashtable(int size);
+HashtableNode **searchNode(Hashtable *hashtable, unsigned int key);
+HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key);
+void addHashtable(Hashtable *hashtable, unsigned int key, void *data);
+void removeHashtable(Hashtable *hashtable, unsigned int key);
 
 //provisorio para testes
 int getSize(Hashtable *hashtable);
-int getNodos(Hashtable *hashtable);
+int getNodes(Hashtable *hashtable);
 
 //gest e sets
-void *getData(Hashtable *hashtable, unsigned int chave);
-void setData(Hashtable *hashtable, unsigned int chave, void *data);
+void *getDate(Hashtable *hashtable, unsigned int key);
+void setDate(Hashtable *hashtable, unsigned int key, void *data);
 
 void printTable(Hashtable *hashtable, void (*printFunction)(void*));
 
-void destroiHashtable(Hashtable *hashtable);
+void destroyHashtable(Hashtable *hashtable);
 
 #endif
