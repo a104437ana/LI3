@@ -4,10 +4,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "utility.h"
+#include "dataset_validator.h"
 
 enum Type_file {
     users,
-    fligths,
+    flights,
     passengers,
     reservations
 };
