@@ -4,32 +4,36 @@
 #include <stdio.h>
 
 struct command {
- int query_id; //numero da query
+ int query_id; //número da query
  char format_flag;
- char args[3][100]; // as queries tem no maximo 3 argumentos
- int n_args; //numero de argumentos
+ char args[3][100]; //as queries têm no maśximo 3 argumentos
+ int n_args; //número de argumentos
 };
 
-void processCommand(Command* command){
+void processCommand(Command* command, int i){
+   createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
      if (command->n_args==0) return;
      else{
-        Q1(command->args[0]);
+        ResultQ1* output = Q1(command->args[0]);
+        printOutputQ1(command->format_flag, output,i);
      }
    }
     else if (command->query_id==2){
      if (command->n_args==0) return;
      else{
-        if (command->n_args==1){ //se so tiver o id como argumento, listar os voos e reservas
-           Q2(command->args[0], FLIGHTS);
-           Q2(commmand->args[0], RESERVATIONS);
+        if (command->n_args==1){ //se só tiver o id como argumento,
+           ResultsQ2* output = Q2(command->args[0], BOTH);
+           printOutputQ2(command->format_flag, BOTH, output, i);
         }
         else{
           if ((strcmp(command->args[1], "flights")==0)){
-            Q2(command->args[0], FLIGHTS);
+            ResultsQ2* output = Q2(command->args[0], FLIGHTS);
+            printOutputQ2(command->format_flag, FLIGHTS, output, i);
           }
           else if ((strcmp(command->args[1], "reservations")==0)){
-           Q2(command->args[0], RESERVATIONS);
+           ResultsQ2* output = Q2(command->args[0], RESERVATIONS);
+           printOutputQ2(command->format_flag, RESERVATIONS, output, i);
           }
           else return;
         }
@@ -38,47 +42,55 @@ void processCommand(Command* command){
     else if (command->query_id==3){
      if (command->n_args==0) return;
      else{
-        Q3(command->args[0]);
+        float output = Q3(command->args[0]);
+        printOutputQ3(command->format_flag, output, i);
      }
    }
     else if (command->query_id==4){
      if (command->n_args==0) return;
      else{
-        Q4(command->args[0]);
+        //Q4(command->args[0]);
+        return;
      }
    }
     else if (command->query_id==5){
      if (command->n_args<3) return;
      else{
-        Q5(command->args[0], toDate(command->args[1]), toDate(command->args[2])); //falta funcao toDate
+        //Q5(command->args[0], toDate(command->args[1]), toDate(command->args[2])); //falta funcao toDate
+        return;
      }
    }
     else if (command->query_id==6){
      if (command->n_args<2) return;
      else{
-        Q6(atoi(command->args[0]), atoi(command->args[1]));
+        //Q6(atoi(command->args[0]), atoi(command->args[1]));
+        return;
      }
    }
     else if (command->query_id==7){
      if (command->n_args==0) return;
      else{
-        Q7(atoi(command->args[0]));        
+        //Q7(atoi(command->args[0]));
+        return;
      }
    }
     else if (command->query_id==8){
      if (command->n_args<3) return;
      else{
-        Q8(command->args[0], toDate(command->args[1]), toDate(command->args[2]));
+        //Q8(command->args[0], toDate(command->args[1]), toDate(command->args[2]));
+        return;
      }
    }
     else if (command->query_id==9){
      if (command->n_args==0) return;
      else{
-        Q9(command->args[0]);
+        //Q9(command->args[0]);
+        return;
      }
    }
     else if (command->query_id==10){
-       Q10(atoi(command->args[0]), command->args[1]); //confirmar o que recebe
+      // Q10(atoi(command->args[0]), command->args[1]); //confirmar o que recebe
+      return;
    }
     else return; 
 }
@@ -86,6 +98,7 @@ void processCommand(Command* command){
 Command* parseCommandLine (char* line){
     Command* command = malloc(sizeof(Command));
     command->query_id= line[0]-'0';
+    command->format_flag = '\0';
     command->n_args=0;
     int j;
     //inicializa os argumentos
@@ -95,12 +108,12 @@ Command* parseCommandLine (char* line){
     int i;
     if (line[1]!=' '){
        command->format_flag = line[1];
-       i=2; //inicio dos argumentos
+       i=2; //início dos argumentos
     }
     else i=1;
     while(i<strlen(line)){
      while(line[i]==' ') i++;
-     if (line[i]=='\"'){ //le um argumento delimitado por aspas
+     if (line[i]=='\"'){ //lê um argumento delimitado por aspas
        i++;
        while(line[i]!='\"' && line[i]!='\0'){
          command->args[command->n_args][strlen(command->args[command->n_args])]=line[i];
@@ -109,7 +122,7 @@ Command* parseCommandLine (char* line){
        command->n_args++;
        i++;
      }
-     else{ //le um argumento separado por espacos
+     else{ //lê um argumento separado por espacos
        while(line[i]!=' ' && line[i]!='\0'){
          command->args[command->n_args][strlen(command->args[command->n_args])]=line[i];
          i++;
@@ -125,13 +138,16 @@ void parseCommandFile (char* name){
  char* line = NULL;
  ssize_t read;
  size_t len;
+ int i = 1;
 
  FILE* ficheiro = fopen(name, "r");
  while((read = getline(&line, &len, ficheiro))!= -1){
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
-    processCommand(command);
+    processCommand(command, i);
+    i++;
     free(command);
  }
  free(line);
+ fclose(name);
 }
