@@ -37,8 +37,8 @@ void setHotelOnList(void *list, void *reservation) {
     list = reservation;
 }
 
-void sortHotelReservationsByDate(Hotel *hotel) {
-    radixSortDate(hotel->reservationsByDate);
+void sortHotelReservationsByDate(void *hotel) {
+    radixSortDate(((Hotel *)hotel)->reservationsByDate);
 }
 
 OrdList *getHotelOrdList(Hotel *hotel) {

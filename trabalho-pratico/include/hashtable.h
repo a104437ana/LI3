@@ -19,8 +19,11 @@ void removeHashtable(Hashtable *hashtable, unsigned int key);
 void *getData(Hashtable *hashtable, unsigned int key);
 void setData(Hashtable *hashtable, unsigned int key, void *data);
 void *getDataIndex(Hashtable *hashtable, unsigned int index);
-
+//mudar para sort de geral de ordlist
+void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*));
 void sortHotelsReservsHashtable(Hashtable *hashtable);
+void sortUsersReservsHashtable(Hashtable *hashtable);
+void sortUsersFlightsHashtable(Hashtable *hashtable);
 
 //para testar
 void printTable(Hashtable *hashtable, void (*printFunction)(void*));

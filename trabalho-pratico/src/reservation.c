@@ -47,7 +47,7 @@ char *getReservId(Reservation *reservation) {
     return strdup(reservation->id);
 }
 
-char *getReservId(Reservation *reservation) {
+char *getReservUserId(Reservation *reservation) {
     return strdup(reservation->id_user);
 }
 

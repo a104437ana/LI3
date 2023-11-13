@@ -26,15 +26,15 @@ int getYear(Date *date) {
 }
 
 char getSeconds(Date *date) {
-    return date->hour.seconds;
+    return date->hour->seconds;
 }
 
 char getMinutes(Date *date) {
-    return date->hour.minutes;
+    return date->hour->minutes;
 }
 
 char getHours(Date *date) {
-    return date->hour.hours;
+    return date->hour->hours;
 }
 
 void setDay(Date *date, char day) {
@@ -50,13 +50,13 @@ void setYear(Date *date, int year) {
 }
 
 void setSeconds(Date *date, char seconds) {
-    date->hour.seconds = seconds;
+    date->hour->seconds = seconds;
 }
 
 void setMinutes(Date *date, char minutes) {
-    date->hour.minutes = minutes;
+    date->hour->minutes = minutes;
 }
 
 void setHours(Date *date, char hours) {
-    date->hour.hours = hours;
+    date->hour->hours = hours;
 }

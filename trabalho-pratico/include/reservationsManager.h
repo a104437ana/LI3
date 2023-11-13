@@ -4,6 +4,7 @@
 #include "reservation.h"
 #include "hashtable.h"
 #include "hotelsManager.h"
+#include "usersManager.h"
 
 typedef struct reservationsManager ReservationsManager;
 

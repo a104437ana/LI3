@@ -1,5 +1,5 @@
-#ifndef _PASSAGEIRO_
-#define _PASSAGEIRO_
+#ifndef _PASSENGER_
+#define _PASSENGER_
 
 #include "utility.h"
 

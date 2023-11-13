@@ -20,7 +20,7 @@ void addHotelToCatalog(HotelsManager *hotelsManager, Hotel *hotel, Reservation *
 }
 
 void sortHotelCatalog(HotelsManager *hotelsManager) {
-    sortHotelsReservsHashtable(hotelsManager->hotels);
+    sortOrdlistHashtable(hotelsManager->hotels, sortHotelReservationsByDate);
 }
 
 Hotel *getHotelCatalog(HotelsManager *hotelsManager, unsigned int key) {

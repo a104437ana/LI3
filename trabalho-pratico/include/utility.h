@@ -25,6 +25,11 @@ typedef struct phoneNumber {
     char indicative[3];
     char number[9];
 } PhoneNumber;
+
+typedef enum gender {
+    MALE,
+    FEMALE,
+} Gender;
 //data com horas
 Date *createDate(char day, char month, int year);
 

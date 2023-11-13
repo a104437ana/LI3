@@ -95,6 +95,19 @@ void setData(Hashtable *hashtable, unsigned int key, void *data) {
 void *getDataIndex(Hashtable *hashtable, unsigned int index) {
     return NULL;
 }
+//mudar para esta funcao
+void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*)) {
+    HashtableNode **node = hashtable->node;
+    int size = hashtable->size;
+    HashtableNode *iNode;
+    for (int i=0; i<size; i++) {
+        iNode = node[i];
+        while (iNode != NULL) {
+            sortFunction(iNode->data);
+            iNode = iNode->next;
+        }
+    }
+}
 
 void sortHotelsReservsHashtable(Hashtable *hashtable) {
     HashtableNode **node = hashtable->node;
@@ -107,6 +120,12 @@ void sortHotelsReservsHashtable(Hashtable *hashtable) {
             iNode = iNode->next;
         }
     }
+}
+
+void sortUsersReservsHashtable(Hashtable *hashtable) {
+}
+
+void sortUsersFlightsHashtable(Hashtable *hashtable) {
 }
 
 void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {

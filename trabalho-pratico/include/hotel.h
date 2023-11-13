@@ -14,7 +14,7 @@ typedef struct hotel Hotel;
 Hotel *createHotel(char *id, char *name, char stars, char *address, int cityTax);
 void addReservationToHotel(Hotel *hotel, void *reservation);
 void setReservationOnList(void *list, void *reservation);
-void sortHotelReservationsByDate(Hotel *hotel);
+void sortHotelReservationsByDate(void *hotel);
 
 OrdList *getHotelOrdList(Hotel *hotel);
 char *getHotelReservation(Hotel *hotel, unsigned int key);
