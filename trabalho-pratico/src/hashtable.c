@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hashtable.h"
+#include "hotel.h"
 
 struct hashtableNode {
     int key;
@@ -47,7 +48,7 @@ Hashtable *createHashtable(int size) {
 HashtableNode **searchNode(Hashtable *hashtable, unsigned int key) {
     int index = key % hashtable->size;
     HashtableNode **node = &(hashtable->node[index]);
-    if (*node != NULL) {
+    if (*node != NULL && (*node)->key != key) {
         while ((*node)->next != NULL)
             node = &((*node)->next);
     }
@@ -60,10 +61,12 @@ HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key) {
 }
 
 void addHashtable(Hashtable *hashtable, unsigned int key, void *data) {
-    int index = key % hashtable->size;
-    HashtableNode **node = &(hashtable->node[index]);
+    HashtableNode **node;
     node = searchNode(hashtable, key);
-    if (*node != NULL) node = &((*node)->next);
+    if (*node != NULL) {
+        if ((*node)->key == key) return;
+        node = &((*node)->next);
+    }
     *node = createHashtableNode();
     (*node)->key = key;
     (*node)->data = data;
@@ -74,27 +77,36 @@ void addHashtable(Hashtable *hashtable, unsigned int key, void *data) {
 void removeHashtable(Hashtable *hashtable, unsigned int key) {
 }
 
-//gets e sets provisorios para teste
-int getSize(Hashtable *hashtable) {
-    return hashtable->size;
-}
-
-int getNodes(Hashtable *hashtable) {
-    return hashtable->nodes;
-}
-
 //gets
-void *getDate(Hashtable *hashtable, unsigned int key) {
+void *getData(Hashtable *hashtable, unsigned int key) {
     HashtableNode *node = searchHashtable(hashtable, key);
+    if (node == NULL) return NULL;
 
     return node->data;
 }
 
-void setDate(Hashtable *hashtable, unsigned int key, void *data) {
+void setData(Hashtable *hashtable, unsigned int key, void *data) {
     HashtableNode *node = searchHashtable(hashtable, key);
     void *oldData = node->data;
     node->data = data;
     free(oldData);
+}
+
+void *getDataIndex(Hashtable *hashtable, unsigned int index) {
+    return NULL;
+}
+
+void sortHotelsReservsHashtable(Hashtable *hashtable) {
+    HashtableNode **node = hashtable->node;
+    int size = hashtable->size;
+    HashtableNode *iNode;
+    for (int i=0; i<size; i++) {
+        iNode = node[i];
+        while (iNode != NULL) {
+            sortHotelReservationsByDate((Hotel*) iNode->data);
+            iNode = iNode->next;
+        }
+    }
 }
 
 void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {
@@ -103,13 +115,33 @@ void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {
     for (int i=0; i<size; i++) {
         node = hashtable->node[i];
         printf("%2d", i);
-        if (node == NULL) printf(" ->    0");
-        while (node != NULL) {
-            printf(" -> %4d", node->key);
-            (*printFunction)(node->data);
-            node = node->next;
+        if (node == NULL) printf(" ->    X\n");
+        else {
+            while (node != NULL) {
+                printf(" -> (%4d,", node->key);
+                (*printFunction)(node->data);
+                node = node->next;
+            }
+            printf(" -> X\n");
         }
-        printf(" -> X\n");
+    }
+}
+
+void printHotelTableReservs(Hashtable *hashtable, void (*printFunction)(void*)) {
+    HashtableNode *node;
+    int size = hashtable->size;
+    for (int i=0; i<size; i++) {
+        node = hashtable->node[i];
+        printf("%2d", i);
+        if (node == NULL) printf(" ->    X\n");
+        else {
+            while (node != NULL) {
+                printf(" -> (%4d", node->key);
+                printOrdList(getHotelOrdList(node->data), printFunction);
+                node = node->next;
+            }
+            printf(" -> X\n");
+        }
     }
 }
 
