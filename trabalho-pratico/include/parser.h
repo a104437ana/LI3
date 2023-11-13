@@ -15,6 +15,7 @@ enum Type_file {
 };
 
 int exist_file (char* path_file);
+Date string_to_date (char* string);
 void parse_file (char* path_directory, enum Type_file type_file);
 void parse_all_files (char* path_directory);
 
