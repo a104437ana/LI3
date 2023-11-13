@@ -2,7 +2,7 @@ CC=gcc
 
 CFLAGS=-Wall -Iinclude
 
-OBJFILES=src/programa-principal.o
+OBJFILES=src/programa-principal.o src/parser.o src/dataset_validator.o
 
 all: programa-principal
 

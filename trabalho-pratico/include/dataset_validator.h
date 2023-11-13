@@ -5,12 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-enum Type_file {
-    users,
-    flights,
-    passengers,
-    reservations
-};
+enum Type_file;
 
 int length_bigger_than_zero (char* string);
 int valid_email (char* email);

@@ -1,5 +1,12 @@
 #include "parser.h"
 
+enum Type_file {
+    users,
+    flights,
+    passengers,
+    reservations
+};
+
 //Verifica se um ficheiro existe ou não, dado um path para o ficheiro
 int exist_file (char* path_file) {
     int exist = 0;
@@ -12,7 +19,7 @@ int exist_file (char* path_file) {
     return exist;
 }
 
-//Transforma uma string num tipo Date
+/*Transforma uma string num tipo Date
 Date string_to_date (char* string) {
     Date date;
     date.year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
@@ -21,13 +28,13 @@ Date string_to_date (char* string) {
     int hasHours = 0;
     if (strlen(string) == 19) {
         hasHours = 1;
-        date.hour.hours = (string[11] -'0') * 10 + (string[12] - '0');
-        date.hour.minutes = (string[14] - '0') * 10 + (string[15] - '0');
-        date.hour.seconds = (string[17] - '0') * 10 + (string[18] - '0');
+        date.hour->hours = (string[11] -'0') * 10 + (string[12] - '0');
+        date.hour->minutes = (string[14] - '0') * 10 + (string[15] - '0');
+        date.hour->seconds = (string[17] - '0') * 10 + (string[18] - '0');
     }
     date.hasHours = hasHours;
     return date;
-}
+}*/
 
 //Constroi o path para o ficheiro e faz o parsing generico desse ficheiro
 void parse_file (char* path_directory, enum Type_file type_file) {
@@ -58,7 +65,7 @@ void parse_file (char* path_directory, enum Type_file type_file) {
         switch (type_file) {
             case 0 : if ((read = getline(&line,&n,file)) != -1) {
                      add_invalid_line_to_error_file(users,line);
-                     while((read = getline(&line,&n,file)) != -1){
+                     while((read = getline(&line,&n,file)) != -1) {
                         char* total_line = malloc(strlen(line) + 1);
                         strcpy(total_line,line);
                         char* token = strsep(&line,";"); //id user
@@ -97,14 +104,15 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                         token = strsep(&line,";"); //account status
                         char* account_status = malloc(strlen(token) + 1);
                         strcpy(account_status,token);
-                        if (valid_user(id_user,name,email,phone_number,birth_date,sex,passport,country_code,address,account_creation,pay_method,account_status)) {
-                            int gender = 0;
-                            if (sex[0] == 'F' || sex[0] == 'f') gender = 1;
-                            Date birth = string_to_date(birth_date);
-                            Date accountCreation = string_to_date(account_creation);
-                            createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation);
+                        if (!valid_user(id_user,name,email,phone_number,birth_date,sex,passport,country_code,address,account_creation,pay_method,account_status)) {
+                            //int gender = 0;
+                            //if (sex[0] == 'F' || sex[0] == 'f') gender = 1;
+                            //Date birth = string_to_date(birth_date);
+                            //Date accountCreation = string_to_date(account_creation);
+                            //createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation);
+                            add_invalid_line_to_error_file(users,total_line);
                         }
-                        else add_invalid_line_to_error_file(users,total_line);
+                        //else
                         free(total_line);
                         free(id_user); 
                         free(name); 
@@ -163,10 +171,10 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                         char* copilot = malloc(strlen(token) + 1);
                         strcpy(copilot,token);
                         token = strsep(&line,";"); //notes
-                        if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot)) {
+                        /*if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot)) {
 
                         }
-                        else add_invalid_line_to_error_file(flights,total_line);
+                        else*/ add_invalid_line_to_error_file(flights,total_line);
                         free(total_line);
                         free(id_flight);
                         free(airline);
@@ -244,10 +252,10 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                         char* rating = malloc(strlen(token) + 1);
                         strcpy(rating,token);
                         token = strsep(&line,";"); //comment
-                        if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating)) {
-
+                        if (!valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating)) {
+                            add_invalid_line_to_error_file(reservations,total_line);
                         }
-                        else add_invalid_line_to_error_file(reservations,total_line);
+                        //else add_invalid_line_to_error_file(reservations,total_line);
                         free(total_line);
                         free(id_reservation);
                         free(id_user);

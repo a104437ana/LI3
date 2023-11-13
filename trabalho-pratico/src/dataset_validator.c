@@ -1,5 +1,12 @@
 #include "dataset_validator.h"
 
+enum Type_file {
+    users,
+    flights,
+    passengers,
+    reservations
+};
+
 int length_bigger_than_zero (char* string) {
     int bigger = 0;
     if (strlen(string) > 0) bigger = 1;
@@ -441,17 +448,17 @@ int valid_flight (char* id_flight, char* airline, char* plane_model, char* total
 void add_invalid_line_to_error_file (enum Type_file type_file, char* string_line) {
     char* path_file = NULL;
     switch (type_file) {
-        case 0 : path_file = malloc(strlen("../Resultados/users_errors.csv") + 1);
-                 strcpy(path_file,"../Resultados/users_errors.csv");
+        case 0 : path_file = malloc(strlen("Resultados/users_errors.csv") + 1);
+                 strcpy(path_file,"Resultados/users_errors.csv");
                  break;
-        case 1 : path_file = malloc(strlen("../Resultados/flights_errors.csv") + 1);
-                 strcpy(path_file,"../Resultados/flights_errors.csv");
+        case 1 : path_file = malloc(strlen("Resultados/flights_errors.csv") + 1);
+                 strcpy(path_file,"Resultados/flights_errors.csv");
                  break;
-        case 2 : path_file = malloc(strlen("../Resultados/passengers_errors.csv") + 1);
-                 strcpy(path_file,"../Resultados/passengers_errors.csv");
+        case 2 : path_file = malloc(strlen("Resultados/passengers_errors.csv") + 1);
+                 strcpy(path_file,"Resultados/passengers_errors.csv");
                  break;
-        case 3 : path_file = malloc(strlen("../Resultados/reservations_errors.csv") + 1);
-                 strcpy(path_file,"../Resultados/reservations_errors.csv");
+        case 3 : path_file = malloc(strlen("Resultados/reservations_errors.csv") + 1);
+                 strcpy(path_file,"Resultados/reservations_errors.csv");
                  break;
     }
     FILE *file;

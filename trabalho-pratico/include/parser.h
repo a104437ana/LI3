@@ -7,12 +7,14 @@
 #include "utility.h"
 #include "dataset_validator.h"
 
-enum Type_file {
+/*enum Type_file {
     users,
     flights,
     passengers,
     reservations
-};
+};*/
+
+enum Type_file;
 
 int exist_file (char* path_file);
 Date string_to_date (char* string);
