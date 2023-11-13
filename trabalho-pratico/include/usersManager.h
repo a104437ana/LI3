@@ -6,8 +6,10 @@
 
 typedef struct usersManager UsersManager;
 
-void addUser();
-void searchUser();
-void removeUser();
+UsersManager *createUsersCatalog(int size);
+void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key);
+//gets
+User *getUserCatalog(UsersManager *usersManager, unsigned int key);
+Hashtable *getHashtableUserCatalog(UsersManager *usersManager);
 
 #endif
