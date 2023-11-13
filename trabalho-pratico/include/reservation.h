@@ -2,43 +2,35 @@
 #define _RESERVATION_
 
 #include "utility.h"
+#include "hotel.h"
+#include "hashtable.h"
 
 //q1 - n_noites e preco total
 
-typedef struct reservation {
-    char *id;                       //q2
-    char *id_user;
-    char *id_hotel;                 //q1
-    char *hotelName;               //q1
-    char hotelStars;            //q1
-    int cityTax;
-    char *hotelAddress;
-    Date begin;                    //q1/q2/q4
-    Date end;                       //q1
-    int pricePerNight;
-    bool includesBreakfast;     //q1
-    char *roomDetails;
-    char userClassification;
-    char *userComment;
-} Reserva;
+typedef struct reservation Reservation;
 
-Reserva *criaReserva(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, int cityTax, char *hotelAdderss, Date begin, Date end, int pricePerNight, bool includesBreakfast, char *roomDetails, char userClassification, char *userComment);
-//adicionar validacao
-//gets e sets fazer get multiplo e set multiplo
-//gets
-char *getUserId(Hashtable *hashtable, unsigned int key);
-char *getHotelId(Hashtable *hashtable, unsigned int key);
-char *getHotelName(Hashtable *hashtable, unsigned int key);
-char getHotelStars(Hashtable *hashtable, unsigned int key);
-int getCityTax(Hashtable *hashtable, unsigned int key);
-char *getHotelAdress(Hashtable *hashtable, unsigned int key);
-char *getBeginDate(Hashtable *hashtable, unsigned int key);
-char *getEndDate(Hashtable *hashtable, unsigned int key);
-int getPricePerNight(Hashtable *hashtable, unsigned int key);
-bool getIncludesBreakfast(Hashtable *hashtable, unsigned int key);
-char *getRoomDetails(Hashtable *hashtable, unsigned int key);
-char getUserClassification(Hashtable *hashtable, unsigned int key);
-char *getUserComment(Hashtable *hashtable, unsigned int key);
+Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, char *hotelAdderss, int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, char *roomDetails, char userClassification, char *userComment, Hashtable *hotels);
+
+//gets libertar espaço dos gets
+char *getReservId(Reservation *reservation);
+char *getReservUserId(Reservation *reservation);
+int getReservUserKey(Reservation *reservation);
+char *getReservHotelId(Reservation *reservation);
+char *getReservHotelName(Reservation *reservation);
+char *getReservHotelAddress(Reservation *reservation);
+char *getReservRoomDetails(Reservation *reservation);
+char *getReservUserComment(Reservation *reservation);
+struct hotel *getReservHotel(Reservation *reservation);
+int getReservCityTax(Reservation *reservation);
+int getReservPricePerNight(Reservation *reservation);
+char getReservUserClassification(Reservation *reservation);
+char getReservHotelStars(Reservation *reservation);
+Date *getReservBegin(Reservation *reservation);
+Date *getReservEnd(Reservation *reservation);
+int getReservBeginDay(void *reservation);
+int getReservBeginMonth(void *reservation);
+int getReservBeginYear(void *reservation);
+bool getReservIncludesBreakfast(Reservation *reservation);
 //sets
 void setUserId(Hashtable *hashtable, unsigned int key, char *id_user);
 void setHotelId(Hashtable *hashtable, unsigned int key, char *id_hotel);
@@ -46,12 +38,14 @@ void setHotelName(Hashtable *hashtable, unsigned int key, char *hotelName);
 void setHotelStars(Hashtable *hashtable, unsigned int key, char hotelStars);
 void setCityTax(Hashtable *hashtable, unsigned int key, int cityTax);
 void setHotelAdress(Hashtable *hashtable, unsigned int key, char *hotelAddress);
-void setBeginDate(Hashtable *hashtable, unsigned int key, Date begin);
-void setEndDate(Hashtable *hashtable, unsigned int key, Date end);
+void setBeginDate(Hashtable *hashtable, unsigned int key, Date *begin);
+void setEndDate(Hashtable *hashtable, unsigned int key, Date *end);
 void setPricePerNight(Hashtable *hashtable, unsigned int key, int pricePerNight);
 void setIncludesBreakfast(Hashtable *hashtable, unsigned int key, bool includesBreakfast);
 void setRoomDetails(Hashtable *hashtable, unsigned int key, char *roomDetails);
 void setUserClassification(Hashtable *hashtable, unsigned int key, char userClassification);
 void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment);
+
+Date *getBeginDateReservation(void *reservation);
 
 #endif
