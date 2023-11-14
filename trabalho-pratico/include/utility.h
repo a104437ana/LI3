@@ -47,4 +47,6 @@ void setSeconds(Date *date, char seconds);
 void setMinutes(Date *date, char minutes);
 void setHours(Date *date, char hours);
 
+char* dateToString(Date *date);
+
 #endif

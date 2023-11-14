@@ -60,3 +60,9 @@ void setMinutes(Date *date, char minutes) {
 void setHours(Date *date, char hours) {
     date->hour->hours = hours;
 }
+
+char* dateToString(Date *date){
+    char* res;
+    sprintf(res, "%d/%d/%d", date->year, date->month, date->day);
+    return res;
+}
