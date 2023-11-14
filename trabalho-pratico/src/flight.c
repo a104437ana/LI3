@@ -120,6 +120,10 @@ char *getFlightNotes(Hashtable *hashtable, unsigned int key) {
     return strdup(data->notes);
 }
 
+OrdList * getPassengers(Flight* flight){
+    OrdList* passengers = flight->passengers;
+}
+
 //sets
 void setFlightAirline(Hashtable *hashtable, unsigned int key, char *airline) {
     Flight *data = getData(hashtable, key);

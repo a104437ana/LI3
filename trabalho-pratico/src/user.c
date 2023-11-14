@@ -139,6 +139,22 @@ Date *getAccountCreation(Hashtable *hashtable, unsigned int key) {
     return accountCreation;
 }
 
+double getTotalSpent(User* user) {
+    double total = user->totalSpent;
+
+    return total;
+}
+
+OrdList * getFlightsByDate(User* user){
+     OrdList* flights = user->flightsByDate;
+     return(flights);
+}
+
+OrdList * getReservationsByDate(User* user){
+     OrdList* reservations = user->reservationsByDate;
+     return(reservations);
+}
+
 //sets
 void setName(Hashtable *hashtable, unsigned int key, char *name) {
     User *data = getData(hashtable, key);

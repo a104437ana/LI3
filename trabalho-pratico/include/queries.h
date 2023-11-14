@@ -70,7 +70,13 @@ typedef struct resultsQ9{
     int N;
 } ResultsQ9;
 
-//retornos (estrutura ?)
+int getNumberFlights(User* user);
+int getNumberReservations(User* user);
+int getNumberPassengers(Flight* flight);
+char* getDelay(Flight* flight);
+int getReservNights(Reservation* reservation);
+double getReservPrice(Reservation* reservation);
+
 ResultQ1* Q1(char *id);
 
 ResultQ2* Q2(char *id, Q2Type type);

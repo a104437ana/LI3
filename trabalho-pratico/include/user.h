@@ -30,6 +30,10 @@ Date *getBirth(Hashtable *hashtable, unsigned int key);
 char *getEmail(Hashtable *hashtable, unsigned int key);
 PhoneNumber *getPhoneNumber(Hashtable *hashtable, unsigned int key);
 Date *getAccountCreation(Hashtable *hashtable, unsigned int key);
+double getTotalSpent(User* user);
+OrdList * getFlightsByDate(User* user);
+OrdList * getReservationsByDate(User* user);
+
 //sets
 void setName(Hashtable *hashtable, unsigned int key, char *name);
 void setGender(Hashtable *hashtable, unsigned int key, Gender gender);

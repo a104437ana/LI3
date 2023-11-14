@@ -23,6 +23,7 @@ Date *getFlightRealArrival(Hashtable *hashtable, unsigned int key);
 char *getFlightPilot(Hashtable *hashtable, unsigned int key);
 char *getFlightCopilot(Hashtable *hashtable, unsigned int key);
 char *getFlightNotes(Hashtable *hashtable, unsigned int key);
+OrdList * getPassengers(Flight* flight);
 
 //sets
 void setFlightAirline(Hashtable *hashtable, unsigned int key, char *airline);
