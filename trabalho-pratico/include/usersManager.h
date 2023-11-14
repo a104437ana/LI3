@@ -11,5 +11,6 @@ void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key);
 //gets
 User *getUserCatalog(UsersManager *usersManager, unsigned int key);
 Hashtable *getHashtableUserCatalog(UsersManager *usersManager);
+int existsUser(UsersManager *usersManager, char *id);
 
 #endif

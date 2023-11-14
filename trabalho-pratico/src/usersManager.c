@@ -4,6 +4,7 @@
 
 struct usersManager {
     Hashtable *users;
+//    OrdList *usersByName;
 };
 
 UsersManager *createUsersCatalog(int size) {
@@ -17,14 +18,21 @@ void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) 
 }
 
 void sortUserCatalog(UsersManager *usersManager) {
-    sortUsersReservsHashtable(usersManager->users);
-    sortUsersFlightsHashtable(usersManager->users);
+    sortOrdlistHashtable(usersManager->users, sortUserReservationsByDate);
+    sortOrdlistHashtable(usersManager->users, sortUserFlightsByDate);
 }
 //gets
 
 User *getUserCatalog(UsersManager *usersManager, unsigned int key) {
     User *user = (User*) getData(usersManager->users, key);
     return user;
+}
+
+int existsUser(UsersManager *usersManager, char *id) {
+    int key = hashFunction(id);
+    HashtableNode *user = searchHashtable(usersManager->users, key);
+    if (user == NULL) return 0;
+    return 1;
 }
 
 Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {

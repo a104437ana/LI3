@@ -53,6 +53,18 @@ void addReservationToUser(User *user, void *reservation) {
     addOrdList(user->reservationsByDate, reservation);
 }
 
+void addFlightToUser(User *user, void *flight) {
+    addOrdList(user->flightsByDate, flight);
+}
+
+void sortUserReservationsByDate(void *user) {
+    radixSortDate(((User *)user)->reservationsByDate);
+}
+
+void sortUserFlightsByDate(void *user) {
+    radixSortDate(((User *)user)->flightsByDate);
+}
+
 //gets
 char *getName(Hashtable *hashtable, unsigned int key) {
     char *name;
