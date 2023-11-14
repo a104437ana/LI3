@@ -52,72 +52,60 @@ void addUserToFlight(Flight *flight, User *user) {
 }
 
 //gets
-char *getFlightAirline(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return strdup(data->airline);
+char *getFlightAirline(Flight *flight) {
+    return strdup(flight->airline);
 }
 
-char *getFlightAirplane(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return strdup(data->airplane);
+char *getFlightAirplane(Flight *flight) {
+    return strdup(flight->airplane);
 }
 
-int getFlightTotalSeats(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return data->totalSeats;
+int getFlightTotalSeats(Flight *flight) {
+    return flight->totalSeats;
 }
 
-char *getFlightOrigin(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
+char *getFlightOrigin(Flight *flight) {
     char origin[3];
-    origin[0] = data->origin[0];
-    origin[1] = data->origin[1];
-    origin[2] = data->origin[2];
+    origin[0] = flight->origin[0];
+    origin[1] = flight->origin[1];
+    origin[2] = flight->origin[2];
     return origin;
 }
 
-char *getFlightDestination(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
+char *getFlightDestination(Flight *flight) {
     char destination[3];
-    destination[0] = data->destination[0];
-    destination[1] = data->destination[1];
-    destination[2] = data->destination[2];
+    destination[0] = flight->destination[0];
+    destination[1] = flight->destination[1];
+    destination[2] = flight->destination[2];
     return destination;
 }
 
-Date *getFlightScheduleDeparture(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return data->scheduleDeparture;
+Date *getFlightScheduleDeparture(Flight *flight) {
+    return flight->scheduleDeparture;
 }
 
-Date *getFlightScheduleArrival(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return data->scheduleArrival;
+Date *getFlightScheduleArrival(Flight *flight) {
+    return flight->scheduleArrival;
 }
 
-Date *getFlightRealDeparture(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return data->realDeparture;
+Date *getFlightRealDeparture(Flight *flight) {
+    return flight->realDeparture;
 }
 
-Date *getFlightRealArrival(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return data->realArrival;
+Date *getFlightRealArrival(Flight *flight) {
+    return flight->realArrival;
 }
 
-char *getFlightPilot(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return strdup(data->pilot);
+char *getFlightPilot(Flight *flight) {
+    return strdup(flight->pilot);
 }
 
-char *getFlightCopilot(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return strdup(data->copilot);
+char *getFlightCopilot(Flight *flight) {
+    return strdup(flight->copilot);
 }
 
-char *getFlightNotes(Hashtable *hashtable, unsigned int key) {
-    Flight *data = getData(hashtable, key);
-    return strdup(data->notes);
+char *getFlightNotes(Flight *flight) {
+    return strdup(flight->notes);
 }
 
 OrdList * getPassengers(Flight* flight){
@@ -125,76 +113,64 @@ OrdList * getPassengers(Flight* flight){
 }
 
 //sets
-void setFlightAirline(Hashtable *hashtable, unsigned int key, char *airline) {
-    Flight *data = getData(hashtable, key);
-    char *oldAirline = data->airline;
-    data->airline = strdup(airline);
+void setFlightAirline(Flight *flight, char *airline) {
+    char *oldAirline = flight->airline;
+    flight->airline = strdup(airline);
     free(oldAirline);
 }
 
-void setFlightAirplane(Hashtable *hashtable, unsigned int key, char *airplane) {
-    Flight *data = getData(hashtable, key);
-    char *oldAirplane = data->airplane;
-    data->airplane = strdup(airplane);
+void setFlightAirplane(Flight *flight, char *airplane) {
+    char *oldAirplane = flight->airplane;
+    flight->airplane = strdup(airplane);
     free(oldAirplane);
 }
 
-void setFlightTotalSeats(Hashtable *hashtable, unsigned int key, int totalSeats) {
-    Flight *data = getData(hashtable, key);
-    data->totalSeats = totalSeats;
+void setFlightTotalSeats(Flight *flight, int totalSeats) {
+    flight->totalSeats = totalSeats;
 }
 
-void setFlightOrigin(Hashtable *hashtable, unsigned int key, char origin[3]) {
-    Flight *data = getData(hashtable, key);
-    data->origin[0] = origin[0];
-    data->origin[1] = origin[1];
-    data->origin[2] = origin[2];
+void setFlightOrigin(Flight *flight, char origin[3]) {
+    flight->origin[0] = origin[0];
+    flight->origin[1] = origin[1];
+    flight->origin[2] = origin[2];
 }
 
-void setFlightDestination(Hashtable *hashtable, unsigned int key, char destination[3]) {
-    Flight *data = getData(hashtable, key);
-    data->destination[0] = destination[0];
-    data->destination[1] = destination[1];
-    data->destination[2] = destination[2];
+void setFlightDestination(Flight *flight, char destination[3]) {
+    flight->destination[0] = destination[0];
+    flight->destination[1] = destination[1];
+    flight->destination[2] = destination[2];
 }
 
-void setFlightScheduleDeparture(Hashtable *hashtable, unsigned int key, Date scheduleDeparture) {
-    Flight *data = getData(hashtable, key);
-    data->scheduleDeparture = scheduleDeparture;
+void setFlightScheduleDeparture(Flight *flight, Date scheduleDeparture) {
+    flight->scheduleDeparture = scheduleDeparture;
 }
 
-void setFlightScheduleArrival(Hashtable *hashtable, unsigned int key, Date scheduleArrival) {
-    Flight *data = getData(hashtable, key);
-    data->scheduleArrival = scheduleArrival;
+void setFlightScheduleArrival(Flight *flight, Date scheduleArrival) {
+    flight->scheduleArrival = scheduleArrival;
 }
 
-void setFlightRealDeparture(Hashtable *hashtable, unsigned int key, Date realDeparture) {
-    Flight *data = getData(hashtable, key);
-    data->realDeparture = realDeparture;
+void setFlightRealDeparture(Flight *flight, Date realDeparture) {
+    flight->realDeparture = realDeparture;
 }
 
-void setFlightRealArrival(Hashtable *hashtable, unsigned int key, Date realArrival) {
-    Flight *data = getData(hashtable, key);
-    data->realArrival = realArrival;
+void setFlightRealArrival(Flight *flight, Date realArrival) {
+    flight->realArrival = realArrival;
 }
 
-void setFlightPilot(Hashtable *hashtable, unsigned int key, char *pilot) {
-    Flight *data = getData(hashtable, key);
-    char *oldPilot = data->pilot;
-    data->pilot = strdup(pilot);
+void setFlightPilot(Flight *flight, char *pilot) {
+    char *oldPilot = flight->pilot;
+    flight->pilot = strdup(pilot);
     free(oldPilot);
 }
 
-void setFlightCopilot(Hashtable *hashtable, unsigned int key, char *copilot) {
-    Flight *data = getData(hashtable, key);
-    char *oldCopilot = data->copilot;
-    data->copilot = strdup(copilot);
+void setFlightCopilot(Flight *flight, char *copilot) {
+    char *oldCopilot = flight->copilot;
+    flight->copilot = strdup(copilot);
     free(oldCopilot);
 }
 
-void setFlightNotes(Hashtable *hashtable, unsigned int key, char *notes) {
-    Flight *data = getData(hashtable, key);
-    char *oldNotes = data->notes;
-    data->notes = strdup(notes);
+void setFlightNotes(Flight *flight, char *notes) {
+    char *oldNotes = flight->notes;
+    flight->notes = strdup(notes);
     free(oldNotes);
 }
