@@ -42,50 +42,50 @@ void processCommand(Command* command, int i){
     else if (command->query_id==3){
      if (command->n_args==0) return;
      else{
-        float output = Q3(command->args[0]);
+        double output = Q3(command->args[0]);
         printOutputQ3(command->format_flag, output, i);
      }
    }
     else if (command->query_id==4){
      if (command->n_args==0) return;
      else{
-        //Q4(command->args[0]);
-        return;
+        ResultsQ4* output = Q4(command->args[0]);
+        printOutputQ4(command->format_flag, output, i);
      }
    }
     else if (command->query_id==5){
      if (command->n_args<3) return;
      else{
-        //Q5(command->args[0], toDate(command->args[1]), toDate(command->args[2])); //falta funcao toDate
-        return;
+        ResultsQ5* output = Q5(command->args[0], toDate(command->args[1]), toDate(command->args[2])); //falta funcao toDate
+        printOutputQ5(command->format_flag, output, i);
      }
    }
     else if (command->query_id==6){
      if (command->n_args<2) return;
      else{
-        //Q6(atoi(command->args[0]), atoi(command->args[1]));
-        return;
+        ResultsQ6* output = Q6(atoi(command->args[0]), atoi(command->args[1]));
+        printOutputQ6(command->format_flag, output, i);
      }
    }
     else if (command->query_id==7){
      if (command->n_args==0) return;
      else{
-        //Q7(atoi(command->args[0]));
-        return;
+        ResultsQ7* output = Q7(atoi(command->args[0]));
+        printOutputQ7(command->format_flag, output, i);
      }
    }
     else if (command->query_id==8){
      if (command->n_args<3) return;
      else{
-        //Q8(command->args[0], toDate(command->args[1]), toDate(command->args[2]));
-        return;
+        double output = Q8(command->args[0], toDate(command->args[1]), toDate(command->args[2]));
+        printOutputQ8(command->format_flag, output, i);
      }
    }
     else if (command->query_id==9){
      if (command->n_args==0) return;
      else{
-        //Q9(command->args[0]);
-        return;
+        ResultsQ9* output = Q9(command->args[0]);
+        printOutputQ9(command->format_flag, output, i);
      }
    }
     else if (command->query_id==10){
