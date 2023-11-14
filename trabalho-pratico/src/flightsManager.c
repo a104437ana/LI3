@@ -14,6 +14,13 @@ FlightsManager *createFlightsCatalog(int size) {
 void addFlightToCatalog(FlightsManager *flightsManager, Flight *flight, unsigned int key) {
     addHashtable(flightsManager->flights, key, flight);
 }
+
+void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey) {
+    Flight *flight = getFlightCatalog(flightsManager, flightKey);
+    User *user = getUserCatalog(usersManager, userKey);
+    addUserToFlight(flight, user);
+    addFlightToUser(user, flight);
+}
 //gets
 
 Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key) {

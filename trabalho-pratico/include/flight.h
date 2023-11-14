@@ -8,6 +8,7 @@
 typedef struct flight Flight;
 
 Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[3], char destination[3], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes);
+void addUserToFlight(Flight *flight, void *user);
 
 //gets
 char *getFlightAirline(Hashtable *hashtable, unsigned int key);
@@ -15,10 +16,10 @@ char *getFlightAirplane(Hashtable *hashtable, unsigned int key);
 int getFlightTotalSeats(Hashtable *hashtable, unsigned int key);
 char *getFlightOrigin(Hashtable *hashtable, unsigned int key);
 char *getFlightDestination(Hashtable *hashtable, unsigned int key);
-Date getFlightScheduleDeparture(Hashtable *hashtable, unsigned int key);
-Date getFlightScheduleArrival(Hashtable *hashtable, unsigned int key);
-Date getFlightRealDeparture(Hashtable *hashtable, unsigned int key);
-Date getFlightRealArrival(Hashtable *hashtable, unsigned int key);
+Date *getFlightScheduleDeparture(Hashtable *hashtable, unsigned int key);
+Date *getFlightScheduleArrival(Hashtable *hashtable, unsigned int key);
+Date *getFlightRealDeparture(Hashtable *hashtable, unsigned int key);
+Date *getFlightRealArrival(Hashtable *hashtable, unsigned int key);
 char *getFlightPilot(Hashtable *hashtable, unsigned int key);
 char *getFlightCopilot(Hashtable *hashtable, unsigned int key);
 char *getFlightNotes(Hashtable *hashtable, unsigned int key);

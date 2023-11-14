@@ -3,6 +3,8 @@
 #include <string.h>
 #include "hotel.h"
 #include "flight.h"
+#include "user.h"
+#include "orderedList.h"
 
 struct flight {
     char *id;
@@ -18,7 +20,7 @@ struct flight {
     char *pilot;
     char *copilot;
     char *notes;
-//    Passenger *passengers;    //q1
+    OrdList *passengers;    //q1
 };
 
 Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[3], char destination[3], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes) {
@@ -43,6 +45,10 @@ Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, ch
     flight->notes = strdup(notes);
 
     return flight;
+}
+//talvez nao seja preciso
+void addUserToFlight(Flight *flight, User *user) {
+    addOrdList(flight->passengers, user);
 }
 
 //gets
@@ -79,22 +85,22 @@ char *getFlightDestination(Hashtable *hashtable, unsigned int key) {
     return destination;
 }
 
-Date getFlightScheduleDeparture(Hashtable *hashtable, unsigned int key) {
+Date *getFlightScheduleDeparture(Hashtable *hashtable, unsigned int key) {
     Flight *data = getData(hashtable, key);
     return data->scheduleDeparture;
 }
 
-Date getFlightScheduleArrival(Hashtable *hashtable, unsigned int key) {
+Date *getFlightScheduleArrival(Hashtable *hashtable, unsigned int key) {
     Flight *data = getData(hashtable, key);
     return data->scheduleArrival;
 }
 
-Date getFlightRealDeparture(Hashtable *hashtable, unsigned int key) {
+Date *getFlightRealDeparture(Hashtable *hashtable, unsigned int key) {
     Flight *data = getData(hashtable, key);
     return data->realDeparture;
 }
 
-Date getFlightRealArrival(Hashtable *hashtable, unsigned int key) {
+Date *getFlightRealArrival(Hashtable *hashtable, unsigned int key) {
     Flight *data = getData(hashtable, key);
     return data->realArrival;
 }
