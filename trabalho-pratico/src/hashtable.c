@@ -60,8 +60,29 @@ HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key) {
     return *(searchNode(hashtable, key));
 }
 
+void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
+    HashtableNode *node;
+    int size = hashtable->size;
+    for (int i=0; i<size; i++) {
+        node = hashtable->node[i];
+        while (node != NULL) {
+            addHashtable(newHashtable, node->key, node->data);
+            node = node->next;
+        }
+    }
+}
+
 void addHashtable(Hashtable *hashtable, unsigned int key, void *data) {
     HashtableNode **node;
+//    int nodes = hashtable->nodes, size = hashtable->size;
+//    float usage = nodes / size;
+//    if (usage >= 2) {
+//        Hashtable *newHashtable = createHashtable(size * 2);
+//        copyHashtable(hashtable, newHashtable);
+//        Hashtable *oldHashtable = hashtable;
+//        destroyHashtable(oldHashtable);
+//        hashtable = newHashtable;
+//    }
     node = searchNode(hashtable, key);
     if (*node != NULL) {
         if ((*node)->key == key) return;
@@ -95,7 +116,7 @@ void setData(Hashtable *hashtable, unsigned int key, void *data) {
 void *getDataIndex(Hashtable *hashtable, unsigned int index) {
     return NULL;
 }
-//mudar para esta funcao
+
 void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*)) {
     HashtableNode **node = hashtable->node;
     int size = hashtable->size;
@@ -107,25 +128,6 @@ void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*)) {
             iNode = iNode->next;
         }
     }
-}
-
-void sortHotelsReservsHashtable(Hashtable *hashtable) {
-    HashtableNode **node = hashtable->node;
-    int size = hashtable->size;
-    HashtableNode *iNode;
-    for (int i=0; i<size; i++) {
-        iNode = node[i];
-        while (iNode != NULL) {
-            sortHotelReservationsByDate((Hotel*) iNode->data);
-            iNode = iNode->next;
-        }
-    }
-}
-
-void sortUsersReservsHashtable(Hashtable *hashtable) {
-}
-
-void sortUsersFlightsHashtable(Hashtable *hashtable) {
 }
 
 void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {

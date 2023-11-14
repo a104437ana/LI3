@@ -12,6 +12,7 @@ HashtableNode *createHashtableNode();
 Hashtable *createHashtable(int size);
 HashtableNode **searchNode(Hashtable *hashtable, unsigned int key);
 HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key);
+void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable);
 void addHashtable(Hashtable *hashtable, unsigned int key, void *data);
 void removeHashtable(Hashtable *hashtable, unsigned int key);
 
@@ -19,11 +20,7 @@ void removeHashtable(Hashtable *hashtable, unsigned int key);
 void *getData(Hashtable *hashtable, unsigned int key);
 void setData(Hashtable *hashtable, unsigned int key, void *data);
 void *getDataIndex(Hashtable *hashtable, unsigned int index);
-//mudar para sort de geral de ordlist
 void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*));
-void sortHotelsReservsHashtable(Hashtable *hashtable);
-void sortUsersReservsHashtable(Hashtable *hashtable);
-void sortUsersFlightsHashtable(Hashtable *hashtable);
 
 //para testar
 void printTable(Hashtable *hashtable, void (*printFunction)(void*));
