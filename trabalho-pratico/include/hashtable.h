@@ -25,6 +25,7 @@ void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*));
 //para testar
 void printTable(Hashtable *hashtable, void (*printFunction)(void*));
 void printHotelTableReservs(Hashtable *hashtable, void (*printFunction)(void*));
+void printHashtableUsage(Hashtable *hashtable);
 //falta acabar
 void destroyHashtable(Hashtable *hashtable);
 

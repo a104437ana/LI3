@@ -18,9 +18,9 @@ struct hashtable {
 
 //funcao hash simples
 unsigned int hashFunction(char *id) {
-    unsigned int hash = 0;
-    for (int i=0; id[i]; i++) 
-        hash += id[i];
+    unsigned long int hash = 1;
+    for (int i=0; id[i] != '\0'; i++)
+        hash = hash * 33 ^ id[i];
 
     return hash;
 }
@@ -164,6 +164,13 @@ void printHotelTableReservs(Hashtable *hashtable, void (*printFunction)(void*)) 
             printf(" -> X\n");
         }
     }
+}
+
+void printHashtableUsage(Hashtable *hashtable) {
+    float usage = (float) hashtable->nodes / (float) hashtable->size;
+    printf("usage: %.3f\n", usage);
+    printf("nodes: %d\n", hashtable->nodes);
+    printf("size: %d\n", hashtable->size);
 }
 
 void destroyHashtable(Hashtable *hashtable) {
