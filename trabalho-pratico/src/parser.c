@@ -66,42 +66,43 @@ void parse_file (char* path_directory, enum Type_file type_file) {
             case 0 : if ((read = getline(&line,&n,file)) != -1) {
                      add_invalid_line_to_error_file(users,line);
                      while((read = getline(&line,&n,file)) != -1) {
-                        char* total_line = malloc(strlen(line) + 1);
-                        strcpy(total_line,line);
-                        char* token = strsep(&line,";"); //id user
+                        char *line2 = line;
+                        char* total_line = malloc(strlen(line2) + 1);
+                        strcpy(total_line,line2);
+                        char* token = strsep(&line2,";"); //id user
                         char* id_user = malloc(strlen(token) + 1);
                         strcpy(id_user,token);
-                        token = strsep(&line,";"); //name
+                        token = strsep(&line2,";"); //name
                         char* name = malloc(strlen(token) + 1);
                         strcpy(name,token);
-                        token = strsep(&line,";"); //email
+                        token = strsep(&line2,";"); //email
                         char* email = malloc(strlen(token) + 1);
                         strcpy(email,token);
-                        token = strsep(&line,";"); //phone number
+                        token = strsep(&line2,";"); //phone number
                         char* phone_number = malloc(strlen(token) + 1);
                         strcpy(phone_number,token);
-                        token = strsep(&line,";"); //birth date
+                        token = strsep(&line2,";"); //birth date
                         char* birth_date = malloc(strlen(token) + 1);
                         strcpy(birth_date,token);
-                        token = strsep(&line,";"); //sex
+                        token = strsep(&line2,";"); //sex
                         char* sex = malloc(strlen(token) + 1);
                         strcpy(sex,token);
-                        token = strsep(&line,";"); //passporte
+                        token = strsep(&line2,";"); //passporte
                         char* passport = malloc(strlen(token) + 1);
                         strcpy(passport,token);
-                        token = strsep(&line,";"); //country code
+                        token = strsep(&line2,";"); //country code
                         char* country_code = malloc(strlen(token) + 1);
                         strcpy(country_code,token);
-                        token = strsep(&line,";"); //address
+                        token = strsep(&line2,";"); //address
                         char* address = malloc(strlen(token) + 1);
                         strcpy(address,token);
-                        token = strsep(&line,";"); //account creation
+                        token = strsep(&line2,";"); //account creation
                         char* account_creation = malloc(strlen(token) + 1);
                         strcpy(account_creation,token);
-                        token = strsep(&line,";"); //pay method
+                        token = strsep(&line2,";"); //pay method
                         char* pay_method = malloc(strlen(token) + 1);
                         strcpy(pay_method,token);
-                        token = strsep(&line,";"); //account status
+                        token = strsep(&line2,";"); //account status
                         char* account_status = malloc(strlen(token) + 1);
                         strcpy(account_status,token);
                         if (!valid_user(id_user,name,email,phone_number,birth_date,sex,passport,country_code,address,account_creation,pay_method,account_status)) {
@@ -131,46 +132,48 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                      break;
             case 1 : if ((read = getline(&line,&n,file)) != -1) {
                      add_invalid_line_to_error_file(flights,line);
+
                      while((read = getline(&line,&n,file)) != -1){
-                        char* total_line = malloc(strlen(line) + 1);
-                        strcpy(total_line,line);
-                        char* token = strsep(&line,";"); //id fligth
+                        char* line2 = line;
+                        char* total_line = malloc(strlen(line2) + 1);
+                        strcpy(total_line,line2);
+                        char* token = strsep(&line2,";"); //id fligth
                         char* id_flight = malloc(strlen(token) + 1);
                         strcpy(id_flight,token);
-                        token = strsep(&line,";"); //airline
+                        token = strsep(&line2,";"); //airline
                         char* airline = malloc(strlen(token) + 1);
                         strcpy(airline,token);
-                        token = strsep(&line,";"); //plane model
+                        token = strsep(&line2,";"); //plane model
                         char* plane_model = malloc(strlen(token) + 1);
                         strcpy(plane_model,token);
-                        token = strsep(&line,";"); //total seats
+                        token = strsep(&line2,";"); //total seats
                         char* total_seats = malloc(strlen(token) + 1);
                         strcpy(total_seats,token);
-                        token = strsep(&line,";"); //origin
+                        token = strsep(&line2,";"); //origin
                         char* origin = malloc(strlen(token) + 1);
                         strcpy(origin,token);
-                        token = strsep(&line,";"); //destination
+                        token = strsep(&line2,";"); //destination
                         char* destination = malloc(strlen(token) + 1);
                         strcpy(destination,token);
-                        token = strsep(&line,";"); //schedule departure date
+                        token = strsep(&line2,";"); //schedule departure date
                         char* schedule_departure_date = malloc(strlen(token) + 1);
                         strcpy(schedule_departure_date,token);
-                        token = strsep(&line,";"); //schedule arrival date
+                        token = strsep(&line2,";"); //schedule arrival date
                         char* schedule_arrival_date = malloc(strlen(token) + 1);
                         strcpy(schedule_arrival_date,token);
-                        token = strsep(&line,";"); //real departure date
+                        token = strsep(&line2,";"); //real departure date
                         char* real_departure_date = malloc(strlen(token) + 1);
                         strcpy(real_departure_date,token);
-                        token = strsep(&line,";"); //real arrival date
+                        token = strsep(&line2,";"); //real arrival date
                         char* real_arrival_date = malloc(strlen(token) + 1);
                         strcpy(real_arrival_date,token);
-                        token = strsep(&line,";"); //pilot
+                        token = strsep(&line2,";"); //pilot
                         char* pilot = malloc(strlen(token) + 1);
                         strcpy(pilot,token);
-                        token = strsep(&line,";"); //copilot
+                        token = strsep(&line2,";"); //copilot
                         char* copilot = malloc(strlen(token) + 1);
                         strcpy(copilot,token);
-                        token = strsep(&line,";"); //notes
+                        token = strsep(&line2,";"); //notes
                         /*if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot)) {
 
                         }
@@ -194,12 +197,13 @@ void parse_file (char* path_directory, enum Type_file type_file) {
             case 2 : if ((read = getline(&line,&n,file)) != -1) {
                      add_invalid_line_to_error_file(passengers,line);
                      while((read = getline(&line,&n,file)) != -1){
-                        char* total_line = malloc(strlen(line) + 1);
-                        strcpy(total_line,line);
-                        char* token = strsep(&line,";"); //id flight
+                        char* line2 = line;
+                        char* total_line = malloc(strlen(line2) + 1);
+                        strcpy(total_line,line2);
+                        char* token = strsep(&line2,";"); //id flight
                         char* id_flight = malloc(strlen(token) + 1);
                         strcpy(id_flight,token);
-                        token = strsep(&line,";"); //id user
+                        token = strsep(&line2,";"); //id user
                         char* id_user = malloc(strlen(token) + 1);
                         strcpy(id_user,token);
                         add_invalid_line_to_error_file(passengers,total_line);
@@ -212,46 +216,47 @@ void parse_file (char* path_directory, enum Type_file type_file) {
             case 3 : if ((read = getline(&line,&n,file)) != -1) {
                      add_invalid_line_to_error_file(reservations,line);
                      while((read = getline(&line,&n,file)) != -1){
-                        char* total_line = malloc(strlen(line) + 1);
-                        strcpy(total_line,line);
-                        char* token = strsep(&line,";"); //id reservation
+                        char* line2 = line;
+                        char* total_line = malloc(strlen(line2) + 1);
+                        strcpy(total_line,line2);
+                        char* token = strsep(&line2,";"); //id reservation
                         char* id_reservation = malloc(strlen(token) + 1);
                         strcpy(id_reservation,token);
-                        token = strsep(&line,";"); //id user
+                        token = strsep(&line2,";"); //id user
                         char* id_user = malloc(strlen(token) + 1);
                         strcpy(id_user,token);
-                        token = strsep(&line,";"); //id hotel
+                        token = strsep(&line2,";"); //id hotel
                         char* id_hotel = malloc(strlen(token) + 1);
                         strcpy(id_hotel,token);
-                        token = strsep(&line,";"); //hotel name
+                        token = strsep(&line2,";"); //hotel name
                         char* hotel_name = malloc(strlen(token) + 1);
                         strcpy(hotel_name,token);
-                        token = strsep(&line,";"); //hotel stars
+                        token = strsep(&line2,";"); //hotel stars
                         char* hotel_stars = malloc(strlen(token) + 1);
                         strcpy(hotel_stars,token);
-                        token = strsep(&line,";"); //city tax
+                        token = strsep(&line2,";"); //city tax
                         char* city_tax = malloc(strlen(token) + 1);
                         strcpy(city_tax,token);
-                        token = strsep(&line,";"); //address
+                        token = strsep(&line2,";"); //address
                         char* address = malloc(strlen(token) + 1);
                         strcpy(address,token);
-                        token = strsep(&line,";"); //begin date
+                        token = strsep(&line2,";"); //begin date
                         char* begin_date = malloc(strlen(token) + 1);
                         strcpy(begin_date,token);
-                        token = strsep(&line,";"); //end date
+                        token = strsep(&line2,";"); //end date
                         char* end_date = malloc(strlen(token) + 1);
                         strcpy(end_date,token);
-                        token = strsep(&line,";"); //price per night
+                        token = strsep(&line2,";"); //price per night
                         char* price_per_night = malloc(strlen(token) + 1);
                         strcpy(price_per_night,token);
-                        token = strsep(&line,";"); //includes breakfast
+                        token = strsep(&line2,";"); //includes breakfast
                         char* includes_breakfast = malloc(strlen(token) + 1);
                         strcpy(includes_breakfast,token);
-                        token = strsep(&line,";"); //room details
-                        token = strsep(&line,";"); //rating
+                        token = strsep(&line2,";"); //room details
+                        token = strsep(&line2,";"); //rating
                         char* rating = malloc(strlen(token) + 1);
                         strcpy(rating,token);
-                        token = strsep(&line,";"); //comment
+                        token = strsep(&line2,";"); //comment
                         if (!valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating)) {
                             add_invalid_line_to_error_file(reservations,total_line);
                         }
