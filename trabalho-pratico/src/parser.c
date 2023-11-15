@@ -151,12 +151,12 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
         fclose(file);
     }
     free(file_path);
-    printf("%d\n",ana);
+    printf("users: %d\n",ana);
 }
 
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/reservations.csv") + 1);
-    strcpy(file_path, directory);
+    strcpy(file_path, directory); int i=0;
     strcat(file_path,"/reservations.csv");
     if (exist_file(file_path)) {
         FILE *file;
@@ -205,19 +205,26 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 char* includes_breakfast = malloc(strlen(token) + 1);
                 strcpy(includes_breakfast,token);
                 token = strsep(&line2,";"); //room details
+                char*  room_details= malloc(strlen(token) + 1);
+                strcpy(room_details,token);
                 token = strsep(&line2,";"); //rating
                 char* rating = malloc(strlen(token) + 1);
                 strcpy(rating,token);
                 token = strsep(&line2,";"); //comment
+                char* comment = malloc(strlen(token) + 1);
+                strcpy(comment,token);
                 if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating,usersCatalog)) {
-                    /*int cityTax = string_to_int(city_tax);
+                    int cityTax = string_to_int(city_tax);
                     int pricePerNight = string_to_int(price_per_night);
+                    char userRating = (char) string_to_int(rating);
+                    char hotelStars = (char) string_to_int(hotel_stars);
                     int includesBreakfast = 0;
                     if (includes_breakfast[0] == 't' || includes_breakfast[0] == 'T' || includes_breakfast[0] == '1') includesBreakfast = 1;
                     Date* begin = string_to_date(begin_date);
-                    Date* end = string_to_date(end_date);*/
-                    //Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,address,cityTax,begin,end,pricePerNight,includesBreakfast, char *roomDetails, char userClassification, char *userComment, Hashtable *hotels);
-                    //addReservToCatalog(reservation_catalog,reservation,hashFunction(id_reservation), HotelsManager *hotelsManager, UsersManager *usersManager);
+                    Date* end = string_to_date(end_date);
+                    Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotelStars,address,cityTax,begin,end,pricePerNight,includesBreakfast,room_details,userRating,comment,getHashtableHotelsCatalog(hotelsCatalog));
+                    addReservToCatalog(reservationsCatalog,reservation,hashFunction(id_reservation),hotelsCatalog,usersCatalog);
+                    i++;
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
@@ -240,6 +247,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
         fclose(file);
     }
     free(file_path);
+    printf("reservas: %d\n", i); //contar reservas, apagar depois
 }
 
 void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
