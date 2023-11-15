@@ -28,6 +28,7 @@ void printTable(Hashtable *hashtable, void (*printFunction)(void*));
 void printHotelTableReservs(Hashtable *hashtable, void (*printFunction)(void*));
 void printHashtableUsage(Hashtable *hashtable);
 //falta acabar
+void removeNode(HashtableNode *hashtable);
 void destroyHashtable(Hashtable *hashtable);
 
 #endif

@@ -4,6 +4,13 @@
 #include "hashtable.h"
 #include "hotel.h"
 
+typedef enum typeOfData {
+    user,
+    reservation,
+    hotel,
+    flight,
+} TypeOfData;
+
 struct hashtableNode {
     int key;
     char *id;
@@ -21,7 +28,7 @@ struct hashtable {
 unsigned int hashFunction(char *id) {
     unsigned long int hash = 1;
     for (int i=0; id[i] != '\0'; i++)
-        hash = hash * 33 ^ id[i];
+        hash = hash * 33 ^ id[i]; // hash[i] = (hash[i-1] * 33) XOR id[i]
 
     return hash;
 }
@@ -50,11 +57,8 @@ Hashtable *createHashtable(int size) {
 HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id) {
     int index = key % hashtable->size;
     HashtableNode **node = &(hashtable->node[index]);
-//    if (*node != NULL && (*node)->key != key) {
- 
-        while ((*node) != NULL && strcmp((*node)->id, id)) {
-            node = &((*node)->next);
-        }
+    while ((*node) != NULL && strcmp((*node)->id, id))
+        node = &((*node)->next);
 
     return node;
 }
@@ -77,6 +81,7 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
 
 void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
     HashtableNode **node;
+    //falta implementar alocamento dinâmico da hashtable para um determinado nível de uso
 //    int nodes = hashtable->nodes, size = hashtable->size;
 //    float usage = nodes / size;
 //    if (usage >= 2) {
@@ -88,7 +93,6 @@ void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) 
 //    }
     node = searchNode(hashtable, key, id);
     if (*node != NULL) {
-//        if ((*node)->key == key) return;
         if (!strcmp((*node)->id, id)) return;
         node = &((*node)->next);
     }
@@ -98,28 +102,6 @@ void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) 
     (*node)->data = data;
     hashtable->nodes += 1;
 }
-
-//void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
-//    HashtableNode *node, *nodeAux;
-////    int nodes = hashtable->nodes, size = hashtable->size;
-////    float usage = nodes / size;
-////    if (usage >= 2) {
-////        Hashtable *newHashtable = createHashtable(size * 2);
-////        copyHashtable(hashtable, newHashtable);
-////        Hashtable *oldHashtable = hashtable;
-////        destroyHashtable(oldHashtable);
-////        hashtable = newHashtable;
-////    }
-//    int index = key % hashtable->size;
-//    nodeAux = hashtable->node[index];
-//    node = createHashtableNode();
-//    node->key = key;
-//    node->id = strdup(id);
-//    node->data = data;
-//    node->next = nodeAux;
-//    hashtable->node[index] = node;
-//    hashtable->nodes += 1;
-//}
 
 //fazer remove
 void removeHashtable(Hashtable *hashtable, unsigned int key) {
@@ -142,23 +124,13 @@ void *getData(Hashtable *hashtable, unsigned int key, char *id) {
     return node->data;
 }
 
-//void *getData(Hashtable *hashtable, unsigned int key, char *id) {
-//    int index = key % hashtable->size;
-//    HashtableNode *node = hashtable->node[index];
-//    while (node != NULL && strcmp(node->id, id))
-//        node = node->next;
-//    if (node == NULL) return NULL;
-//
-//    return node->data;
-//}
-
 void setData(Hashtable *hashtable, unsigned int key, void *data, char *id) {
     HashtableNode *node = searchHashtable(hashtable, key, id);
     void *oldData = node->data;
     node->data = data;
     free(oldData);
 }
-
+//nao usado
 void *getDataIndex(Hashtable *hashtable, unsigned int index) {
     return NULL;
 }
@@ -217,6 +189,24 @@ void printHashtableUsage(Hashtable *hashtable) {
     printf("usage: %.3f\n", usage);
     printf("nodes: %d\n", hashtable->nodes);
     printf("size: %d\n", hashtable->size);
+}
+
+void removeNode(HashtableNode *node) {
+//    switch (typeOfData) {
+//        case user:
+//            destroyUser(node->data);
+//            break;
+//        case reservation:
+//            destroyReservation(node->data);
+//            break;
+//        case hotel:
+//            destroyHotel(node->data);
+//            break;
+//        case flight:
+//            destroyFlight(node->data);
+//            break;
+//    }
+//    free(node->id);
 }
 
 void destroyHashtable(Hashtable *hashtable) {

@@ -11,7 +11,7 @@
 #define USERS_HASHTABLE_INI_SIZE 10000
 #define RESERVATIONS_HASHTABLE_INI_SIZE 40000
 #define HOTELS_HASHTABLE_INI_SIZE 100
-#define FLIGHTS_HASHTABLE_INI_SIZE 10000
+#define FLIGHTS_HASHTABLE_INI_SIZE 1000
 
 int main (int argc, char** argv) {
 
@@ -34,6 +34,7 @@ int main (int argc, char** argv) {
 //    printUsers(usersCatalog);
 //    printReservations(reservationsCatalog);
 //    printHotels(hotelsCatalog);
+//    printFlights(flightsCatalog);
 
     //print tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);

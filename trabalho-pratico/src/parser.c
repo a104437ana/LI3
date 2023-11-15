@@ -252,7 +252,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
 
 void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/flights.csv") + 1);
-    strcpy(file_path, directory);
+    strcpy(file_path, directory); int j=0;
     strcat(file_path,"/flights.csv");
     if (exist_file(file_path)) {
         FILE *file;
@@ -304,14 +304,17 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 char* copilot = malloc(strlen(token) + 1);
                 strcpy(copilot,token);
                 token = strsep(&line2,";"); //notes
+                char* notes = malloc(strlen(token) + 1);
+                strcpy(notes,token);
                 if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot)) {
                     int totalSeats = string_to_int(total_seats);
                     Date* scheduleDeparture = string_to_date(schedule_departure_date);
                     Date* scheduleArrival = string_to_date(schedule_arrival_date);
                     Date* realDeparture = string_to_date(real_departure_date);
                     Date* realArrival = string_to_date(real_arrival_date);
-                    //Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[3], char destination[3], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes) {
- 
+                    Flight *flight = createFlight(id_flight,airline,plane_model,totalSeats,origin,destination,scheduleDeparture,scheduleArrival,realDeparture,realArrival,pilot,copilot,notes);
+                    addFlightToCatalog(flightsCatalog,flight,hashFunction(id_flight));
+                    j++;
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
@@ -334,11 +337,12 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
         fclose(file);
     }
     free(file_path);
+    printf("voos: %d\n", j);
 }
 
 void parse_passengers_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1);
-    strcpy(file_path, directory);
+    strcpy(file_path, directory); int k=0;
     strcat(file_path,"/passengers.csv");
     if (exist_file(file_path)) {
         FILE *file;
@@ -360,11 +364,10 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
                 char* id_user = malloc(strlen(token) + 1);
                 strcpy(id_user,token);
                 //if (valid_passenger()) {
-                //    void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey) {
-
+                //    addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
                 //}
                 //else 
-                add_invalid_line_to_error_file(file_path_errors,line);
+                //    add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
                 free(id_flight);
                 free(id_user);
@@ -375,15 +378,16 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
         fclose(file);
     }
     free(file_path);
+    printf("passageiros: %d\n", k);
 }
 
 //Faz o parsing de todos os tipos de ficheiros
 void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
     parse_users_file(directory,usersCatalog);
     parse_reservations_file(directory,usersCatalog,reservationsCatalog,hotelsCatalog);
-    
+
     //count_passengers(directory,usersCatalog)
 
-    //parse_flights_file(directory,usersCatalog,flightsCatalog);
-    //parse_passengers_file(directory,usersCatalog,flightsCatalog);
+    parse_flights_file(directory,usersCatalog,flightsCatalog);
+    parse_passengers_file(directory,usersCatalog,flightsCatalog);
 }
