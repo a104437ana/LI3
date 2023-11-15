@@ -77,29 +77,50 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
   if (format_flag=='F'){
     if (Q2Type==BOTH){
      for (j=0; j<output->N; j++){
+       char* resultT;
+       if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
+       else resultT = strdup("reservation");
        fprintf (file, "--- %d ---\n", j);
-       fprintf (file,"%s\n", output->results[j]->result); //incompleto
+       fprintf (file,"id: %s\ndate: %d/%d/%d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
      }
     }
     else{
-     for (j=0; j<output->N; j++){
-       fprintf (file, "--- %d ---\n", j);
-       fprintf (file,"%s\n", output->results[j]->result); //incompleto
+     if(Q2Type==FLIGHTS){
+      for (j=0; j<output->N; j++){
+        fprintf (file, "--- %d ---\n", j);
+        fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
+      }
+     }
+     else{
+      for (j=0; j<output->N; j++){
+        fprintf (file, "--- %d ---\n", j);
+        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToString(getReservBeginDay(output->results[j]->result)));
+      }
      }
     }
   }
   else{
     if (Q2Type==BOTH){
      for (j=0; j<output->N; j++){
-       fprintf (file, output->results[j]->result); //incompleto
+       char* resultT;
+       if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
+       else resultT = strdup("reservation");
+       fprintf (file,"%s;%d/%d/%d;%s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
      }
     }
     else{
-     for (j=0; j<output->N; j++){
-       fprintf (file, output->results[j]->result); //incompleto
+     if(Q2Type==FLIGHTS){
+      for (j=0; j<output->N; j++){
+        fprintf (file,"%s;%s\n", getReservId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
+      }
      }
-    }
-  }
+     else{
+      for (j=0; j<output->N; j++){
+        fprintf (file,"%s;%s\n", getFlightId(output->results[j]->result), dateToString(getReservBeginDay(output->results[j]->result)));
+      }
+     }
+    } 
+   }
   fclose(file);
 }
 

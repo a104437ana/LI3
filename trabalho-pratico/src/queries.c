@@ -50,26 +50,61 @@ double getReservPrice(Reservation* reservation){
      return res;
 }
 
+int getBeginDay(ResultQ2* data){
+  if (data->type == FLIGHTS){
+    return ((getFlightScheduleDeparture(data->result))->day);
+  }
+  else{
+    return (getReservBeginDay(data->result));
+  }
+}
 
-ResultQ1* Q1(char *id){
+int getBeginMonth(ResultQ2* data){
+  if (data->type == FLIGHTS){
+    return ((getFlightScheduleDeparture(data->result))->month);
+  }
+  else{
+    return (getReservBeginMonth(data->result));
+  }
+}
+
+int getBeginYear(ResultQ2* data){
+  if (data->type == FLIGHTS){
+    return ((getFlightScheduleDeparture(data->result))->year);
+  }
+  else{
+    return (getReservBeginYear(data->result));
+  }
+}
+
+char * getIdResultQ2(ResultQ2* data){
+  if (data->type == FLIGHTS){
+    return (getFlightId(data->result));
+  }
+  else{
+    return (getReservId(data->result));
+  }
+}
+
+ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
     if(id[0]=='U'){
       ResultQ1* result;
-      result->result = getUserCatalog(usersManager, hashFunction(id), id);
-      if (getAccountStatus(result->result)==false) return NULL; //se o utilizador não estiver ativo
+      result->result = getUserCatalog(usersCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
+      if (getAccountStatus(result->result)==false) return NULL; //se o utilizador não estiver ativo
       result->resultType=USER;
       return result;
     }
     else if(id[0]=='F'){
       ResultQ1* result;
-      result->result = getFlightCatalog(flightsManager, hashFunction(id), id);
+      result->result = getFlightCatalog(flightsCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=FLIGHT;
       return result;   
     }
     else if(id[0]=='R'){
       ResultQ1* result;
-      result->result = getReservCatalog(reservationsManager, hashFunction(id), id);
+      result->result = getReservCatalog(reservationsCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=RESERVATION;
       return result;
@@ -77,7 +112,52 @@ ResultQ1* Q1(char *id){
     else return NULL; //se o id não for válido
 }
 
-ResultQ2* Q2(char *id, Q2Type type);
+ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
+    User *user = getUserCatalog(usersCatalog, hashFunction(id), id);
+    if (user==NULL) return NULL; //se o id não existir
+    if (user==NULL) return NULL; //se o id não existir
+    int i;
+    ResultsQ2 *results;
+    if (type==FLIGHTS){
+      OrdList* flights = getFlightsByDate(user);
+      results->N = flights->size;
+       for(i=0;i<results->N; i--){
+         results->results[i]->result = flights->data[(results->N)-i-1];
+       }
+    }
+    else if (type==RESERVATIONS){
+      OrdList* reservations = getReservationsByDate(user);
+      results->N = reservations->size;
+       for(i=0;i<results->N; i--){
+         results->results[i]->result = reservations->data[(results->N)-i-1];
+       }
+    }
+    else{
+      OrdList* flights = getFlightsByDate(user);
+      OrdList* reservations = getReservationsByDate(user);
+      results->N = flights->size+reservations->size;
+      int sizef = flights->size;
+      int sizer = reservations->size; 
+      OrdList* ordResults = createOrdList(results->N);
+      for(i=0; i<sizef; i++){
+        ResultQ2 res;
+        res->type = FLIGHTS;
+        res->result = flights->data[i];
+        addOrdList(ordResults, res);
+      }
+      for(i=0; i<sizer; i++){
+        ResultQ2 res;
+        res->type = RESERVATIONS;
+        res->result = reservations->data[i];
+        addOrdList(ordResults, res);
+      }
+      radixSortDateResultQ2(ordResults);
+      for(i=0; i<results->N; i++){
+        results->results[i]->result = ordResults[(results->N)-i-1];
+      }
+    }
+    return results;
+}
 
 double Q3(char *id);
 

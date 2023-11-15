@@ -15,6 +15,7 @@ void destroyOrdList(OrdList *ordList);
 //ordenação
 void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset);
 void radixSortDate(OrdList *list);
+void radixSortDateResultQ2(OrdList *list);
 
 void *getDataOrdList(OrdList *ordList, int index);
 int getOrdListSize(OrdList *ordList);

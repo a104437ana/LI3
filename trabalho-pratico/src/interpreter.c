@@ -10,12 +10,12 @@ struct command {
  int n_args; //número de argumentos
 };
 
-void processCommand(Command* command, int i){
+void processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog){
    createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
      if (command->n_args==0) return;
      else{
-        ResultQ1* output = Q1(command->args[0]);
+        ResultQ1* output = Q1(command->args[0],usersCatalog,reservationsCatalog,flightsCatalog);
         printOutputQ1(command->format_flag, output,i);
      }
    }
@@ -137,7 +137,7 @@ Command* parseCommandLine (char* line){
     return command;
 }
 
-void parseCommandFile (char* name){
+void parseCommandFile (char* name,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog){
  char* line = NULL;
  ssize_t read;
  size_t len;
@@ -147,7 +147,7 @@ void parseCommandFile (char* name){
  while((read = getline(&line, &len, ficheiro))!= -1){
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
-    processCommand(command, i);
+    processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
     i++;
     free(command);
  }

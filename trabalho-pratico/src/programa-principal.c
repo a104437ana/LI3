@@ -28,6 +28,7 @@ int main (int argc, char** argv) {
 
     if (argc == 3) {
     parse_all_files(argv[1],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
+    //parseCommandFile(argv[2],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
     }
 
 //    printUsers(usersCatalog);
