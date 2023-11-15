@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "flightsManager.h"
 
 struct flightsManager {
@@ -30,4 +31,15 @@ Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key) {
 
 Hashtable *getHashtableFlightCatalog(FlightsManager *flightsManager) {
     return flightsManager->flights;
+}
+
+void printFunctionFlight(void *data) {
+    char *flightId = getFlightId((Flight *) data);
+    printf(" %8s)", flightId);
+    free(flightId);
+}
+
+void printFlights(FlightsManager *flightsManager) {
+    printTable(flightsManager->flights, printFunctionFlight);
+    printHashtableUsage(flightsManager->flights);
 }

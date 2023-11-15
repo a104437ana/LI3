@@ -62,7 +62,7 @@ void setHours(Date *date, char hours) {
 }
 
 char* dateToString(Date *date){
-    char* res;
+    char* res = 0;
     sprintf(res, "%d/%d/%d", date->year, date->month, date->day);
     return res;
 }

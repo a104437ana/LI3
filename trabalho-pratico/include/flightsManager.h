@@ -3,6 +3,7 @@
 
 #include "flight.h"
 #include "hashtable.h"
+#include "usersManager.h"
 //ligar lista de passageiros a lista de flights de um user
 typedef struct flightsManager FlightsManager;
 
@@ -12,5 +13,7 @@ void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersM
 //gets
 Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key);
 Hashtable *getHashtableFlightCatalog(FlightsManager *flightsManager);
+
+void printFlights(FlightsManager *flightsManager);
 
 #endif

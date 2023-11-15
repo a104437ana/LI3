@@ -17,6 +17,7 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
 void radixSortDate(OrdList *list);
 
 void *getDataOrdList(OrdList *ordList, int index);
+int getOrdListSize(OrdList *ordList);
 //para testar
 void printOrdList(OrdList *ordList, void (*printFunction)(void*));
 

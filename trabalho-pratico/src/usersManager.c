@@ -38,3 +38,14 @@ int existsUser(UsersManager *usersManager, char *id) {
 Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
     return usersManager->users;
 }
+
+void printFunctionUser(void *data) {
+    char *userId = getUserId((User *) data);
+    printf(" %8s, %d)", userId, getOrdListSize(getReservationsByDate((User *) data)));
+    free(userId);
+}
+
+void printUsers(UsersManager *usersManager) {
+    printTable(usersManager->users, printFunctionUser);
+    printHashtableUsage(usersManager->users);
+}

@@ -14,4 +14,6 @@ void addReservToCatalog(ReservationsManager *reservationsManager, Reservation *r
 Reservation *getReservCatalog(ReservationsManager *reservationsManager, unsigned int key);
 Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
 
+void printReservations(ReservationsManager *reservationsManager);
+
 #endif

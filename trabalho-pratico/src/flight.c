@@ -47,7 +47,7 @@ Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, ch
     return flight;
 }
 //talvez nao seja preciso
-void addUserToFlight(Flight *flight, User *user) {
+void addUserToFlight(Flight *flight, void *user) {
     addOrdList(flight->passengers, user);
 }
 
@@ -65,18 +65,14 @@ int getFlightTotalSeats(Flight *flight) {
 }
 
 char *getFlightOrigin(Flight *flight) {
-    char origin[3];
-    origin[0] = flight->origin[0];
-    origin[1] = flight->origin[1];
-    origin[2] = flight->origin[2];
+    char *origin = malloc(sizeof(char) * 3);
+    memcpy(origin, flight->origin, 3);
     return origin;
 }
 
 char *getFlightDestination(Flight *flight) {
-    char destination[3];
-    destination[0] = flight->destination[0];
-    destination[1] = flight->destination[1];
-    destination[2] = flight->destination[2];
+    char *destination = malloc(sizeof(char) * 3);
+    memcpy(destination, flight->destination, 3);
     return destination;
 }
 
@@ -108,8 +104,12 @@ char *getFlightNotes(Flight *flight) {
     return strdup(flight->notes);
 }
 
+char *getFlightId(Flight *flight) {
+    return strdup(flight->id);
+}
+
 OrdList * getPassengers(Flight* flight){
-    OrdList* passengers = flight->passengers;
+    return flight->passengers;
 }
 
 //sets
@@ -141,19 +141,19 @@ void setFlightDestination(Flight *flight, char destination[3]) {
     flight->destination[2] = destination[2];
 }
 
-void setFlightScheduleDeparture(Flight *flight, Date scheduleDeparture) {
+void setFlightScheduleDeparture(Flight *flight, Date *scheduleDeparture) {
     flight->scheduleDeparture = scheduleDeparture;
 }
 
-void setFlightScheduleArrival(Flight *flight, Date scheduleArrival) {
+void setFlightScheduleArrival(Flight *flight, Date *scheduleArrival) {
     flight->scheduleArrival = scheduleArrival;
 }
 
-void setFlightRealDeparture(Flight *flight, Date realDeparture) {
+void setFlightRealDeparture(Flight *flight, Date *realDeparture) {
     flight->realDeparture = realDeparture;
 }
 
-void setFlightRealArrival(Flight *flight, Date realArrival) {
+void setFlightRealArrival(Flight *flight, Date *realArrival) {
     flight->realArrival = realArrival;
 }
 

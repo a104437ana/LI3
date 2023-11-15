@@ -13,4 +13,6 @@ User *getUserCatalog(UsersManager *usersManager, unsigned int key);
 Hashtable *getHashtableUserCatalog(UsersManager *usersManager);
 int existsUser(UsersManager *usersManager, char *id);
 
+void printUsers(UsersManager *usersManager);
+
 #endif

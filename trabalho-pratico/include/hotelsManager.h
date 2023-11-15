@@ -14,4 +14,6 @@ void sortHotelCatalog(HotelsManager *hotelsManager);
 Hotel *getHotelCatalog(HotelsManager *hotelsManager, unsigned int key);
 Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager);
 
+void printHotels(HotelsManager *hotelsManager);
+
 #endif

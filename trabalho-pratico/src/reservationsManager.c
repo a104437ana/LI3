@@ -37,3 +37,14 @@ Reservation *getReservCatalog(ReservationsManager *reservationsManager, unsigned
 Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
     return reservationsManager->reservations;
 }
+
+void printFunctionReservation(void *data) {
+    char *reservId = getReservId((Reservation *) data);
+    printf(" %8s)", reservId);
+    free(reservId);
+}
+
+void printReservations(ReservationsManager *reservationsManager) {
+    printTable(reservationsManager->reservations, printFunctionReservation);
+    printHashtableUsage(reservationsManager->reservations);
+}

@@ -24,6 +24,7 @@ Date *getFlightRealArrival(Flight *flight);
 char *getFlightPilot(Flight *flight);
 char *getFlightCopilot(Flight *flight);
 char *getFlightNotes(Flight *flight);
+char *getFlightId(Flight *flight);
 OrdList * getPassengers(Flight* flight);
 
 //sets

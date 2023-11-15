@@ -31,3 +31,14 @@ Hotel *getHotelCatalog(HotelsManager *hotelsManager, unsigned int key) {
 Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager) {
     return hotelsManager->hotels;
 }
+
+void printFunctionHotel(void *data) {
+    char *hotelId = getHotelId((Hotel *) data);
+    printf(" %8s)", hotelId);
+    free(hotelId);
+}
+
+void printHotels(HotelsManager *hotelsManager) {
+    printTable(hotelsManager->hotels, printFunctionHotel);
+    printHashtableUsage(hotelsManager->hotels);
+}

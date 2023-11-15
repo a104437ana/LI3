@@ -32,8 +32,9 @@ User *createUser(char *id, char *name, Gender gender, char country[2], char *add
     user->id = strdup(id);
     user->name = strdup(name);
     user->gender = gender;
-    user->country[0] = country[0];
-    user->country[1] = country[1];
+    memcpy(user->country, country, 2);
+//    user->country[0] = country[0];
+//    user->country[1] = country[1];
     user->address = strdup(address);
     user->passport = strdup(passport);
     user->birth = birth;
@@ -83,10 +84,9 @@ Gender getGender(Hashtable *hashtable, unsigned int key) {
 }
 
 char *getCountry(Hashtable *hashtable, unsigned int key) {
-    char country[2];
+    char *country = malloc(sizeof(char) * 2);
     User *data = getData(hashtable, key);
-    country[0] = data->country[0];
-    country[1] = data->country[1];
+    memcpy(country, data->country, 2);
 
     return country;
 }
@@ -139,6 +139,10 @@ Date *getAccountCreation(Hashtable *hashtable, unsigned int key) {
     return accountCreation;
 }
 
+char *getUserId(User *user) {
+    return strdup(user->id);
+}
+
 double getTotalSpent(User* user) {
     double total = user->totalSpent;
 
@@ -170,11 +174,12 @@ void setGender(Hashtable *hashtable, unsigned int key, Gender gender) {
 
 void setCountry(Hashtable *hashtable, unsigned int key, char *country) {
     User *data = getData(hashtable, key);
-    char oldCountry[2];
-    oldCountry[0] = data->country[0];
-    oldCountry[1] = data->country[1];
-    data->country[0] = country[0];
-    data->country[1] = country[1];
+    memcpy(data->country, country, 2);
+//    char oldCountry[2];
+//    oldCountry[0] = data->country[0];
+//    oldCountry[1] = data->country[1];
+//    data->country[0] = country[0];
+//    data->country[1] = country[1];
 }
 
 void setAdress(Hashtable *hashtable, unsigned int key, char *address) {

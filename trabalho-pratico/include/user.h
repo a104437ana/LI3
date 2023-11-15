@@ -31,6 +31,7 @@ Date *getBirth(Hashtable *hashtable, unsigned int key);
 char *getEmail(Hashtable *hashtable, unsigned int key);
 PhoneNumber *getPhoneNumber(Hashtable *hashtable, unsigned int key);
 Date *getAccountCreation(Hashtable *hashtable, unsigned int key);
+char *getUserId(User *user);
 double getTotalSpent(User* user);
 OrdList * getFlightsByDate(User* user);
 OrdList * getReservationsByDate(User* user);
