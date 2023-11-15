@@ -67,74 +67,65 @@ void sortUserFlightsByDate(void *user) {
 }
 
 //gets
-char *getName(Hashtable *hashtable, unsigned int key) {
+char *getName(User *user) {
     char *name;
-    User *data = getData(hashtable, key);
-    name = strdup(data->name);
+    name = strdup(user->name);
 
     return name;
 }
 
-Gender getGender(Hashtable *hashtable, unsigned int key) {
+Gender getGender(User *user) {
     Gender gender;
-    User *data = getData(hashtable, key);
-    gender = data->gender;
+    gender = user->gender;
 
     return gender;
 }
 
-char *getCountry(Hashtable *hashtable, unsigned int key) {
+char *getCountry(User *user) {
     char *country = malloc(sizeof(char) * 2);
-    User *data = getData(hashtable, key);
-    memcpy(country, data->country, 2);
+    memcpy(country, user->country, 2);
 
     return country;
 }
 
-char *getAdress(Hashtable *hashtable, unsigned int key) {
+char *getAdress(User *user) {
     char *address;
-    User *data = getData(hashtable, key);
-    address = strdup(data->address);
+    address = strdup(user->address);
 
     return address;
 }
 
-char *getPassport(Hashtable *hashtable, unsigned int key) {
+char *getPassport(User *user) {
     char *passport;
-    User *data = getData(hashtable, key);
-    passport = strdup(data->passport);
+    passport = strdup(user->passport);
 
     return passport;
 }
 
-Date *getBirth(Hashtable *hashtable, unsigned int key) {
+Date *getBirth(User *user) {
     Date *birth;
-    User *data = getData(hashtable, key);
-    birth = data->birth;
+    birth = user->birth;
 
     return birth;
 }
 
-char *getEmail(Hashtable *hashtable, unsigned int key) {
+char *getEmail(User *user) {
     char *email;
-    User *data = getData(hashtable, key);
-    email = strdup(data->email);
+    email = strdup(user->email);
 
     return email;
 }
 
-PhoneNumber *getPhoneNumber(Hashtable *hashtable, unsigned int key) {
+PhoneNumber *getPhoneNumber(User *user) {
     PhoneNumber *number;
-    User *data = getData(hashtable, key);
-    number = data->phoneNumber;
+    number = user->phoneNumber;
 
     return number;
 }
 
-Date *getAccountCreation(Hashtable *hashtable, unsigned int key) {
+Date *getAccountCreation(User *user) {
     Date *accountCreation;
-    User *data = getData(hashtable, key);
-    accountCreation = data->accountCreation;
+    accountCreation = user->accountCreation;
 
     return accountCreation;
 }

@@ -22,15 +22,15 @@ void sortUserFlightsByDate(void *user);
 
 //gets e sets fazer get multiplo e set multiplo
 //gets
-char *getName(Hashtable *hashtable, unsigned int key);
-Gender getGender(Hashtable *hashtable, unsigned int key);
-char *getCountry(Hashtable *hashtable, unsigned int key);
-char *getAdress(Hashtable *hashtable, unsigned int key);
-char *getPassport(Hashtable *hashtable, unsigned int key);
-Date *getBirth(Hashtable *hashtable, unsigned int key);
-char *getEmail(Hashtable *hashtable, unsigned int key);
-PhoneNumber *getPhoneNumber(Hashtable *hashtable, unsigned int key);
-Date *getAccountCreation(Hashtable *hashtable, unsigned int key);
+char *getName(User *user);
+Gender getGender(User *user);
+char *getCountry(User *user);
+char *getAdress(User *user);
+char *getPassport(User *user);
+Date *getBirth(User *user);
+char *getEmail(User *user);
+PhoneNumber *getPhoneNumber(User *user);
+Date *getAccountCreation(User *user);
 char *getUserId(User *user);
 double getTotalSpent(User* user);
 OrdList * getFlightsByDate(User* user);
