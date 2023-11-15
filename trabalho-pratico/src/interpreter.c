@@ -56,22 +56,25 @@ void processCommand(Command* command, int i){
     else if (command->query_id==5){
      if (command->n_args<3) return;
      else{
-        ResultsQ5* output = Q5(command->args[0], toDate(command->args[1]), toDate(command->args[2])); //falta funcao toDate
-        printOutputQ5(command->format_flag, output, i);
+        //ResultsQ5* output = Q5(command->args[0], toDate(command->args[1]), toDate(command->args[2])); //falta funcao toDate
+        //printOutputQ5(command->format_flag, output, i);
+        return;
      }
    }
     else if (command->query_id==6){
      if (command->n_args<2) return;
      else{
-        ResultsQ6* output = Q6(atoi(command->args[0]), atoi(command->args[1]));
-        printOutputQ6(command->format_flag, output, i);
+        //ResultsQ6* output = Q6(atoi(command->args[0]), atoi(command->args[1]));
+        //printOutputQ6(command->format_flag, output, i);
+        return;
      }
    }
     else if (command->query_id==7){
      if (command->n_args==0) return;
      else{
-        ResultsQ7* output = Q7(atoi(command->args[0]));
-        printOutputQ7(command->format_flag, output, i);
+        //ResultsQ7* output = Q7(atoi(command->args[0]));
+        //printOutputQ7(command->format_flag, output, i);
+        return;
      }
    }
     else if (command->query_id==8){

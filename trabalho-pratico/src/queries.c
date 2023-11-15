@@ -39,7 +39,7 @@ double getReservPrice(Reservation* reservation){
 ResultQ1* Q1(char *id){
     if(id[0]=='U'){
       ResultQ1* result;
-      result->result = getUserCatalog(usersManager, hashFunction(id));
+      result->result = getUserCatalog(usersManager, hashFunction(id)); //falta verificar se o utilizador está ativo
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=USER;
       return result;
