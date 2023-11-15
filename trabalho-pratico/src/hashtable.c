@@ -51,11 +51,10 @@ HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id) {
     int index = key % hashtable->size;
     HashtableNode **node = &(hashtable->node[index]);
 //    if (*node != NULL && (*node)->key != key) {
-    if (*node != NULL && strcmp((*node)->id, id)) {
-        while ((*node)->next != NULL && strcmp((*node)->id, id)) {
+ 
+        while ((*node) != NULL && strcmp((*node)->id, id)) {
             node = &((*node)->next);
         }
-    }
 
     return node;
 }

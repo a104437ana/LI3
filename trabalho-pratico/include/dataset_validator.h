@@ -24,7 +24,7 @@ int valid_city_tax (char* city_tax);
 int valid_price_per_night (char* price_per_night);
 int valid_includes_breakfast (char* includes_breakfast);
 int valid_rating (char* rating);
-int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating,UsersManager* user_catalog);
+int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating,UsersManager* usersCatalog);
 
 int valid_origin_or_destination (char* local);
 int valid_par_of_origin_and_destination (char* origin, char* destination);

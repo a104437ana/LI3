@@ -78,15 +78,15 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
 }
 
 void radixSortDate(OrdList *list) {
-    radixSort(list, getReservBeginDay, 31, 0);
-    radixSort(list, getReservBeginMonth, 12, 0);
-    radixSort(list, getReservBeginYear, N_YEARS, BEGIN_YEAR);
+   // radixSort(list, getReservBeginDay, 31, 0);
+    //radixSort(list, getReservBeginMonth, 12, 0);
+    //radixSort(list, getReservBeginYear, N_YEARS, BEGIN_YEAR);
 }
 
 void radixSortDateResultQ2(OrdList *list) {
-    radixSort(list, getBeginDay, 31, 0);
-    radixSort(list, getBeginMonth, 12, 0);
-    radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
+    //radixSort(list, getBeginDay, 31, 0);
+    //radixSort(list, getBeginMonth, 12, 0);
+    //radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
 }
 
 void *getDataOrdList(OrdList *ordList, int index) {

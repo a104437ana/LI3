@@ -32,7 +32,7 @@ int base_e_expoente (int base, int expoente) {
 int string_to_int (char* string) {
     int number = 0;
     int i = 0;
-    while (string[i] != '\0' && string[i] != 1) {
+    while (string[i] != '\0' && string[i] != '.') {
         i++;
     }
     i--;
@@ -66,6 +66,7 @@ Date* string_to_date (char* string) {
 }
 
 void parse_users_file (char* directory,UsersManager *usersCatalog) {
+    int ana = 0;
     char* file_path = malloc(strlen(directory) + strlen("/users.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/users.csv");
@@ -125,6 +126,7 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
                     Date* accountCreation = string_to_date(account_creation);
                     User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,account_status);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
+                    ana++;
                 }
                 else {
                     add_invalid_line_to_error_file(file_path_errors,line);
@@ -149,6 +151,7 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
         fclose(file);
     }
     free(file_path);
+    printf("%d\n",ana);
 }
 
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog) {
@@ -370,6 +373,9 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
 void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
     parse_users_file(directory,usersCatalog);
     parse_reservations_file(directory,usersCatalog,reservationsCatalog,hotelsCatalog);
-    parse_flights_file(directory,usersCatalog,flightsCatalog);
-    parse_passengers_file(directory,usersCatalog,flightsCatalog);
+    
+    //count_passengers(directory,usersCatalog)
+
+    //parse_flights_file(directory,usersCatalog,flightsCatalog);
+    //parse_passengers_file(directory,usersCatalog,flightsCatalog);
 }

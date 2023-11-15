@@ -346,7 +346,7 @@ int valid_rating (char* rating) {
     return valid;
 }
 
-int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating, UsersManager* user_catalog) {
+int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating, UsersManager* usersCatalog) {
     int valid = 0;
     if (length_bigger_than_zero(id_reservation)) {
         if (length_bigger_than_zero(id_user)) { 
@@ -361,8 +361,7 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
                                             if (valid_includes_breakfast(includes_breakfast)) {
                                                 if (valid_rating(rating)) {
                                                     if (valid_par_of_dates(begin_date,end_date)) {
-                                                        //if (existsUser(user_catalog,id_user)) 
-                                                        valid = 1;
+                                                        if (existsUser(usersCatalog,id_user)) valid = 1;
                                                     }
                                                 }
                                             }
@@ -429,7 +428,10 @@ int valid_par_of_origin_and_destination (char* origin, char* destination) {
 }
 
 int valid_total_seats (char* total_seats) { //função inacabada
-    int valid = 1;
+    int valid = 0;
+    if (valid_price_per_night(total_seats)) {
+
+    }
     int passengers = 0;
     if (atoi(total_seats) < passengers) valid = 1;
     return valid;
@@ -469,9 +471,9 @@ int valid_flight (char* id_flight, char* airline, char* plane_model, char* total
     return valid;
 }
 
-/*int valid_passenger (char* id_flight, char* id_user) {
+/*int valid_passenger (char* id_flight, char* id_user, UsersManager* usersCatalog) {
     int valid = 0;
-    if (existsUser(id_user)) {
+    if (existsUser(usersCatalog,id_user)) {
         if (existFlight(id_flight)) valid = 1;
     }
     return valid;
