@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "usersManager.h"
+#include "reservationsManager.h"
 
 enum Type_file;
 
@@ -18,14 +20,12 @@ int the_bigger_date (char* date1, char* date2);
 int valid_par_of_dates (char* date1, char* date2);
 int valid_user (char *id_user, char* name, char* email, char* phone_number, char* birth_date, char* sex, char* passport, char* country_code, char* address, char* account_creation, char* pay_method, char* account_status);
 
-int valid_id_user (char* id_user);
-
 int valid_hotel_stars (char *hotel_stars);
 int valid_city_tax (char* city_tax);
 int valid_price_per_night (char* price_per_night);
 int valid_includes_breakfast (char* includes_breakfast);
 int valid_rating (char* rating);
-int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating);
+int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating,UsersManager* user_catalog);
 
 int valid_total_seats (char* total_seats);
 

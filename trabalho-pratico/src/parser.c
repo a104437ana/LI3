@@ -19,9 +19,13 @@ int exist_file (char* path_file) {
     return exist;
 }
 
-/*Transforma uma string num tipo Date
-Date string_to_date (char* string) {
-    Date date;
+//Transforma uma string num tipo Date
+Date* string_to_date (char* string) {
+    int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
+    int month = (string[5] - '0') * 10 + (string[6] - '0');
+    int day = (string[8] - '0') * 10 + (string[9] - '0');
+    Date* date = createDate(day,month,year);
+    /*Date* date;
     date.year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
     date.month = (string[5] - '0') * 10 + (string[6] - '0');
     date.day = (string[8] - '0') * 10 + (string[9] - '0');
@@ -32,12 +36,12 @@ Date string_to_date (char* string) {
         date.hour->minutes = (string[14] - '0') * 10 + (string[15] - '0');
         date.hour->seconds = (string[17] - '0') * 10 + (string[18] - '0');
     }
-    date.hasHours = hasHours;
+    date.hasHours = hasHours;*/
     return date;
-}*/
+}
 
 //Constroi o path para o ficheiro e faz o parsing generico desse ficheiro
-void parse_file (char* path_directory, enum Type_file type_file) {
+void parse_file (char* path_directory, enum Type_file type_file, UsersManager* user_catalog, ReservationsManager * reservation_catalog) {
     char* name_file = NULL;
     switch (type_file) {
         case 0 : name_file = malloc(strlen("/users.csv") + 1);
@@ -105,15 +109,17 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                         token = strsep(&line2,";"); //account status
                         char* account_status = malloc(strlen(token) + 1);
                         strcpy(account_status,token);
-                        if (!valid_user(id_user,name,email,phone_number,birth_date,sex,passport,country_code,address,account_creation,pay_method,account_status)) {
-                            //int gender = 0;
-                            //if (sex[0] == 'F' || sex[0] == 'f') gender = 1;
-                            //Date birth = string_to_date(birth_date);
-                            //Date accountCreation = string_to_date(account_creation);
-                            //createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation);
+                        if (valid_user(id_user,name,email,phone_number,birth_date,sex,passport,country_code,address,account_creation,pay_method,account_status)) {
+                            int gender = 0;
+                            if (sex[0] == 'F' || sex[0] == 'f') gender = 1;
+                            Date* birth = string_to_date(birth_date);
+                            Date* accountCreation = string_to_date(account_creation);
+                            User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,account_status);
+                            addUserToCatalog(user_catalog,user,hashFunction(id_user));
+                        }
+                        else {
                             add_invalid_line_to_error_file(users,total_line);
                         }
-                        //else
                         free(total_line);
                         free(id_user); 
                         free(name); 
@@ -174,10 +180,10 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                         char* copilot = malloc(strlen(token) + 1);
                         strcpy(copilot,token);
                         token = strsep(&line2,";"); //notes
-                        /*if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot)) {
+                        if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot)) {
 
                         }
-                        else*/ add_invalid_line_to_error_file(flights,total_line);
+                        else add_invalid_line_to_error_file(flights,total_line);
                         free(total_line);
                         free(id_flight);
                         free(airline);
@@ -206,7 +212,7 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                         token = strsep(&line2,";"); //id user
                         char* id_user = malloc(strlen(token) + 1);
                         strcpy(id_user,token);
-                        add_invalid_line_to_error_file(passengers,total_line);
+                        if (existsUser(user_catalog,id_user)) add_invalid_line_to_error_file(passengers,total_line);
                         free(total_line);
                         free(id_flight);
                         free(id_user);
@@ -257,10 +263,13 @@ void parse_file (char* path_directory, enum Type_file type_file) {
                         char* rating = malloc(strlen(token) + 1);
                         strcpy(rating,token);
                         token = strsep(&line2,";"); //comment
-                        if (!valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating)) {
-                            add_invalid_line_to_error_file(reservations,total_line);
+                        if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating,user_catalog)) {
+
+
+                            //Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,address, int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, char *roomDetails, char userClassification, char *userComment, Hashtable *hotels);
+                            //addReservToCatalog(reservation_catalog,reservation,hashFunction(id_reservation), HotelsManager *hotelsManager, UsersManager *usersManager);
                         }
-                        //else add_invalid_line_to_error_file(reservations,total_line);
+                        else add_invalid_line_to_error_file(reservations,total_line);
                         free(total_line);
                         free(id_reservation);
                         free(id_user);
@@ -286,9 +295,9 @@ void parse_file (char* path_directory, enum Type_file type_file) {
 }
 
 //Faz o parsing de todos os tipos de ficheiros
-void parse_all_files (char* path_directory) {
-    parse_file(path_directory,users);
-    parse_file(path_directory,reservations);
-    parse_file(path_directory,flights);
-    parse_file(path_directory,passengers);
+void parse_all_files (char* path_directory, UsersManager* user_catalog, ReservationsManager * reservation_catalog) {
+    parse_file(path_directory,users,user_catalog,reservation_catalog);
+    parse_file(path_directory,reservations,user_catalog,reservation_catalog);
+    parse_file(path_directory,flights,user_catalog,reservation_catalog);
+    parse_file(path_directory,passengers,user_catalog,reservation_catalog);
 }

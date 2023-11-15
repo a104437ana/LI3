@@ -233,11 +233,6 @@ int valid_user (char *id_user, char* name, char* email, char* phone_number, char
     return valid;
 }
 
-int valid_id_user (char* id_user) { //função inacabada
-    int valid = 0;
-    return valid;
-}
-
 int valid_hotel_stars (char *hotel_stars) {
     int valid = 0;
     if (hotel_stars[0] >= '1' && hotel_stars[0] <= '5' ) {
@@ -302,7 +297,7 @@ int valid_price_per_night (char* price_per_night) {
             if (price_per_night[i] == '\0' && zeros != i - 1) valid = 1;
         }
         else {
-            if (price_per_night[i] == '\0' && zeros != i) valid = 1;
+            if (price_per_night[i] == '\0' && zeros != i ) valid = 1;
         }
     }
     return valid;
@@ -358,7 +353,7 @@ int valid_rating (char* rating) {
     return valid;
 }
 
-int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating) {
+int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating, UsersManager* user_catalog) {
     int valid = 0;
     if (length_bigger_than_zero(id_reservation)) {
         if (length_bigger_than_zero(id_user)) { //add valid_id_user here
@@ -372,7 +367,9 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
                                         if (valid_price_per_night(price_per_night)) {
                                             if (valid_includes_breakfast(includes_breakfast)) {
                                                 if (valid_rating(rating)) {
-                                                    if (valid_par_of_dates(begin_date,end_date)) valid = 1;
+                                                    if (valid_par_of_dates(begin_date,end_date)) {
+                                                        if (existsUser(user_catalog,id_user)) valid = 1;
+                                                    }
                                                 }
                                             }
                                         }
