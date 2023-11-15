@@ -21,10 +21,10 @@ int main (int argc, char** argv) {
     UsersManager *usersCatalog = createUsersCatalog(HASHTABLE_INI_SIZE);
     ReservationsManager *reservationsCatalog = createReservsCatalog(HASHTABLE_INI_SIZE);
     HotelsManager *hotelsCatalog = createHotelsCatalog(HASHTABLE_INI_SIZE);
-//    FlightsManager *flightsCatalog = createFlightsCatalog(HASHTABLE_INI_SIZE);
+    FlightsManager *flightsCatalog = createFlightsCatalog(HASHTABLE_INI_SIZE);
 
     if (argc == 3) {
-    parse_all_files(argv[1],usersCatalog,reservationsCatalog,hotelsCatalog);
+    parse_all_files(argv[1],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
     }
 
 //    printUsers(usersCatalog);

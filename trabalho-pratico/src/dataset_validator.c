@@ -1,12 +1,5 @@
 #include "dataset_validator.h"
 
-enum Type_file {
-    users,
-    flights,
-    passengers,
-    reservations
-};
-
 int length_bigger_than_zero (char* string) {
     int bigger = 0;
     if (strlen(string) > 0) bigger = 1;
@@ -356,7 +349,7 @@ int valid_rating (char* rating) {
 int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating, UsersManager* user_catalog) {
     int valid = 0;
     if (length_bigger_than_zero(id_reservation)) {
-        if (length_bigger_than_zero(id_user)) { //add valid_id_user here
+        if (length_bigger_than_zero(id_user)) { 
             if (length_bigger_than_zero(id_hotel)) {
                 if (length_bigger_than_zero(hotel_name)) {
                     if (valid_hotel_stars(hotel_stars)) {
@@ -368,7 +361,8 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
                                             if (valid_includes_breakfast(includes_breakfast)) {
                                                 if (valid_rating(rating)) {
                                                     if (valid_par_of_dates(begin_date,end_date)) {
-                                                        if (existsUser(user_catalog,id_user)) valid = 1;
+                                                        //if (existsUser(user_catalog,id_user)) 
+                                                        valid = 1;
                                                     }
                                                 }
                                             }
@@ -382,13 +376,6 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
             }
         }
     }
-    return valid;
-}
-
-int valid_total_seats (char* total_seats) { //função inacabada
-    int valid = 1;
-    int passengers = 0;
-    if (atoi(total_seats) < passengers) valid = 1;
     return valid;
 }
 
@@ -407,6 +394,46 @@ int valid_par_of_origin_and_destination (char* origin, char* destination) {
     }
     return valid;
 }
+
+/*Hashtable* count_passengers () {
+    Hashtable *passengers_per_flight = createHashtable(600);
+    FILE *file;
+    file = fopen(file_path,"r");
+    char* line = NULL;
+    size_t n;
+    ssize_t read;
+    if ((read = getline(&line,&n,file)) != -1) {
+        while((read = getline(&line,&n,file)) != -1){
+            char* line2 = line;
+            char* total_line = malloc(strlen(line2) + 1);
+            strcpy(total_line,line2);
+            char* token = strsep(&line2,";"); //id flight
+            char* id_flight = malloc(strlen(token) + 1);
+            strcpy(id_flight,token);
+            token = strsep(&line2,";"); //id user
+            char* id_user = malloc(strlen(token) + 1);
+            strcpy(id_user,token);
+            if (existsUser(user_catalog,id_user)) {
+                if (searchHashtable(passengers_per_flight,id_flight) == NULL) {
+                    addHashtable(Hashtable *hashtable, id_flight, void *data)
+                }
+                int total_passengers = getData() + 1;
+                setData = total_passengers;
+            }
+            free(total_line);
+            free(id_flight);
+            free(id_user);
+        }
+    }
+    return passengers_per_flight;
+}
+
+int valid_total_seats (char* total_seats) { //função inacabada
+    int valid = 1;
+    int passengers = 0;
+    if (atoi(total_seats) < passengers) valid = 1;
+    return valid;
+}*/
 
 int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot) {
     int valid = 0;
@@ -442,25 +469,10 @@ int valid_flight (char* id_flight, char* airline, char* plane_model, char* total
     return valid;
 }
 
-void add_invalid_line_to_error_file (enum Type_file type_file, char* string_line) {
-    char* path_file = NULL;
-    switch (type_file) {
-        case 0 : path_file = malloc(strlen("Resultados/users_errors.csv") + 1);
-                 strcpy(path_file,"Resultados/users_errors.csv");
-                 break;
-        case 1 : path_file = malloc(strlen("Resultados/flights_errors.csv") + 1);
-                 strcpy(path_file,"Resultados/flights_errors.csv");
-                 break;
-        case 2 : path_file = malloc(strlen("Resultados/passengers_errors.csv") + 1);
-                 strcpy(path_file,"Resultados/passengers_errors.csv");
-                 break;
-        case 3 : path_file = malloc(strlen("Resultados/reservations_errors.csv") + 1);
-                 strcpy(path_file,"Resultados/reservations_errors.csv");
-                 break;
+/*int valid_passenger (char* id_flight, char* id_user) {
+    int valid = 0;
+    if (existsUser(id_user)) {
+        if (existFlight(id_flight)) valid = 1;
     }
-    FILE *file;
-    file = fopen(path_file,"a");
-    fprintf(file,"%s",string_line);
-    fclose(file);
-    free(path_file);
-}
+    return valid;
+}*/

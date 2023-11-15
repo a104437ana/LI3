@@ -6,8 +6,7 @@
 #include <stdio.h>
 #include "usersManager.h"
 #include "reservationsManager.h"
-
-enum Type_file;
+#include "flightsManager.h"
 
 int length_bigger_than_zero (char* string);
 int valid_email (char* email);
@@ -27,12 +26,8 @@ int valid_includes_breakfast (char* includes_breakfast);
 int valid_rating (char* rating);
 int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating,UsersManager* user_catalog);
 
-int valid_total_seats (char* total_seats);
-
 int valid_origin_or_destination (char* local);
 int valid_par_of_origin_and_destination (char* origin, char* destination);
 int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot);
-
-void add_invalid_line_to_error_file (enum Type_file type_file, char* string_line);
 
 #endif
