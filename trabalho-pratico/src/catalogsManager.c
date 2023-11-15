@@ -8,3 +8,10 @@ struct catalogsManager {
 //    HotelsManager *hotelsManager;
 //    AirportsManager *airportsManager;
 };
+
+void destroyCatalogs(UsersManager *usersManager, ReservationsManager *reservationsManager, HotelsManager *hotelsManager, FlightsManager *flightsManager) {
+    destroyUsersCatalog(usersManager);
+    destroyreservationsCatalog(reservationsManager);
+    destroyHotelsCatalog(hotelsManager);
+    destroyFlightsCatalog(flightsManager);
+}

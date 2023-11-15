@@ -16,4 +16,6 @@ Hashtable *getHashtableFlightCatalog(FlightsManager *flightsManager);
 
 void printFlights(FlightsManager *flightsManager);
 
+void destroyFlightsCatalog(FlightsManager *flightsManager);
+
 #endif

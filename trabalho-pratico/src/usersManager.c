@@ -49,3 +49,9 @@ void printUsers(UsersManager *usersManager) {
     printTable(usersManager->users, printFunctionUser);
     printHashtableUsage(usersManager->users);
 }
+
+void destroyUsersCatalog(UsersManager *usersManager) {
+    if (usersManager == NULL) return;
+    destroyHashtable(usersManager->users, destroyUser);
+    free(usersManager);
+}

@@ -48,4 +48,6 @@ void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id);
 void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id);
 void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id);
 
+void destroyUser(void *user);
+
 #endif

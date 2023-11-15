@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "user.h"
+#include "flight.h"
+#include "reservation.h"
 #include "orderedList.h"
 
 //enum gender {
@@ -210,4 +212,23 @@ void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNu
 void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id) {
     User *data = getData(hashtable, key, id);
     data->accountCreation = accountCreation;
+}
+
+void destroyUser(void *user) {
+    if (user == NULL) return;
+//    destroyOrdList(((User *) user)->flightsByDate, destroyFlight);
+//    destroyOrdList(((User *) user)->reservationsByDate, destroyReservation);
+//    destroyFlights(((User *) user)->flightsByDate);
+//    destroyReservations(((User *) user)->reservationsByDate);
+    destroyDate(((User *)user)->birth);
+    destroyDate(((User *) user)->accountCreation);
+    destroyPhoneNumber(((User *) user)->phoneNumber);
+    free(((User *) user)->paymentMethod);
+    free(((User *) user)->email);
+    free(((User *) user)->passport);
+    free(((User *) user)->address);
+//    free(((User *) user)->country);
+    free(((User *) user)->name);
+    free(((User *) user)->id);
+    free(user);
 }

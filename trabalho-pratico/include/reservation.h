@@ -48,4 +48,6 @@ void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment, c
 
 Date *getBeginDateReservation(void *reservation);
 
+void destroyReservation(void *reservation);
+
 #endif

@@ -174,3 +174,21 @@ void setFlightNotes(Flight *flight, char *notes) {
     flight->notes = strdup(notes);
     free(oldNotes);
 }
+
+void destroyFlight(void *flight) {
+    if (flight == NULL) return;
+//    destroyOrdList(((Flight *) flight)->passengers, destroyUser);
+    destroyDate(((Flight *) flight)->scheduleDeparture);
+    destroyDate(((Flight *) flight)->scheduleArrival);
+    destroyDate(((Flight *) flight)->realDeparture);
+    destroyDate(((Flight *) flight)->realArrival);
+    free(((Flight *) flight)->notes);
+    free(((Flight *) flight)->copilot);
+    free(((Flight *) flight)->pilot);
+//    free(((Flight *) flight)->destination);
+//    free(((Flight *) flight)->origin);
+    free(((Flight *) flight)->airplane);
+    free(((Flight *) flight)->airline);
+    free(((Flight *) flight)->id);
+    free(flight);
+}

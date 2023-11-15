@@ -7,6 +7,7 @@
 #include "reservationsManager.h"
 #include "hotelsManager.h"
 #include "flightsManager.h"
+#include "catalogsManager.h"
 
 #define USERS_HASHTABLE_INI_SIZE 10000
 #define RESERVATIONS_HASHTABLE_INI_SIZE 40000
@@ -35,6 +36,8 @@ int main (int argc, char** argv) {
 //    printReservations(reservationsCatalog);
 //    printHotels(hotelsCatalog);
 //    printFlights(flightsCatalog);
+
+    destroyCatalogs(usersCatalog, reservationsCatalog, hotelsCatalog, flightsCatalog);
 
     //print tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);

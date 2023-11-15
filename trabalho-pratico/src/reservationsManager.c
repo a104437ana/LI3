@@ -44,3 +44,9 @@ void printReservations(ReservationsManager *reservationsManager) {
     printTable(reservationsManager->reservations, printFunctionReservation);
     printHashtableUsage(reservationsManager->reservations);
 }
+
+void destroyreservationsCatalog(ReservationsManager *reservationsManager) {
+    if (reservationsManager == NULL) return;
+    destroyHashtable(reservationsManager->reservations, destroyReservation);
+    free(reservationsManager);
+}

@@ -200,3 +200,15 @@ void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment, c
 Date *getBeginDateReservation(void *reservation) {
     return ((Reservation*)reservation)->begin;
 }
+
+void destroyReservation(void *reservation) {
+    if (reservation == NULL) return;
+//    destroyHotel(((Reservation *) reservation)->hotel);
+    destroyDate(((Reservation *) reservation)->begin);
+    destroyDate(((Reservation *) reservation)->end);
+    free(((Reservation *) reservation)->userComment);
+    free(((Reservation *) reservation)->roomDetails);
+    free(((Reservation *) reservation)->id_user);
+    free(((Reservation *) reservation)->id);
+    free(reservation);
+}

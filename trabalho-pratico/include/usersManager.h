@@ -15,4 +15,6 @@ int existsUser(UsersManager *usersManager, char *id);
 
 void printUsers(UsersManager *usersManager);
 
+void destroyUsersCatalog(UsersManager *usersManager);
+
 #endif

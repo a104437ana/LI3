@@ -66,3 +66,14 @@ char* dateToString(Date *date){
     sprintf(res, "%d/%d/%d", date->year, date->month, date->day);
     return res;
 }
+
+void destroyDate(Date *date) {
+    if (date == NULL) return;
+    if (date->hour != NULL) free(date->hour);
+    free(date);
+}
+
+void destroyPhoneNumber(PhoneNumber *phoneNumber) {
+    if (phoneNumber == NULL) return;
+    free(phoneNumber);
+}

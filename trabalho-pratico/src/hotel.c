@@ -113,3 +113,12 @@ void removeHAddress(Hotel *hotel) {
     hotel->address = NULL;
 //    free(oldHotelAddress);
 }
+
+void destroyHotel(void *hotel) {
+    if (hotel == NULL) return;
+//    destroyOrdList(((Hotel *) hotel)->reservationsByDate, destroyReservation);
+    free(((Hotel *) hotel)->address);
+    free(((Hotel *) hotel)->name);
+    free(((Hotel *) hotel)->id);
+    free(hotel);
+}

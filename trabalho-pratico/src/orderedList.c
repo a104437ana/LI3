@@ -49,9 +49,6 @@ void addOrdList(OrdList *ordList, void *data) {
 void removeOrdList(OrdList *ordList, unsigned int key) {
 }
 
-void destroyOrdList(OrdList *ordList) {
-}
-
 void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset) {
     int size = list->size;
     void **newData = malloc(sizeof(void *) * size);
@@ -104,4 +101,13 @@ void printOrdList(OrdList *ordList, void (*printFunction)(void*)) {
         (*printFunction)(data[i]);
     }
     printf(")");
+}
+
+void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*)) {
+    if (ordlist == NULL) return;
+    void **data = ordlist->data;
+    int size = ordlist->size;
+    for (int i=0; i<size; i++)
+        (*destroyDataFunction)(data[i]);
+    free(ordlist);
 }

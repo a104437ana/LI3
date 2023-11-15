@@ -49,4 +49,7 @@ void setHours(Date *date, char hours);
 
 char* dateToString(Date *date);
 
+void destroyDate(Date *date);
+void destroyPhoneNumber(PhoneNumber *phoneNumber);
+
 #endif

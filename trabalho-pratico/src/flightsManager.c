@@ -43,3 +43,9 @@ void printFlights(FlightsManager *flightsManager) {
     printTable(flightsManager->flights, printFunctionFlight);
     printHashtableUsage(flightsManager->flights);
 }
+
+void destroyFlightsCatalog(FlightsManager *flightsManager) {
+    if (flightsManager == NULL) return;
+    destroyHashtable(flightsManager->flights, destroyFlight);
+    free(flightsManager);
+}

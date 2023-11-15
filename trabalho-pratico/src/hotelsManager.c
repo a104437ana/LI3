@@ -42,3 +42,9 @@ void printHotels(HotelsManager *hotelsManager) {
     printTable(hotelsManager->hotels, printFunctionHotel);
     printHashtableUsage(hotelsManager->hotels);
 }
+
+void destroyHotelsCatalog(HotelsManager *hotelsManager) {
+    if (hotelsManager == NULL) return;
+    destroyHashtable(hotelsManager->hotels, destroyHotel);
+    free(hotelsManager);
+}

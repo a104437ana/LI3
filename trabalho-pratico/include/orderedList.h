@@ -11,7 +11,7 @@ void *searchOrdList(OrdList *ordList, unsigned int key);
 void addOrdList(OrdList *ordList, void *data);
 //falta libertar espaço em memória
 void removeOrdList(OrdList *ordList, unsigned int key);
-void destroyOrdList(OrdList *ordList);
+//void destroyOrdList(OrdList *ordList);
 //ordenação
 void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset);
 void radixSortDate(OrdList *list);
@@ -21,5 +21,9 @@ void *getDataOrdList(OrdList *ordList, int index);
 int getOrdListSize(OrdList *ordList);
 //para testar
 void printOrdList(OrdList *ordList, void (*printFunction)(void*));
+
+void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*));
+//void destroyFlights(OrdList *flights);
+//void destroyReservations(OrdList *reservations);
 
 #endif

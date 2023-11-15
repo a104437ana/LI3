@@ -36,4 +36,6 @@ void removeHId(Hotel *hotel);
 void removeHName(Hotel *hotel);
 void removeHAddress(Hotel *hotel);
 
+void destroyHotel(void *hotel);
+
 #endif

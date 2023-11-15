@@ -16,4 +16,6 @@ Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager);
 
 void printHotels(HotelsManager *hotelsManager);
 
+void destroyHotelsCatalog(HotelsManager *hotelsManager);
+
 #endif

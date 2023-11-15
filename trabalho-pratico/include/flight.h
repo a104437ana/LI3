@@ -41,4 +41,6 @@ void setFlightPilot(Flight *flight, char *pilot);
 void setFlightCopilot(Flight *flight, char *copilot);
 void setFlightNotes(Flight *flight, char *notes);
 
+void destroyFlight(void *flight);
+
 #endif

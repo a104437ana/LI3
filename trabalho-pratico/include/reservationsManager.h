@@ -16,4 +16,6 @@ Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
 
 void printReservations(ReservationsManager *reservationsManager);
 
+void destroyreservationsCatalog(ReservationsManager *reservationsManager);
+
 #endif

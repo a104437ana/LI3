@@ -209,5 +209,20 @@ void removeNode(HashtableNode *node) {
 //    free(node->id);
 }
 
-void destroyHashtable(Hashtable *hashtable) {
+void destroyHashtable(Hashtable *hashtable, void (*destroyDataFunction)(void*)) {
+    if (hashtable == NULL) return;
+    int size = hashtable->size;
+    HashtableNode *node, *nodeAux;
+    for (int i=0; i<size; i++) {
+        node = hashtable->node[i];
+        while (node != NULL) {
+            nodeAux = node->next;
+            (*destroyDataFunction)(node->data);
+//            free(node->data);
+            free(node->id);
+            free(node);
+            node = nodeAux;
+        }
+    }
+    free(hashtable);
 }
