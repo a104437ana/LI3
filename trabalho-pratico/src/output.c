@@ -25,10 +25,10 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       sex='F';
     }
-    fprintf(file, "name: %s\nsex: %c\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",getName(output->result), sex, getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result)); //incompleto, gets de n voos, n reservas não existem
+    fprintf(file, "name: %s\nsex: %c\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",getName(output->result), sex, getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
    }
    if (output->resultType==FLIGHT){
-    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %.3f\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFlightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result)); //incompleto, get n passageiros e delay não existem
+    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %.3f\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFlightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result)); 
    }
    if (output->resultType==RESERVATION){
     char breakfast[6];
@@ -38,7 +38,7 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       strcpy(breakfast, "false");
     }
-    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result)); //incompleto, gets de n noites e preço total não existem
+    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
    }
   }
   else{
@@ -50,10 +50,10 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       sex='F';
     }
-    fprintf(file, "%s;%c;%d;%s;%s;%d;%d;%.3f\n",getName(output->result), sex, getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result)); //incompleto, gets de n voos, n reservas e total gasto não existem
+    fprintf(file, "%s;%c;%d;%s;%s;%d;%d;%.3f\n",getName(output->result), sex, getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
    }
    if (output->resultType==FLIGHT){
-    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFLightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result));  //incompleto, get n passageiros e delay não existem
+    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFLightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result));
    }
    if (output->resultType==RESERVATION){
     char breakfast[6];
@@ -63,7 +63,7 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       strcpy(breakfast, "false");
     }
-    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result)); //incompleto, gets de n noites e preço total não existem
+    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
    }
   }
   fclose(file);
@@ -125,12 +125,12 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
   if (format_flag=='F'){
      for (j=0; j<output->N; j++){
        fprintf (file, "--- %d ---\n", j);
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.3f\ntotal_price: %.3f\n",getReservId(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), getReservUserId(output->result), getReservUserClassification(output->result), getReservPrice(output->result)); //incompleto, get de preço total não existe
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.3f\ntotal_price: %.3f\n",getReservId(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), getReservUserId(output->result), getReservUserClassification(output->result), getReservPrice(output->result));
      }
     }
   else{
      for (j=0; j<output->N; j++){
-        fprintf(file, "%s;%s;%s;%s;%.3f;%.3f\n",getReservId(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), getReservUserId(output->result), getReservUserClassification(output->result), getReservPrice(output->result)); //incompleto, get de preço total não existe
+        fprintf(file, "%s;%s;%s;%s;%.3f;%.3f\n",getReservId(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), getReservUserId(output->result), getReservUserClassification(output->result), getReservPrice(output->result));
      }
   }
   fclose(file);

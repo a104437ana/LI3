@@ -35,6 +35,7 @@ char *getUserId(User *user);
 double getTotalSpent(User* user);
 OrdList * getFlightsByDate(User* user);
 OrdList * getReservationsByDate(User* user);
+bool getAccountStatus(User* user);
 
 //sets
 void setName(Hashtable *hashtable, unsigned int key, char *name);

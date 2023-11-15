@@ -13,11 +13,26 @@ int getNumberPassengers(Flight* flight){
     OrdList* passengers = getPassengers(flight);
     return(passengers->size);
 }
-char* getDelay(Flight* flight){ //incompleta
+char* getDelay(Flight* flight){
      Date* scheduleDep = getFlightScheduleDeparture(flight);
      Date* realDep = getFlightRealDeparture(flight);
      char* delay;
-     sprintf(delay, "%d:%d:%d");
+     int diffseg=0; int diffmin=0; int diffhour=0; int diffday=0;
+     diffseg += (realDep->seconds - scheduleDep->seconds);
+     if (diffseg<0){
+      diffseg+=60; diffmin-=1;
+     }
+     diffmin += (realDep->minutes - scheduleDep->minutes);
+     if (diffmin<0){
+      diffmin+=60; diffhour-=1;
+     }
+     diffhour += (realDep->hours - scheduleDep->hours);
+     if (diffhour<0){
+      diffhour+=24; diffday-=1;
+     }
+     diffday += (realDep->day - scheduleDep->day);
+     sprintf(delay, "0000/00/%02d %02d:%02d:%02d", diffday, diffhour, diffmin, diffseg);
+     return delay;
 }
 
 int getReservNights(Reservation* reservation){
@@ -39,7 +54,8 @@ double getReservPrice(Reservation* reservation){
 ResultQ1* Q1(char *id){
     if(id[0]=='U'){
       ResultQ1* result;
-      result->result = getUserCatalog(usersManager, hashFunction(id)); //falta verificar se o utilizador está ativo
+      result->result = getUserCatalog(usersManager, hashFunction(id));
+      if (getAccountStatus(result->result)==false) return NULL; //se o utilizador não estiver ativo
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=USER;
       return result;

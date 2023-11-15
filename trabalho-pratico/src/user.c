@@ -150,6 +150,10 @@ OrdList * getReservationsByDate(User* user){
      return(reservations);
 }
 
+bool getAccountStatus(User* user){
+    return(user->accounStatus);
+}
+
 //sets
 void setName(Hashtable *hashtable, unsigned int key, char *name) {
     User *data = getData(hashtable, key);
