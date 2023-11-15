@@ -31,7 +31,7 @@ Hotel *createHotel(char *id, char *name, char stars, char *address, int cityTax)
 
 void addReservationToHotel(Hotel *hotel, void *reservation) {
     addOrdList(hotel->reservationsByDate, reservation);
-    hotel->starsSum += (int) getReservHotelStars((Reservation *) reservation);
+//    hotel->starsSum += (int) getReservHotelStars((Reservation *) reservation);
 }
 
 void setHotelOnList(void *list, void *reservation) {

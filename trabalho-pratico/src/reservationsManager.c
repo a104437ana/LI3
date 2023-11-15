@@ -19,14 +19,10 @@ void addReservToCatalog(ReservationsManager *reservationsManager, Reservation *r
     //adiciona reserva ao catalogo de reservas
     addHashtable(reservationsManager->reservations, key, reservation, getReservId(reservation));
     //adiciona reserva à lista de reservas do hotel
-    Hotel *hotel = getReservHotel(reservation);
-    addReservationToHotel(hotel, reservation);
     //adiciona reserva à lista de reservas do utilizador
-    if (usersManager != NULL) {
-        int userKey = getReservUserKey(reservation);
-        User *user = getUserCatalog(usersManager, userKey, getReservUserId(reservation));
-        addReservationToUser(user, reservation);
-    }
+    int userKey = getReservUserKey(reservation);
+    User *user = getUserCatalog(usersManager, userKey, getReservUserId(reservation));
+    addReservationToUser(user, reservation);
 }
 
 Reservation *getReservCatalog(ReservationsManager *reservationsManager, unsigned int key, char *id) {

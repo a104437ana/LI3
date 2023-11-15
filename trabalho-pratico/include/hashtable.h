@@ -15,6 +15,7 @@ HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key, char *id)
 void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable);
 void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id);
 void removeHashtable(Hashtable *hashtable, unsigned int key);
+int existsData(Hashtable *hashtable, unsigned int key, char *id);
 
 //gest e sets
 void *getData(Hashtable *hashtable, unsigned int key, char *id);

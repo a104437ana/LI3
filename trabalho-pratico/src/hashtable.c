@@ -51,8 +51,8 @@ HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id) {
     int index = key % hashtable->size;
     HashtableNode **node = &(hashtable->node[index]);
 //    if (*node != NULL && (*node)->key != key) {
-    if (*node != NULL && !strcmp((*node)->id, id)) {
-        while ((*node)->next != NULL && !strcmp((*node)->id, id)) {
+    if (*node != NULL && strcmp((*node)->id, id)) {
+        while ((*node)->next != NULL && strcmp((*node)->id, id)) {
             node = &((*node)->next);
         }
     }
@@ -100,17 +100,58 @@ void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) 
     hashtable->nodes += 1;
 }
 
+//void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
+//    HashtableNode *node, *nodeAux;
+////    int nodes = hashtable->nodes, size = hashtable->size;
+////    float usage = nodes / size;
+////    if (usage >= 2) {
+////        Hashtable *newHashtable = createHashtable(size * 2);
+////        copyHashtable(hashtable, newHashtable);
+////        Hashtable *oldHashtable = hashtable;
+////        destroyHashtable(oldHashtable);
+////        hashtable = newHashtable;
+////    }
+//    int index = key % hashtable->size;
+//    nodeAux = hashtable->node[index];
+//    node = createHashtableNode();
+//    node->key = key;
+//    node->id = strdup(id);
+//    node->data = data;
+//    node->next = nodeAux;
+//    hashtable->node[index] = node;
+//    hashtable->nodes += 1;
+//}
+
 //fazer remove
 void removeHashtable(Hashtable *hashtable, unsigned int key) {
+}
+
+int existsData(Hashtable *hashtable, unsigned int key, char *id) {
+    int index = key % hashtable->size;
+    HashtableNode *node = hashtable->node[index];
+    while (node != NULL && strcmp(node->id, id))
+        node = node->next;
+    if (node != NULL) return 1;
+    return 0;
 }
 
 //gets
 void *getData(Hashtable *hashtable, unsigned int key, char *id) {
     HashtableNode *node = searchHashtable(hashtable, key, id);
-    if (node == NULL) return NULL;
+    if (node == NULL) return node;
 
     return node->data;
 }
+
+//void *getData(Hashtable *hashtable, unsigned int key, char *id) {
+//    int index = key % hashtable->size;
+//    HashtableNode *node = hashtable->node[index];
+//    while (node != NULL && strcmp(node->id, id))
+//        node = node->next;
+//    if (node == NULL) return NULL;
+//
+//    return node->data;
+//}
 
 void setData(Hashtable *hashtable, unsigned int key, void *data, char *id) {
     HashtableNode *node = searchHashtable(hashtable, key, id);

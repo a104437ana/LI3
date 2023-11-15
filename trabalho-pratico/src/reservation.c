@@ -24,12 +24,14 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
     reservation->id = strdup(id);
     reservation->id_user = strdup(id_user);
     unsigned int hotelKey = hashFunction(id_hotel);
-    Hotel *hotel = NULL;
-//    Hotel *hotel = getData(hotels, hotelKey, id_hotel);
-    if (hotel == NULL) {
+    int existsHotel = existsData(hotels, hotelKey, id_hotel);
+    Hotel *hotel;
+    if (existsHotel == 0) {
         hotel = createHotel(id_hotel, hotelName, hotelStars, hotelAddress, cityTax);
         addHashtable(hotels, hotelKey, hotel, id_hotel);
-    }
+    } else
+        hotel = (Hotel*) getData(hotels, hotelKey, id_hotel);
+    addReservationToHotel(hotel, reservation);
     addToHotelStarsSum(hotel, hotelStars);
     reservation->hotel = hotel;
     reservation->begin = begin;

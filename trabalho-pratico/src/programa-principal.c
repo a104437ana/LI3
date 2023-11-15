@@ -8,7 +8,10 @@
 #include "hotelsManager.h"
 #include "flightsManager.h"
 
-#define HASHTABLE_INI_SIZE 10000
+#define USERS_HASHTABLE_INI_SIZE 10000
+#define RESERVATIONS_HASHTABLE_INI_SIZE 40000
+#define HOTELS_HASHTABLE_INI_SIZE 100
+#define FLIGHTS_HASHTABLE_INI_SIZE 10000
 
 int main (int argc, char** argv) {
 
@@ -18,10 +21,10 @@ int main (int argc, char** argv) {
     clock_gettime(CLOCK_REALTIME, &start);
 
     //inicialização dos catalogos
-    UsersManager *usersCatalog = createUsersCatalog(HASHTABLE_INI_SIZE);
-    ReservationsManager *reservationsCatalog = createReservsCatalog(HASHTABLE_INI_SIZE);
-    HotelsManager *hotelsCatalog = createHotelsCatalog(HASHTABLE_INI_SIZE);
-    FlightsManager *flightsCatalog = createFlightsCatalog(HASHTABLE_INI_SIZE);
+    UsersManager *usersCatalog = createUsersCatalog(USERS_HASHTABLE_INI_SIZE);
+    ReservationsManager *reservationsCatalog = createReservsCatalog(RESERVATIONS_HASHTABLE_INI_SIZE);
+    HotelsManager *hotelsCatalog = createHotelsCatalog(HOTELS_HASHTABLE_INI_SIZE);
+//    FlightsManager *flightsCatalog = createFlightsCatalog(FLIGHTS_HASHTABLE_INI_SIZE);
 
     if (argc == 3) {
     parse_all_files(argv[1],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
@@ -29,6 +32,7 @@ int main (int argc, char** argv) {
 
 //    printUsers(usersCatalog);
 //    printReservations(reservationsCatalog);
+//    printHotels(hotelsCatalog);
 
     //print tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);
