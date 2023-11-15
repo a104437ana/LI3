@@ -10,15 +10,15 @@ unsigned int hashFunction(char *id);
 
 HashtableNode *createHashtableNode();
 Hashtable *createHashtable(int size);
-HashtableNode **searchNode(Hashtable *hashtable, unsigned int key);
-HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key);
+HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id);
+HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key, char *id);
 void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable);
-void addHashtable(Hashtable *hashtable, unsigned int key, void *data);
+void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id);
 void removeHashtable(Hashtable *hashtable, unsigned int key);
 
 //gest e sets
-void *getData(Hashtable *hashtable, unsigned int key);
-void setData(Hashtable *hashtable, unsigned int key, void *data);
+void *getData(Hashtable *hashtable, unsigned int key, char *id);
+void setData(Hashtable *hashtable, unsigned int key, void *data, char *id);
 void *getDataIndex(Hashtable *hashtable, unsigned int index);
 void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*));
 

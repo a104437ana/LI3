@@ -9,7 +9,7 @@ typedef struct usersManager UsersManager;
 UsersManager *createUsersCatalog(int size);
 void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key);
 //gets
-User *getUserCatalog(UsersManager *usersManager, unsigned int key);
+User *getUserCatalog(UsersManager *usersManager, unsigned int key, char *id);
 Hashtable *getHashtableUserCatalog(UsersManager *usersManager);
 int existsUser(UsersManager *usersManager, char *id);
 

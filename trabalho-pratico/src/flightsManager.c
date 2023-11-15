@@ -13,19 +13,19 @@ FlightsManager *createFlightsCatalog(int size) {
 }
 
 void addFlightToCatalog(FlightsManager *flightsManager, Flight *flight, unsigned int key) {
-    addHashtable(flightsManager->flights, key, flight);
+    addHashtable(flightsManager->flights, key, flight, getFlightId(flight));
 }
 
-void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey) {
-    Flight *flight = getFlightCatalog(flightsManager, flightKey);
-    User *user = getUserCatalog(usersManager, userKey);
+void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey, char *flightId, char *userId) {
+    Flight *flight = getFlightCatalog(flightsManager, flightKey, flightId);
+    User *user = getUserCatalog(usersManager, userKey, userId);
     addUserToFlight(flight, user);
     addFlightToUser(user, flight);
 }
 //gets
 
-Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key) {
-    Flight *flight = (Flight*) getData(flightsManager->flights, key);
+Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key, char *id) {
+    Flight *flight = (Flight*) getData(flightsManager->flights, key, id);
     return flight;
 }
 

@@ -38,14 +38,14 @@ OrdList * getReservationsByDate(User* user);
 bool getAccountStatus(User* user);
 
 //sets
-void setName(Hashtable *hashtable, unsigned int key, char *name);
-void setGender(Hashtable *hashtable, unsigned int key, Gender gender);
-void setCountry(Hashtable *hashtable, unsigned int key, char *country);
-void setAdress(Hashtable *hashtable, unsigned int key, char *address);
-void setPassport(Hashtable *hashtable, unsigned int key, char *passport);
-void setBirth(Hashtable *hashtable, unsigned int key, Date *birth);
-void setEmail(Hashtable *hashtable, unsigned int key, char *email);
-void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber);
-void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation);
+void setName(Hashtable *hashtable, unsigned int key, char *name, char *id);
+void setGender(Hashtable *hashtable, unsigned int key, Gender gender, char *id);
+void setCountry(Hashtable *hashtable, unsigned int key, char *country, char *id);
+void setAdress(Hashtable *hashtable, unsigned int key, char *address, char *id);
+void setPassport(Hashtable *hashtable, unsigned int key, char *passport, char *id);
+void setBirth(Hashtable *hashtable, unsigned int key, Date *birth, char *id);
+void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id);
+void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id);
+void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id);
 
 #endif

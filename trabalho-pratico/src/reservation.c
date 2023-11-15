@@ -24,10 +24,11 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
     reservation->id = strdup(id);
     reservation->id_user = strdup(id_user);
     unsigned int hotelKey = hashFunction(id_hotel);
-    Hotel *hotel = getData(hotels, hotelKey);
-    if (hotel == NULL) { 
+    Hotel *hotel = NULL;
+//    Hotel *hotel = getData(hotels, hotelKey, id_hotel);
+    if (hotel == NULL) {
         hotel = createHotel(id_hotel, hotelName, hotelStars, hotelAddress, cityTax);
-        addHashtable(hotels, hotelKey, hotel);
+        addHashtable(hotels, hotelKey, hotel, id_hotel);
     }
     addToHotelStarsSum(hotel, hotelStars);
     reservation->hotel = hotel;
@@ -120,75 +121,75 @@ bool getReservIncludesBreakfast(Reservation *reservation) {
 }
 
 //sets falta libertar o espaço em meória
-void setUserId(Hashtable *hashtable, unsigned int key, char *id_user) {
-    Reservation *data = getData(hashtable, key);
+void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *reservId) {
+    Reservation *data = getData(hashtable, key, reservId);
     char *oldUserId = data->id_user;
     data->id_user = strdup(id_user);
     free(oldUserId);
 }
 
-void setHotelId(Hashtable *hashtable, unsigned int key, char *id_hotel) {
-    Reservation *data = getData(hashtable, key);
+void setHotelId(Hashtable *hashtable, unsigned int key, char *id_hotel, char* id) {
+    Reservation *data = getData(hashtable, key, id);
     removeHId(data->hotel);
     setHId(data->hotel, id_hotel);
 }
 
-void setHotelName(Hashtable *hashtable, unsigned int key, char *hotelName) {
-    Reservation *data = getData(hashtable, key);
+void setHotelName(Hashtable *hashtable, unsigned int key, char *hotelName, char* id) {
+    Reservation *data = getData(hashtable, key, id);
     removeHName(data->hotel);
     setHName(data->hotel, hotelName);
 }
 
-void setHotelStars(Hashtable *hashtable, unsigned int key, char hotelStars) {
-    Reservation *data = getData(hashtable, key);
+void setHotelStars(Hashtable *hashtable, unsigned int key, char hotelStars, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     setHStars(data->hotel, hotelStars);
 }
 
-void setCityTax(Hashtable *hashtable, unsigned int key, int cityTax) {
-    Reservation *data = getData(hashtable, key);
+void setCityTax(Hashtable *hashtable, unsigned int key, int cityTax, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     setHCityTax(data->hotel, cityTax);
 }
 
-void setHotelAdress(Hashtable *hashtable, unsigned int key, char *hotelAddress) {
-    Reservation *data = getData(hashtable, key);
+void setHotelAdress(Hashtable *hashtable, unsigned int key, char *hotelAddress, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     removeHAddress(data->hotel);
     setHAddress(data->hotel, hotelAddress);
 }
 
-void setBeginDate(Hashtable *hashtable, unsigned int key, Date *begin) {
-    Reservation *data = getData(hashtable, key);
+void setBeginDate(Hashtable *hashtable, unsigned int key, Date *begin, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     data->begin = begin;
 }
 
-void setEndDate(Hashtable *hashtable, unsigned int key, Date *end) {
-    Reservation *data = getData(hashtable, key);
+void setEndDate(Hashtable *hashtable, unsigned int key, Date *end, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     data->end = end;
 }
 
-void setPricePerNight(Hashtable *hashtable, unsigned int key, int pricePerNight) {
-    Reservation *data = getData(hashtable, key);
+void setPricePerNight(Hashtable *hashtable, unsigned int key, int pricePerNight, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     data->pricePerNight = pricePerNight;
 }
 
-void setIncludesBreakfast(Hashtable *hashtable, unsigned int key, bool includesBreakfast) {
-    Reservation *data = getData(hashtable, key);
+void setIncludesBreakfast(Hashtable *hashtable, unsigned int key, bool includesBreakfast, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     data->includesBreakfast = includesBreakfast;
 }
 
-void setRoomDetails(Hashtable *hashtable, unsigned int key, char *roomDetails) {
-    Reservation *data = getData(hashtable, key);
+void setRoomDetails(Hashtable *hashtable, unsigned int key, char *roomDetails, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     char *oldRoomDetails = roomDetails;
     data->roomDetails = strdup(roomDetails);
     free(oldRoomDetails);
 }
 
-void setUserClassification(Hashtable *hashtable, unsigned int key, char userClassification) {
-    Reservation *data = getData(hashtable, key);
+void setUserClassification(Hashtable *hashtable, unsigned int key, char userClassification, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     data->userClassification = userClassification;
 }
 
-void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment) {
-    Reservation *data = getData(hashtable, key);
+void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment, char *id) {
+    Reservation *data = getData(hashtable, key, id);
     char *oldUserComment = userComment;
     data->userComment = strdup(userComment);
     free(oldUserComment);

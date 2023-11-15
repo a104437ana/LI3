@@ -11,7 +11,7 @@ typedef struct reservationsManager ReservationsManager;
 ReservationsManager *createReservsCatalog(int size);
 void addReservToCatalog(ReservationsManager *reservationsManager, Reservation *reservation, unsigned int key, HotelsManager *hotelsManager, UsersManager *usersManager);
 //gets
-Reservation *getReservCatalog(ReservationsManager *reservationsManager, unsigned int key);
+Reservation *getReservCatalog(ReservationsManager *reservationsManager, unsigned int key, char *id);
 Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
 
 void printReservations(ReservationsManager *reservationsManager);

@@ -9,9 +9,9 @@ typedef struct flightsManager FlightsManager;
 
 FlightsManager *createFlightsCatalog(int size);
 void addFlightToCatalog(FlightsManager *flightsManager, Flight *flight, unsigned int key);
-void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey);
+void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey, char *flightId, char *userId);
 //gets
-Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key);
+Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key, char *id);
 Hashtable *getHashtableFlightCatalog(FlightsManager *flightsManager);
 
 void printFlights(FlightsManager *flightsManager);

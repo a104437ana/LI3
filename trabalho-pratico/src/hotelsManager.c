@@ -16,15 +16,15 @@ HotelsManager *createHotelsCatalog(int size) {
 
 void addHotelToCatalog(HotelsManager *hotelsManager, Hotel *hotel, Reservation *reservation, unsigned int key) {
     addReservationToHotel(hotel, reservation);
-    addHashtable(hotelsManager->hotels, key, hotel);
+    addHashtable(hotelsManager->hotels, key, hotel, getHotelId(hotel));
 }
 
 void sortHotelCatalog(HotelsManager *hotelsManager) {
     sortOrdlistHashtable(hotelsManager->hotels, sortHotelReservationsByDate);
 }
 
-Hotel *getHotelCatalog(HotelsManager *hotelsManager, unsigned int key) {
-    Hotel *hotel = (Hotel *) getData(hotelsManager->hotels, key);
+Hotel *getHotelCatalog(HotelsManager *hotelsManager, unsigned int key, char *id) {
+    Hotel *hotel = (Hotel *) getData(hotelsManager->hotels, key, id);
     return hotel;
 }
 

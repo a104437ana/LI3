@@ -17,7 +17,7 @@ struct hotel {
 };
 
 Hotel *createHotel(char *id, char *name, char stars, char *address, int cityTax) {
-    Hotel *hotel = malloc(sizeof(hotel));
+    Hotel *hotel = malloc(sizeof(Hotel));
     hotel->address = strdup(address); //address desaparece
     hotel->id = strdup(id);
     hotel->name = strdup(name);

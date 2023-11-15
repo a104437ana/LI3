@@ -54,7 +54,7 @@ double getReservPrice(Reservation* reservation){
 ResultQ1* Q1(char *id){
     if(id[0]=='U'){
       ResultQ1* result;
-      result->result = getUserCatalog(usersManager, hashFunction(id));
+      result->result = getUserCatalog(usersManager, hashFunction(id), id);
       if (getAccountStatus(result->result)==false) return NULL; //se o utilizador não estiver ativo
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=USER;
@@ -62,14 +62,14 @@ ResultQ1* Q1(char *id){
     }
     else if(id[0]=='F'){
       ResultQ1* result;
-      result->result = getFlightCatalog(flightsManager, hashFunction(id));
+      result->result = getFlightCatalog(flightsManager, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=FLIGHT;
       return result;   
     }
     else if(id[0]=='R'){
       ResultQ1* result;
-      result->result = getReservCatalog(reservationsManager, hashFunction(id));
+      result->result = getReservCatalog(reservationsManager, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=RESERVATION;
       return result;

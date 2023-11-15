@@ -14,7 +14,7 @@ UsersManager *createUsersCatalog(int size) {
 }
 
 void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) {
-    addHashtable(usersManager->users, key, user);
+    addHashtable(usersManager->users, key, user, getUserId(user));
 }
 
 void sortUserCatalog(UsersManager *usersManager) {
@@ -23,14 +23,14 @@ void sortUserCatalog(UsersManager *usersManager) {
 }
 //gets
 
-User *getUserCatalog(UsersManager *usersManager, unsigned int key) {
-    User *user = (User*) getData(usersManager->users, key);
+User *getUserCatalog(UsersManager *usersManager, unsigned int key, char *id) {
+    User *user = (User*) getData(usersManager->users, key, id);
     return user;
 }
 
 int existsUser(UsersManager *usersManager, char *id) {
     int key = hashFunction(id);
-    HashtableNode *user = searchHashtable(usersManager->users, key);
+    HashtableNode *user = searchHashtable(usersManager->users, key, id);
     if (user == NULL) return 0;
     return 1;
 }

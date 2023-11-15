@@ -135,9 +135,7 @@ char *getUserId(User *user) {
 }
 
 double getTotalSpent(User* user) {
-    double total = user->totalSpent;
-
-    return total;
+    return user->totalSpent;
 }
 
 OrdList * getFlightsByDate(User* user){
@@ -155,20 +153,20 @@ bool getAccountStatus(User* user){
 }
 
 //sets
-void setName(Hashtable *hashtable, unsigned int key, char *name) {
-    User *data = getData(hashtable, key);
+void setName(Hashtable *hashtable, unsigned int key, char *name, char *id) {
+    User *data = getData(hashtable, key, id);
     char *oldName = data->name;
     data->name = strdup(name);
     free(oldName);
 }
 
-void setGender(Hashtable *hashtable, unsigned int key, Gender gender) {
-    User *data = getData(hashtable, key);
+void setGender(Hashtable *hashtable, unsigned int key, Gender gender, char *id) {
+    User *data = getData(hashtable, key, id);
     data->gender = gender;
 }
 
-void setCountry(Hashtable *hashtable, unsigned int key, char *country) {
-    User *data = getData(hashtable, key);
+void setCountry(Hashtable *hashtable, unsigned int key, char *country, char *id) {
+    User *data = getData(hashtable, key, id);
     memcpy(data->country, country, 2);
 //    char oldCountry[2];
 //    oldCountry[0] = data->country[0];
@@ -177,39 +175,39 @@ void setCountry(Hashtable *hashtable, unsigned int key, char *country) {
 //    data->country[1] = country[1];
 }
 
-void setAdress(Hashtable *hashtable, unsigned int key, char *address) {
-    User *data = getData(hashtable, key);
+void setAdress(Hashtable *hashtable, unsigned int key, char *address, char *id) {
+    User *data = getData(hashtable, key, id);
     char *oldAddress = data->address;
     data->address = strdup(address);
     free(oldAddress);
 }
 
-void setPassport(Hashtable *hashtable, unsigned int key, char *passport) {
-    User *data = getData(hashtable, key);
+void setPassport(Hashtable *hashtable, unsigned int key, char *passport, char *id) {
+    User *data = getData(hashtable, key, id);
     char *oldPassport = data->passport;
     data->passport = strdup(passport);
     free(oldPassport);
 }
 
-void setBirth(Hashtable *hashtable, unsigned int key, Date *birth) {
-    User *data = getData(hashtable, key);
+void setBirth(Hashtable *hashtable, unsigned int key, Date *birth, char *id) {
+    User *data = getData(hashtable, key, id);
     data->birth = birth;
 }
 
-void setEmail(Hashtable *hashtable, unsigned int key, char *email) {
-    User *data = getData(hashtable, key);
+void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id) {
+    User *data = getData(hashtable, key, id);
     char *oldEmail = data->email;
     data->email = strdup(email);
     free(oldEmail);
 }
 
 
-void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber) {
-    User *data = getData(hashtable, key);
+void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id) {
+    User *data = getData(hashtable, key, id);
     data->phoneNumber = phoneNumber;
 }
 
-void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation) {
-    User *data = getData(hashtable, key);
+void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id) {
+    User *data = getData(hashtable, key, id);
     data->accountCreation = accountCreation;
 }

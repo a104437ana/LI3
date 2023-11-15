@@ -2,15 +2,15 @@ CC=gcc
 
 CFLAGS=-Wall -Iinclude
 
-OBJFILES=src/programa-principal.o src/parser.o src/dataset_validator.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/user.o src/hashtable.o src/hotelsManager.o src/reservationsManager.o src/usersManager.o
+OBJFILES=src/programa-principal.o src/parser.o src/dataset_validator.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/user.o src/flight.o src/hashtable.o src/hotelsManager.o src/reservationsManager.o src/usersManager.o src/flightsManager.o
 
 all: programa-principal
 
 programa-principal: $(OBJFILES)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) -g $^ -o $@
 
 $(OBJFILES): src/%.o : src/%.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+	$(CC) $(CFLAGS) -c -g $^ -o $@
 
 clean:
 	rm -f programa-principal programa-testes src/*.o
@@ -23,16 +23,16 @@ clean:
 #OBJFILESTEST=src/testes/testaflights.o src/catalogsManager.o src/flightsManager.o src/flight.o src/utility.o src/hashtable.o
 #OBJFILESTEST=src/testes/testaordlists.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/hashtable.o
 #OBJFILESTEST=src/testes/testahotels.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/hashtable.o
-OBJFILESTEST=src/testes/testaCatalogs.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/user.o src/hashtable.o src/hotelsManager.o src/reservationsManager.o src/usersManager.o
+#OBJFILESTEST=src/testes/testaCatalogs.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/user.o src/hashtable.o src/hotelsManager.o src/reservationsManager.o src/usersManager.o
 #OBJFILESTEST=src/testes/testaRadixSort.o
 
-teste: test
-
-test: $(OBJFILESTEST)
-	$(CC) $(CFLAGS) -g $^ -o $@
-
-$(OBJFILESTEST): src/%.o : src/%.c
-	$(CC) $(CFLAGS) -c -g $^ -o $@
-
-cleantest:
-	rm -f test src/*.o src/testes/*.o
+#teste: test
+#
+#test: $(OBJFILESTEST)
+#	$(CC) $(CFLAGS) -g $^ -o $@
+#
+#$(OBJFILESTEST): src/%.o : src/%.c
+#	$(CC) $(CFLAGS) -c -g $^ -o $@
+#
+#cleantest:
+#	rm -f test src/*.o src/testes/*.o

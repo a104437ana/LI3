@@ -41,7 +41,7 @@ Date* string_to_date (char* string) {
 }
 
 //Constroi o path para o ficheiro e faz o parsing generico desse ficheiro
-void parse_file (char* path_directory, enum Type_file type_file, UsersManager* user_catalog, ReservationsManager * reservation_catalog) {
+void parse_file (char* path_directory, enum Type_file type_file, UsersManager* user_catalog, ReservationsManager * reservation_catalog, HotelsManager *hotel_catalog) {
     char* name_file = NULL;
     switch (type_file) {
         case 0 : name_file = malloc(strlen("/users.csv") + 1);
@@ -259,15 +259,19 @@ void parse_file (char* path_directory, enum Type_file type_file, UsersManager* u
                         char* includes_breakfast = malloc(strlen(token) + 1);
                         strcpy(includes_breakfast,token);
                         token = strsep(&line2,";"); //room details
+                        char* room_details = malloc((sizeof(char) * 2));
+                        strcpy(room_details,"a");
                         token = strsep(&line2,";"); //rating
                         char* rating = malloc(strlen(token) + 1);
                         strcpy(rating,token);
                         token = strsep(&line2,";"); //comment
+                        char* comment = malloc(sizeof(char) * 2);
+                        strcpy(comment,"a");
                         if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating,user_catalog)) {
-
-
-                            //Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,address, int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, char *roomDetails, char userClassification, char *userComment, Hashtable *hotels);
-                            //addReservToCatalog(reservation_catalog,reservation,hashFunction(id_reservation), HotelsManager *hotelsManager, UsersManager *usersManager);
+                            Date *begin = string_to_date(begin_date);
+                            Date *end = string_to_date(end_date);
+                            Reservation *reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,4,address,1,begin,end,0,0,room_details,4,comment,getHashtableHotelsCatalog(hotel_catalog));
+                            addReservToCatalog(reservation_catalog,reservation,hashFunction(id_reservation),hotel_catalog,user_catalog);
                         }
                         else add_invalid_line_to_error_file(reservations,total_line);
                         free(total_line);
@@ -295,9 +299,9 @@ void parse_file (char* path_directory, enum Type_file type_file, UsersManager* u
 }
 
 //Faz o parsing de todos os tipos de ficheiros
-void parse_all_files (char* path_directory, UsersManager* user_catalog, ReservationsManager * reservation_catalog) {
-    parse_file(path_directory,users,user_catalog,reservation_catalog);
-    parse_file(path_directory,reservations,user_catalog,reservation_catalog);
-    parse_file(path_directory,flights,user_catalog,reservation_catalog);
-    parse_file(path_directory,passengers,user_catalog,reservation_catalog);
+void parse_all_files (char* path_directory, UsersManager* user_catalog, ReservationsManager * reservation_catalog, HotelsManager *hotel_catalog) {
+    parse_file(path_directory,users,user_catalog,reservation_catalog,hotel_catalog);
+    parse_file(path_directory,reservations,user_catalog,reservation_catalog,hotel_catalog);
+//    parse_file(path_directory,flights,user_catalog,reservation_catalog);
+//    parse_file(path_directory,passengers,user_catalog,reservation_catalog);
 }
