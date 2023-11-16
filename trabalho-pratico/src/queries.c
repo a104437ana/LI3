@@ -168,7 +168,18 @@ double Q3(char *id, HotelsManager *hotelsCatalog) {
   return result;
 }
 
-ResultsQ4* Q4(char *id);
+ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
+    Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
+    if (hotel==NULL) return NULL; //se o id não existir
+    int i;
+    ResultsQ4 *results;
+    OrdList *reservations = getHotelOrdList(hotel);
+    results->N = reservations->size;
+       for(i=0;i<results->N; i--){
+         results->results[i]->result = reservations->data[(results->N)-i-1];
+       }
+    return results;
+}
 
 double Q8(char *id, Date begin, Date end);
 
