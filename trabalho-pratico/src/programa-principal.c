@@ -41,7 +41,7 @@ int main (int argc, char** argv) {
 //    printHotels(hotelsCatalog);
 //    printFlights(flightsCatalog);
 
-//    sortHotelCatalog(hotelsCatalog);
+    sortCatalogs(usersCatalog, hotelsCatalog);
 
 //    printHotelTableReservs(getHashtableHotelsCatalog(hotelsCatalog), printDate);
 

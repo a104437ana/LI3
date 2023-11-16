@@ -98,12 +98,12 @@ char getReservHotelStars(Reservation *reservation) {
     return getHotelStars(reservation->hotel);
 }
 
-void *getReservBegin(void *reservation) {
-    return ((Reservation *) reservation)->begin;
+Date *getReservBegin(Reservation *reservation) {
+    return reservation->begin;
 }
 
-void *getReservEnd(void *reservation) {
-    return ((Reservation *) reservation)->end;
+Date *getReservEnd(Reservation *reservation) {
+    return reservation->end;
 }
 
 int getReservBeginDay(void *reservation) {

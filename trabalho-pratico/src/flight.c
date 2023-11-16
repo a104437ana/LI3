@@ -76,20 +76,32 @@ char *getFlightDestination(Flight *flight) {
     return destination;
 }
 
-void *getFlightScheduleDeparture(void *flight) {
-    return ((Flight *) flight)->scheduleDeparture;
+Date *getFlightScheduleDeparture(Flight *flight) {
+    return flight->scheduleDeparture;
 }
 
-void *getFlightScheduleArrival(void *flight) {
-    return ((Flight *) flight)->scheduleArrival;
+Date *getFlightScheduleArrival(Flight *flight) {
+    return flight->scheduleArrival;
 }
 
-void *getFlightRealDeparture(void *flight) {
-    return ((Flight *) flight)->realDeparture;
+Date *getFlightRealDeparture(Flight *flight) {
+    return flight->realDeparture;
 }
 
-void *getFlightRealArrival(void *flight) {
-    return ((Flight *) flight)->realArrival;
+Date *getFlightRealArrival(Flight *flight) {
+    return flight->realArrival;
+}
+
+int getFlightScheduleDepartureDay(void *flight) {
+    return ((Flight *) flight)->scheduleDeparture->day;
+}
+
+int getFlightScheduleDepartureMonth(void *flight) {
+    return ((Flight *) flight)->scheduleDeparture->month;
+}
+
+int getFlightScheduleDepartureYear(void *flight) {
+    return ((Flight *) flight)->scheduleDeparture->year;
 }
 
 char *getFlightPilot(Flight *flight) {

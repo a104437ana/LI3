@@ -4,6 +4,7 @@
 #include "orderedList.h"
 #include "utility.h"
 #include "reservation.h"
+#include "flight.h"
 
 struct ordList {
     int maxSize;
@@ -49,7 +50,7 @@ void addOrdList(OrdList *ordList, void *data) {
 void removeOrdList(OrdList *ordList, unsigned int key) {
 }
 
-void radixSort(OrdList *list, int (*getParameterFunction)(void*), void *(*getDataFunction)(void *), int interval, int offset) {
+void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset) {
     int size = list->size;
     void **newData = malloc(sizeof(void *) * size);
     void *data;
@@ -57,13 +58,13 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), void *(*getDat
     for (i=0; i<=interval; i++) count[i] = 0;
     for (j=0; j<size; j++) {
         //conta ocorrencias
-        data = (*getDataFunction)(list->data[j]);
+        data = list->data[j];
         i = (*getParameterFunction)(data) - offset;
         count[i] += 1;
     }
     for (i=1; i<=interval; i++) count[i] += count[i-1];
     for (j=size-1; j>=0; j--) {
-        data = (*getDataFunction)(list->data[j]);
+        data = list->data[j];
         i = (*getParameterFunction)(data) - offset;
         newData[count[i]-1] = data;
         count[i] -= 1;
@@ -74,10 +75,22 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), void *(*getDat
 //    free(oldData);
 }
 
-void radixSortDate(OrdList *list, void *(*getDateFunction)(void*)) {
+//void radixSortDate(OrdList *list, void *(*getDateFunction)(void*)) {
 //    radixSort(list, getDay, getDateFunction, 31, 0);
 //    radixSort(list, getMonth, getDateFunction, 12, 0);
 //    radixSort(list, getYear, getDateFunction, N_YEARS, BEGIN_YEAR);
+//}
+
+void radixSortReservDate(OrdList *list) {
+    radixSort(list, getReservBeginDay, 31, 0);
+    radixSort(list, getReservBeginMonth, 12, 0);
+    radixSort(list, getReservBeginYear, N_YEARS, BEGIN_YEAR);
+}
+
+void radixSortFlightDate(OrdList *list) {
+    radixSort(list, getFlightScheduleDepartureDay, 31, 0);
+    radixSort(list, getFlightScheduleDepartureMonth, 12, 0);
+    radixSort(list, getFlightScheduleDepartureYear, N_YEARS, BEGIN_YEAR);
 }
 
 void radixSortDateResultQ2(OrdList *list) {

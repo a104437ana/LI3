@@ -453,7 +453,7 @@ void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* p
         fclose(file);
     }
     free(file_path);
-    printf("%d\n",i);
+    printf("n passengeiros: %d\n",i);
 }
 
 int valid_total_seats (char* total_seats,Hashtable* passengers_per_flight, char* id_flight) {

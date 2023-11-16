@@ -39,7 +39,7 @@ void setHotelOnList(void *list, void *reservation) {
 }
 
 void sortHotelReservationsByDate(void *hotel) {
-    radixSortDate(((Hotel *)hotel)->reservationsByDate, getReservBegin);
+    radixSortReservDate(((Hotel *)hotel)->reservationsByDate);
 }
 
 OrdList *getHotelOrdList(Hotel *hotel) {
@@ -62,6 +62,10 @@ char *getHotelName(Hotel *hotel) {
 
 char getHotelStars(Hotel *hotel) {
     return hotel->stars;
+}
+
+char getHotelStarsSum(Hotel *hotel) {
+    return hotel->starsSum;
 }
 
 char *getHotelAddress(Hotel *hotel) {

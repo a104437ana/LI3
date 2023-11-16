@@ -22,6 +22,7 @@ char *getHotelReservation(Hotel *hotel, unsigned int key);
 char *getHotelId(Hotel *hotel);
 char *getHotelName(Hotel *hotel);
 char getHotelStars(Hotel *hotel);
+char getHotelStarsSum(Hotel *hotel);
 char *getHotelAddress(Hotel *hotel);
 int getHotelCityTax(Hotel *hotel);
 //sets falta libertar espaço em memória

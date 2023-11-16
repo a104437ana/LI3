@@ -61,11 +61,11 @@ void addFlightToUser(User *user, void *flight) {
 }
 
 void sortUserReservationsByDate(void *user) {
-    radixSortDate(((User *)user)->reservationsByDate, getReservBegin);
+    radixSortReservDate(((User *)user)->reservationsByDate);
 }
 
 void sortUserFlightsByDate(void *user) {
-    radixSortDate(((User *)user)->flightsByDate, getFlightScheduleDeparture);
+    radixSortFlightDate(((User *)user)->flightsByDate);
 }
 
 //gets

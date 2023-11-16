@@ -39,6 +39,8 @@ void procuraAeroporto();
 void removeAeroporto();
 void destroiGestorAeroportos();
 
+void sortCatalogs(UsersManager *usersManager, HotelsManager *hotelsManager);
+
 void destroyCatalogs(UsersManager *usersManager, ReservationsManager *reservationsManager, HotelsManager *hotelsManager, FlightsManager *flightsManager);
 
 #endif
