@@ -29,6 +29,13 @@ Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key, char 
     return flight;
 }
 
+int existsFlight (FlightsManager* flightsManager,char* id) {
+    int key = hashFunction(id);
+    HashtableNode *flight = searchHashtable(flightsManager->flights, key, id);
+    if (flight == NULL) return 0;
+    return 1;
+}
+
 Hashtable *getHashtableFlightCatalog(FlightsManager *flightsManager) {
     return flightsManager->flights;
 }

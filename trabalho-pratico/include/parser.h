@@ -17,8 +17,10 @@ int string_to_int (char* string);
 Date* string_to_date (char* string);
 void parse_users_file (char* directory,UsersManager *usersCatalog);
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog);
-void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog);
+void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog,Hashtable* passengers_per_flight);
 void parse_passengers_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog);
+
+void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* passengers_per_flight);
 void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog);
 
 #endif

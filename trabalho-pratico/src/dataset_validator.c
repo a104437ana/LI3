@@ -43,7 +43,7 @@ int valid_country_code (char* country_code) {
 
 int valid_account_status (char* account_status) {
     int valid = 0;
-    if (strlen(account_status) == 7 || strlen(account_status) == 9) {
+    if (strlen(account_status) == 6 || strlen(account_status) == 8) {
         int i = 0;
         int continua = 1;
         if (account_status[i] == 'i' || account_status[i] == 'I') {
@@ -66,7 +66,7 @@ int valid_account_status (char* account_status) {
                                 i++;
                                 if (account_status[i] == 'e' || account_status[i] == 'E') {
                                     i++;
-                                    if (account_status[i] == '\n') valid = 1;
+                                    if (account_status[i] == '\0') valid = 1;
                                 }
                             }
                         }
@@ -394,55 +394,87 @@ int valid_par_of_origin_and_destination (char* origin, char* destination) {
     return valid;
 }
 
-/*Hashtable* count_passengers () {
-    Hashtable *passengers_per_flight = createHashtable(600);
-    FILE *file;
-    file = fopen(file_path,"r");
-    char* line = NULL;
-    size_t n;
-    ssize_t read;
-    if ((read = getline(&line,&n,file)) != -1) {
-        while((read = getline(&line,&n,file)) != -1){
-            char* line2 = line;
-            char* total_line = malloc(strlen(line2) + 1);
-            strcpy(total_line,line2);
-            char* token = strsep(&line2,";"); //id flight
-            char* id_flight = malloc(strlen(token) + 1);
-            strcpy(id_flight,token);
-            token = strsep(&line2,";"); //id user
-            char* id_user = malloc(strlen(token) + 1);
-            strcpy(id_user,token);
-            if (existsUser(user_catalog,id_user)) {
-                if (searchHashtable(passengers_per_flight,id_flight) == NULL) {
-                    addHashtable(Hashtable *hashtable, id_flight, void *data)
-                }
-                int total_passengers = getData() + 1;
-                setData = total_passengers;
-            }
-            free(total_line);
-            free(id_flight);
-            free(id_user);
-        }
-    }
-    return passengers_per_flight;
+struct flight_passengers {
+    int number;
+};
+
+FlightPassengers *createFlightPassengers () {
+    FlightPassengers* flight_passengers = malloc(sizeof(FlightPassengers));
+    flight_passengers->number = 0;
+    return flight_passengers;
 }
 
-int valid_total_seats (char* total_seats) { //função inacabada
+void AddPassenger(Hashtable *hashtable, unsigned int key, char *id) {
+    FlightPassengers *data = getData(hashtable, key, id);
+    data->number++;
+}
+
+int getPassengersNumber (Hashtable *hashtable, unsigned int key, char *id) {
+    FlightPassengers *data = getData(hashtable, key, id);
+    int passengers = data->number;
+    return passengers;
+}
+
+void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* passengers_per_flight) {
+    char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1); int i = 0;
+    strcpy(file_path, directory);
+    strcat(file_path,"/passengers.csv");
+    if (exist_file(file_path)) {
+        FILE *file;
+        file = fopen(file_path,"r");
+        char* line = NULL;
+        size_t n;
+        ssize_t read;
+        if ((read = getline(&line,&n,file)) != -1) {
+            while((read = getline(&line,&n,file)) != -1){
+                char* line2 = malloc(strlen(line) + 1);
+                strcpy(line2,line);
+                char* token = strsep(&line2,";"); //id flight
+                char* id_flight = malloc(strlen(token) + 1);
+                strcpy(id_flight,token);
+                token = strsep(&line2,";"); //id user
+                char* id_user = malloc(strlen(token) + 1);
+                strcpy(id_user,token);
+                remove_new_line(id_user);
+                if (existsUser(usersCatalog,id_user)) {
+                    if (searchHashtable(passengers_per_flight,hashFunction(id_flight),id_flight) == NULL) {
+                        FlightPassengers* flight_passengers = createFlightPassengers();
+                        addHashtable(passengers_per_flight, hashFunction(id_flight), flight_passengers, id_flight);
+                        i++;
+                    }
+                    AddPassenger (passengers_per_flight,hashFunction(id_flight),id_flight);
+                }
+                free(line2);
+                free(id_flight);
+                free(id_user);
+            }
+        }
+        free(line);
+        fclose(file);
+    }
+    free(file_path);
+    printf("%d\n",i);
+}
+
+int valid_total_seats (char* total_seats,Hashtable* passengers_per_flight, char* id_flight) {
     int valid = 0;
     if (valid_price_per_night(total_seats)) {
-
+        if (searchHashtable(passengers_per_flight,hashFunction(id_flight),id_flight) == NULL) valid = 1;
+        else {
+            int seats = string_to_int(total_seats);
+            int passengers = getPassengersNumber(passengers_per_flight,hashFunction(id_flight),id_flight);
+            if (seats >= passengers) valid = 1;
+        }
     }
-    int passengers = 0;
-    if (atoi(total_seats) < passengers) valid = 1;
     return valid;
-}*/
+}
 
-int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot) {
+int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot,Hashtable* passengers_per_flight) {
     int valid = 0;
     if (length_bigger_than_zero(id_flight)) {
         if (length_bigger_than_zero(airline)) {
             if (length_bigger_than_zero(plane_model)) {
-                //if (valid_total_seats(total_seats)) {
+                if (valid_total_seats(total_seats,passengers_per_flight,id_flight)) {
                     if (valid_origin_or_destination(origin)) {
                         if (valid_origin_or_destination(destination)) {
                             if (valid_par_of_origin_and_destination(origin,destination)) {
@@ -464,17 +496,17 @@ int valid_flight (char* id_flight, char* airline, char* plane_model, char* total
                             }
                         }
                     }
-                //}
+                }
             }
         }
     }
     return valid;
 }
 
-/*int valid_passenger (char* id_flight, char* id_user, UsersManager* usersCatalog) {
+int valid_passenger (char* id_flight, char* id_user, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
     int valid = 0;
     if (existsUser(usersCatalog,id_user)) {
-        if (existFlight(id_flight)) valid = 1;
+        if (existsFlight(flightsCatalog,id_flight)) valid = 1;
     }
     return valid;
-}*/
+}

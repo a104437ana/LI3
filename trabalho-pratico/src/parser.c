@@ -38,7 +38,7 @@ int string_to_int (char* string) {
     i--;
     int j = 0;
     while (i>=0) {
-        number = string[i]*base_e_expoente(10,j);
+        number = (string[i]-'0')*base_e_expoente(10,j);
         j++;
         i--;
     }
@@ -63,6 +63,14 @@ Date* string_to_date (char* string) {
     }
     date.hasHours = hasHours;*/
     return date;
+}
+
+void remove_new_line (char* string) {
+    int i = 0;
+    while (string[i] != '\n' && string[i] != '\0') {
+        i++;
+    }
+    string[i] = '\0';
 }
 
 void parse_users_file (char* directory,UsersManager *usersCatalog) {
@@ -119,6 +127,7 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
                 token = strsep(&line2,";"); //account status
                 char* account_status = malloc(strlen(token) + 1);
                 strcpy(account_status,token);
+                remove_new_line(account_status);
                 if (valid_user(id_user,name,email,phone_number,birth_date,sex,passport,country_code,address,account_creation,pay_method,account_status)) {
                     int gender = 0;
                     if (sex[0] == 'F' || sex[0] == 'f') gender = 1;
@@ -213,6 +222,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 token = strsep(&line2,";"); //comment
                 char* comment = malloc(strlen(token) + 1);
                 strcpy(comment,token);
+                remove_new_line(comment);
                 if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating,usersCatalog)) {
                     int cityTax = string_to_int(city_tax);
                     int pricePerNight = string_to_int(price_per_night);
@@ -240,6 +250,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 free(price_per_night);
                 free(includes_breakfast);
                 free(rating);
+                free(comment);
             }
             free(file_path_errors);
         }
@@ -250,7 +261,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
     printf("reservas: %d\n", i); //contar reservas, apagar depois
 }
 
-void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
+void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog, Hashtable* passengers_per_flight) {
     char* file_path = malloc(strlen(directory) + strlen("/flights.csv") + 1);
     strcpy(file_path, directory); int j=0;
     strcat(file_path,"/flights.csv");
@@ -306,7 +317,8 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 token = strsep(&line2,";"); //notes
                 char* notes = malloc(strlen(token) + 1);
                 strcpy(notes,token);
-                if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot)) {
+                remove_new_line(notes);
+                if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,passengers_per_flight)) {
                     int totalSeats = string_to_int(total_seats);
                     Date* scheduleDeparture = string_to_date(schedule_departure_date);
                     Date* scheduleArrival = string_to_date(schedule_arrival_date);
@@ -330,6 +342,7 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 free(real_arrival_date);
                 free(pilot);
                 free(copilot);
+                free(notes);
             }
             free(file_path_errors);
         }
@@ -363,11 +376,11 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
                 token = strsep(&line2,";"); //id user
                 char* id_user = malloc(strlen(token) + 1);
                 strcpy(id_user,token);
-                //if (valid_passenger()) {
+                remove_new_line(id_user);
+                if (valid_passenger(id_flight,id_user,usersCatalog,flightsCatalog)) {
                 //    addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
-                //}
-                //else 
-                //    add_invalid_line_to_error_file(file_path_errors,line);
+                }
+                else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
                 free(id_flight);
                 free(id_user);
@@ -385,9 +398,8 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
 void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
     parse_users_file(directory,usersCatalog);
     parse_reservations_file(directory,usersCatalog,reservationsCatalog,hotelsCatalog);
-
-    //count_passengers(directory,usersCatalog)
-
-    parse_flights_file(directory,usersCatalog,flightsCatalog);
+    Hashtable *passengers_per_flight = createHashtable(10000);
+    count_passengers(directory,usersCatalog,passengers_per_flight);
+    parse_flights_file(directory,usersCatalog,flightsCatalog,passengers_per_flight);
     parse_passengers_file(directory,usersCatalog,flightsCatalog);
 }

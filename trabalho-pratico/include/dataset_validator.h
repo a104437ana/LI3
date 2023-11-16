@@ -7,6 +7,7 @@
 #include "usersManager.h"
 #include "reservationsManager.h"
 #include "flightsManager.h"
+#include "parser.h"
 
 int length_bigger_than_zero (char* string);
 int valid_email (char* email);
@@ -28,6 +29,7 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
 
 int valid_origin_or_destination (char* local);
 int valid_par_of_origin_and_destination (char* origin, char* destination);
-int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot);
+typedef struct flight_passengers FlightPassengers;
+int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot,Hashtable* passengers_per_flight);
 
 #endif
