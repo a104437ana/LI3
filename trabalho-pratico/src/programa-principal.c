@@ -8,7 +8,7 @@
 #include "hotelsManager.h"
 #include "flightsManager.h"
 #include "catalogsManager.h"
-#include "interpreter.h"
+//#include "interpreter.h"
 
 #define USERS_HASHTABLE_INI_SIZE 10000
 #define RESERVATIONS_HASHTABLE_INI_SIZE 40000
@@ -34,7 +34,7 @@ int main (int argc, char** argv) {
 
     if (argc == 3) {
     parse_all_files(argv[1],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
-    parseCommandFile(argv[2],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
+    //parseCommandFile(argv[2],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
     }
 
 //    printUsers(usersCatalog);
