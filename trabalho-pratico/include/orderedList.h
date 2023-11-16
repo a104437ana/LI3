@@ -13,8 +13,8 @@ void addOrdList(OrdList *ordList, void *data);
 void removeOrdList(OrdList *ordList, unsigned int key);
 //void destroyOrdList(OrdList *ordList);
 //ordenação
-void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset);
-void radixSortDate(OrdList *list);
+void radixSort(OrdList *list, int (*getParameterFunction)(void*),void *(*getDataFunction)(void*), int interval, int offset);
+void radixSortDate(OrdList *list, void *(*getDateFunction)(void*));
 void radixSortDateResultQ2(OrdList *list);
 
 void *getDataOrdList(OrdList *ordList, int index);

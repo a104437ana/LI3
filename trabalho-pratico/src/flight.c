@@ -53,11 +53,11 @@ void addUserToFlight(Flight *flight, void *user) {
 
 //gets
 char *getFlightAirline(Flight *flight) {
-    return strdup(flight->airline);
+    return flight->airline; //falta encapsulamento
 }
 
 char *getFlightAirplane(Flight *flight) {
-    return strdup(flight->airplane);
+    return flight->airplane; //falta encapsulamento
 }
 
 int getFlightTotalSeats(Flight *flight) {
@@ -76,36 +76,36 @@ char *getFlightDestination(Flight *flight) {
     return destination;
 }
 
-Date *getFlightScheduleDeparture(Flight *flight) {
-    return flight->scheduleDeparture;
+void *getFlightScheduleDeparture(void *flight) {
+    return ((Flight *) flight)->scheduleDeparture;
 }
 
-Date *getFlightScheduleArrival(Flight *flight) {
-    return flight->scheduleArrival;
+void *getFlightScheduleArrival(void *flight) {
+    return ((Flight *) flight)->scheduleArrival;
 }
 
-Date *getFlightRealDeparture(Flight *flight) {
-    return flight->realDeparture;
+void *getFlightRealDeparture(void *flight) {
+    return ((Flight *) flight)->realDeparture;
 }
 
-Date *getFlightRealArrival(Flight *flight) {
-    return flight->realArrival;
+void *getFlightRealArrival(void *flight) {
+    return ((Flight *) flight)->realArrival;
 }
 
 char *getFlightPilot(Flight *flight) {
-    return strdup(flight->pilot);
+    return flight->pilot;
 }
 
 char *getFlightCopilot(Flight *flight) {
-    return strdup(flight->copilot);
+    return flight->copilot;
 }
 
 char *getFlightNotes(Flight *flight) {
-    return strdup(flight->notes);
+    return flight->notes;
 }
 
 char *getFlightId(Flight *flight) {
-    return strdup(flight->id);
+    return flight->id;
 }
 
 OrdList * getPassengers(Flight* flight){
@@ -177,6 +177,7 @@ void setFlightNotes(Flight *flight, char *notes) {
 
 void destroyFlight(void *flight) {
     if (flight == NULL) return;
+//    free(((Flight *) flight)->passengers);
 //    destroyOrdList(((Flight *) flight)->passengers, destroyUser);
     destroyDate(((Flight *) flight)->scheduleDeparture);
     destroyDate(((Flight *) flight)->scheduleArrival);

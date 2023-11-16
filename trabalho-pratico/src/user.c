@@ -61,17 +61,17 @@ void addFlightToUser(User *user, void *flight) {
 }
 
 void sortUserReservationsByDate(void *user) {
-    radixSortDate(((User *)user)->reservationsByDate);
+    radixSortDate(((User *)user)->reservationsByDate, getReservBegin);
 }
 
 void sortUserFlightsByDate(void *user) {
-    radixSortDate(((User *)user)->flightsByDate);
+    radixSortDate(((User *)user)->flightsByDate, getFlightScheduleDeparture);
 }
 
 //gets
 char *getName(User *user) {
     char *name;
-    name = strdup(user->name);
+    name = user->name; //falta encapsulamento
 
     return name;
 }
@@ -84,7 +84,7 @@ Gender getGender(User *user) {
 }
 
 char *getCountry(User *user) {
-    char *country = malloc(sizeof(char) * 2);
+    char *country = malloc(sizeof(char) * 2); //possivel leak de memória
     memcpy(country, user->country, 2);
 
     return country;
@@ -92,14 +92,14 @@ char *getCountry(User *user) {
 
 char *getAdress(User *user) {
     char *address;
-    address = strdup(user->address);
+    address = user->address; //falta encapsulamento
 
     return address;
 }
 
 char *getPassport(User *user) {
     char *passport;
-    passport = strdup(user->passport);
+    passport = user->passport; //falta encapsulamento
 
     return passport;
 }
@@ -113,7 +113,7 @@ Date *getBirth(User *user) {
 
 char *getEmail(User *user) {
     char *email;
-    email = strdup(user->email);
+    email = user->email; //falta encapsulamento
 
     return email;
 }
@@ -133,7 +133,7 @@ Date *getAccountCreation(User *user) {
 }
 
 char *getUserId(User *user) {
-    return strdup(user->id);
+    return user->id; //falta encapsulamento
 }
 
 double getTotalSpent(User* user) {
@@ -206,16 +206,20 @@ void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id) {
 
 void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id) {
     User *data = getData(hashtable, key, id);
+    destroyPhoneNumber(data->phoneNumber);
     data->phoneNumber = phoneNumber;
 }
 
 void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id) {
     User *data = getData(hashtable, key, id);
+    destroyDate(data->accountCreation);
     data->accountCreation = accountCreation;
 }
 
 void destroyUser(void *user) {
     if (user == NULL) return;
+//    free(((User *) user)->flightsByDate);
+//    free(((User *) user)->reservationsByDate);
 //    destroyOrdList(((User *) user)->flightsByDate, destroyFlight);
 //    destroyOrdList(((User *) user)->reservationsByDate, destroyReservation);
 //    destroyFlights(((User *) user)->flightsByDate);

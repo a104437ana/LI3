@@ -14,6 +14,10 @@
 #define HOTELS_HASHTABLE_INI_SIZE 100
 #define FLIGHTS_HASHTABLE_INI_SIZE 1000
 
+void printDate(void *data) {
+    printf(", %d/%d/%d", getDay(getReservBegin((Reservation *) data)), getMonth(getReservBegin((Reservation *) data)), getYear(getReservBegin((Reservation *) data)));
+}
+
 int main (int argc, char** argv) {
 
     //inicialização de variáveis para medição de tempo
@@ -36,6 +40,15 @@ int main (int argc, char** argv) {
 //    printReservations(reservationsCatalog);
 //    printHotels(hotelsCatalog);
 //    printFlights(flightsCatalog);
+
+//    sortHotelCatalog(hotelsCatalog);
+
+//    printHotelTableReservs(getHashtableHotelsCatalog(hotelsCatalog), printDate);
+
+//    char *id = strdup("Book0000000247");
+//    Date *date = getReservBegin((Reservation *) getData(getHashtableReservCatalog(reservationsCatalog), hashFunction(id), id));
+//
+//    printf("%s: %d/%d/%d\n", id, getDay(date), getMonth(date), getYear(date));
 
     destroyCatalogs(usersCatalog, reservationsCatalog, hotelsCatalog, flightsCatalog);
 

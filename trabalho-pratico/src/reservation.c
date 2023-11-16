@@ -47,11 +47,11 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
 
 //gets
 char *getReservId(Reservation *reservation) {
-    return strdup(reservation->id);
+    return reservation->id; //falta encapsulamento
 }
 
 char *getReservUserId(Reservation *reservation) {
-    return strdup(reservation->id_user);
+    return reservation->id_user; //encapsulamento
 }
 
 char *getReservHotelId(Reservation *reservation) {
@@ -71,11 +71,11 @@ char *getReservHotelAddress(Reservation *reservation) {
 }
 
 char *getReservRoomDetails(Reservation *reservation) {
-    return strdup(reservation->roomDetails);
+    return reservation->roomDetails; //falta encapsulamento
 }
 
 char *getReservUserComment(Reservation *reservation) {
-    return strdup(reservation->userComment);
+    return reservation->userComment; //falta encapsulamento
 }
 
 Hotel *getReservHotel(Reservation *reservation) {
@@ -98,12 +98,12 @@ char getReservHotelStars(Reservation *reservation) {
     return getHotelStars(reservation->hotel);
 }
 
-Date *getReservBegin(Reservation *reservation) {
-    return reservation->begin;
+void *getReservBegin(void *reservation) {
+    return ((Reservation *) reservation)->begin;
 }
 
-Date *getReservEnd(Reservation *reservation) {
-    return reservation->end;
+void *getReservEnd(void *reservation) {
+    return ((Reservation *) reservation)->end;
 }
 
 int getReservBeginDay(void *reservation) {
@@ -203,6 +203,7 @@ Date *getBeginDateReservation(void *reservation) {
 
 void destroyReservation(void *reservation) {
     if (reservation == NULL) return;
+//    free(((Reservation *) reservation)->hotel);
 //    destroyHotel(((Reservation *) reservation)->hotel);
     destroyDate(((Reservation *) reservation)->begin);
     destroyDate(((Reservation *) reservation)->end);

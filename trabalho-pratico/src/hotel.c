@@ -39,7 +39,7 @@ void setHotelOnList(void *list, void *reservation) {
 }
 
 void sortHotelReservationsByDate(void *hotel) {
-    radixSortDate(((Hotel *)hotel)->reservationsByDate);
+    radixSortDate(((Hotel *)hotel)->reservationsByDate, getReservBegin);
 }
 
 OrdList *getHotelOrdList(Hotel *hotel) {
@@ -53,11 +53,11 @@ char *getHotelReservation(Hotel *hotel, unsigned int key) {
 
 //gets
 char *getHotelId(Hotel *hotel) {
-    return strdup(hotel->id);
+    return hotel->id; //falta encapsulamento
 }
 
 char *getHotelName(Hotel *hotel) {
-    return strdup(hotel->name);
+    return hotel->name; //falta encapsulamento
 }
 
 char getHotelStars(Hotel *hotel) {
@@ -65,7 +65,7 @@ char getHotelStars(Hotel *hotel) {
 }
 
 char *getHotelAddress(Hotel *hotel) {
-    return strdup(hotel->address);
+    return hotel->address; //falta encapsulamento
 }
 
 int getHotelCityTax(Hotel *hotel) {
@@ -73,11 +73,15 @@ int getHotelCityTax(Hotel *hotel) {
 }
 //sets falta libertar espaço em memória
 void setHId(Hotel *hotel, char *id) {
+    char *oldHotelId = hotel->id;
     hotel->id = strdup(id);
+    free(oldHotelId);
 }
 
 void setHName(Hotel *hotel, char *name) {
+    char *oldName = name;
     hotel->name = strdup(name);
+    free(oldName);
 }
 
 void setHStars(Hotel *hotel, char stars) {
@@ -85,7 +89,9 @@ void setHStars(Hotel *hotel, char stars) {
 }
 
 void setHAddress(Hotel *hotel, char *address) {
+    char *oldAddress = address;
     hotel->address = strdup(address);
+    free(oldAddress);
 }
 
 void setHCityTax(Hotel *hotel, int cityTax) {
@@ -116,6 +122,7 @@ void removeHAddress(Hotel *hotel) {
 
 void destroyHotel(void *hotel) {
     if (hotel == NULL) return;
+//    free(((Hotel *) hotel)->reservationsByDate);
 //    destroyOrdList(((Hotel *) hotel)->reservationsByDate, destroyReservation);
     free(((Hotel *) hotel)->address);
     free(((Hotel *) hotel)->name);

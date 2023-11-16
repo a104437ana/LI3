@@ -13,16 +13,16 @@ Date *createDate(char day, char month, int year) {
     return date;
 }
 
-int getDay(Date *date) {
-    return (int) date->day;
+int getDay(void *date) {
+    return (int) ((Date *) date)->day;
 }
 
-int getMonth(Date *date) {
-    return (int) date->month;
+int getMonth(void *date) {
+    return (int) ((Date *) date)->month;
 }
 
-int getYear(Date *date) {
-    return date->year;
+int getYear(void *date) {
+    return ((Date *) date)->year;
 }
 
 char getSeconds(Date *date) {
