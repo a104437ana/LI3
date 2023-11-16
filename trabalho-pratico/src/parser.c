@@ -380,7 +380,7 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
                 strcpy(id_user,token);
                 remove_new_line(id_user);
                 if (valid_passenger(id_flight,id_user,usersCatalog,flightsCatalog)) {
-                    //addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
+                    addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);

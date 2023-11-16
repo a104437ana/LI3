@@ -43,6 +43,7 @@ Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, ch
     flight->pilot = strdup(pilot);
     flight->copilot = strdup(copilot);
     flight->notes = strdup(notes);
+    flight->passengers = createOrdList(PASSENGER_LIST_INI_SIZE);
 
     return flight;
 }

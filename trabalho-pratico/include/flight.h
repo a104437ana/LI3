@@ -6,6 +6,8 @@
 #include "hashtable.h"
 #include "orderedList.h"
 
+#define PASSENGER_LIST_INI_SIZE 100
+
 typedef struct flight Flight;
 
 Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[3], char destination[3], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes);
