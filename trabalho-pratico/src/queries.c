@@ -159,7 +159,14 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     return results;
 }
 
-double Q3(char *id);
+double Q3(char *id, HotelsManager *hotelsCatalog) {
+  Hotel *hotel = getHotelCatalog(hotelsManager, hashFunction(id), id);
+  double numberClassifications = getOrdListSize(getHotelOrdList(hotel));
+  double result = getHotelStarsSum(hotel);
+  result /= numberClassifications;
+
+  return result;
+}
 
 ResultsQ4* Q4(char *id);
 

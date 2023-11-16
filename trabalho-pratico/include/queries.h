@@ -85,7 +85,7 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
 
 ResultsQ2* Q2(char *id, Q2Type type);
 
-double Q3(char *id);
+double Q3(char *id, HotelsManager *hotelsCatalog);
 
 ResultsQ4* Q4(char *id);
 
