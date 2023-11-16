@@ -56,7 +56,7 @@ User *createUser(char *id, char *name, Gender gender, char country[2], char *add
 }
 
 void addReservationToUser(User *user, void *reservation) {
-    ResultQ2* res;
+    ResultQ2* res = malloc(sizeof(ResultQ2));
     res->resultType=RESERVATIONS;
     res->result = reservation;
     addOrdList(user->flightsReservationsByDate, res);
@@ -64,7 +64,7 @@ void addReservationToUser(User *user, void *reservation) {
 }
 
 void addFlightToUser(User *user, void *flight) {
-    ResultQ2* res;
+    ResultQ2* res = malloc(sizeof(ResultQ2));
     res->resultType=FLIGHTS;
     res->result = flight;
     addOrdList(user->flightsReservationsByDate, res);

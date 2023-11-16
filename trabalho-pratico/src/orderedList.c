@@ -47,6 +47,26 @@ void addOrdList(OrdList *ordList, void *data) {
     ordList->size = size + 1;
     ordList->maxSize = maxSize;
 }
+//procura indice da primeira data com dia igual ou maior que a data dada
+int searchReservDateIndex(OrdList *ordlist, Date *date) {
+    int size = ordlist->size;
+    int lower = 0, higher = size - 1;
+    int index = size / 2;
+    int day = getDay(date), reservDay = getReservBeginDay(ordlist->data[index]);
+    if (getReservBeginDay(ordlist->data[higher]) < day) return -1;
+    if (getReservBeginDay(ordlist->data[lower]) >= day) return 0;
+    while (reservDay != day && index != lower) {
+        if (reservDay > day)
+            higher = index;
+        else
+            lower = index;
+        index = (higher + lower) / 2;
+        reservDay = getReservBeginDay(ordlist->data[index]);
+    }
+    if (index == lower) index++;
+
+    return index;
+}
 
 void removeOrdList(OrdList *ordList, unsigned int key) {
 }
@@ -72,6 +92,7 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
     }
 //    for (i=0; i<size; i++) printf("%d / %d / %d\n", getReservBeginDay(list->data[i]), getReservBeginMonth(list->data[i]),getReservBeginYear(list->data[i]));
 //    void **oldData = list->data;
+    free(list->data);
     list->data = newData;
 //    free(oldData);
 }
@@ -100,6 +121,10 @@ void radixSortUserList(OrdList *list) {
     radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
 }
 
+//void quickSortUserNames(OrdList *list) {
+//    qSort(list->data, list->size, strcmp);
+//}
+
 void *getDataOrdList(OrdList *ordList, int index) {
     return ordList->data[index];
 }
@@ -108,7 +133,7 @@ int getOrdListSize(OrdList *ordList) {
     return ordList->size;
 }
 
-void *setDataOrdList (OrdList *ordList, int index, void* data) {
+void setDataOrdList (OrdList *ordList, int index, void* data) {
     void *oldData = ordList->data[index];
     ordList->data[index] = data;
     free(oldData);

@@ -30,6 +30,9 @@ Date *getReservEnd(Reservation *reservation);
 int getReservBeginDay(void *reservation);
 int getReservBeginMonth(void *reservation);
 int getReservBeginYear(void *reservation);
+int getReservEndDay(void *reservation);
+int getReservEndMonth(void *reservation);
+int getReservEndYear(void *reservation);
 bool getReservIncludesBreakfast(Reservation *reservation);
 //sets
 void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *ReservId);

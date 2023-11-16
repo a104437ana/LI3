@@ -32,7 +32,7 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
     } else
         hotel = (Hotel*) getData(hotels, hotelKey, id_hotel);
     addReservationToHotel(hotel, reservation);
-    addToHotelRatingsSum(hotel, hotelStars);
+    addToHotelRatingsSum(hotel, userClassification);
     reservation->hotel = hotel;
     reservation->begin = begin;
     reservation->end = end;
@@ -116,6 +116,18 @@ int getReservBeginMonth(void *reservation) {
 
 int getReservBeginYear(void *reservation) {
     return ((Reservation*)reservation)->begin->year;
+}
+
+int getReservEndDay(void *reservation) {
+    return ((Reservation*)reservation)->end->day;
+}
+
+int getReservEndMonth(void *reservation) {
+    return ((Reservation*)reservation)->end->month;
+}
+
+int getReservEndYear(void *reservation) {
+    return ((Reservation*)reservation)->end->year;
 }
 
 bool getReservIncludesBreakfast(Reservation *reservation) {
