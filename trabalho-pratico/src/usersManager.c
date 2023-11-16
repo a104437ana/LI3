@@ -18,8 +18,7 @@ void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) 
 }
 
 void sortUserCatalog(UsersManager *usersManager) {
-    sortOrdlistHashtable(usersManager->users, sortUserReservationsByDate);
-    sortOrdlistHashtable(usersManager->users, sortUserFlightsByDate);
+    sortOrdlistHashtable(usersManager->users, sortUserList);
 }
 //gets
 
@@ -41,7 +40,7 @@ Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
 
 void printFunctionUser(void *data) {
     char *userId = getUserId((User *) data);
-    printf(" %8s, %d)", userId, getOrdListSize(getReservationsByDate((User *) data)));
+    printf(" %8s, %d)", userId, getOrdListSize(getUserList((User *) data)));
     free(userId);
 }
 

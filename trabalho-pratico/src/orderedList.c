@@ -5,6 +5,7 @@
 #include "utility.h"
 #include "reservation.h"
 #include "flight.h"
+#include "queries.h"
 
 struct ordList {
     int maxSize;
@@ -93,10 +94,10 @@ void radixSortFlightDate(OrdList *list) {
     radixSort(list, getFlightScheduleDepartureYear, N_YEARS, BEGIN_YEAR);
 }
 
-void radixSortDateResultQ2(OrdList *list) {
-    //radixSort(list, getBeginDay, 31, 0);
-    //radixSort(list, getBeginMonth, 12, 0);
-    //radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
+void radixSortUserList(OrdList *list) {
+    radixSort(list, getBeginDay, 31, 0);
+    radixSort(list, getBeginMonth, 12, 0);
+    radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
 }
 
 void *getDataOrdList(OrdList *ordList, int index) {

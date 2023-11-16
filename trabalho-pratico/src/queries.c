@@ -1,32 +1,66 @@
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "utility.h"
+#include "flight.h"
+#include "flightsManager.h"
+#include "hotel.h"
+#include "hotelsManager.h"
+#include "reservation.h"
+#include "reservationsManager.h"
+#include "user.h"
+#include "usersManager.h"
+#include "utility.h"
+#include "hashtable.h"
+#include "orderedList.h"
 #include "queries.h"
+#define YEAR 2023
+#define MONTH 10
+#define DAY 01
 
-int getNumberFlights(User* user){
-    OrdList* flights = getFlightsByDate(user);
-    return(flights->size);
-}
-int getNumberReservations(User* user){
-    OrdList* reservations = getReservationsByDate(user);
-    return(reservations->size);
+int getAge(User* user){
+  Date *birthdate = getBirth(user);
+  bool birthday;
+  if(MONTH<birthdate->month){
+    birthday=false;
+  }
+  else if(MONTH>birthdate->month){
+    birthday=true;
+  }
+  else{
+    if(DAY<birthdate->day){
+      birthday=false;
+    }
+    else{
+      birthday=true;
+    }
+  }
+  if(birthday==true){
+    return (YEAR-birthdate->year);
+  }
+  else{
+    return (YEAR-birthdate->year-1);
+  }
 }
 
 int getNumberPassengers(Flight* flight){
     OrdList* passengers = getPassengers(flight);
-    return(passengers->size);
+    return(getOrdListSize(passengers));
 }
 char* getDelay(Flight* flight){
      Date* scheduleDep = getFlightScheduleDeparture(flight);
      Date* realDep = getFlightRealDeparture(flight);
      char* delay;
      int diffseg=0; int diffmin=0; int diffhour=0; int diffday=0;
-     diffseg += (realDep->seconds - scheduleDep->seconds);
+     diffseg += (realDep->hour->seconds - scheduleDep->hour->seconds);
      if (diffseg<0){
       diffseg+=60; diffmin-=1;
      }
-     diffmin += (realDep->minutes - scheduleDep->minutes);
+     diffmin += (realDep->hour->minutes - scheduleDep->hour->minutes);
      if (diffmin<0){
       diffmin+=60; diffhour-=1;
      }
-     diffhour += (realDep->hours - scheduleDep->hours);
+     diffhour += (realDep->hour->hours - scheduleDep->hour->hours);
      if (diffhour<0){
       diffhour+=24; diffday-=1;
      }
@@ -51,38 +85,38 @@ double getReservPrice(Reservation* reservation){
 }
 
 int getBeginDay(ResultQ2* data){
-  if (data->type == FLIGHTS){
-    return ((getFlightScheduleDeparture(data->result))->day);
+  if (data->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)data->result))->day);
   }
   else{
-    return (getReservBeginDay(data->result));
+    return (getReservBeginDay((Reservation *)data->result));
   }
 }
 
 int getBeginMonth(ResultQ2* data){
-  if (data->type == FLIGHTS){
-    return ((getFlightScheduleDeparture(data->result))->month);
+  if (data->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)data->result))->month);
   }
   else{
-    return (getReservBeginMonth(data->result));
+    return (getReservBeginMonth((Reservation *)data->result));
   }
 }
 
 int getBeginYear(ResultQ2* data){
-  if (data->type == FLIGHTS){
-    return ((getFlightScheduleDeparture(data->result))->year);
+  if (data->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)data->result))->year);
   }
   else{
-    return (getReservBeginYear(data->result));
+    return (getReservBeginYear((Reservation *)data->result));
   }
 }
 
 char * getIdResultQ2(ResultQ2* data){
-  if (data->type == FLIGHTS){
-    return (getFlightId(data->result));
+  if (data->resultType == FLIGHTS){
+    return (getFlightId((Flight *)data->result));
   }
   else{
-    return (getReservId(data->result));
+    return (getReservId((Reservation *)data->result));
   }
 }
 
@@ -115,54 +149,54 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
 ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     User *user = getUserCatalog(usersCatalog, hashFunction(id), id);
     if (user==NULL) return NULL; //se o id não existir
-    if (user==NULL) return NULL; //se o id não existir
+    if (getAccountStatus(user)==false) return NULL; //se o utilizador não estiver ativo
     int i;
     ResultsQ2 *results;
     if (type==FLIGHTS){
-      OrdList* flights = getFlightsByDate(user);
-      results->N = flights->size;
-       for(i=0;i<results->N; i--){
-         results->results[i]->result = flights->data[(results->N)-i-1];
-       }
+      OrdList* userList = getUserList(user);
+      int listSize = getOrdListSize(userList);
+      int nFlights = getNumberFlights(user);
+      results->N = nFlights;
+      int j = nFlights-1;
+      for(i=0;i<listSize; i++){
+        ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
+         if (data->resultType==FLIGHTS){
+           results->results[j]->result = data; 
+           j--;
+         }
+      }
     }
     else if (type==RESERVATIONS){
-      OrdList* reservations = getReservationsByDate(user);
-      results->N = reservations->size;
-       for(i=0;i<results->N; i--){
-         results->results[i]->result = reservations->data[(results->N)-i-1];
-       }
+      OrdList* userList = getUserList(user);
+      int listSize = getOrdListSize(userList);
+      int nReservations = getNumberReservations(user);
+      results->N = nReservations;
+      int j = nReservations-1;
+      for(i=0;i<listSize; i++){
+        ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
+         if (data->resultType==RESERVATIONS){
+           results->results[j]->result = data; 
+           j--;
+         }
+      }
     }
     else{
-      OrdList* flights = getFlightsByDate(user);
-      OrdList* reservations = getReservationsByDate(user);
-      results->N = flights->size+reservations->size;
-      int sizef = flights->size;
-      int sizer = reservations->size; 
-      OrdList* ordResults = createOrdList(results->N);
-      for(i=0; i<sizef; i++){
-        ResultQ2 res;
-        res->type = FLIGHTS;
-        res->result = flights->data[i];
-        addOrdList(ordResults, res);
-      }
-      for(i=0; i<sizer; i++){
-        ResultQ2 res;
-        res->type = RESERVATIONS;
-        res->result = reservations->data[i];
-        addOrdList(ordResults, res);
-      }
-      radixSortDateResultQ2(ordResults);
-      for(i=0; i<results->N; i++){
-        results->results[i]->result = ordResults[(results->N)-i-1];
+      OrdList* userList = getUserList(user);
+      int listSize = getOrdListSize(userList);
+      results->N = listSize;
+      for(i=0;i<listSize; i++){
+        ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
+           results->results[listSize-i-1]->result = data;
+           
       }
     }
     return results;
 }
 
 double Q3(char *id, HotelsManager *hotelsCatalog) {
-  Hotel *hotel = getHotelCatalog(hotelsManager, hashFunction(id), id);
+  Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
   double numberClassifications = getOrdListSize(getHotelOrdList(hotel));
-  double result = getHotelStarsSum(hotel);
+  double result = getHotelRatingsSum(hotel);
   result /= numberClassifications;
 
   return result;
@@ -174,10 +208,12 @@ ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
     int i;
     ResultsQ4 *results;
     OrdList *reservations = getHotelOrdList(hotel);
-    results->N = reservations->size;
-       for(i=0;i<results->N; i--){
-         results->results[i]->result = reservations->data[(results->N)-i-1];
-       }
+    int listSize = getOrdListSize(reservations);
+    results->N = listSize;
+    for(i=0;i<listSize; i++){
+      Reservation * data = (Reservation *)getDataOrdList(reservations, i);
+      results->results[listSize-i-1] = data;     
+    }
     return results;
 }
 

@@ -81,8 +81,6 @@ typedef struct resultsQ9{
 } ResultsQ9;
 
 int getAge(User* user);
-int getNumberFlights(User* user);
-int getNumberReservations(User* user);
 int getNumberPassengers(Flight* flight);
 char* getDelay(Flight* flight);
 int getReservNights(Reservation* reservation);

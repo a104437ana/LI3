@@ -13,7 +13,7 @@ struct hotel {
     char *address;
     int cityTax;
     OrdList *reservationsByDate;        //q4
-    int starsSum;
+    int ratingsSum;
 };
 
 Hotel *createHotel(char *id, char *name, char stars, char *address, int cityTax) {
@@ -23,7 +23,7 @@ Hotel *createHotel(char *id, char *name, char stars, char *address, int cityTax)
     hotel->name = strdup(name);
     hotel->stars = stars;
     hotel->cityTax = cityTax;
-    hotel->starsSum = 0;
+    hotel->ratingsSum = 0;
     hotel->reservationsByDate = createOrdList(HOTEL_RESERVATIONS_INI_SIZE);
 
     return hotel;
@@ -64,8 +64,8 @@ char getHotelStars(Hotel *hotel) {
     return hotel->stars;
 }
 
-char getHotelStarsSum(Hotel *hotel) {
-    return hotel->starsSum;
+char getHotelRatingsSum(Hotel *hotel) {
+    return hotel->ratingsSum;
 }
 
 char *getHotelAddress(Hotel *hotel) {
@@ -102,8 +102,8 @@ void setHCityTax(Hotel *hotel, int cityTax) {
     hotel->cityTax = cityTax;
 }
 
-void addToHotelStarsSum(Hotel *hotel, int stars) {
-    hotel->starsSum += stars;
+void addToHotelStarsSum(Hotel *hotel, int rating) {
+    hotel->ratingsSum += rating;
 }
 
 void removeHId(Hotel *hotel) {

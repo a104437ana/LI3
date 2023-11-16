@@ -5,8 +5,7 @@
 #include "hashtable.h"
 #include "orderedList.h"
 
-#define USER_FLIGHTS_INI_SIZE 100
-#define USER_RESERVATIONS_INI_SIZE 100
+#define USER_LIST_INI_SIZE 200
 
 //typedef enum gender {
 //    MALE,
@@ -17,8 +16,7 @@ typedef struct user User;
 User *createUser(char *id, char *name, Gender gender, char country[2], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus);
 void addReservationToUser(User *user, void *reservation);
 void addFlightToUser(User *user, void *flight);
-void sortUserReservationsByDate(void *user);
-void sortUserFlightsByDate(void *user);
+void sortUserList(User *user);
 
 //gets e sets fazer get multiplo e set multiplo
 //gets
@@ -33,9 +31,10 @@ PhoneNumber *getPhoneNumber(User *user);
 Date *getAccountCreation(User *user);
 char *getUserId(User *user);
 double getTotalSpent(User* user);
-OrdList * getFlightsByDate(User* user);
-OrdList * getReservationsByDate(User* user);
+OrdList * getUserList(User* user);
 bool getAccountStatus(User* user);
+int getNumberFlights(User* user);
+int getNumberReservations(User* user);
 
 //sets
 void setName(Hashtable *hashtable, unsigned int key, char *name, char *id);

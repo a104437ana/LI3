@@ -17,7 +17,7 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
 void radixSortDate(OrdList *list);
 void radixSortReservDate(OrdList *list);
 void radixSortFlightDate(OrdList *list);
-void radixSortDateResultQ2(OrdList *list);
+void radixSortUserList(OrdList *list);
 
 void *getDataOrdList(OrdList *ordList, int index);
 int getOrdListSize(OrdList *ordList);

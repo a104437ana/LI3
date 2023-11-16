@@ -5,6 +5,7 @@
 #include "flight.h"
 #include "reservation.h"
 #include "orderedList.h"
+#include "queries.h"
 
 //enum gender {
 //    MALE,
@@ -23,10 +24,11 @@ struct user {
     PhoneNumber *phoneNumber;
     Date *accountCreation;
     char *paymentMethod;
-    bool accounStatus;
-    OrdList *flightsByDate;            //q1/q2
-    OrdList *reservationsByDate;        //q1/q2     //? Book<id>
+    bool accounStatus;          
+    OrdList *flightsReservationsByDate;      
     double totalSpent;     //q1        //?
+    int nFlights;
+    int nReservations;
 };
 
 User *createUser(char *id, char *name, Gender gender, char country[2], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus) {
@@ -46,26 +48,32 @@ User *createUser(char *id, char *name, Gender gender, char country[2], char *add
     user->paymentMethod = strdup(paymentMethod);
     user->accounStatus = accountStatus;
     user->totalSpent = 0;
-    user->flightsByDate = createOrdList(USER_FLIGHTS_INI_SIZE);
-    user->reservationsByDate = createOrdList(USER_RESERVATIONS_INI_SIZE);
+    user->flightsReservationsByDate = createOrdList(USER_LIST_INI_SIZE);
+    user->nFlights=0;
+    user->nReservations=0;
 
     return user;
 }
 
 void addReservationToUser(User *user, void *reservation) {
-    addOrdList(user->reservationsByDate, reservation);
+    ResultQ2* res;
+    res->resultType=RESERVATIONS;
+    res->result = reservation;
+    addOrdList(user->flightsReservationsByDate, res);
+    user->nReservations++;
 }
 
 void addFlightToUser(User *user, void *flight) {
-    addOrdList(user->flightsByDate, flight);
+    ResultQ2* res;
+    res->resultType=FLIGHTS;
+    res->result = flight;
+    addOrdList(user->flightsReservationsByDate, res);
+    user->nFlights++;
 }
 
-void sortUserReservationsByDate(void *user) {
-    radixSortReservDate(((User *)user)->reservationsByDate);
-}
-
-void sortUserFlightsByDate(void *user) {
-    radixSortFlightDate(((User *)user)->flightsByDate);
+void sortUserList(User *user) {
+    //falta sort por id
+    radixSortUserList(user->flightsReservationsByDate);
 }
 
 //gets
@@ -140,18 +148,21 @@ double getTotalSpent(User* user) {
     return user->totalSpent;
 }
 
-OrdList * getFlightsByDate(User* user){
-     OrdList* flights = user->flightsByDate;
-     return(flights);
-}
-
-OrdList * getReservationsByDate(User* user){
-     OrdList* reservations = user->reservationsByDate;
-     return(reservations);
+OrdList * getUserList(User* user){
+     OrdList* list = user->flightsReservationsByDate;
+     return(list);
 }
 
 bool getAccountStatus(User* user){
     return(user->accounStatus);
+}
+
+int getNumberFlights(User* user){
+    return(user->nFlights);
+}
+
+int getNumberReservations(User* user){
+    return (user->nReservations);
 }
 
 //sets
