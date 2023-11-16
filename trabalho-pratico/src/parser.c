@@ -73,7 +73,7 @@ void remove_new_line (char* string) {
     string[i] = '\0';
 }
 
-void parse_users_file (char* directory,UsersManager *usersCatalog) {
+void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_id_name) {
     int ana = 0;
     char* file_path = malloc(strlen(directory) + strlen("/users.csv") + 1);
     strcpy(file_path, directory);
@@ -133,6 +133,10 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
                     if (sex[0] == 'F' || sex[0] == 'f') gender = 1;
                     Date* birth = string_to_date(birth_date);
                     Date* accountCreation = string_to_date(account_creation);
+                    int accountStatus = 0;
+                    if (account_status[0] == 'a' || account_status[0] == 'A') {
+                        accountStatus = 1;  
+                    }
                     User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,account_status);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
                     ana++;
@@ -395,8 +399,8 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
 }
 
 //Faz o parsing de todos os tipos de ficheiros
-void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
-    parse_users_file(directory,usersCatalog);
+void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog,OrdList* user_id_name) {
+    parse_users_file(directory,usersCatalog,user_id_name);
     parse_reservations_file(directory,usersCatalog,reservationsCatalog,hotelsCatalog);
     Hashtable *passengers_per_flight = createHashtable(10000);
     count_passengers(directory,usersCatalog,passengers_per_flight);

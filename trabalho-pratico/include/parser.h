@@ -15,12 +15,11 @@ void add_invalid_line_to_error_file (char* file_path, char* string_line);
 int base_e_expoente (int base, int expoente);
 int string_to_int (char* string);
 Date* string_to_date (char* string);
-void parse_users_file (char* directory,UsersManager *usersCatalog);
+void remove_new_line (char* string);
+void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_id_name);
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog);
 void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog,Hashtable* passengers_per_flight);
 void parse_passengers_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog);
-
-void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* passengers_per_flight);
-void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog);
+void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog,OrdList* user_id_name);
 
 #endif

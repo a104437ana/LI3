@@ -107,6 +107,12 @@ int getOrdListSize(OrdList *ordList) {
     return ordList->size;
 }
 
+void *setDataOrdList (OrdList *ordList, int index, void* data) {
+    void *oldData = ordList->data[index];
+    ordList->data[index] = data;
+    free(oldData);
+}
+
 void printOrdList(OrdList *ordList, void (*printFunction)(void*)) {
     int size = ordList->size;
     void **data = ordList->data;

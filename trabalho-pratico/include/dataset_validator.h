@@ -30,6 +30,7 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
 int valid_origin_or_destination (char* local);
 int valid_par_of_origin_and_destination (char* origin, char* destination);
 typedef struct flight_passengers FlightPassengers;
+void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* passengers_per_flight);
 int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot,Hashtable* passengers_per_flight);
 
 #endif
