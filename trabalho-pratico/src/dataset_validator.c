@@ -244,7 +244,7 @@ int valid_hotel_stars (char *hotel_stars) {
     return valid;
 }
 
-int valid_city_tax (char* city_tax) {
+int is_non_negative_integer (char* city_tax) {
     int valid = 0;
     if (is_digit(city_tax[0])) {
         int i = 1;
@@ -267,7 +267,7 @@ int valid_city_tax (char* city_tax) {
     return valid;
 }
 
-int valid_price_per_night (char* price_per_night) {
+int is_positive_integer (char* price_per_night) {
     int zeros = 0;
     int valid = 0;
     if (is_digit(price_per_night[0])) {
@@ -353,11 +353,11 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
             if (length_bigger_than_zero(id_hotel)) {
                 if (length_bigger_than_zero(hotel_name)) {
                     if (valid_hotel_stars(hotel_stars)) {
-                        if (valid_city_tax(city_tax)) {
+                        if (is_non_negative_integer(city_tax)) {
                             if (length_bigger_than_zero(address)) {
                                 if (valid_date_ymd(begin_date)) {
                                     if (valid_date_ymd(end_date)) {
-                                        if (valid_price_per_night(price_per_night)) {
+                                        if (is_positive_integer(price_per_night)) {
                                             if (valid_includes_breakfast(includes_breakfast)) {
                                                 if (valid_rating(rating)) {
                                                     if (valid_par_of_dates(begin_date,end_date)) {
@@ -458,7 +458,7 @@ void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* p
 
 int valid_total_seats (char* total_seats,Hashtable* passengers_per_flight, char* id_flight) {
     int valid = 0;
-    if (valid_price_per_night(total_seats)) {
+    if (is_positive_integer(total_seats)) {
         if (searchHashtable(passengers_per_flight,hashFunction(id_flight),id_flight) == NULL) valid = 1;
         else {
             int seats = string_to_int(total_seats);

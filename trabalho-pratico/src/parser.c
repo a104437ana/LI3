@@ -137,7 +137,7 @@ void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_
                     if (account_status[0] == 'a' || account_status[0] == 'A') {
                         accountStatus = 1;  
                     }
-                    User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,account_status);
+                    User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,accountStatus);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
                     ana++;
                 }
@@ -230,13 +230,11 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating,usersCatalog)) {
                     int cityTax = string_to_int(city_tax);
                     int pricePerNight = string_to_int(price_per_night);
-                    char userRating = (char) string_to_int(rating);
-                    char hotelStars = (char) string_to_int(hotel_stars);
                     int includesBreakfast = 0;
                     if (includes_breakfast[0] == 't' || includes_breakfast[0] == 'T' || includes_breakfast[0] == '1') includesBreakfast = 1;
                     Date* begin = string_to_date(begin_date);
                     Date* end = string_to_date(end_date);
-                    Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotelStars,address,cityTax,begin,end,pricePerNight,includesBreakfast,room_details,userRating,comment,getHashtableHotelsCatalog(hotelsCatalog));
+                    Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars[0],address,cityTax,begin,end,pricePerNight,includesBreakfast,room_details,rating[0],comment,getHashtableHotelsCatalog(hotelsCatalog));
                     addReservToCatalog(reservationsCatalog,reservation,hashFunction(id_reservation),hotelsCatalog,usersCatalog);
                     i++;
                 }
@@ -382,7 +380,7 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
                 strcpy(id_user,token);
                 remove_new_line(id_user);
                 if (valid_passenger(id_flight,id_user,usersCatalog,flightsCatalog)) {
-                //    addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
+                    //addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
