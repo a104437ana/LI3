@@ -4,17 +4,19 @@
 
 struct usersManager {
     Hashtable *users;
-//    OrdList *usersByName;
+    OrdList *usersByName;
 };
 
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager));
     usersManager->users = createHashtable(size);
+    usersManager->usersByName = createOrdList(size);
     return usersManager;
 }
 
 void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) {
     addHashtable(usersManager->users, key, user, getUserId(user));
+    addOrdList(usersManager->usersByName, user);
 }
 
 void sortUserCatalog(UsersManager *usersManager) {

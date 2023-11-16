@@ -12,16 +12,16 @@ typedef enum typeOfData {
 } TypeOfData;
 
 struct hashtableNode {
-    int key;
-    char *id;
-    void *data;
-    struct hashtableNode *next;
+    int key; //chave de hash
+    char *id; //id usado para hash
+    void *data; //data guardada
+    struct hashtableNode *next; //próximo nodo para gerir colisões
 };
 
 struct hashtable {
-    int size;
-    int nodes;
-    HashtableNode **node;
+    int size; //tamanho
+    int nodes; //numero de nodos
+    HashtableNode **node; //lista dos primeiros nodos
 };
 
 //funcao hash
@@ -32,7 +32,7 @@ unsigned int hashFunction(char *id) {
 
     return hash;
 }
-
+//cria um novo nodo vazio
 HashtableNode *createHashtableNode() {
     HashtableNode *node = malloc(sizeof(HashtableNode));
     node->key = 0;
@@ -42,7 +42,7 @@ HashtableNode *createHashtableNode() {
 
     return node;
 }
-
+//cria hashtable vazia
 Hashtable *createHashtable(int size) {
     Hashtable *newHashtable = malloc(sizeof(Hashtable));
     newHashtable->size = size;
@@ -53,11 +53,11 @@ Hashtable *createHashtable(int size) {
 
     return newHashtable;
 }
-
+//procura nodo com o id dado na hashtable
 HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id) {
-    int index = key % hashtable->size;
-    HashtableNode **node = &(hashtable->node[index]);
-    while ((*node) != NULL && strcmp((*node)->id, id))
+    int index = key % hashtable->size; //indice para onde aponta a chave
+    HashtableNode **node = &(hashtable->node[index]); //primeiro nodo com esse indice
+    while ((*node) != NULL && strcmp((*node)->id, id)) //procura nodo com id se existir
         node = &((*node)->next);
 
     return node;
@@ -66,7 +66,7 @@ HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id) {
 HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key, char *id) {
     return *(searchNode(hashtable, key, id));
 }
-
+//copia uma hashtable para outra
 void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
     HashtableNode *node;
     int size = hashtable->size;
@@ -78,7 +78,7 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
         }
     }
 }
-
+//adiciona nova data à hashtable
 void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
     HashtableNode **node;
     //falta implementar alocamento dinâmico da hashtable para um determinado nível de uso
@@ -91,10 +91,10 @@ void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) 
 //        destroyHashtable(oldHashtable);
 //        hashtable = newHashtable;
 //    }
-    node = searchNode(hashtable, key, id);
+    node = searchNode(hashtable, key, id); //procura onde inserir a nova data
     if (*node != NULL) {
-        if (!strcmp((*node)->id, id)) return;
-        node = &((*node)->next);
+        if (!strcmp((*node)->id, id)) return; //caso a data já exista na hashtable
+        node = &((*node)->next); //caso naõ exista insere no próximo nodo
     }
     *node = createHashtableNode();
     (*node)->key = key;
