@@ -1,7 +1,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include "interpreter.h"
-#include <stdio.h>
+#include "output.h"
+#include "queries.h"
+#include <stdlib.h>
+#include "flight.h"
+#include "hotel.h"
+#include "reservation.h"
+#include "user.h"
+#include "utility.h"
+#include "flightsManager.h"
+#include "hotelsManager.h"
+#include "reservationsManager.h"
+#include "usersManager.h"
+
 
 struct command {
  int query_id; //número da query
@@ -23,16 +35,16 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
      if (command->n_args==0) return;
      else{
         if (command->n_args==1){ //se só tiver o id como argumento,
-           ResultsQ2* output = Q2(command->args[0], BOTH);
+           ResultsQ2* output = Q2(command->args[0], BOTH, usersCatalog);
            printOutputQ2(command->format_flag, BOTH, output, i);
         }
         else{
           if ((strcmp(command->args[1], "flights")==0)){
-            ResultsQ2* output = Q2(command->args[0], FLIGHTS);
+            ResultsQ2* output = Q2(command->args[0], FLIGHTS, usersCatalog);
             printOutputQ2(command->format_flag, FLIGHTS, output, i);
           }
           else if ((strcmp(command->args[1], "reservations")==0)){
-           ResultsQ2* output = Q2(command->args[0], RESERVATIONS);
+           ResultsQ2* output = Q2(command->args[0], RESERVATIONS, usersCatalog);
            printOutputQ2(command->format_flag, RESERVATIONS, output, i);
           }
           else return;
@@ -42,14 +54,14 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else if (command->query_id==3){
      if (command->n_args==0) return;
      else{
-        double output = Q3(command->args[0]);
+        double output = Q3(command->args[0], hotelsCatalog);
         printOutputQ3(command->format_flag, output, i);
      }
    }
     else if (command->query_id==4){
      if (command->n_args==0) return;
      else{
-        ResultsQ4* output = Q4(command->args[0]);
+        ResultsQ4* output = Q4(command->args[0], hotelsCatalog);
         printOutputQ4(command->format_flag, output, i);
      }
    }
@@ -80,15 +92,17 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else if (command->query_id==8){
      if (command->n_args<3) return;
      else{
-        double output = Q8(command->args[0], toDate(command->args[1]), toDate(command->args[2]));
-        printOutputQ8(command->format_flag, output, i);
+        //double output = Q8(command->args[0], toDate(command->args[1]), toDate(command->args[2]));
+        //printOutputQ8(command->format_flag, output, i);
+        return;
      }
    }
     else if (command->query_id==9){
      if (command->n_args==0) return;
      else{
-        ResultsQ9* output = Q9(command->args[0]);
-        printOutputQ9(command->format_flag, output, i);
+        //ResultsQ9* output = Q9(command->args[0]);
+        //printOutputQ9(command->format_flag, output, i);
+        return;
      }
    }
     else if (command->query_id==10){

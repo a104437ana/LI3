@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include "output.h"
 #include "queries.h"
+#include <stdlib.h>
+#include "flight.h"
+#include "hotel.h"
+#include "reservation.h"
+#include "user.h"
+#include "utility.h"
 
 void createOutputFile (int nCommand){
   char path[100];
@@ -19,16 +25,16 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
    fprintf (file, "--- 1 ---\n");
    if (output->resultType==USER){
     char sex;
-    if (getGender(output->result)==M){
+    if (getGender(output->result)==MALE){
       sex='M';
     }
     else{
       sex='F';
     }
-    fprintf(file, "name: %s\nsex: %c\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",getName(output->result), sex, getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
+    fprintf(file, "name: %s\nsex: %c\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",getName(output->result), sex, getAge(output->result), getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
    }
    if (output->resultType==FLIGHT){
-    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %.3f\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFlightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result)); 
+    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %s\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFlightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result)); 
    }
    if (output->resultType==RESERVATION){
     char breakfast[6];
@@ -44,16 +50,16 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
   else{
    if (output->resultType==USER){
     char sex;
-    if (getGender(output->result)==M){
+    if (getGender(output->result)==MALE){
       sex='M';
     }
     else{
       sex='F';
     }
-    fprintf(file, "%s;%c;%d;%s;%s;%d;%d;%.3f\n",getName(output->result), sex, getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
+    fprintf(file, "%s;%c;%d;%s;%s;%d;%d;%.3f\n",getName(output->result), sex, getAge(output->result), getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
    }
    if (output->resultType==FLIGHT){
-    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%.3f\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFLightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result));
+    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%s\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFlightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result));
    }
    if (output->resultType==RESERVATION){
     char breakfast[6];
@@ -70,12 +76,13 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
 }
 
 void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
+  if (output==NULL) return; //se o id não existir, não escreve nada
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
   int j;
   if (format_flag=='F'){
-    if (Q2Type==BOTH){
+    if (qType==BOTH){
      for (j=0; j<output->N; j++){
        char* resultT;
        if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
@@ -85,7 +92,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
      }
     }
     else{
-     if(Q2Type==FLIGHTS){
+     if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
         fprintf (file, "--- %d ---\n", j);
         fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
@@ -94,13 +101,13 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
      else{
       for (j=0; j<output->N; j++){
         fprintf (file, "--- %d ---\n", j);
-        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToString(getReservBeginDay(output->results[j]->result)));
+        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToString(getReservBegin(output->results[j]->result)));
       }
      }
     }
   }
   else{
-    if (Q2Type==BOTH){
+    if (qType==BOTH){
      for (j=0; j<output->N; j++){
        char* resultT;
        if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
@@ -109,14 +116,14 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
      }
     }
     else{
-     if(Q2Type==FLIGHTS){
+     if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
         fprintf (file,"%s;%s\n", getReservId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
       }
      }
      else{
       for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%s\n", getFlightId(output->results[j]->result), dateToString(getReservBeginDay(output->results[j]->result)));
+        fprintf (file,"%s;%s\n", getFlightId(output->results[j]->result), dateToString(getReservBegin(output->results[j]->result)));
       }
      }
     } 
@@ -125,6 +132,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
 }
 
 void printOutputQ3 (char format_flag, double output, int i){
+  if (output==-1) return; //se o id não existir, não escreve nada
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
@@ -139,6 +147,7 @@ void printOutputQ3 (char format_flag, double output, int i){
 }
 
 void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
+  if (output==NULL) return; //se o id não existir, não escreve nada
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
@@ -146,12 +155,12 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
   if (format_flag=='F'){
      for (j=0; j<output->N; j++){
        fprintf (file, "--- %d ---\n", j);
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %.3f\ntotal_price: %.3f\n",getReservId(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), getReservUserId(output->result), getReservUserClassification(output->result), getReservPrice(output->result));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
      }
     }
   else{
      for (j=0; j<output->N; j++){
-        fprintf(file, "%s;%s;%s;%s;%.3f;%.3f\n",getReservId(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), getReservUserId(output->result), getReservUserClassification(output->result), getReservPrice(output->result));
+        fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
      }
   }
   fclose(file);

@@ -1,3 +1,8 @@
+#include "flightsManager.h"
+#include "hotelsManager.h"
+#include "reservationsManager.h"
+#include "usersManager.h"
+
 #ifndef _INTERPRETER_
 #define _INTERPRETER_ //header file para o interpretador de comandos
 
