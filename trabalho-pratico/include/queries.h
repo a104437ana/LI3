@@ -85,9 +85,9 @@ int getNumberPassengers(Flight* flight);
 char* getDelay(Flight* flight);
 int getReservNights(Reservation* reservation);
 double getReservPrice(Reservation* reservation);
-int getBeginDay(ResultQ2* data);
-int getBeginMonth(ResultQ2* data);
-int getBeginYear(ResultQ2* data);
+int getBeginDay(void* data);
+int getBeginMonth(void* data);
+int getBeginYear(void* data);
 char * getIdResultQ2(ResultQ2* data);
 
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog);

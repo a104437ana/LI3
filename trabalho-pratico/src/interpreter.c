@@ -157,8 +157,8 @@ void parseCommandFile (char* name,UsersManager *usersCatalog,ReservationsManager
  size_t len;
  int i = 1;
 
- FILE* ficheiro = fopen(name, "r");
- while((read = getline(&line, &len, ficheiro))!= -1){
+ FILE* file = fopen(name, "r");
+ while((read = getline(&line, &len, file))!= -1){
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
     processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
@@ -166,5 +166,5 @@ void parseCommandFile (char* name,UsersManager *usersCatalog,ReservationsManager
     free(command);
  }
  free(line);
- fclose(name);
+ fclose(file);
 }

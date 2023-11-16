@@ -71,8 +71,9 @@ void addFlightToUser(User *user, void *flight) {
     user->nFlights++;
 }
 
-void sortUserList(User *user) {
+void sortUserList(void *data) {
     //falta sort por id
+    User *user = (User *) data;
     radixSortUserList(user->flightsReservationsByDate);
 }
 

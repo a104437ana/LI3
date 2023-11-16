@@ -16,7 +16,7 @@ typedef struct user User;
 User *createUser(char *id, char *name, Gender gender, char country[2], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus);
 void addReservationToUser(User *user, void *reservation);
 void addFlightToUser(User *user, void *flight);
-void sortUserList(User *user);
+void sortUserList(void *data);
 
 //gets e sets fazer get multiplo e set multiplo
 //gets

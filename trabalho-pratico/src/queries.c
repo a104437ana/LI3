@@ -84,30 +84,33 @@ double getReservPrice(Reservation* reservation){
      return res;
 }
 
-int getBeginDay(ResultQ2* data){
-  if (data->resultType == FLIGHTS){
-    return ((getFlightScheduleDeparture((Flight *)data->result))->day);
+int getBeginDay(void* data){
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)res->result))->day);
   }
   else{
-    return (getReservBeginDay((Reservation *)data->result));
+    return (getReservBeginDay((Reservation *)res->result));
   }
 }
 
-int getBeginMonth(ResultQ2* data){
-  if (data->resultType == FLIGHTS){
-    return ((getFlightScheduleDeparture((Flight *)data->result))->month);
+int getBeginMonth(void* data){
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)res->result))->month);
   }
   else{
-    return (getReservBeginMonth((Reservation *)data->result));
+    return (getReservBeginMonth((Reservation *)res->result));
   }
 }
 
-int getBeginYear(ResultQ2* data){
-  if (data->resultType == FLIGHTS){
-    return ((getFlightScheduleDeparture((Flight *)data->result))->year);
+int getBeginYear(void* data){
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)res->result))->year);
   }
   else{
-    return (getReservBeginYear((Reservation *)data->result));
+    return (getReservBeginYear((Reservation *)res->result));
   }
 }
 

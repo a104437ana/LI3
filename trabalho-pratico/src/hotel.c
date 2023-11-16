@@ -102,7 +102,7 @@ void setHCityTax(Hotel *hotel, int cityTax) {
     hotel->cityTax = cityTax;
 }
 
-void addToHotelStarsSum(Hotel *hotel, int rating) {
+void addToHotelRatingsSum(Hotel *hotel, int rating) {
     hotel->ratingsSum += rating;
 }
 
