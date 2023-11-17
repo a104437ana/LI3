@@ -125,7 +125,21 @@ char * getIdResultQ2(ResultQ2* data){
 }
 
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
-    if(id[0]=='U'){
+    if(same_prefix("Book", id) != 0){
+      ResultQ1* result = malloc(sizeof(ResultQ1));
+      result->result = getReservCatalog(reservationsCatalog, hashFunction(id), id);
+      if (result->result==NULL) return NULL; //se o id não existir
+      result->resultType=RESERVATION;
+      return result;
+    }
+    else if (id[0]>='0' && id[0]<='9'){
+      ResultQ1* result = malloc(sizeof(ResultQ1));
+      result->result = getFlightCatalog(flightsCatalog, hashFunction(id), id);
+      if (result->result==NULL) return NULL; //se o id não existir
+      result->resultType=FLIGHT;
+      return result;   
+    }
+    else{
       ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getUserCatalog(usersCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
@@ -133,21 +147,6 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
       result->resultType=USER;
       return result;
     }
-    else if(id[0]=='F'){
-      ResultQ1* result = malloc(sizeof(ResultQ1));
-      result->result = getFlightCatalog(flightsCatalog, hashFunction(id), id);
-      if (result->result==NULL) return NULL; //se o id não existir
-      result->resultType=FLIGHT;
-      return result;   
-    }
-    else if(id[0]=='R'){
-      ResultQ1* result = malloc(sizeof(ResultQ1));
-      result->result = getReservCatalog(reservationsCatalog, hashFunction(id), id);
-      if (result->result==NULL) return NULL; //se o id não existir
-      result->resultType=RESERVATION;
-      return result;
-    }
-    else return NULL; //se o id não for válido
 }
 
 ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
