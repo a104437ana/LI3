@@ -13,7 +13,7 @@
 //} Gender;
 typedef struct user User;
 
-User *createUser(char *id, char *name, Gender gender, char country[2], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus);
+User *createUser(char *id, char *name, Gender gender, char country[3], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus);
 void addReservationToUser(User *user, void *reservation);
 void addFlightToUser(User *user, void *flight);
 void sortUserList(void *data);

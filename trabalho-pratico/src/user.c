@@ -16,7 +16,7 @@ struct user {
     char *id;
     char *name;             //q1
     Gender gender;          //q1
-    char country[2];
+    char country[3];
     char *address;
     char *passport;       //q1
     Date *birth;        //q1
@@ -31,7 +31,7 @@ struct user {
     int nReservations;
 };
 
-User *createUser(char *id, char *name, Gender gender, char country[2], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus) {
+User *createUser(char *id, char *name, Gender gender, char country[3], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus) {
     User *user = malloc(sizeof(User));
     user->id = strdup(id);
     user->name = strdup(name);
