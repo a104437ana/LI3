@@ -106,7 +106,11 @@ ResultsQ7* Q7(int N);
 
 double Q8(char *id, int begin, int end, int month, HotelsManager *hotelsCatalog);
 
-ResultsQ9* Q9(char *prefix);
+int same_prefix (char* prefix, char* name);
+void swap (UserByName* user1, UserByName* user2);
+int bigger_user (UserByName* user1, UserByName* user2);
+void ord_list_by_name (OrdList* list, int begin, int end);
+OrdList* Q9 (char* prefix,UsersManager *usersCatalog);
 
 void Q10(int year, char month);
 

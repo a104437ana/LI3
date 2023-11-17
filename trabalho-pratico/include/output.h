@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include "orderedList.h"
 #include "queries.h"
 
 
@@ -15,6 +16,6 @@ void printOutputQ5 (char format_flag, ResultsQ5* output, int i);
 void printOutputQ6 (char format_flag, ResultsQ6* output, int i);
 void printOutputQ7 (char format_flag, ResultsQ7* output, int i);
 void printOutputQ8 (char format_flag, double output, int i);
-void printOutputQ9 (char format_flag, ResultsQ9* output, int i);
+void printOutputQ9 (char format_flag, OrdList* list, int i);
 
 #endif

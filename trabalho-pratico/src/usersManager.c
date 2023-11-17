@@ -43,6 +43,10 @@ Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
     return usersManager->users;
 }
 
+OrdList *getOrdListUser (UsersManager *usersManager) {
+    return usersManager->usersByName;
+}
+
 void printFunctionUser(void *data) {
     char *userId = getUserId((User *) data);
     printf(" %8s, %d)", userId, getOrdListSize(getUserList((User *) data)));

@@ -103,8 +103,8 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else if (command->query_id==9){
      if (command->n_args==0) return;
      else{
-        //ResultsQ9* output = Q9(command->args[0]);
-        //printOutputQ9(command->format_flag, output, i);
+        OrdList* list = Q9(command->args[0],usersCatalog);
+        printOutputQ9(command->format_flag, list, i);
         return;
      }
    }

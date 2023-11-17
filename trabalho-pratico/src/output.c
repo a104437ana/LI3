@@ -240,20 +240,31 @@ void printOutputQ8 (char format_flag, double output, int i){
   fclose(file);
 }
 
-void printOutputQ9 (char format_flag, ResultsQ9* output, int i){
+void printOutputQ9 (char format_flag, OrdList* list, int i) {
+  int N = getOrdListSize(list);
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
   int j;
   if (format_flag=='F'){
-     for (j=0; j<output->N; j++){
+     for (j=0; j<N; j++){
        fprintf (file, "--- %d ---\n", j);
-       fprintf (file,"id: %s\nname: %s\n", (output->results[j])->id, (output->results[j])->name);
+       UserByName* user = getDataOrdList(list,i);
+       char* id = getId_UserByName(user);
+       char* name = getName_UserByName(user);
+       fprintf (file,"id: %s\nname: %s\n", id, name);
+       free(id);
+       free(name);
      }
     }
   else{
-     for (j=0; j<output->N; j++){
-       fprintf (file,"%s;%s\n", (output->results[j])->id, (output->results[j])->name);
+     for (j=0; j<N; j++){
+       UserByName* user = getDataOrdList(list,i);
+       char* id = getId_UserByName(user);
+       char* name = getName_UserByName(user);
+       fprintf (file,"%s;%s\n", id, name);
+       free(id);
+       free(name);
      }
   }
   fclose(file);
