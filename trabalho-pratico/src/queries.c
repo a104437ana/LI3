@@ -48,31 +48,10 @@ int getNumberPassengers(Flight* flight){
     OrdList* passengers = getPassengers(flight);
     return(getOrdListSize(passengers));
 }
-Date *getDelay(Flight* flight){
+int getDelay(Flight* flight){
      Date* scheduleDep = getFlightScheduleDeparture(flight);
      Date* realDep = getFlightRealDeparture(flight);
-     Date *res = malloc(sizeof(Date));
-     res->hour = malloc(sizeof(Hour));
-     int diffseg=0; int diffmin=0; int diffhour=0; int diffday=0;
-     diffseg += (realDep->hour->seconds - scheduleDep->hour->seconds);
-     if (diffseg<0){
-      diffseg+=60; diffmin-=1;
-     }
-     diffmin += (realDep->hour->minutes - scheduleDep->hour->minutes);
-     if (diffmin<0){
-      diffmin+=60; diffhour-=1;
-     }
-     diffhour += (realDep->hour->hours - scheduleDep->hour->hours);
-     if (diffhour<0){
-      diffhour+=24; diffday-=1;
-     }
-     diffday += (realDep->day - scheduleDep->day);
-     res->year = 0;
-     res->month = 0;
-     res->day = diffday;
-     res->hour->hours = diffhour;
-     res->hour->minutes = diffmin;
-     res->hour->seconds = diffseg;
+     int res = ((realDep->hour->hours)-(scheduleDep->hour->hours))*3600 + ((realDep->hour->minutes)-(scheduleDep->hour->minutes))*60 +((realDep->hour->seconds)-(scheduleDep->hour->seconds));
      return res;
 }
 

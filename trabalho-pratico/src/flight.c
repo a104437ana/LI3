@@ -33,9 +33,11 @@ Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, ch
     flight->origin[0] = origin[0];
     flight->origin[1] = origin[1];
     flight->origin[2] = origin[2];
+    flight->origin[3] = '\0';
     flight->destination[0] = destination[0];
     flight->destination[1] = destination[1];
     flight->destination[2] = destination[2];
+    flight->destination[3] = '\0';
     flight->scheduleDeparture = scheduleDeparture;
     flight->scheduleArrival = scheduleArrival;
     flight->realDeparture = realDeparture;
