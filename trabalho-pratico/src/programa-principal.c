@@ -35,6 +35,7 @@ int main (int argc, char** argv) {
     OrdList* user_id_name = createOrdList(USER_ID_NAME_LIST_SIZE);
     if (argc == 3) {
     parse_all_files(argv[1],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,user_id_name);
+    sortCatalogs(usersCatalog, hotelsCatalog);
     parseCommandFile(argv[2],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
     }
 
@@ -42,7 +43,6 @@ int main (int argc, char** argv) {
 //    printReservations(reservationsCatalog);
 //    printHotels(hotelsCatalog);
 //    printFlights(flightsCatalog);
-    sortCatalogs(usersCatalog, hotelsCatalog);
 
 //    printHotelTableReservs(getHashtableHotelsCatalog(hotelsCatalog), printDate);
 
