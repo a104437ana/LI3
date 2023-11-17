@@ -39,10 +39,10 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
    if (output->resultType==RESERVATION){
     char breakfast[6];
     if (getReservIncludesBreakfast(output->result)==true){
-      strcpy(breakfast, "true");
+      strcpy(breakfast, "True");
     }
     else{
-      strcpy(breakfast, "false");
+      strcpy(breakfast, "False");
     }
     fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
    }
@@ -64,10 +64,10 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
    if (output->resultType==RESERVATION){
     char breakfast[6];
     if (getReservIncludesBreakfast(output->result)==true){
-      strcpy(breakfast, "true");
+      strcpy(breakfast, "True");
     }
     else{
-      strcpy(breakfast, "false");
+      strcpy(breakfast, "False");
     }
     fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
    }
@@ -102,7 +102,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
      else{
       for (j=0; j<output->N; j++){
         fprintf (file, "--- %d ---\n", j);
-        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToString(getReservBegin(output->results[j]->result)));
+        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getReservBegin(output->results[j]->result)));
       }
      }
     }
@@ -119,7 +119,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
     else{
      if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%s\n", getReservId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
+        fprintf (file,"%s;%s\n", getReservId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
       }
      }
      else{

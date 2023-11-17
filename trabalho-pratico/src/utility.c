@@ -116,6 +116,13 @@ char* dateToString(Date *date){
     return res;
 }
 
+char* dateToStringNoHours(Date *date){
+    char* res = 0;
+    res = malloc(11);
+    sprintf(res, "%04d/%02d/%02d", date->year, date->month, date->day);
+    return res;
+}
+
 int string_to_day(char* string) {
     int day = (string[8] - '0') * 10 + (string[9] - '0');
     return day;
