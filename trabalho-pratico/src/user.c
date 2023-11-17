@@ -94,8 +94,8 @@ Gender getGender(User *user) {
 }
 
 char *getCountry(User *user) {
-    char *country = malloc(sizeof(char) * 2); //possivel leak de memória
-    memcpy(country, user->country, 2);
+    char *country; //falta encapsulamento
+    country = user->country;
 
     return country;
 }
