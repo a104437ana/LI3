@@ -1,6 +1,6 @@
 #include "Q9.h"
 
-int same_prefix (char* prefix, char* name) {
+int same_prefix (char* prefix, char* name) { 
     int same_prefix = 0;
     if (strlen(name) >= strlen(prefix)) {
         int i = 0;
@@ -13,69 +13,79 @@ int same_prefix (char* prefix, char* name) {
     return same_prefix;
 }
 
-struct user_id_name {
-    char* id_user;
-    char* name_user;
-};
-
-void swap(OrdList* ordList,int index1,int index2) {
-    UserIdName* user1 = malloc(sizeof(UserIdName));
-    user1 = getDataOrdList(user_id_name,index1);
-    char* id1 = user1->id_user;
-    char* name1 = user1->name_user;
-    UserIdName* user2 = malloc(sizeof(UserIdName));
-    user2 = getDataOrdList(user_id_name,index2);
-    char* id2 = user2->id_user;
-    char* name2 = user2->name_user;
-    setDataOrdList(ordList,index1,user2);
-    setDataOrdList(ordList,index2,user1);
+void swap (UserByName* user1, UserByName* user2) {
+    char* name1 = getName_UserByName(user1);
+    char* name2 = getName_UserByName(user2);
+    char* id1 = getId_UserByName(user1);
+    char* id2 = getId_UserByName(user2);
+    setName_UserByName(user1,name2);
+    setName_UserByName(user2,name1);
+    setId_UserByName(user1,id2);
+    setId_UserByName(user2,id1);
+    free(name1);
+    free(name2);
+    free(id1);
+    free(id2);
 }
 
-int bigger_user (UserIdName* user1, UserIdName* user2) {
+int bigger_user (UserByName* user1, UserByName* user2) {
     int bigger_user = 2;
-    int result = strcoll(user1->name_user,user2->name_user);
+    char* name1 = getName_UserByName(user1);
+    char* name2 = getName_UserByName(user2);
+    int result = strcoll(name1,name2);
+    free(name1);
+    free(name2);
     if (result == 0) {
-        result = strcoll(user1->id,user2->id);
+        char* id1 = getId_UserByName(user1);
+        char* id2 = getId_UserByName(user2);
+        result = strcoll(id1,id2);
+        free(id1);
+        free(id2);
     }
     if (result > 0) bigger_user = 1;
     return bigger_user;
 }
 
-void ord_list_by_name (UsersManager* usersCatalog, int begin, int end) {
+void ord_list_by_name (OrdList* list, int begin, int end) {
     if (begin != end) {
-        UserIdName* pivo = getDataOrdList(user_id_name,end);
+        UserByName* pivo = getDataOrdList(list,end);
         int i = begin-1;
         int j = begin;
         while (j < end) {
-            UserIdName* user1 = getDataOrdList(user_id_name,j);
-            if (bigger_user(user1,pivo) == 1) {
+            UserByName* user_j = getDataOrdList(list,j);
+            if (bigger_user(user_j,pivo) == 1) {
                 j++;
             }
             else {
                 i++;
-                swap(user_id_name,j,i);
+                UserByName* user_i = getDataOrdList(list,i);
+                swap(user_i,user_j);
             }
         }
         if (j == end) {
             i++;
-            swap(user_id_name,j,i);
+            UserByName* user_i = getDataOrdList(list,i);
+            swap(user_i,user_j);
         }
-        ord_list_by_name(ordList,0,i-1);
-        ord_list_by_name(ordList,i+1,end);
+        ord_list_by_name(list,0,i-1);
+        ord_list_by_name(list,i+1,end);
     }
 }
 
-void Q9 (char* prefix,OrdList* user_id_name) {
+OrdList* Q9 (char* prefix,UsersManager *usersCatalog) {
     OrdList* name_with_prefix = createOrdList(10000);
-    int size = getOrdListSize(user_id_name);
+    int size = getOrdListSize(usersCatalog->usersByName);
     int i = 0;
     while (i<size) {
-        UserIdName* user = getDataOrdList(user_id_name,i);
-        int addToList = same_prefix(prefix,user->name);
+        UserByName* userByName = getDataOrdList(usersCatalog->usersByName,i);
+        char* name = getName_UserByName(userByName);
+        int addToList = same_prefix(prefix,name);
+        free(name);
         if (addToList) {
-            addOrdList(name_with_prefix,user);
+            addOrdList(name_with_prefix,userByName);
         }
         i++;
     }
     ord_list_by_name(name_with_prefix,0,size-1);
+    return name_with_prefix;
 }
