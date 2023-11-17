@@ -251,10 +251,10 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 remove_new_line(notes);
                 if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,passengers_counter)) {
                     int totalSeats = string_to_int(total_seats);
-                    Date* scheduleDeparture = string_to_date(schedule_departure_date);
-                    Date* scheduleArrival = string_to_date(schedule_arrival_date);
-                    Date* realDeparture = string_to_date(real_departure_date);
-                    Date* realArrival = string_to_date(real_arrival_date);
+                    Date* scheduleDeparture = string_to_date_hours(schedule_departure_date);
+                    Date* scheduleArrival = string_to_date_hours(schedule_arrival_date);
+                    Date* realDeparture = string_to_date_hours(real_departure_date);
+                    Date* realArrival = string_to_date_hours(real_arrival_date);
                     Flight *flight = createFlight(id_flight,airline,plane_model,totalSeats,origin,destination,scheduleDeparture,scheduleArrival,realDeparture,realArrival,pilot,copilot,notes);
                     addFlightToCatalog(flightsCatalog,flight,hashFunction(id_flight));
                     j++;

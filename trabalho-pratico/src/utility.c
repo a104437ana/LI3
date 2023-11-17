@@ -13,24 +13,45 @@ Date *createDate(char day, char month, int year) {
     return date;
 }
 
+Date *createDateHours(char day, char month, int year, char hours, char minutes, char seconds) {
+    Date *date = malloc(sizeof(Date));
+    date->day = day;
+    date->month = month;
+    date->year = year;
+    date->hasHours = 1;
+    date->hour = createHour(hours, minutes, seconds);
+
+    return date;
+}
+
+Hour *createHour(char hours, char minutes, char seconds) {
+    Hour *hour = malloc(sizeof(Hour));
+    hour->hours = hours;
+    hour->minutes = minutes;
+    hour->seconds = seconds;
+
+    return hour;
+}
+
 //Transforma uma string num tipo Date
 Date* string_to_date (char* string) {
     int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
     int month = (string[5] - '0') * 10 + (string[6] - '0');
     int day = (string[8] - '0') * 10 + (string[9] - '0');
     Date* date = createDate(day,month,year);
-    /*Date* date;
-    date.year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
-    date.month = (string[5] - '0') * 10 + (string[6] - '0');
-    date.day = (string[8] - '0') * 10 + (string[9] - '0');
-    int hasHours = 0;
-    if (strlen(string) == 19) {
-        hasHours = 1;
-        date.hour->hours = (string[11] -'0') * 10 + (string[12] - '0');
-        date.hour->minutes = (string[14] - '0') * 10 + (string[15] - '0');
-        date.hour->seconds = (string[17] - '0') * 10 + (string[18] - '0');
-    }
-    date.hasHours = hasHours;*/
+
+    return date;
+}
+
+Date* string_to_date_hours (char* string) {
+    int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
+    int month = (string[5] - '0') * 10 + (string[6] - '0');
+    int day = (string[8] - '0') * 10 + (string[9] - '0');
+    int hours = (string[11] - '0') * 10 + (string[12] - '0');
+    int minutes = (string[14] - '0') * 10 + (string[15] - '0');
+    int seconds = (string[17] - '0') * 10 + (string[18] - '0');
+    Date* date = createDateHours(day,month,year,hours,minutes,seconds);
+
     return date;
 }
 
@@ -84,7 +105,14 @@ void setHours(Date *date, char hours) {
 
 char* dateToString(Date *date){
     char* res = 0;
-    sprintf(res, "%d/%d/%d", date->year, date->month, date->day);
+    if (date->hasHours == 0) {
+        res = malloc(11);
+        sprintf(res, "%04d/%02d/%02d", date->year, date->month, date->day);
+    }
+    else {
+        res = malloc(20);
+        sprintf(res, "%04d/%02d/%02d %02d:%02d:%02d", date->year, date->month, date->day, date->hour->hours, date->hour->minutes, date->hour->seconds);
+    }
     return res;
 }
 

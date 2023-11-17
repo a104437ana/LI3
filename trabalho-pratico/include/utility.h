@@ -32,7 +32,10 @@ typedef enum gender {
 } Gender;
 //data com horas
 Date *createDate(char day, char month, int year);
+Date *createDateHours(char day, char month, int year, char hours, char minutes, char seconds);
 Date* string_to_date (char* string);
+Date* string_to_date_hours (char* string);
+Hour *createHour(char hours, char minutes, char seconds);
 
 int getDay(void *date);
 int getMonth(void *date);

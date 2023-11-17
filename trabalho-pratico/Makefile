@@ -15,6 +15,8 @@ $(OBJFILES): src/%.o : src/%.c
 clean:
 	rm -f programa-principal programa-testes src/*.o
 
+clean_results:
+	rm -f Resultados/*.txt Resultados/*.csv
 
 #para testes manuais
 #OBJFILESTEST=src/testes/testausers.o src/catalogsManager.o src/usersManager.o src/user.o src/utility.o src/hashtable.o

@@ -89,7 +89,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
        if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
        else resultT = strdup("reservation");
        fprintf (file, "--- %d ---\n", j);
-       fprintf (file,"id: %s\ndate: %d/%d/%d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
+       fprintf (file,"id: %s\ndate: %04d/%02d/%02d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
      }
     }
     else{
@@ -113,7 +113,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
        char* resultT;
        if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
        else resultT = strdup("reservation");
-       fprintf (file,"%s;%d/%d/%d;%s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
+       fprintf (file,"%s;%04d/%02d/%02d;%s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
      }
     }
     else{

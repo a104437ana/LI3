@@ -41,9 +41,11 @@ Hashtable *getHashtableFlightCatalog(FlightsManager *flightsManager) {
 }
 
 void printFunctionFlight(void *data) {
-    int passengers = getOrdListSize(getPassengers((Flight *) data));
+//    int passengers = getOrdListSize(getPassengers((Flight *) data));
+    char *date = dateToString(getFlightScheduleDeparture((Flight *) data));
 //    char *flightId = getFlightId((Flight *) data);
-    printf(" %8d)", passengers);
+    printf(" %20s)", date);
+    free(date);
 //    free(flightId);
 }
 
