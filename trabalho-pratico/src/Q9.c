@@ -41,7 +41,7 @@ int bigger_user (UserIdName* user1, UserIdName* user2) {
     return bigger_user;
 }
 
-void ord_list_by_name (OrdList *ordList, int begin, int end) {
+void ord_list_by_name (UsersManager* usersCatalog, int begin, int end) {
     if (begin != end) {
         UserIdName* pivo = getDataOrdList(user_id_name,end);
         int i = begin-1;

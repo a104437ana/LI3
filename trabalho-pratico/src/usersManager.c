@@ -16,7 +16,10 @@ UsersManager *createUsersCatalog(int size) {
 
 void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) {
     addHashtable(usersManager->users, key, user, getUserId(user));
-    addOrdList(usersManager->usersByName, user);
+}
+
+void addUserByNameToCatalog (UsersManager* usersManager, UserByName* userByName) {
+    addOrdList(usersManager->usersByName, userByName);
 }
 
 void sortUserCatalog(UsersManager *usersManager) {
@@ -56,3 +59,4 @@ void destroyUsersCatalog(UsersManager *usersManager) {
     destroyHashtable(usersManager->users, destroyUser);
     free(usersManager);
 }
+

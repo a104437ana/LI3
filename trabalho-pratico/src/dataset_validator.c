@@ -1,5 +1,50 @@
 #include "dataset_validator.h"
 
+//Verifica se um ficheiro existe ou não, dado um path para o ficheiro
+int exist_file (char* file_path) {
+    int exist = 0;
+	FILE *file;
+	file = fopen(file_path,"r");
+	if (file != NULL) {
+		exist = 1;
+        fclose(file);
+	}
+    return exist;
+}
+//para expoentes positivos ou nulos
+int base_e_expoente (int base, int expoente) {
+    int r = 1;
+    while (expoente > 0) {
+        r *= base;
+        expoente--;
+    }
+    return r;
+}
+
+int string_to_int (char* string) {
+    int number = 0;
+    int i = 0;
+    while (string[i] != '\0' && string[i] != '.') {
+        i++;
+    }
+    i--;
+    int j = 0;
+    while (i>=0) {
+        number = (string[i]-'0')*base_e_expoente(10,j);
+        j++;
+        i--;
+    }
+    return number;
+}
+
+void remove_new_line (char* string) {
+    int i = 0;
+    while (string[i] != '\n' && string[i] != '\0') {
+        i++;
+    }
+    string[i] = '\0';
+}
+
 int length_bigger_than_zero (char* string) {
     int bigger = 0;
     if (strlen(string) > 0) bigger = 1;
@@ -394,28 +439,63 @@ int valid_par_of_origin_and_destination (char* origin, char* destination) {
     return valid;
 }
 
-struct flight_passengers {
+struct passengers_per_flight {
     int number;
 };
 
-FlightPassengers *createFlightPassengers () {
-    FlightPassengers* flight_passengers = malloc(sizeof(FlightPassengers));
-    flight_passengers->number = 0;
-    return flight_passengers;
+PassengersPerFlight *createPassengersPerFlight () {
+    PassengersPerFlight* passengers_per_flight = malloc(sizeof(PassengersPerFlight));
+    passengers_per_flight->number = 0;
+    return passengers_per_flight;
 }
 
-void AddPassenger(Hashtable *hashtable, unsigned int key, char *id) {
-    FlightPassengers *data = getData(hashtable, key, id);
+void destroyPassengersPerFlight (void* passengers_per_flight) {
+    if (passengers_per_flight != NULL) {
+        free(passengers_per_flight);
+    }
+}
+
+struct passengers_counter {
+    Hashtable* passengers_per_flight;
+};
+
+PassengersCounter *createPassengersCounter (int size) {
+    PassengersCounter* passengers_counter = malloc(sizeof(PassengersCounter));
+    passengers_counter->passengers_per_flight = createHashtable(size);
+    return passengers_counter;
+}
+
+void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight) {
+    addHashtable(passengers_counter->passengers_per_flight, key, passengers_per_flight, id_flight);
+}
+
+int existsPassengersPerFlight (PassengersCounter* passengers_counter, char* id_flight) {
+    int exist = 1;
+    int key = hashFunction(id_flight);
+    HashtableNode *passengers_per_flight = searchHashtable(passengers_counter->passengers_per_flight, key, id_flight);
+    if (passengers_per_flight == NULL) exist = 0;
+    return exist;
+}
+
+void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, unsigned int key, char *id) {
+    PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, key, id);
     data->number++;
 }
 
-int getPassengersNumber (Hashtable *hashtable, unsigned int key, char *id) {
-    FlightPassengers *data = getData(hashtable, key, id);
+int getPassengersNumber (PassengersCounter* passengers_counter, unsigned int key, char *id) {
+    PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, key, id);
     int passengers = data->number;
     return passengers;
 }
 
-void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* passengers_per_flight) {
+void destroyPassengersCounter (PassengersCounter* passengers_counter) {
+    if (passengers_counter != NULL) {
+        destroyHashtable(passengers_counter->passengers_per_flight, destroyPassengersPerFlight);
+        free(passengers_counter);
+    }
+}
+
+void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCounter* passengers_counter) {
     char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1); int i = 0;
     strcpy(file_path, directory);
     strcat(file_path,"/passengers.csv");
@@ -437,12 +517,12 @@ void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* p
                 strcpy(id_user,token);
                 remove_new_line(id_user);
                 if (existsUser(usersCatalog,id_user)) {
-                    if (searchHashtable(passengers_per_flight,hashFunction(id_flight),id_flight) == NULL) {
-                        FlightPassengers* flight_passengers = createFlightPassengers();
-                        addHashtable(passengers_per_flight, hashFunction(id_flight), flight_passengers, id_flight);
+                    if (!(existsPassengersPerFlight(passengers_counter,id_flight))) {
+                        PassengersPerFlight* passengers_per_flight = createPassengersPerFlight();
+                        addPassengersPerFlight_ToPassengersCounter(passengers_counter,passengers_per_flight,hashFunction(id_flight),id_flight);
                         i++;
                     }
-                    AddPassenger (passengers_per_flight,hashFunction(id_flight),id_flight);
+                    addPassenger_ToPassengersPerFlight(passengers_counter,hashFunction(id_flight),id_flight);
                 }
                 free(line2);
                 free(id_flight);
@@ -453,28 +533,28 @@ void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* p
         fclose(file);
     }
     free(file_path);
-    printf("n passengeiros: %d\n",i);
+    printf("n voos semi validos: %d\n",i);
 }
 
-int valid_total_seats (char* total_seats,Hashtable* passengers_per_flight, char* id_flight) {
+int valid_total_seats (char* total_seats,PassengersCounter* passengers_counter, char* id_flight) {
     int valid = 0;
     if (is_positive_integer(total_seats)) {
-        if (searchHashtable(passengers_per_flight,hashFunction(id_flight),id_flight) == NULL) valid = 1;
+        if (!(existsPassengersPerFlight(passengers_counter,id_flight))) valid = 1;
         else {
             int seats = string_to_int(total_seats);
-            int passengers = getPassengersNumber(passengers_per_flight,hashFunction(id_flight),id_flight);
+            int passengers = getPassengersNumber(passengers_counter,hashFunction(id_flight),id_flight);
             if (seats >= passengers) valid = 1;
         }
     }
     return valid;
 }
 
-int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot,Hashtable* passengers_per_flight) {
+int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot, PassengersCounter* passengers_counter) {
     int valid = 0;
     if (length_bigger_than_zero(id_flight)) {
         if (length_bigger_than_zero(airline)) {
             if (length_bigger_than_zero(plane_model)) {
-                if (valid_total_seats(total_seats,passengers_per_flight,id_flight)) {
+                if (valid_total_seats(total_seats,passengers_counter,id_flight)) {
                     if (valid_origin_or_destination(origin)) {
                         if (valid_origin_or_destination(destination)) {
                             if (valid_par_of_origin_and_destination(origin,destination)) {
@@ -509,4 +589,11 @@ int valid_passenger (char* id_flight, char* id_user, UsersManager* usersCatalog,
         if (existsFlight(flightsCatalog,id_flight)) valid = 1;
     }
     return valid;
+}
+
+void add_invalid_line_to_error_file (char* file_path, char* string_line) {
+    FILE *file;
+    file = fopen(file_path,"a");
+    fprintf(file,"%s",string_line);
+    fclose(file);
 }

@@ -12,6 +12,7 @@ void addFlightToCatalog(FlightsManager *flightsManager, Flight *flight, unsigned
 void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey, char *flightId, char *userId);
 //gets
 Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key, char *id);
+int existsFlight (FlightsManager* flightsManager,char* id);
 Hashtable *getHashtableFlightCatalog(FlightsManager *flightsManager);
 
 void printFlights(FlightsManager *flightsManager);

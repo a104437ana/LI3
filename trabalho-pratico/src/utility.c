@@ -13,6 +13,27 @@ Date *createDate(char day, char month, int year) {
     return date;
 }
 
+//Transforma uma string num tipo Date
+Date* string_to_date (char* string) {
+    int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
+    int month = (string[5] - '0') * 10 + (string[6] - '0');
+    int day = (string[8] - '0') * 10 + (string[9] - '0');
+    Date* date = createDate(day,month,year);
+    /*Date* date;
+    date.year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
+    date.month = (string[5] - '0') * 10 + (string[6] - '0');
+    date.day = (string[8] - '0') * 10 + (string[9] - '0');
+    int hasHours = 0;
+    if (strlen(string) == 19) {
+        hasHours = 1;
+        date.hour->hours = (string[11] -'0') * 10 + (string[12] - '0');
+        date.hour->minutes = (string[14] - '0') * 10 + (string[15] - '0');
+        date.hour->seconds = (string[17] - '0') * 10 + (string[18] - '0');
+    }
+    date.hasHours = hasHours;*/
+    return date;
+}
+
 int getDay(void *date) {
     return (int) ((Date *) date)->day;
 }

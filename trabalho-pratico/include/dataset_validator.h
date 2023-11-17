@@ -7,7 +7,13 @@
 #include "usersManager.h"
 #include "reservationsManager.h"
 #include "flightsManager.h"
-#include "parser.h"
+
+#define PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE 10000
+
+int exist_file (char* file_path);
+int base_e_expoente (int base, int expoente);
+int string_to_int (char* string);
+void remove_new_line (char* string);
 
 int length_bigger_than_zero (char* string);
 int valid_email (char* email);
@@ -30,15 +36,26 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
 int valid_origin_or_destination (char* local);
 int valid_par_of_origin_and_destination (char* origin, char* destination);
 
-typedef struct flight_passengers FlightPassengers;
-FlightPassengers *createFlightPassengers ();
-void AddPassenger(Hashtable *hashtable, unsigned int key, char *id);
-int getPassengersNumber (Hashtable *hashtable, unsigned int key, char *id);
+typedef struct passengers_per_flight PassengersPerFlight;
 
-void count_passengers (char* directory, UsersManager* usersCatalog, Hashtable* passengers_per_flight);
-int valid_total_seats (char* total_seats,Hashtable* passengers_per_flight, char* id_flight);
+PassengersPerFlight *createPassengersPerFlight ();
+void destroyPassengersPerFlight (void* passengers_per_flight);
 
-int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot,Hashtable* passengers_per_flight);
+typedef struct passengers_counter PassengersCounter;
+
+PassengersCounter *createPassengersCounter (int size);
+void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight);
+int existsPassengersPerFlight (PassengersCounter* passengers_counter, char* id_flight);
+void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, unsigned int key, char *id);
+int getPassengersNumber (PassengersCounter* passengers_counter, unsigned int key, char *id);
+void destroyPassengersCounter (PassengersCounter* passengers_counter);
+
+void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCounter* passengers_counter);
+int valid_total_seats (char* total_seats,PassengersCounter* passengers_counter, char* id_flight);
+
+int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot, PassengersCounter* passengers_counter);
 int valid_passenger (char* id_flight, char* id_user, UsersManager* usersCatalog, FlightsManager* flightsCatalog);
+
+void add_invalid_line_to_error_file (char* file_path, char* string_line);
 
 #endif

@@ -1,78 +1,5 @@
 #include "parser.h"
 
-//Verifica se um ficheiro existe ou não, dado um path para o ficheiro
-int exist_file (char* file_path) {
-    int exist = 0;
-	FILE *file;
-	file = fopen(file_path,"r");
-	if (file != NULL) {
-		exist = 1;
-        fclose(file);
-	}
-    return exist;
-}
-
-void add_invalid_line_to_error_file (char* file_path, char* string_line) {
-    FILE *file;
-    file = fopen(file_path,"a");
-    fprintf(file,"%s",string_line);
-    fclose(file);
-}
-
-//para expoentes positivos ou nulos
-int base_e_expoente (int base, int expoente) {
-    int r = 1;
-    while (expoente > 0) {
-        r *= base;
-        expoente--;
-    }
-    return r;
-}
-
-int string_to_int (char* string) {
-    int number = 0;
-    int i = 0;
-    while (string[i] != '\0' && string[i] != '.') {
-        i++;
-    }
-    i--;
-    int j = 0;
-    while (i>=0) {
-        number = (string[i]-'0')*base_e_expoente(10,j);
-        j++;
-        i--;
-    }
-    return number;
-}
-//Transforma uma string num tipo Date
-Date* string_to_date (char* string) {
-    int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
-    int month = (string[5] - '0') * 10 + (string[6] - '0');
-    int day = (string[8] - '0') * 10 + (string[9] - '0');
-    Date* date = createDate(day,month,year);
-    /*Date* date;
-    date.year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
-    date.month = (string[5] - '0') * 10 + (string[6] - '0');
-    date.day = (string[8] - '0') * 10 + (string[9] - '0');
-    int hasHours = 0;
-    if (strlen(string) == 19) {
-        hasHours = 1;
-        date.hour->hours = (string[11] -'0') * 10 + (string[12] - '0');
-        date.hour->minutes = (string[14] - '0') * 10 + (string[15] - '0');
-        date.hour->seconds = (string[17] - '0') * 10 + (string[18] - '0');
-    }
-    date.hasHours = hasHours;*/
-    return date;
-}
-
-void remove_new_line (char* string) {
-    int i = 0;
-    while (string[i] != '\n' && string[i] != '\0') {
-        i++;
-    }
-    string[i] = '\0';
-}
-
 void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_id_name) {
     int ana = 0;
     char* file_path = malloc(strlen(directory) + strlen("/users.csv") + 1);
@@ -135,7 +62,9 @@ void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_
                     Date* accountCreation = string_to_date(account_creation);
                     int accountStatus = 0;
                     if (account_status[0] == 'a' || account_status[0] == 'A') {
-                        accountStatus = 1;  
+                        accountStatus = 1;
+                        UserByName* userByName = createUserByName(id_user,name);
+                        addUserByNameToCatalog(usersCatalog,userByName);
                     }
                     User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,accountStatus);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
@@ -263,7 +192,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
     printf("reservas: %d\n", i); //contar reservas, apagar depois
 }
 
-void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog, Hashtable* passengers_per_flight) {
+void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog, PassengersCounter* passengers_counter) {
     char* file_path = malloc(strlen(directory) + strlen("/flights.csv") + 1);
     strcpy(file_path, directory); int j=0;
     strcat(file_path,"/flights.csv");
@@ -320,7 +249,7 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 char* notes = malloc(strlen(token) + 1);
                 strcpy(notes,token);
                 remove_new_line(notes);
-                if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,passengers_per_flight)) {
+                if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,passengers_counter)) {
                     int totalSeats = string_to_int(total_seats);
                     Date* scheduleDeparture = string_to_date(schedule_departure_date);
                     Date* scheduleArrival = string_to_date(schedule_arrival_date);
@@ -352,7 +281,7 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
         fclose(file);
     }
     free(file_path);
-    printf("voos: %d\n", j);
+    printf("voos validos: %d\n", j);
 }
 
 void parse_passengers_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
@@ -381,6 +310,7 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
                 remove_new_line(id_user);
                 if (valid_passenger(id_flight,id_user,usersCatalog,flightsCatalog)) {
                     addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
+                    k++;
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
@@ -400,8 +330,9 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
 void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog,OrdList* user_id_name) {
     parse_users_file(directory,usersCatalog,user_id_name);
     parse_reservations_file(directory,usersCatalog,reservationsCatalog,hotelsCatalog);
-    Hashtable *passengers_per_flight = createHashtable(10000);
-    count_passengers(directory,usersCatalog,passengers_per_flight);
-    parse_flights_file(directory,usersCatalog,flightsCatalog,passengers_per_flight);
+    PassengersCounter* passengers_counter = createPassengersCounter(PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE);
+    count_passengers(directory,usersCatalog,passengers_counter);
+    parse_flights_file(directory,usersCatalog,flightsCatalog,passengers_counter);
+    destroyPassengersCounter(passengers_counter);
     parse_passengers_file(directory,usersCatalog,flightsCatalog);
 }
