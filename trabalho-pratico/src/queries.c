@@ -213,11 +213,11 @@ ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
     Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
     if (hotel==NULL) return NULL; //se o id não existir
     int i;
-    ResultsQ4 *results = malloc(sizeof(Reservation));
+    ResultsQ4 *results = malloc(sizeof(ResultsQ4));
     OrdList *reservations = getHotelOrdList(hotel);
     int listSize = getOrdListSize(reservations);
     results->N = listSize;
-    results->results = malloc(sizeof(ResultQ4)*listSize);
+    results->results = malloc(sizeof(Reservation*)*listSize);
     for(i=0;i<listSize; i++){
       Reservation * data = (Reservation *)getDataOrdList(reservations, i);
       results->results[listSize-i-1] = data;     
