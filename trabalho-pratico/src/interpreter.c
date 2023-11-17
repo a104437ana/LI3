@@ -31,25 +31,25 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         printOutputQ1(command->format_flag, output,i);
      }
    }
-    else if (command->query_id==2){
-     if (command->n_args==0) return;
-     else{
-        if (command->n_args==1){ //se só tiver o id como argumento,
-           ResultsQ2* output = Q2(command->args[0], BOTH, usersCatalog);
-           printOutputQ2(command->format_flag, BOTH, output, i);
-        }
-        else{
-          if ((strcmp(command->args[1], "flights")==0)){
-            ResultsQ2* output = Q2(command->args[0], FLIGHTS, usersCatalog);
-            printOutputQ2(command->format_flag, FLIGHTS, output, i);
-          }
-          else if ((strcmp(command->args[1], "reservations")==0)){
-           ResultsQ2* output = Q2(command->args[0], RESERVATIONS, usersCatalog);
-           printOutputQ2(command->format_flag, RESERVATIONS, output, i);
-          }
-          else return;
-        }
-     }
+    else if (command->query_id==2){ return;
+//     if (command->n_args==0) return;
+//     else{
+//        if (command->n_args==1){ //se só tiver o id como argumento,
+//           ResultsQ2* output = Q2(command->args[0], BOTH, usersCatalog);
+//           printOutputQ2(command->format_flag, BOTH, output, i);
+//        }
+//        else{
+//          if ((strcmp(command->args[1], "flights")==0)){
+//            ResultsQ2* output = Q2(command->args[0], FLIGHTS, usersCatalog);
+//            printOutputQ2(command->format_flag, FLIGHTS, output, i);
+//          }
+//          else if ((strcmp(command->args[1], "reservations")==0)){
+//           ResultsQ2* output = Q2(command->args[0], RESERVATIONS, usersCatalog);
+//           printOutputQ2(command->format_flag, RESERVATIONS, output, i);
+//          }
+//          else return;
+//        }
+//     }
    }
     else if (command->query_id==3){
      if (command->n_args==0) return;
@@ -58,12 +58,12 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         printOutputQ3(command->format_flag, output, i);
      }
    }
-    else if (command->query_id==4){
-     if (command->n_args==0) return;
-     else{
-        ResultsQ4* output = Q4(command->args[0], hotelsCatalog);
-        printOutputQ4(command->format_flag, output, i);
-     }
+    else if (command->query_id==4){ return;
+//     if (command->n_args==0) return;
+//     else{
+//        ResultsQ4* output = Q4(command->args[0], hotelsCatalog);
+//        printOutputQ4(command->format_flag, output, i);
+//     }
    }
     else if (command->query_id==5){
      if (command->n_args<3) return;
