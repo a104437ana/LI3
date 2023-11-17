@@ -50,7 +50,7 @@ int getNumberPassengers(Flight* flight){
 char* getDelay(Flight* flight){
      Date* scheduleDep = getFlightScheduleDeparture(flight);
      Date* realDep = getFlightRealDeparture(flight);
-     char* delay;
+     char* delay = malloc(sizeof(char)*20);
      int diffseg=0; int diffmin=0; int diffhour=0; int diffday=0;
      diffseg += (realDep->hour->seconds - scheduleDep->hour->seconds);
      if (diffseg<0){
@@ -125,7 +125,7 @@ char * getIdResultQ2(ResultQ2* data){
 
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
     if(id[0]=='U'){
-      ResultQ1* result;
+      ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getUserCatalog(usersCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
       if (getAccountStatus(result->result)==false) return NULL; //se o utilizador não estiver ativo
@@ -133,14 +133,14 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
       return result;
     }
     else if(id[0]=='F'){
-      ResultQ1* result;
+      ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getFlightCatalog(flightsCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=FLIGHT;
       return result;   
     }
     else if(id[0]=='R'){
-      ResultQ1* result;
+      ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getReservCatalog(reservationsCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir
       result->resultType=RESERVATION;
@@ -154,7 +154,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     if (user==NULL) return NULL; //se o id não existir
     if (getAccountStatus(user)==false) return NULL; //se o utilizador não estiver ativo
     int i;
-    ResultsQ2 *results;
+    ResultsQ2 *results = malloc(sizeof(ResultsQ2));
     if (type==FLIGHTS){
       OrdList* userList = getUserList(user);
       int listSize = getOrdListSize(userList);
@@ -209,7 +209,7 @@ ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
     Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
     if (hotel==NULL) return NULL; //se o id não existir
     int i;
-    ResultsQ4 *results;
+    ResultsQ4 *results = malloc(sizeof(ResultsQ4));
     OrdList *reservations = getHotelOrdList(hotel);
     int listSize = getOrdListSize(reservations);
     results->N = listSize;

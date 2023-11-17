@@ -72,6 +72,7 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
    }
   }
+  free(output);
   fclose(file);
 }
 
@@ -128,6 +129,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
      }
     } 
    }
+  free(output);
   fclose(file);
 }
 
@@ -163,6 +165,7 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
         fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
      }
   }
+  free(output);
   fclose(file);
 }
 
