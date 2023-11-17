@@ -87,7 +87,7 @@ double getReservPrice(Reservation* reservation){
      int ppn = getReservPricePerNight(reservation);
      int nnights = getReservNights(reservation);
      int cityTax = getReservCityTax(reservation);
-     double res = (ppn*nnights)+(((ppn*nnights)/100)*cityTax);
+     double res = (ppn*nnights)+(((float)(ppn*nnights)/100)*cityTax);
      return res;
 }
 

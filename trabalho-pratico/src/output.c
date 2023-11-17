@@ -96,13 +96,13 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
      if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
         fprintf (file, "--- %d ---\n", j);
-        fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
+        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
       }
      }
      else{
       for (j=0; j<output->N; j++){
         fprintf (file, "--- %d ---\n", j);
-        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getReservBegin(output->results[j]->result)));
+        fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToStringNoHours(getReservBegin(output->results[j]->result)));
       }
      }
     }
@@ -119,12 +119,12 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
     else{
      if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%s\n", getReservId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
+        fprintf (file,"%s;%s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
       }
      }
      else{
       for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%s\n", getFlightId(output->results[j]->result), dateToString(getReservBegin(output->results[j]->result)));
+        fprintf (file,"%s;%s\n", getReservId(output->results[j]->result), dateToString(getReservBegin(output->results[j]->result)));
       }
      }
     } 

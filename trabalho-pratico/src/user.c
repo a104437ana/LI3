@@ -36,7 +36,7 @@ User *createUser(char *id, char *name, Gender gender, char country[3], char *add
     user->id = strdup(id);
     user->name = strdup(name);
     user->gender = gender;
-    memcpy(user->country, country, 2);
+    memcpy(user->country, country, 3);
 //    user->country[0] = country[0];
 //    user->country[1] = country[1];
     user->address = strdup(address);
@@ -61,6 +61,7 @@ void addReservationToUser(User *user, void *reservation) {
     res->result = reservation;
     addOrdList(user->flightsReservationsByDate, res);
     user->nReservations++;
+    user->totalSpent+=getReservPrice((Reservation*)reservation);
 }
 
 void addFlightToUser(User *user, void *flight) {

@@ -158,7 +158,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 remove_new_line(comment);
                 if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating,usersCatalog)) {
                     int cityTax = string_to_int(city_tax);
-                    int pricePerNight = string_to_int(price_per_night);
+                    int pricePerNight = atoi(price_per_night);
                     int includesBreakfast = 0;
                     if (includes_breakfast[0] == 't' || includes_breakfast[0] == 'T' || includes_breakfast[0] == '1') includesBreakfast = 1;
                     Date* begin = string_to_date(begin_date);
