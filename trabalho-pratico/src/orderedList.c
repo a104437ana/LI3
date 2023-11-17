@@ -48,11 +48,11 @@ void addOrdList(OrdList *ordList, void *data) {
     ordList->maxSize = maxSize;
 }
 //procura indice da primeira data com dia igual ou maior que a data dada
-int searchReservDateIndex(OrdList *ordlist, Date *date) {
+int searchReservDateIndex(OrdList *ordlist, int day) {
     int size = ordlist->size;
     int lower = 0, higher = size - 1;
     int index = size / 2;
-    int day = getDay(date), reservDay = getReservBeginDay(ordlist->data[index]);
+    int reservDay = getReservBeginDay(ordlist->data[index]);
     if (getReservBeginDay(ordlist->data[higher]) < day) return -1;
     if (getReservBeginDay(ordlist->data[lower]) >= day) return 0;
     while (reservDay != day && index != lower) {

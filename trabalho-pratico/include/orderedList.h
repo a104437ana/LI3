@@ -9,7 +9,7 @@ OrdList *createOrdList(int size);
 //acabar
 void *searchOrdList(OrdList *ordList, unsigned int key);
 void addOrdList(OrdList *ordList, void *data);
-int searchReservDateIndex(OrdList *ordlist, Date *date);
+int searchReservDateIndex(OrdList *ordlist, int day);
 //falta libertar espaço em memória
 void removeOrdList(OrdList *ordList, unsigned int key);
 //void destroyOrdList(OrdList *ordList);

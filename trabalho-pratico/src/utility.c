@@ -88,6 +88,16 @@ char* dateToString(Date *date){
     return res;
 }
 
+int string_to_day(char* string) {
+    int day = (string[8] - '0') * 10 + (string[9] - '0');
+    return day;
+}
+
+int string_to_month(char* string) {
+    int month = (string[5] - '0') * 10 + (string[6] - '0');
+    return month;
+}
+
 void destroyDate(Date *date) {
     if (date == NULL) return;
     if (date->hour != NULL) free(date->hour);

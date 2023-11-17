@@ -104,7 +104,7 @@ ResultsQ6* Q6(int year, int N);
 
 ResultsQ7* Q7(int N);
 
-double Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog);
+double Q8(char *id, int begin, int end, int month, HotelsManager *hotelsCatalog);
 
 ResultsQ9* Q9(char *prefix);
 

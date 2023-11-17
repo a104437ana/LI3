@@ -49,6 +49,8 @@ void setMinutes(Date *date, char minutes);
 void setHours(Date *date, char hours);
 
 char* dateToString(Date *date);
+int string_to_day(char* string);
+int string_to_month(char* string);
 
 void destroyDate(Date *date);
 void destroyPhoneNumber(PhoneNumber *phoneNumber);

@@ -92,7 +92,10 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else if (command->query_id==8){
      if (command->n_args<3) return;
      else{
-        double output = Q8(command->args[0], string_to_date(command->args[1]), string_to_date(command->args[2]), hotelsCatalog);
+        int begin = string_to_day(command->args[1]);
+        int end = string_to_day(command->args[2]);
+        int month = string_to_month(command->args[1]);
+        double output = Q8(command->args[0], begin, end, month, hotelsCatalog);
         printOutputQ8(command->format_flag, output, i);
         return;
      }
@@ -158,6 +161,7 @@ void parseCommandFile (char* name,UsersManager *usersCatalog,ReservationsManager
  int i = 1;
 
  FILE* file = fopen(name, "r");
+    if (file != NULL) {
  while((read = getline(&line, &len, file))!= -1){
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
@@ -165,6 +169,8 @@ void parseCommandFile (char* name,UsersManager *usersCatalog,ReservationsManager
     i++;
     free(command);
  }
+    }
  free(line);
+ if (file != NULL)
  fclose(file);
 }

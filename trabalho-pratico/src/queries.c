@@ -14,6 +14,7 @@
 #include "hashtable.h"
 #include "orderedList.h"
 #include "queries.h"
+#include "parser.h"
 #define YEAR 2023
 #define MONTH 10
 #define DAY 01
@@ -220,13 +221,17 @@ ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
     return results;
 }
 
-double Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
+void printDay(void *reservation) {
+  printf(", %d", getReservBeginDay((Reservation *) reservation));
+}
+
+double Q8(char *id, int begin, int end, int month, HotelsManager *hotelsCatalog) {
   OrdList *reservations = getHotelOrdList(getHotelCatalog(hotelsCatalog, hashFunction(id), id));
   int index = searchReservDateIndex(reservations, begin);
-  int endDay = getDay(end);
+  int endDay = end;
   int size = getOrdListSize(reservations);
   Reservation *reservation = getDataOrdList(reservations, index);
-  int day = getReservBeginDay(reservation);
+  int day = getReservBeginDay(reservation), reservMonth = getReservBeginMonth(reservation);
   int reservEnd;
   double total = 0, nDays, pricePerNight, cityTax;
 
@@ -236,9 +241,11 @@ double Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
     reservEnd = getReservEndDay(reservation);
     pricePerNight = getReservPricePerNight(reservation);
     cityTax = getReservCityTax(reservation);
+    if (day < endDay && month != reservMonth) {
     if (reservEnd <= endDay) nDays = reservEnd - day;
     else nDays = endDay - day;
     total += (pricePerNight*nDays)+(((pricePerNight*nDays)/100)*cityTax);
+    }
   }
 
   return total;
