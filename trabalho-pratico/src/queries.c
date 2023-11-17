@@ -166,7 +166,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
       for(i=0;i<listSize; i++){
         ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
          if (data->resultType==FLIGHTS){
-           results->results[j]->result = data; 
+           results->results[j] = data; 
            j--;
          }
       }
@@ -181,7 +181,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
       for(i=0;i<listSize; i++){
         ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
          if (data->resultType==RESERVATIONS){
-           results->results[j]->result = data; 
+           results->results[j] = data; 
            j--;
          }
       }
@@ -193,8 +193,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
       results->results = malloc(sizeof(ResultQ2)*listSize);
       for(i=0;i<listSize; i++){
         ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
-           results->results[listSize-i-1]->result = data;
-           
+        results->results[listSize-i-1] = data;
       }
     }
     return results;
