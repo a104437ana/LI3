@@ -48,20 +48,24 @@ void addOrdList(OrdList *ordList, void *data) {
     ordList->maxSize = maxSize;
 }
 //procura indice da primeira data com dia igual ou maior que a data dada
-int searchReservDateIndex(OrdList *ordlist, int day) {
+int searchReservDateIndex(OrdList *ordlist, Date *date) {
     int size = ordlist->size;
     int lower = 0, higher = size - 1;
     int index = size / 2;
-    int reservDay = getReservBeginDay(ordlist->data[index]);
-    if (getReservBeginDay(ordlist->data[higher]) < day) return -1;
-    if (getReservBeginDay(ordlist->data[lower]) >= day) return 0;
-    while (reservDay != day && index != lower) {
-        if (reservDay > day)
-            higher = index;
-        else
-            lower = index;
-        index = (higher + lower) / 2;
-        reservDay = getReservBeginDay(ordlist->data[index]);
+    int maior = 0;
+    Date *reservDate = getReservBegin((Reservation *) ordlist->data[higher]);
+    if (compareDates(reservDate, date) > 0) return -1; //se último dia da lista for menor que a data
+    reservDate = getReservBegin((Reservation *) ordlist->data[lower]);
+    if (compareDates(reservDate, date) < 0) return 0; //se primeiro dia da lista for maior que a data
+    reservDate = getReservBegin((Reservation *) ordlist->data[index]);
+    //enquanto as datas nao forem iguais ou indice diferente de limites
+    while ((maior = compareDates(reservDate, date)) != 0 && index != lower) {
+        if (maior == -1) //se data for menor que a data do indice
+            higher = index; //limite superior igual a indice
+        else //caso contrário
+            lower = index; //limite inferior igual a indice
+        index = (higher + lower) / 2; //novo indice entre os dois limites
+        reservDate = getReservBegin(ordlist->data[index]);
     }
     if (index == lower) index++;
 

@@ -133,6 +133,46 @@ int string_to_month(char* string) {
     return month;
 }
 
+int totalLeapYears(int year, int month) {
+  if (month <= 2) year--; //se o mês for menor que 3 não precisa de contar ano atual
+  return (year / 4) - (year / 100) + (year / 400); //total de anos bissextos
+}
+
+int totalDaysInMonths(int month) {
+  int nDays = 0, daysOfMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  for (int i=0; i <month-1; i++) //conta numero de dias até ao mês anterior ao atual
+    nDays += daysOfMonth[i];
+  return nDays;
+}
+
+int daysBetweenDates(Date *begin, Date *end) {
+  int beginDay = getDay(begin), beginMonth = getMonth(begin), beginYear = getYear(begin);
+  int endDay = getDay(end), endMonth = getMonth(end), endYear = getYear(end);
+  int nDays;
+  unsigned int totalDaysBegin, totalDaysEnd;
+  //total de dias =  dia  +  dias de cada mês + dias de cada ano + um dia por cada ano bissexto
+  totalDaysBegin = beginDay + totalDaysInMonths(beginMonth) + (365 * beginYear) + totalLeapYears(beginYear, beginMonth);
+  totalDaysEnd = endDay + totalDaysInMonths(endMonth) + (365 * endYear) + totalLeapYears(endYear, endMonth);
+  nDays = totalDaysEnd - totalDaysBegin;
+
+  return nDays;
+}
+
+int compareDates(Date *date1, Date *date2) {
+  int day1 = getDay(date1), month1 = getMonth(date1), year1 = getYear(date1);
+  int day2 = getDay(date2), month2 = getMonth(date2), year2 = getYear(date2);
+  int result = 0;
+
+  if (year1 > year2) result--;
+  else if (year2 > year1) result++;
+  else if (month1 > month2) result--;
+  else if (month2 > month1) result++;
+  else if (day1 > day2) result--;
+  else if (day2 > day1) result++;
+
+  return result;
+}
+
 void destroyDate(Date *date) {
     if (date == NULL) return;
     if (date->hour != NULL) free(date->hour);

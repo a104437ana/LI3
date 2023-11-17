@@ -20,6 +20,10 @@ void printDate(void *data) {
     printf(", %d/%d/%d", getDay(getReservBegin((Reservation *) data)), getMonth(getReservBegin((Reservation *) data)), getYear(getReservBegin((Reservation *) data)));
 }
 
+void printString(void *string) {
+    printf(" %s", (char *) string);
+}
+
 int main (int argc, char** argv) {
 
     //inicialização de variáveis para medição de tempo

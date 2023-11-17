@@ -212,27 +212,30 @@ void printDay(void *reservation) {
   printf(", %d", getReservBeginDay((Reservation *) reservation));
 }
 
-double Q8(char *id, int begin, int end, int month, HotelsManager *hotelsCatalog) {
+double getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end) {
+  double pricePerNight = getReservPricePerNight(reservation);
+  double cityTax = getReservCityTax(reservation);
+  double nDays = daysBetweenDates(begin, end);
+  double total = (pricePerNight * nDays) + (((pricePerNight * nDays) / 100) * cityTax);
+  return total;
+}
+
+double Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
   OrdList *reservations = getHotelOrdList(getHotelCatalog(hotelsCatalog, hashFunction(id), id));
-  int index = searchReservDateIndex(reservations, begin);
-  int endDay = end;
+  int index = searchReservDateIndex(reservations, begin); //procura indice da reserva inicial
   int size = getOrdListSize(reservations);
   Reservation *reservation = getDataOrdList(reservations, index);
-  int day = getReservBeginDay(reservation), reservMonth = getReservBeginMonth(reservation);
-  int reservEnd;
-  double total = 0, nDays, pricePerNight, cityTax;
+  Date *reservBegin = getReservBegin(reservation), *reservEnd = getReservEnd(reservation);
+  double total = 0;
 
-  for (int i=index; i<size && day < endDay; i++) {
-    reservation = getDataOrdList(reservations, i);
-    day = getReservBeginDay(reservation);
-    reservEnd = getReservEndDay(reservation);
-    pricePerNight = getReservPricePerNight(reservation);
-    cityTax = getReservCityTax(reservation);
-    if (day < endDay && month != reservMonth) {
-    if (reservEnd <= endDay) nDays = reservEnd - day;
-    else nDays = endDay - day;
-    total += (pricePerNight*nDays)+(((pricePerNight*nDays)/100)*cityTax);
-    }
+  for (int i=index; i<size && compareDates(reservBegin, end) > 0; i++) { //enquanto dia limite maior ou igual a dia atual
+    if (compareDates(reservEnd, end) < 0) //se dia limite menor que dia de fim da reserva
+      total += getReservPriceBetweenDates(reservation, reservBegin, end);
+    else
+      total += getReservPriceBetweenDates(reservation, reservBegin, reservEnd);
+    reservation = getDataOrdList(reservations, i+1); //proxima reserva
+    reservBegin = getReservBegin(reservation); //dia inicio da reserva
+    reservEnd = getReservEnd(reservation); //dia fim da reserva
   }
 
   return total;

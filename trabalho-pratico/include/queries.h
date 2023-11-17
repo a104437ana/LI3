@@ -104,7 +104,7 @@ ResultsQ6* Q6(int year, int N);
 
 ResultsQ7* Q7(int N);
 
-double Q8(char *id, int begin, int end, int month, HotelsManager *hotelsCatalog);
+double Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog);
 
 int same_prefix (char* prefix, char* name);
 void swap (UserByName* user1, UserByName* user2);

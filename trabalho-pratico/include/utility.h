@@ -40,6 +40,9 @@ Hour *createHour(char hours, char minutes, char seconds);
 int getDay(void *date);
 int getMonth(void *date);
 int getYear(void *date);
+int getDateDay(Date *date);
+int getDateMonth(Date *date);
+int getDateYear(Date *date);
 char getSeconds(Date *date);
 char getMinutes(Date *date);
 char getHours(Date *date);
@@ -55,6 +58,8 @@ char* dateToString(Date *date);
 char* dateToStringNoHours(Date *date);
 int string_to_day(char* string);
 int string_to_month(char* string);
+int daysBetweenDates(Date *begin, Date *end);
+int compareDates(Date *date1, Date *date2);
 
 void destroyDate(Date *date);
 void destroyPhoneNumber(PhoneNumber *phoneNumber);
