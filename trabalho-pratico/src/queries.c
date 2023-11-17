@@ -161,6 +161,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
       int listSize = getOrdListSize(userList);
       int nFlights = getNumberFlights(user);
       results->N = nFlights;
+      results->results = malloc(sizeof(ResultQ2)*nFlights);
       int j = nFlights-1;
       for(i=0;i<listSize; i++){
         ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
@@ -175,6 +176,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
       int listSize = getOrdListSize(userList);
       int nReservations = getNumberReservations(user);
       results->N = nReservations;
+      results->results = malloc(sizeof(ResultQ2)*nReservations);
       int j = nReservations-1;
       for(i=0;i<listSize; i++){
         ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
@@ -188,6 +190,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
       OrdList* userList = getUserList(user);
       int listSize = getOrdListSize(userList);
       results->N = listSize;
+      results->results = malloc(sizeof(ResultQ2)*listSize);
       for(i=0;i<listSize; i++){
         ResultQ2 * data = (ResultQ2 *)getDataOrdList(userList, i);
            results->results[listSize-i-1]->result = data;
@@ -210,10 +213,11 @@ ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
     Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
     if (hotel==NULL) return NULL; //se o id não existir
     int i;
-    ResultsQ4 *results = malloc(sizeof(ResultsQ4));
+    ResultsQ4 *results = malloc(sizeof(Reservation));
     OrdList *reservations = getHotelOrdList(hotel);
     int listSize = getOrdListSize(reservations);
     results->N = listSize;
+    results->results = malloc(sizeof(ResultQ4)*listSize);
     for(i=0;i<listSize; i++){
       Reservation * data = (Reservation *)getDataOrdList(reservations, i);
       results->results[listSize-i-1] = data;     
