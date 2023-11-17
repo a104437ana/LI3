@@ -226,16 +226,16 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
 //  fclose(file);
 //}
 
-void printOutputQ8 (char format_flag, double output, int i){
+void printOutputQ8 (char format_flag, int output, int i){
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
   if (format_flag=='F'){
    fprintf (file, "--- 1 ---\n");
-   fprintf (file,"revenue: %.3f\n", output);
+   fprintf (file,"revenue: %d\n", output);
   }
   else{
-   fprintf (file,"%f\n", output);
+   fprintf (file,"%d\n", output);
   }
   fclose(file);
 }

@@ -67,7 +67,7 @@ int searchReservDateIndex(OrdList *ordlist, Date *date) {
         index = (higher + lower) / 2; //novo indice entre os dois limites
         reservDate = getReservBegin(ordlist->data[index]);
     }
-    if (index == lower) index++;
+//    if (index == lower) index++;
 
     return index;
 }
