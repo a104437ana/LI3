@@ -48,10 +48,11 @@ int getNumberPassengers(Flight* flight){
     OrdList* passengers = getPassengers(flight);
     return(getOrdListSize(passengers));
 }
-char* getDelay(Flight* flight){
+Date *getDelay(Flight* flight){
      Date* scheduleDep = getFlightScheduleDeparture(flight);
      Date* realDep = getFlightRealDeparture(flight);
-     char* delay = malloc(sizeof(char)*20);
+     Date *res = malloc(sizeof(Date));
+     res->hour = malloc(sizeof(Hour));
      int diffseg=0; int diffmin=0; int diffhour=0; int diffday=0;
      diffseg += (realDep->hour->seconds - scheduleDep->hour->seconds);
      if (diffseg<0){
@@ -66,8 +67,13 @@ char* getDelay(Flight* flight){
       diffhour+=24; diffday-=1;
      }
      diffday += (realDep->day - scheduleDep->day);
-     sprintf(delay, "0000/00/%02d %02d:%02d:%02d", diffday, diffhour, diffmin, diffseg);
-     return delay;
+     res->year = 0;
+     res->month = 0;
+     res->day = diffday;
+     res->hour->hours = diffhour;
+     res->hour->minutes = diffmin;
+     res->hour->seconds = diffseg;
+     return res;
 }
 
 int getReservNights(Reservation* reservation){
@@ -125,7 +131,7 @@ char * getIdResultQ2(ResultQ2* data){
 }
 
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
-    if(same_prefix("Book", id) != 0){
+    if(same_prefix("Book", id) == 1){
       ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getReservCatalog(reservationsCatalog, hashFunction(id), id);
       if (result->result==NULL) return NULL; //se o id não existir

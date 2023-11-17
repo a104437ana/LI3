@@ -82,7 +82,7 @@ typedef struct resultsQ9{
 
 int getAge(User* user);
 int getNumberPassengers(Flight* flight);
-char* getDelay(Flight* flight);
+Date * getDelay(Flight* flight);
 int getReservNights(Reservation* reservation);
 double getReservPrice(Reservation* reservation);
 int getBeginDay(void* data);
