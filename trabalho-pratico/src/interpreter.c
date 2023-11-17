@@ -58,7 +58,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         printOutputQ3(command->format_flag, output, i);
      }
    }
-    else if (command->query_id==4){ return;
+    else if (command->query_id==4){
      if (command->n_args==0) return;
      else{
         ResultsQ4* output = Q4(command->args[0], hotelsCatalog);
@@ -100,13 +100,13 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         return;
      }
    }
-    else if (command->query_id==9){
-     if (command->n_args==0) return;
-     else{
-        OrdList* list = Q9(command->args[0],usersCatalog);
-        printOutputQ9(command->format_flag, list, i);
-        return;
-     }
+    else if (command->query_id==9){ return;
+     //if (command->n_args==0) return;
+     //else{
+     //   OrdList* list = Q9(command->args[0],usersCatalog);
+     //   printOutputQ9(command->format_flag, list, i);
+     //   return;
+     //}
    }
     else if (command->query_id==10){
       // Q10(atoi(command->args[0]), command->args[1]); //confirmar o que recebe
