@@ -1,7 +1,6 @@
 #include "parser.h"
 
 void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_id_name) {
-    int ana = 0;
     char* file_path = malloc(strlen(directory) + strlen("/users.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/users.csv");
@@ -68,7 +67,6 @@ void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_
                     }
                     User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,accountStatus);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
-                    ana++;
                 }
                 else {
                     add_invalid_line_to_error_file(file_path_errors,line);
@@ -93,12 +91,11 @@ void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_
         fclose(file);
     }
     free(file_path);
-    printf("users: %d\n",ana);
 }
 
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/reservations.csv") + 1);
-    strcpy(file_path, directory); int i=0;
+    strcpy(file_path, directory);
     strcat(file_path,"/reservations.csv");
     if (exist_file(file_path)) {
         FILE *file;
@@ -165,7 +162,6 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                     Date* end = string_to_date(end_date);
                     Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars[0],address,cityTax,begin,end,pricePerNight,includesBreakfast,room_details,rating[0],comment,getHashtableHotelsCatalog(hotelsCatalog));
                     addReservToCatalog(reservationsCatalog,reservation,hashFunction(id_reservation),hotelsCatalog,usersCatalog);
-                    i++;
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
@@ -189,12 +185,11 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
         fclose(file);
     }
     free(file_path);
-    printf("reservas: %d\n", i); //contar reservas, apagar depois
 }
 
 void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog, PassengersCounter* passengers_counter) {
     char* file_path = malloc(strlen(directory) + strlen("/flights.csv") + 1);
-    strcpy(file_path, directory); int j=0;
+    strcpy(file_path, directory);
     strcat(file_path,"/flights.csv");
     if (exist_file(file_path)) {
         FILE *file;
@@ -257,7 +252,6 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                     Date* realArrival = string_to_date_hours(real_arrival_date);
                     Flight *flight = createFlight(id_flight,airline,plane_model,totalSeats,origin,destination,scheduleDeparture,scheduleArrival,realDeparture,realArrival,pilot,copilot,notes);
                     addFlightToCatalog(flightsCatalog,flight,hashFunction(id_flight));
-                    j++;
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
@@ -281,12 +275,11 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
         fclose(file);
     }
     free(file_path);
-    printf("voos validos: %d\n", j);
 }
 
 void parse_passengers_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1);
-    strcpy(file_path, directory); int k=0;
+    strcpy(file_path, directory);
     strcat(file_path,"/passengers.csv");
     if (exist_file(file_path)) {
         FILE *file;
@@ -310,7 +303,6 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
                 remove_new_line(id_user);
                 if (valid_passenger(id_flight,id_user,usersCatalog,flightsCatalog)) {
                     addPassengerToCatalog(flightsCatalog,hashFunction(id_flight),usersCatalog,hashFunction(id_user),id_flight,id_user);
-                    k++;
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
                 free(line2);
@@ -323,7 +315,6 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
         fclose(file);
     }
     free(file_path);
-    printf("passageiros: %d\n", k);
 }
 
 //Faz o parsing de todos os tipos de ficheiros

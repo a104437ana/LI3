@@ -496,7 +496,7 @@ void destroyPassengersCounter (PassengersCounter* passengers_counter) {
 }
 
 void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCounter* passengers_counter) {
-    char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1); int i = 0;
+    char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/passengers.csv");
     if (exist_file(file_path)) {
@@ -520,7 +520,6 @@ void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCo
                     if (!(existsPassengersPerFlight(passengers_counter,id_flight))) {
                         PassengersPerFlight* passengers_per_flight = createPassengersPerFlight();
                         addPassengersPerFlight_ToPassengersCounter(passengers_counter,passengers_per_flight,hashFunction(id_flight),id_flight);
-                        i++;
                     }
                     addPassenger_ToPassengersPerFlight(passengers_counter,hashFunction(id_flight),id_flight);
                 }
@@ -533,7 +532,6 @@ void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCo
         fclose(file);
     }
     free(file_path);
-    printf("n voos semi validos: %d\n",i);
 }
 
 int valid_total_seats (char* total_seats,PassengersCounter* passengers_counter, char* id_flight) {
