@@ -11,8 +11,8 @@ struct flight {
     char *airline;            //q1
     char *airplane;                //q1
     int totalSeats;
-    char origin[3];             //q1
-    char destination[3];            //q1
+    char origin[4];             //q1
+    char destination[4];            //q1
     Date *scheduleDeparture;           //q1/q2
     Date *scheduleArrival;           //q1
     Date *realDeparture;
@@ -23,7 +23,7 @@ struct flight {
     OrdList *passengers;    //q1
 };
 
-Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[3], char destination[3], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes) {
+Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes) {
     Flight *flight = malloc(sizeof(Flight));
     flight->id = strdup(id);
     flight->airline = strdup(airline);
@@ -33,11 +33,11 @@ Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, ch
     flight->origin[0] = origin[0];
     flight->origin[1] = origin[1];
     flight->origin[2] = origin[2];
-    flight->origin[3] = '\0';
+    flight->origin[3] = origin[3];
     flight->destination[0] = destination[0];
     flight->destination[1] = destination[1];
     flight->destination[2] = destination[2];
-    flight->destination[3] = '\0';
+    flight->destination[3] = origin[3];
     flight->scheduleDeparture = scheduleDeparture;
     flight->scheduleArrival = scheduleArrival;
     flight->realDeparture = realDeparture;
@@ -68,14 +68,14 @@ int getFlightTotalSeats(Flight *flight) {
 }
 
 char *getFlightOrigin(Flight *flight) {
-    char *origin = malloc(sizeof(char) * 3);
-    memcpy(origin, flight->origin, 3);
+    char *origin = malloc(sizeof(char) * 4);
+    memcpy(origin, flight->origin, 4);
     return origin;
 }
 
 char *getFlightDestination(Flight *flight) {
-    char *destination = malloc(sizeof(char) * 3);
-    memcpy(destination, flight->destination, 3);
+    char *destination = malloc(sizeof(char) * 4);
+    memcpy(destination, flight->destination, 4);
     return destination;
 }
 
@@ -144,13 +144,13 @@ void setFlightTotalSeats(Flight *flight, int totalSeats) {
     flight->totalSeats = totalSeats;
 }
 
-void setFlightOrigin(Flight *flight, char origin[3]) {
+void setFlightOrigin(Flight *flight, char origin[4]) {
     flight->origin[0] = origin[0];
     flight->origin[1] = origin[1];
     flight->origin[2] = origin[2];
 }
 
-void setFlightDestination(Flight *flight, char destination[3]) {
+void setFlightDestination(Flight *flight, char destination[4]) {
     flight->destination[0] = destination[0];
     flight->destination[1] = destination[1];
     flight->destination[2] = destination[2];
