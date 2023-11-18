@@ -4,13 +4,13 @@
 
 struct usersManager {
     Hashtable *users;
-    OrdList *usersByName;
+    OrdList *usersId;
 };
 
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager));
     usersManager->users = createHashtable(size);
-    usersManager->usersByName = createOrdList(size);
+    usersManager->usersId = createOrdList(size);
     return usersManager;
 }
 
@@ -18,8 +18,8 @@ void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) 
     addHashtable(usersManager->users, key, user, getUserId(user));
 }
 
-void addUserByNameToCatalog (UsersManager* usersManager, UserByName* userByName) {
-    addOrdList(usersManager->usersByName, userByName);
+void addUserIdToCatalog (UsersManager* usersManager, UserId* userId) {
+    addOrdList(usersManager->usersId, userId);
 }
 
 void sortUserCatalog(UsersManager *usersManager) {
@@ -44,7 +44,7 @@ Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
 }
 
 OrdList *getOrdListUser (UsersManager *usersManager) {
-    return usersManager->usersByName;
+    return usersManager->usersId;
 }
 
 void printFunctionUser(void *data) {
@@ -61,7 +61,7 @@ void printUsers(UsersManager *usersManager) {
 void destroyUsersCatalog(UsersManager *usersManager) {
     if (usersManager == NULL) return;
     destroyHashtable(usersManager->users, destroyUser);
-    destroyOrdList(usersManager->usersByName,destroyUserByName);
+    destroyOrdList(usersManager->usersId,destroyUserId);
     free(usersManager);
 }
 

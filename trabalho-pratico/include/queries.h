@@ -12,6 +12,7 @@
 #include "usersManager.h"
 #include "utility.h"
 #include "hashtable.h"
+#include <locale.h>
 
 typedef enum{
    USER,
@@ -110,9 +111,8 @@ ResultsQ7* Q7(int N);
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog);
 
 int same_prefix (char* prefix, char* name);
-void swap (UserByName* user1, UserByName* user2);
-int bigger_user (UserByName* user1, UserByName* user2);
-void ord_list_by_name (OrdList* list, int begin, int end);
+int bigger_user (char* id1, char* id2, char* name1, char* name2);
+void ord_list_by_name (OrdList* list, int begin, int end,UsersManager *usersCatalog);
 OrdList* Q9 (char* prefix,UsersManager *usersCatalog);
 
 void Q10(int year, char month);

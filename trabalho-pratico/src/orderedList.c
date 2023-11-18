@@ -163,3 +163,9 @@ void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*)) {
         (*destroyDataFunction)(data[i]);
     free(ordlist);
 }
+
+void swap (OrdList *ordlist, int i, int j) {
+    void* data_i = ordlist->data[i];
+    ordlist->data[i] = ordlist->data[j];
+    ordlist->data[j] = data_i;
+}

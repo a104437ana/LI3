@@ -9,6 +9,7 @@
 #include "flightsManager.h"
 #include "catalogsManager.h"
 #include "interpreter.h"
+#include <locale.h>
 
 #define USERS_HASHTABLE_INI_SIZE 10000
 #define RESERVATIONS_HASHTABLE_INI_SIZE 40000
@@ -30,7 +31,7 @@ int main (int argc, char** argv) {
     struct timespec start, end;
     double elapsed;
     clock_gettime(CLOCK_REALTIME, &start);
-
+    setlocale(LC_COLLATE, "en_US.UTF-8");
     //inicialização dos catalogos
     UsersManager *usersCatalog = createUsersCatalog(USERS_HASHTABLE_INI_SIZE);
     ReservationsManager *reservationsCatalog = createReservsCatalog(RESERVATIONS_HASHTABLE_INI_SIZE);

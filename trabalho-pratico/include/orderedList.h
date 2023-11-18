@@ -31,5 +31,6 @@ void printOrdList(OrdList *ordList, void (*printFunction)(void*));
 void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*));
 //void destroyFlights(OrdList *flights);
 //void destroyReservations(OrdList *reservations);
+void swap (OrdList *ordlist, int i, int j);
 
 #endif

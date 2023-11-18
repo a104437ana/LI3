@@ -2,7 +2,7 @@ CC=gcc
 
 CFLAGS=-Wall -Iinclude
 
-OBJFILES=src/programa-principal.o src/parser.o src/dataset_validator.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/user.o src/flight.o src/hashtable.o src/hotelsManager.o src/reservationsManager.o src/usersManager.o src/flightsManager.o src/catalogsManager.o src/interpreter.o src/output.o src/queries.o src/userByName.o
+OBJFILES=src/programa-principal.o src/parser.o src/dataset_validator.o src/orderedList.o src/utility.o src/hotel.o src/reservation.o src/user.o src/flight.o src/hashtable.o src/hotelsManager.o src/reservationsManager.o src/usersManager.o src/flightsManager.o src/catalogsManager.o src/interpreter.o src/output.o src/queries.o src/userId.o
 
 all: programa-principal
 
