@@ -92,12 +92,12 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else if (command->query_id==8){
      if (command->n_args<3) return;
      else{
-        //Date *begin = string_to_date(command->args[1]);
-        //Date *end = string_to_date(command->args[2]);
-        //int output = Q8(command->args[0], begin, end, hotelsCatalog);
-        //printOutputQ8(command->format_flag, output, i);
-        //destroyDate(begin);
-        //destroyDate(end);
+        Date *begin = string_to_date(command->args[1]);
+        Date *end = string_to_date(command->args[2]);
+        int output = Q8(command->args[0], begin, end, hotelsCatalog);
+        printOutputQ8(command->format_flag, output, i);
+        destroyDate(begin);
+        destroyDate(end);
         return;
      }
    }
