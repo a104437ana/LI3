@@ -44,7 +44,7 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       strcpy(breakfast, "False");
     }
-    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
+    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToStringNoHours(getReservBegin(output->result)), dateToStringNoHours(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
    }
   }
   else{
@@ -69,7 +69,7 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       strcpy(breakfast, "False");
     }
-    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToString(getReservBegin(output->result)), dateToString(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
+    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToStringNoHours(getReservBegin(output->result)), dateToStringNoHours(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
    }
   }
   free(output);
@@ -97,28 +97,30 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
       else resultT = strdup("reservation");
       fprintf (file, "--- %d ---\n", (j+1));
       fprintf (file,"id: %s\ndate: %04d/%02d/%02d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
-
     }
     else{
      if(qType==FLIGHTS){
-      for (j=0; j<output->N-1; j++){
-        fprintf (file, "--- %d ---\n", (j+1));
-        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
-        fprintf (file, "\n");
-      }
-      fprintf (file, "--- %d ---\n", (j+1));
-      fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
+     for (j=0; j<output->N-1; j++){
+       fprintf (file, "--- %d ---\n", (j+1));
+       fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]));
+       fprintf (file, "\n");
      }
+      fprintf (file, "--- %d ---\n", (j+1));
+      fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]));
+     }
+     
      else{
       for (j=0; j<output->N-1; j++){
-        fprintf (file, "--- %d ---\n", (j+1));
-        fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToStringNoHours(getReservBegin(output->results[j]->result)));
-        fprintf (file, "\n");
-      }
-        fprintf (file, "--- %d ---\n", (j+1));
-        fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToStringNoHours(getReservBegin(output->results[j]->result)));
+     for (j=0; j<output->N-1; j++){
+       fprintf (file, "--- %d ---\n", (j+1));
+       fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]));
+       fprintf (file, "\n");
+     }
+      fprintf (file, "--- %d ---\n", (j+1));
+      fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]));
      }
     }
+  }
   }
   else{
     if (qType==BOTH){
@@ -129,19 +131,18 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
        fprintf (file,"%s;%04d/%02d/%02d;%s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
      }
     }
-    else{
      if(qType==FLIGHTS){
-      for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
-      }
+     for (j=0; j<output->N; j++){
+       fprintf (file,"%s;%04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]));
+     }
      }
      else{
-      for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%s\n", getReservId(output->results[j]->result), dateToString(getReservBegin(output->results[j]->result)));
-      }
+     for (j=0; j<output->N; j++){
+       fprintf (file,"%s;%04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]));
+     }
      }
     } 
-   }
+  free(output->results);
   free(output);
   fclose(file);
 }
@@ -170,17 +171,18 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
   if (format_flag=='F'){
      for (j=0; j<output->N-1; j++){
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
        fprintf (file, "\n");
      }
     fprintf (file, "--- %d ---\n", (j+1));
-    fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+    fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
     }
   else{
      for (j=0; j<output->N; j++){
-        fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+        fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
      }
   }
+  free(output->results);
   free(output);
   fclose(file);
 }

@@ -143,22 +143,34 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
     if(same_prefix("Book", id) == 1){
       ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getReservCatalog(reservationsCatalog, hashFunction(id), id);
-      if (result->result==NULL) return NULL; //se o id não existir
+      if (result->result==NULL){
+        free(result);
+        return NULL; //se o id não existir
+      }
       result->resultType=RESERVATION;
       return result;
     }
     else if (id[0]>='0' && id[0]<='9'){
       ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getFlightCatalog(flightsCatalog, hashFunction(id), id);
-      if (result->result==NULL) return NULL; //se o id não existir
+      if (result->result==NULL){
+        free(result);
+        return NULL; //se o id não existir
+      }
       result->resultType=FLIGHT;
       return result;   
     }
     else{
       ResultQ1* result = malloc(sizeof(ResultQ1));
       result->result = getUserCatalog(usersCatalog, hashFunction(id), id);
-      if (result->result==NULL) return NULL; //se o id não existir
-      if (getAccountStatus(result->result)==false) return NULL; //se o utilizador não estiver ativo
+      if (result->result==NULL){
+        free(result);
+        return NULL; //se o id não existir
+      }
+      if (getAccountStatus(result->result)==false){
+        free(result);
+        return NULL; //se o utilizador não estiver ativo
+      }
       result->resultType=USER;
       return result;
     }
