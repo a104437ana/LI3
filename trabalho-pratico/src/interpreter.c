@@ -89,7 +89,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         return;
      }
    }
-    /*else if (command->query_id==8){
+    else if (command->query_id==8){
      if (command->n_args<3) return;
      else{
         Date *begin = string_to_date(command->args[1]);
@@ -109,7 +109,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         return;
      }
    }
-    else if (command->query_id==10){
+    /*else if (command->query_id==10){
       // Q10(atoi(command->args[0]), command->args[1]); //confirmar o que recebe
       return;
    }*/
