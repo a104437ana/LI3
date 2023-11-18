@@ -211,26 +211,47 @@ void printDay(void *reservation) {
   printf(", %d", getReservBeginDay((Reservation *) reservation));
 }
 
-int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end) {
+int daysInsideDates(Date *begin, Date *end, Date *reservBegin, Date *reservEnd) {
+  int nDays = 0;
+  int reservBegin_begin, reservEnd_end, reservBegin_end, reservEnd_begin;
+  Date *lower, *higher;
+  reservEnd_begin = compareDates(reservEnd, begin);
+  if (reservEnd_begin > 0) return -1;
+  reservBegin_begin = compareDates(reservBegin, begin);
+  reservEnd_end = compareDates(reservEnd, end);
+  reservBegin_end  = compareDates(reservBegin, end);
+  if (reservBegin_end < 0) return -1;
+
+  if (reservBegin_begin >= 0) lower = begin;
+  else lower = reservBegin;
+  if (reservEnd_end <= 0) higher = end;
+  else higher = reservEnd;
+
+  nDays = daysBetweenDates(lower, higher) + 1;
+  if (reservBegin_begin <= 0 && reservEnd_end >= 0)
+    nDays --;
+
+  return nDays;
+}
+
+int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end, Date *reservBegin, Date *reservEnd) {
   int pricePerNight = getReservPricePerNight(reservation);
-  int nDays = daysBetweenDates(begin, end) + 1;
+  int nDays = daysInsideDates(begin, end, reservBegin, reservEnd);
+  if (nDays == -1) return 0;
   int total = (pricePerNight * nDays);
   return total;
 }
 
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
   OrdList *reservations = getHotelOrdList(getHotelCatalog(hotelsCatalog, hashFunction(id), id));
-  int index = searchReservDateIndex(reservations, begin); //procura indice da reserva inicial
+//  int index = searchReservDateIndex(reservations, begin); //procura indice da reserva inicial
   int size = getOrdListSize(reservations);
-  Reservation *reservation = getDataOrdList(reservations, index);
+  Reservation *reservation = getDataOrdList(reservations, 0);
   Date *reservBegin = getReservBegin(reservation), *reservEnd = getReservEnd(reservation);
   int total = 0;
 
-  for (int i=index; i<size && compareDates(reservBegin, end) >= 0; i++) { //enquanto dia limite maior ou igual a dia atual
-    if (compareDates(reservEnd, end) < 0) //se dia limite menor que dia de fim da reserva
-      total += getReservPriceBetweenDates(reservation, reservBegin, end);
-    else
-      total += getReservPriceBetweenDates(reservation, reservBegin, reservEnd);
+  for (int i=0; i<size && compareDates(reservBegin, end) >= 0; i++) { //enquanto dia limite maior ou igual a dia atual
+    total += getReservPriceBetweenDates(reservation, begin, end, reservBegin, reservEnd);
     reservation = getDataOrdList(reservations, i+1); //proxima reserva
     reservBegin = getReservBegin(reservation); //dia inicio da reserva
     reservEnd = getReservEnd(reservation); //dia fim da reserva
