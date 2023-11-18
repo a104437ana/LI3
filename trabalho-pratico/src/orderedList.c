@@ -56,7 +56,7 @@ int searchReservDateIndex(OrdList *ordlist, Date *date) {
     Date *reservDate = getReservBegin((Reservation *) ordlist->data[higher]);
     if (compareDates(reservDate, date) > 0) return -1; //se último dia da lista for menor que a data
     reservDate = getReservBegin((Reservation *) ordlist->data[lower]);
-    if (compareDates(reservDate, date) < 0) return 0; //se primeiro dia da lista for maior que a data
+    if (compareDates(reservDate, date) <= 0) return 0; //se primeiro dia da lista for maior ou igual que a data
     reservDate = getReservBegin((Reservation *) ordlist->data[index]);
     //enquanto as datas nao forem iguais ou indice diferente de limites
     while ((maior = compareDates(reservDate, date)) != 0 && index != lower) {
@@ -66,6 +66,15 @@ int searchReservDateIndex(OrdList *ordlist, Date *date) {
             lower = index; //limite inferior igual a indice
         index = (higher + lower) / 2; //novo indice entre os dois limites
         reservDate = getReservBegin(ordlist->data[index]);
+    }
+    if (maior == 0 && index > 0) { //se ambas as datas sao iguais procura a indice incial onde são iguais
+        Reservation *reservDatePrevious = getReservBegin(ordlist->data[index-1]);
+        while ( index > 0 && compareDates(reservDate, reservDatePrevious) == 0) {
+            index--;
+            reservDate = getReservBegin(ordlist->data[index]);
+            if (index > 0)
+            reservDatePrevious = getReservBegin(ordlist->data[index-1]);
+        }
     }
 //    if (index == lower) index++;
 

@@ -46,6 +46,7 @@ int getDateYear(Date *date);
 char getSeconds(Date *date);
 char getMinutes(Date *date);
 char getHours(Date *date);
+void getDayMonthYear(Date *date, int *day, int *month, int *year);
 
 void setDay(Date *date, char day);
 void setMonth(Date *date, char month);

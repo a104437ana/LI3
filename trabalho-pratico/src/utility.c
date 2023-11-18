@@ -79,6 +79,12 @@ char getHours(Date *date) {
     return date->hour->hours;
 }
 
+void getDayMonthYear(Date *date, int *day, int *month, int *year) {
+    *day = date->day;
+    *month = date->month;
+    *year = date->year;
+}
+
 void setDay(Date *date, char day) {
     date->day = day;
 }
