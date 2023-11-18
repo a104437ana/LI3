@@ -33,6 +33,7 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
         hotel = (Hotel*) getData(hotels, hotelKey, id_hotel);
     addReservationToHotel(hotel, reservation);
     addToHotelRatingsSum(hotel, userClassification);
+    addToHotelNumberRatings(hotel, userClassification);
     reservation->hotel = hotel;
     reservation->begin = begin;
     reservation->end = end;

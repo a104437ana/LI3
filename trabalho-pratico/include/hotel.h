@@ -22,7 +22,8 @@ char *getHotelReservation(Hotel *hotel, unsigned int key);
 char *getHotelId(Hotel *hotel);
 char *getHotelName(Hotel *hotel);
 char getHotelStars(Hotel *hotel);
-char getHotelRatingsSum(Hotel *hotel);
+double getHotelRatingsSum(Hotel *hotel);
+int getHotelNumberRatings(Hotel *hotel);
 char *getHotelAddress(Hotel *hotel);
 int getHotelCityTax(Hotel *hotel);
 //sets falta libertar espaço em memória
@@ -31,7 +32,8 @@ void setHName(Hotel *hotel, char *name);
 void setHStars(Hotel *hotel, char stars);
 void setHAddress(Hotel *hotel, char *address);
 void setHCityTax(Hotel *hotel, int cityTax);
-void addToHotelRatingsSum(Hotel *hotel, int stars);
+void addToHotelRatingsSum(Hotel *hotel, char rating);
+void addToHotelNumberRatings(Hotel *hotel, char rating);
 
 void removeHId(Hotel *hotel);
 void removeHName(Hotel *hotel);

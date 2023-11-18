@@ -185,10 +185,9 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
 
 double Q3(char *id, HotelsManager *hotelsCatalog) {
   Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
-  double numberClassifications = getOrdListSize(getHotelOrdList(hotel));
+  int numberClassifications = getOrdListSize(getHotelOrdList(hotel));
   double result = getHotelRatingsSum(hotel);
   result /= numberClassifications;
-
   return result;
 }
 

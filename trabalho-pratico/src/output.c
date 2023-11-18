@@ -143,7 +143,7 @@ void printOutputQ3 (char format_flag, double output, int i){
    fprintf (file,"rating: %.3f\n", output);
   }
   else{
-   fprintf (file,"%f\n", output);
+   fprintf (file,"%.3f\n", output);
   }
   fclose(file);
 }
