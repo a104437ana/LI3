@@ -58,7 +58,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         printOutputQ3(command->format_flag, output, i);
      }
    }
-    else if (command->query_id==4){ return;
+    else if (command->query_id==4){
      if (command->n_args==0) return;
      else{
         ResultsQ4* output = Q4(command->args[0], hotelsCatalog);
