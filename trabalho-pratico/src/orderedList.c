@@ -86,12 +86,12 @@ void removeOrdList(OrdList *ordList, unsigned int key) {
 
 void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset) {
     int size = list->size;
-    void **newData = malloc(sizeof(void *) * size);
+    void **newData = malloc(sizeof(void *) * size); //cria nova lista
     void *data;
     int count[interval+1], i ,j;
     for (i=0; i<=interval; i++) count[i] = 0;
     for (j=0; j<size; j++) {
-        //conta ocorrencias
+        //conta ocorrencias de cada parametro
         data = list->data[j];
         i = (*getParameterFunction)(data) - offset;
         count[i] += 1;
@@ -103,18 +103,9 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
         newData[count[i]-1] = data;
         count[i] -= 1;
     }
-//    for (i=0; i<size; i++) printf("%d / %d / %d\n", getReservBeginDay(list->data[i]), getReservBeginMonth(list->data[i]),getReservBeginYear(list->data[i]));
-//    void **oldData = list->data;
     free(list->data);
     list->data = newData;
-//    free(oldData);
 }
-
-//void radixSortDate(OrdList *list, void *(*getDateFunction)(void*)) {
-//    radixSort(list, getDay, getDateFunction, 31, 0);
-//    radixSort(list, getMonth, getDateFunction, 12, 0);
-//    radixSort(list, getYear, getDateFunction, N_YEARS, BEGIN_YEAR);
-//}
 
 void radixSortReservDate(OrdList *list) {
     radixSort(list, getReservBeginDay, 31, 0);
@@ -129,6 +120,9 @@ void radixSortFlightDate(OrdList *list) {
 }
 
 void radixSortUserList(OrdList *list) {
+    radixSort(list, getBeginSeconds, 60, 0);
+    radixSort(list, getBeginMinutes, 60, 0);
+    radixSort(list, getBeginHours, 24, 0);
     radixSort(list, getBeginDay, 31, 0);
     radixSort(list, getBeginMonth, 12, 0);
     radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);

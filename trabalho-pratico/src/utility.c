@@ -38,7 +38,7 @@ Date* string_to_date (char* string) {
     int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
     int month = (string[5] - '0') * 10 + (string[6] - '0');
     int day = (string[8] - '0') * 10 + (string[9] - '0');
-    Date* date = createDate(day,month,year);
+    Date* date = createDateHours(day,month,year,0,0,0);
 
     return date;
 }

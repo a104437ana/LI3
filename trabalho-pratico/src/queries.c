@@ -100,6 +100,36 @@ int getBeginYear(void* data){
   }
 }
 
+int getBeginSeconds(void* data) {
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)res->result))->hour->seconds);
+  }
+  else{
+    return (0);
+  }
+}
+
+int getBeginMinutes(void* data) {
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)res->result))->hour->minutes);
+  }
+  else{
+    return (0);
+  }
+}
+
+int getBeginHours(void* data) {
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS){
+    return ((getFlightScheduleDeparture((Flight *)res->result))->hour->hours);
+  }
+  else{
+    return (0);
+  }
+}
+
 char * getIdResultQ2(ResultQ2* data){
   if (data->resultType == FLIGHTS){
     return (getFlightId((Flight *)data->result));
