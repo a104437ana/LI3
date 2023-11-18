@@ -84,26 +84,39 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
   int j;
   if (format_flag=='F'){
     if (qType==BOTH){
-     for (j=0; j<output->N; j++){
+     for (j=0; j<output->N-1; j++){
        char* resultT;
        if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
        else resultT = strdup("reservation");
        fprintf (file, "--- %d ---\n", (j+1));
        fprintf (file,"id: %s\ndate: %04d/%02d/%02d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
+       fprintf (file, "\n");
      }
+      char* resultT;
+      if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
+      else resultT = strdup("reservation");
+      fprintf (file, "--- %d ---\n", (j+1));
+      fprintf (file,"id: %s\ndate: %04d/%02d/%02d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j]),getBeginMonth(output->results[j]),getBeginDay(output->results[j]), resultT);
+
     }
     else{
      if(qType==FLIGHTS){
-      for (j=0; j<output->N; j++){
+      for (j=0; j<output->N-1; j++){
         fprintf (file, "--- %d ---\n", (j+1));
-        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToString(getFlightScheduleDeparture(output->results[j]->result)));
+        fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
+        fprintf (file, "\n");
       }
+      fprintf (file, "--- %d ---\n", (j+1));
+      fprintf (file,"id: %s\ndate: %s\n", getFlightId(output->results[j]->result), dateToStringNoHours(getFlightScheduleDeparture(output->results[j]->result)));
      }
      else{
-      for (j=0; j<output->N; j++){
+      for (j=0; j<output->N-1; j++){
         fprintf (file, "--- %d ---\n", (j+1));
         fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToStringNoHours(getReservBegin(output->results[j]->result)));
+        fprintf (file, "\n");
       }
+        fprintf (file, "--- %d ---\n", (j+1));
+        fprintf (file,"id: %s\ndate: %s\n", getReservId(output->results[j]->result), dateToStringNoHours(getReservBegin(output->results[j]->result)));
      }
     }
   }
@@ -155,10 +168,13 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
   FILE* file = fopen(path, "w");
   int j;
   if (format_flag=='F'){
-     for (j=0; j<output->N; j++){
+     for (j=0; j<output->N-1; j++){
        fprintf (file, "--- %d ---\n", (j+1));
        fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+       fprintf (file, "\n");
      }
+    fprintf (file, "--- %d ---\n", (j+1));
+    fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToString(getReservBegin(output->results[j])), dateToString(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
     }
   else{
      for (j=0; j<output->N; j++){
