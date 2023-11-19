@@ -7,33 +7,33 @@
 #include "hashtable.h"
 
 struct reservation {
-    char *id;                       //q2
+    char *id;
     char *id_user;
     Hotel *hotel;
-    Date *begin;                    //q1/q2/q4
-    Date *end;                       //q1
+    Date *begin;
+    Date *end;
     int pricePerNight;
-    bool includesBreakfast;     //q1
+    bool includesBreakfast;
     //char *roomDetails;
     char userClassification;
     //char *userComment;
 };
-
+//função que cria uma nova reserva dados os dados da mesma
 Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, /*char *hotelAddress,*/ int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, /*char *roomDetails,*/ char userClassification, /*char *userComment,*/ Hashtable *hotels) {
-    Reservation *reservation = malloc(sizeof(Reservation));
-    reservation->id = strdup(id);
+    Reservation *reservation = malloc(sizeof(Reservation)); //aloca espaço em memória para a reserva
+    reservation->id = strdup(id); //aloca espaço para os diferentes campos da reserva
     reservation->id_user = strdup(id_user);
     unsigned int hotelKey = hashFunction(id_hotel);
-    int existsHotel = existsData(hotels, hotelKey, id_hotel);
+    int existsHotel = existsData(hotels, hotelKey, id_hotel); //verifica se o hotel já existe no catálogo de hoteis
     Hotel *hotel;
-    if (existsHotel == 0) {
+    if (existsHotel == 0) { //caso não exista cria um novo hotel
         hotel = createHotel(id_hotel, hotelName, hotelStars, /*hotelAddress,*/ cityTax);
-        addHashtable(hotels, hotelKey, hotel, id_hotel);
-    } else
-        hotel = (Hotel*) getData(hotels, hotelKey, id_hotel);
-    addReservationToHotel(hotel, reservation);
-    addToHotelRatingsSum(hotel, userClassification);
-    addToHotelNumberRatings(hotel, userClassification);
+        addHashtable(hotels, hotelKey, hotel, id_hotel); //adiciona o hotel ao catálogo dos hoteis
+    } else //caso já exista
+        hotel = (Hotel*) getData(hotels, hotelKey, id_hotel); //obtem apontador para o hotel do catálogo dos hoteis
+    addReservationToHotel(hotel, reservation); //adiciona o apontador da reserva às reservas do hotel
+    addToHotelRatingsSum(hotel, userClassification); //incremanta a soma das classificações do hotel caso tenha sido dada uma
+    addToHotelNumberRatings(hotel, userClassification); //incrementa o numero de classificações do hotel
     reservation->hotel = hotel;
     reservation->begin = begin;
     reservation->end = end;
@@ -43,10 +43,10 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
     reservation->userClassification = userClassification;
     //reservation->userComment = strdup(userComment);
 
-    return reservation;
+    return reservation; //retorna o apontador para a nova reserva
 }
 
-//gets
+//gets dos campos da reserva
 char *getReservId(Reservation *reservation) {
     return reservation->id; //falta encapsulamento
 }
@@ -135,7 +135,7 @@ bool getReservIncludesBreakfast(Reservation *reservation) {
     return reservation->includesBreakfast;
 }
 
-//sets falta libertar o espaço em meória
+//sets dos campos da reserva
 void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *reservId) {
     Reservation *data = getData(hashtable, key, reservId);
     char *oldUserId = data->id_user;
@@ -213,12 +213,12 @@ void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment, c
 Date *getBeginDateReservation(void *reservation) {
     return ((Reservation*)reservation)->begin;
 }
-
+//função que liberta o espaço em memória alocado pela reserva
 void destroyReservation(void *reservation) {
-    if (reservation == NULL) return;
+    if (reservation == NULL) return; //se a reserva não existir
 //    free(((Reservation *) reservation)->hotel);
 //    destroyHotel(((Reservation *) reservation)->hotel);
-    destroyDate(((Reservation *) reservation)->begin);
+    destroyDate(((Reservation *) reservation)->begin); //liberta espaço em memória dos diferentes campos
     destroyDate(((Reservation *) reservation)->end);
     //free(((Reservation *) reservation)->userComment);
     //free(((Reservation *) reservation)->roomDetails);

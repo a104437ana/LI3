@@ -5,13 +5,11 @@
 #include "hotel.h"
 #include "hashtable.h"
 
-//q1 - n_noites e preco total
-
 typedef struct reservation Reservation;
-
+//cria uma nova reserva
 Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, /*char *hotelAdderss,*/ int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, /*char *roomDetails,*/ char userClassification, /*char *userComment,*/ Hashtable *hotels);
 
-//gets libertar espaço dos gets
+//gets
 char *getReservId(Reservation *reservation);
 char *getReservUserId(Reservation *reservation);
 int getReservUserKey(Reservation *reservation);
@@ -50,7 +48,7 @@ void setUserClassification(Hashtable *hashtable, unsigned int key, char userClas
 //void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment, char *id);
 
 Date *getBeginDateReservation(void *reservation);
-
+//liberta espaço em memória da reserva
 void destroyReservation(void *reservation);
 
 #endif

@@ -34,6 +34,8 @@ void printOrdList(OrdList *ordList, void (*printFunction)(void*));
 
 //liberta espaço em memória da lista
 void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*));
+//liberta apenas espaço em memóra da lista
+void destroyOnlyOrdList(OrdList *list);
 //troca posição de dois elementos da lista
 void swap (OrdList *ordlist, int i, int j);
 

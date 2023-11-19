@@ -205,6 +205,12 @@ void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*)) {
         (*destroyDataFunction)(data[i]);
     free(ordlist);
 }
+//função que liberta apenas a memória alocada pela lista
+void destroyOnlyOrdList(OrdList *list) {
+    if (list == NULL) return;
+    free(list->data);
+    free(list);
+}
 //função que troca a posição de dois elementos de uma lista
 void swap (OrdList *ordlist, int i, int j) {
     void* data_i = ordlist->data[i];
