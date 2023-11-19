@@ -269,12 +269,12 @@ void printOutputQ9 (char format_flag, OrdList* list, int i) {
   int j;
   if (format_flag=='F'){
      for (j=0; j<N; j++){
+       if (j>0) fprintf (file,"\n\n");
        fprintf (file, "--- %d ---\n", (j+1));
        User* user = getDataOrdList(list,j);
        char* id = strdup(getUserId(user));
        char* name = strdup(getName(user));
-       fprintf (file,"id: %s\nname: %s\n", id, name);
-       fprintf (file,"\n");
+       fprintf (file,"id: %s\nname: %s", id, name);
        free(id);
        free(name);
      }
