@@ -274,6 +274,7 @@ void printOutputQ9 (char format_flag, OrdList* list, int i) {
        char* id = strdup(getUserId(user));
        char* name = strdup(getName(user));
        fprintf (file,"id: %s\nname: %s\n", id, name);
+       fprintf (file,"\n");
        free(id);
        free(name);
      }

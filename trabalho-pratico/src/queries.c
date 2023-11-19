@@ -398,7 +398,7 @@ OrdList *Q9(char *prefix, UsersManager *usersCatalog) {
   OrdList *usersByName = getUsersByName(usersCatalog);
   int size = getOrdListSize(usersByName);
   int i = searchDataOrdList(usersByName, prefix, isPrefix, 0, 1);
-  if (i == -1) return usersByName;
+  if (i == -1) return result;
   User *user = getDataOrdList(usersByName, i);
   while (i < size && isPrefix(prefix, user) == 0) {
     addOrdList(result, user);
