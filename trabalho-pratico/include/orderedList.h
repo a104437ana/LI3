@@ -10,6 +10,7 @@ OrdList *createOrdList(int size);
 void *searchOrdList(OrdList *ordList, unsigned int key);
 void addOrdList(OrdList *ordList, void *data);
 int searchReservDateIndex(OrdList *ordlist, Date *date);
+int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int searchBack);
 //falta libertar espaço em memória
 void removeOrdList(OrdList *ordList, unsigned int key);
 //void destroyOrdList(OrdList *ordList);
@@ -19,7 +20,7 @@ void radixSortDate(OrdList *list);
 void radixSortReservDate(OrdList *list);
 void radixSortFlightDate(OrdList *list);
 void radixSortUserList(OrdList *list);
-void quickSort(OrdList *list, int (*compareFunction)(void*));
+void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*), int equal);
 void sortByName(char **names, int size);
 
 void *getDataOrdList(OrdList *ordList, int index);

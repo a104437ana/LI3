@@ -40,8 +40,15 @@ void setHotelOnList(void *list, void *reservation) {
     list = reservation;
 }
 
+int compareReservsIds(void *reserv1, void *reserv2) {
+    char *id1 = getReservId((Reservation *) reserv1), *id2 = getReservId((Reservation *) reserv2);
+    return strcoll(id1, id2);
+}
+
 void sortHotelReservationsByDate(void *hotel) {
-    radixSortReservDate(((Hotel *)hotel)->reservationsByDate);
+    OrdList *reservationsByDate = ((Hotel *) hotel)->reservationsByDate;
+    quickSort(reservationsByDate, 0, getOrdListSize(reservationsByDate)-1, compareReservsIds, 0);
+    radixSortReservDate(reservationsByDate);
 }
 
 OrdList *getHotelOrdList(Hotel *hotel) {

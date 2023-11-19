@@ -17,6 +17,7 @@ User *createUser(char *id, char *name, Gender gender, char country[3], char *add
 void addReservationToUser(User *user, void *reservation);
 void addFlightToUser(User *user, void *flight);
 void sortUserList(void *data);
+int compareUsersNames(void *user1, void *user2);
 
 //gets e sets fazer get multiplo e set multiplo
 //gets

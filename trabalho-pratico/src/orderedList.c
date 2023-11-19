@@ -81,6 +81,29 @@ int searchReservDateIndex(OrdList *ordlist, Date *date) {
     return index;
 }
 
+int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int searchBack) {
+    int lower = 0, higher = list->size - 1;
+    int i = (higher + lower) / 2, compare;
+    void *compareData = list->data[i];
+    while ((compare = compareFunction(data, compareData)) != equal && (higher - lower) > 1) {
+        if (compare < equal) higher = i;
+        else lower = i;
+        i = (higher + lower) / 2;
+        compareData = list->data[i];
+    }
+    if (higher - lower == 1 && compare != equal) return -1;
+    if (searchBack) {
+        while (i > 0 && compare == equal) {
+            compareData = list->data[i-1];
+            compare = compareFunction(data, compareData);
+            i--;
+        }
+        if (compare != equal) i++;
+    }
+
+    return i;
+}
+
 void removeOrdList(OrdList *ordList, unsigned int key) {
 }
 
@@ -126,6 +149,43 @@ void radixSortUserList(OrdList *list) {
     radixSort(list, getBeginDay, 31, 0);
     radixSort(list, getBeginMonth, 12, 0);
     radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
+}
+
+void swapOrdList(OrdList *list, int i, int j) {
+    void *aux = list->data[i];
+    list->data[i] = list->data[j];
+    list->data[j] = aux;
+}
+
+int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int (*compareFunction)(void*,void*), int equal) {
+    void *data = getDataOrdList(list, lower);
+    while (higher > lower) {
+        while (compareFunction(data, pivotData) < equal) {
+            lower++;
+            data = getDataOrdList(list, lower);
+        }
+        data = getDataOrdList(list, higher);
+        while (higher >= lower && compareFunction(data, pivotData) >= equal) {
+            higher--;
+            data = getDataOrdList(list, higher);
+        }
+        if (lower < higher)
+            swapOrdList(list, lower, higher);
+    }
+
+    return lower;
+}
+
+void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void*,void*), int equal) {
+    if (higher - lower > 1) {
+        int pivot = (lower + higher) / 2;
+        swapOrdList(list, pivot, higher);
+        void *pivotData = getDataOrdList(list, higher);
+        int partition = partitionOrdList(list, lower, higher-1, pivotData, compareFunction, equal);
+        swapOrdList(list, partition, higher);
+        quickSort(list, lower, partition-1, compareFunction, equal);
+        quickSort(list, partition+1, higher, compareFunction, equal);
+    }
 }
 
 //void quickSortUserNames(OrdList *list) {
