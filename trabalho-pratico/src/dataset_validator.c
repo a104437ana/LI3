@@ -507,12 +507,13 @@ void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCo
         ssize_t read;
         if ((read = getline(&line,&n,file)) != -1) {
             while((read = getline(&line,&n,file)) != -1){
-                char* line2 = malloc(strlen(line) + 1);
-                strcpy(line2,line);
-                char* token = strsep(&line2,";"); //id flight
+                char* line_modified = malloc(strlen(line) + 1);
+                strcpy(line_modified,line);
+                char* line_pointer = line_modified;
+                char* token = strsep(&line_pointer,";"); //id flight
                 char* id_flight = malloc(strlen(token) + 1);
                 strcpy(id_flight,token);
-                token = strsep(&line2,";"); //id user
+                token = strsep(&line_pointer,";"); //id user
                 char* id_user = malloc(strlen(token) + 1);
                 strcpy(id_user,token);
                 remove_new_line(id_user);
@@ -523,7 +524,7 @@ void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCo
                     }
                     addPassenger_ToPassengersPerFlight(passengers_counter,hashFunction(id_flight),id_flight);
                 }
-                free(line2);
+                free(line_modified);
                 free(id_flight);
                 free(id_user);
             }
