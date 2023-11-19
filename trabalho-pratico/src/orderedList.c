@@ -12,7 +12,7 @@ struct ordList {
     int size;
     void **data;
 };
-
+//função que cria uma nova lista vazia com um certo tamanho
 OrdList *createOrdList(int size) {
     OrdList *ordList = malloc(sizeof(OrdList));
     void **data = malloc(sizeof(void *) * size);
@@ -22,16 +22,11 @@ OrdList *createOrdList(int size) {
 
     return ordList;
 }
-//acabar
-void *searchOrdList(OrdList *ordList, unsigned int key) {
-    return ordList->data[key];
-}
-
+//função que adiciona um novo elemento a uma lista
 void addOrdList(OrdList *ordList, void *data) {
     int maxSize = ordList->maxSize;
     int size = ordList->size;
-//    void **ordData = ordList->data;
-    if (size == maxSize) {
+    if (size == maxSize) { //se a lista estiver cheia cria uma nova lista com o dobro do tamanho
         maxSize *= 2;
         void **newData = malloc(sizeof(void *) * maxSize);
         int i=0;
@@ -43,91 +38,61 @@ void addOrdList(OrdList *ordList, void *data) {
         ordList->data = newData;
         ordList->maxSize = maxSize;
     }
-    ordList->data[size] = data;
-    ordList->size = size + 1;
+    ordList->data[size] = data; //adiciona novo elemnto na última posição da lista
+    ordList->size = size + 1; //incrementa numero de elementos na lista
     ordList->maxSize = maxSize;
 }
-//procura indice da primeira data com dia igual ou maior que a data dada
-int searchReservDateIndex(OrdList *ordlist, Date *date) {
-    int size = ordlist->size;
-    int lower = 0, higher = size - 1;
-    int index = size / 2;
-    int maior = 0;
-    Date *reservDate = getReservBegin((Reservation *) ordlist->data[higher]);
-    if (compareDates(reservDate, date) > 0) return -1; //se último dia da lista for menor que a data
-    reservDate = getReservBegin((Reservation *) ordlist->data[lower]);
-    if (compareDates(reservDate, date) <= 0) return 0; //se primeiro dia da lista for maior ou igual que a data
-    reservDate = getReservBegin((Reservation *) ordlist->data[index]);
-    //enquanto as datas nao forem iguais ou indice diferente de limites
-    while ((maior = compareDates(reservDate, date)) != 0 && index != lower) {
-        if (maior == -1) //se data for menor que a data do indice
-            higher = index; //limite superior igual a indice
-        else //caso contrário
-            lower = index; //limite inferior igual a indice
-        index = (higher + lower) / 2; //novo indice entre os dois limites
-        reservDate = getReservBegin(ordlist->data[index]);
-    }
-    if (maior == 0 && index > 0) { //se ambas as datas sao iguais procura a indice incial onde são iguais
-        Reservation *reservDatePrevious = getReservBegin(ordlist->data[index-1]);
-        while ( index > 0 && compareDates(reservDate, reservDatePrevious) == 0) {
-            index--;
-            reservDate = getReservBegin(ordlist->data[index]);
-            if (index > 0)
-            reservDatePrevious = getReservBegin(ordlist->data[index-1]);
-        }
-    }
-//    if (index == lower) index++;
-
-    return index;
-}
-
+//função que devolve o indice da primeira ocorrência de um elemento numa lista
 int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int searchBack) {
-    int lower = 0, higher = list->size - 1;
-    int i = (higher + lower) / 2, compare;
-    void *compareData = list->data[i];
+    int lower = 0, higher = list->size - 1; //limites para procura
+    int i = (higher + lower) / 2, compare; //indice central para comparar elementos
+    void *compareData = list->data[i]; //elemento a comparar
+    //enquanto os elementos não forem iguais e os limites não se cruzarem
     while ((compare = compareFunction(data, compareData)) != equal && (higher - lower) > 1) {
-        if (compare < equal) higher = i;
-        else lower = i;
-        i = (higher + lower) / 2;
-        compareData = list->data[i];
+        if (compare < equal) higher = i; //se for elemento for menor limite superior passa aser o indice do elemento
+        else lower = i; //caso contrário limite inferior passa a ser o indice do elemento
+        i = (higher + lower) / 2; //novo indice central entre os dois limites
+        compareData = list->data[i]; //novo elemento a comparar
     }
-    if (higher - lower == 1 && compare != equal) return -1;
-    if (searchBack) {
-        while (i > 0 && compare == equal) {
+    if (higher - lower == 1 && compare != equal) return -1; //se o elemento nao existir na lista
+    if (searchBack) { //caso se pretenda a primeira ocorrência desse elemento na lista
+        while (i > 0 && compare == equal) { //compara com o anterior até encontrar um elemento diferente
             compareData = list->data[i-1];
             compare = compareFunction(data, compareData);
             i--;
         }
-        if (compare != equal) i++;
+        if (compare != equal) i++; //quando a comparação não dá igual incrementa indice para apontar para o último elemento que deu igual
     }
 
-    return i;
+    return i; //retorna indice do elemento que se procurou na lista
 }
 
 void removeOrdList(OrdList *ordList, unsigned int key) {
 }
-
+//radixsort ordena uma lista por valores que estejam num intervalo conhecido
+//recebe uma função que devolve o valor do parametro para o qual queremos ordenar os elementos
 void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset) {
     int size = list->size;
-    void **newData = malloc(sizeof(void *) * size); //cria nova lista
+    void **newData = malloc(sizeof(void *) * size); //cria nova lista que irá ficar ordenada
     void *data;
-    int count[interval+1], i ,j;
-    for (i=0; i<=interval; i++) count[i] = 0;
+    int count[interval+1], i ,j; //array com de tamanho do intervalo de valores conhecido
+    for (i=0; i<=interval; i++) count[i] = 0; //inicializa array a zero
     for (j=0; j<size; j++) {
-        //conta ocorrencias de cada parametro
-        data = list->data[j];
-        i = (*getParameterFunction)(data) - offset;
-        count[i] += 1;
+        //conta ocorrencias de cada parametro no indice correspondente ao valor desse parametro
+        data = list->data[j]; //obtem elemento da lista
+        i = (*getParameterFunction)(data) - offset; //obtem valor do parametro a considerar desse elemento
+        count[i] += 1; //incrementa a contagem desse valor no array
     }
-    for (i=1; i<=interval; i++) count[i] += count[i-1];
-    for (j=size-1; j>=0; j--) {
-        data = list->data[j];
-        i = (*getParameterFunction)(data) - offset;
+    for (i=1; i<=interval; i++) count[i] += count[i-1]; //incrementa todas as posições com o valor da posição anterior
+    for (j=size-1; j>=0; j--) { //começando no fim da lista e até chegar ao início
+        data = list->data[j]; //obtem elemento da lista
+        i = (*getParameterFunction)(data) - offset; //obtem o valor do parametro
+        //introduz o elemento na nova lista na posição do numero de contagens do valor do parametro desse elemento menos um
         newData[count[i]-1] = data;
-        count[i] -= 1;
+        count[i] -= 1; //decrementa o numero de contagens desse elemento
     }
     free(list->data);
-    list->data = newData;
+    list->data = newData; //retorna uma nova lista ordenada pelo valor do parametro dado
 }
 
 void radixSortReservDate(OrdList *list) {
@@ -150,44 +115,51 @@ void radixSortUserList(OrdList *list) {
     radixSort(list, getBeginMonth, 12, 0);
     radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
 }
-
+//função que troca duas posições de uma lista
 void swapOrdList(OrdList *list, int i, int j) {
     void *aux = list->data[i];
     list->data[i] = list->data[j];
     list->data[j] = aux;
 }
-
+//função de partição recebe uma lista os indices inferiores e superiores onde se pretende fazer uma partição
+//um elemento pivô uma função que compara dois elementos da lista e o valor de retorno dessa função caso sejam iguais
 int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int (*compareFunction)(void*,void*), int equal) {
-    void *data = getDataOrdList(list, lower);
+    void *data = getDataOrdList(list, lower); //obtem o elemento do indice inferior da lista
+    //enquanto os indices inferior e superior não se cruzarem
     while (higher > lower) {
+        //enquanto o elemento do indice inferior for menor que o pivô
         while (compareFunction(data, pivotData) < equal) {
-            lower++;
+            lower++; //incrementa o indice inferior
             data = getDataOrdList(list, lower);
         }
-        data = getDataOrdList(list, higher);
+        data = getDataOrdList(list, higher); //obtem o elemento do indice superior
+        //enquanto o elemento do indice superior for maior ou igual que o pivô
         while (higher >= lower && compareFunction(data, pivotData) >= equal) {
-            higher--;
+            higher--; //decrementa o indice superior
             data = getDataOrdList(list, higher);
         }
-        if (lower < higher)
-            swapOrdList(list, lower, higher);
+        if (lower < higher) //caso os indices inferior e superior não se cruzaram
+            swapOrdList(list, lower, higher); //troca a posição dos elementos
     }
 
-    return lower;
+    return lower; //devolve o indice onde os elementos são todos menores à esquerda e maiores à direita que o pivô
 }
-
+//quicksort recebe uma lista os indices inferiores e superiores para ordenar uma função que compara
+//dois elementos da lista e o valor que a função retorna caso os elementos sejam iguais
 void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void*,void*), int equal) {
-    if (higher - lower > 1) {
-        int pivot = (lower + higher) / 2;
-        swapOrdList(list, pivot, higher);
-        void *pivotData = getDataOrdList(list, higher);
+    if (higher - lower > 1) { //se a sublista tiver apenas um elemento está ordenada
+        int pivot = (lower + higher) / 2; //escolhe elemento central como pivô
+        swapOrdList(list, pivot, higher); //move pivô para o fim da sublista
+        void *pivotData = getDataOrdList(list, higher); //obtem a data do pivô
+        //faz uma partição da sublista fazendo swaps até obter o indice para o qual
+        //todos os elementos da sublista à esquerda do indice são menores que o pivô e à direita maiores
         int partition = partitionOrdList(list, lower, higher-1, pivotData, compareFunction, equal);
-        swapOrdList(list, partition, higher);
-        quickSort(list, lower, partition-1, compareFunction, equal);
-        quickSort(list, partition, higher, compareFunction, equal);
+        swapOrdList(list, partition, higher); //move pivô para a posição da partição
+        quickSort(list, lower, partition-1, compareFunction, equal); //chamada recursiva para a metade esquerda da sublista
+        quickSort(list, partition, higher, compareFunction, equal); //chamada recursiva para a metade direita da sublista
     }
 }
-
+//função que inverte a posição de todos os elementos de uma lista
 void reverseOrdList(OrdList* list){
     int size = list->size;
     int i = 0;
@@ -201,21 +173,21 @@ void reverseOrdList(OrdList* list){
 //void quickSortUserNames(OrdList *list) {
 //    qSort(list->data, list->size, strcmp);
 //}
-
+//função que devolve o elemento de uma lista dado um indice
 void *getDataOrdList(OrdList *ordList, int index) {
     return ordList->data[index];
 }
-
+//função que devolve o numero de elementos na lista
 int getOrdListSize(OrdList *ordList) {
     return ordList->size;
 }
-
+//função que altera um elemento da lista dado um indice
 void setDataOrdList (OrdList *ordList, int index, void* data) {
     void *oldData = ordList->data[index];
     ordList->data[index] = data;
     free(oldData);
 }
-
+//função que imprime todos os elementos de uma lista, para efeitos de teste
 void printOrdList(OrdList *ordList, void (*printFunction)(void*)) {
     int size = ordList->size;
     void **data = ordList->data;
@@ -224,7 +196,7 @@ void printOrdList(OrdList *ordList, void (*printFunction)(void*)) {
     }
     printf(")");
 }
-
+//função que liberta toda a memória alocada de uma lista
 void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*)) {
     if (ordlist == NULL) return;
     void **data = ordlist->data;
@@ -233,7 +205,7 @@ void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*)) {
         (*destroyDataFunction)(data[i]);
     free(ordlist);
 }
-
+//função que troca a posição de dois elementos de uma lista
 void swap (OrdList *ordlist, int i, int j) {
     void* data_i = ordlist->data[i];
     ordlist->data[i] = ordlist->data[j];

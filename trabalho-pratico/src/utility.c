@@ -112,12 +112,12 @@ void setHours(Date *date, char hours) {
 char* dateToString(Date *date){
     char* res = 0;
     if (date->hasHours == 0) {
-        res = malloc(11);
-        sprintf(res, "%04d/%02d/%02d", date->year, date->month, date->day);
+        res = malloc(11); //hhu short short unsigned output numerico tamanho 8 bits
+        sprintf(res, "%04d/%02hhu/%02hhu", date->year, date->month, date->day);
     }
     else {
         res = malloc(20);
-        sprintf(res, "%04d/%02d/%02d %02d:%02d:%02d", date->year, date->month, date->day, date->hour->hours, date->hour->minutes, date->hour->seconds);
+        sprintf(res, "%04d/%02hhu/%02hhu %02hhu:%02hhu:%02hhu", date->year, date->month, date->day, date->hour->hours, date->hour->minutes, date->hour->seconds);
     }
     return res;
 }
@@ -125,7 +125,7 @@ char* dateToString(Date *date){
 char* dateToStringNoHours(Date *date){
     char* res = 0;
     res = malloc(11);
-    sprintf(res, "%04d/%02d/%02d", date->year, date->month, date->day);
+    sprintf(res, "%04d/%02hhu/%02hhu", date->year, date->month, date->day);
     return res;
 }
 

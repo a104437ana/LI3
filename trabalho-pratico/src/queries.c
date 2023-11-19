@@ -286,7 +286,7 @@ int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end,
 
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
   OrdList *reservations = getHotelOrdList(getHotelCatalog(hotelsCatalog, hashFunction(id), id));
-//  int index = searchReservDateIndex(reservations, begin); //procura indice da reserva inicial
+//  int index = searchDateOrdList(reservations, begin, compareDates); //procura indice da reserva inicial
   int size = getOrdListSize(reservations);
   Reservation *reservation = getDataOrdList(reservations, 0);
   Date *reservBegin = getReservBegin(reservation), *reservEnd = getReservEnd(reservation);
