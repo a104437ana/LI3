@@ -20,12 +20,12 @@ typedef struct date {
     bool hasHours;
     Hour *hour;
 } Date;
-
+/*
 typedef struct phoneNumber {
     char indicative[3];
     char number[9];
 } PhoneNumber;
-
+*/
 typedef enum gender {
     MALE,
     FEMALE,
@@ -63,6 +63,6 @@ int daysBetweenDates(Date *begin, Date *end);
 int compareDates(Date *date1, Date *date2);
 
 void destroyDate(Date *date);
-void destroyPhoneNumber(PhoneNumber *phoneNumber);
+//void destroyPhoneNumber(PhoneNumber *phoneNumber);
 
 #endif

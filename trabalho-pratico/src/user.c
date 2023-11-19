@@ -17,13 +17,13 @@ struct user {
     char *name;             //q1
     Gender gender;          //q1
     char country[3];
-    char *address;
+    //char *address;
     char *passport;       //q1
     Date *birth;        //q1
-    char *email;
-    PhoneNumber *phoneNumber;
+    //char *email;
+    //PhoneNumber *phoneNumber;
     Date *accountCreation;
-    char *paymentMethod;
+    //char *paymentMethod;
     bool accounStatus;          
     OrdList *flightsReservationsByDate;      
     double totalSpent;     //q1        //?
@@ -31,7 +31,7 @@ struct user {
     int nReservations;
 };
 
-User *createUser(char *id, char *name, Gender gender, char country[3], char *address, char *passport, Date *birth, char *email, PhoneNumber *phoneNumber, Date *accountCreation, char *paymentMethod, bool accountStatus) {
+User *createUser(char *id, char *name, Gender gender, char country[3], /*char *address,*/ char *passport, Date *birth, /*char *email, PhoneNumber *phoneNumber,*/ Date *accountCreation, /*char *paymentMethod,*/ bool accountStatus) {
     User *user = malloc(sizeof(User));
     user->id = strdup(id);
     user->name = strdup(name);
@@ -39,13 +39,13 @@ User *createUser(char *id, char *name, Gender gender, char country[3], char *add
     memcpy(user->country, country, 3);
 //    user->country[0] = country[0];
 //    user->country[1] = country[1];
-    user->address = strdup(address);
+    //user->address = strdup(address);
     user->passport = strdup(passport);
     user->birth = birth;
-    user->email = strdup(email);
-    user->phoneNumber = phoneNumber;
+    //user->email = strdup(email);
+    //user->phoneNumber = phoneNumber;
     user->accountCreation = accountCreation;
-    user->paymentMethod = strdup(paymentMethod);
+    //user->paymentMethod = strdup(paymentMethod);
     user->accounStatus = accountStatus;
     user->totalSpent = 0;
     user->flightsReservationsByDate = createOrdList(USER_LIST_INI_SIZE);
@@ -106,14 +106,14 @@ char *getCountry(User *user) {
 
     return country;
 }
-
+/*
 char *getAdress(User *user) {
     char *address;
     address = user->address; //falta encapsulamento
 
     return address;
 }
-
+*/
 char *getPassport(User *user) {
     char *passport;
     passport = user->passport; //falta encapsulamento
@@ -127,7 +127,7 @@ Date *getBirth(User *user) {
 
     return birth;
 }
-
+/*
 char *getEmail(User *user) {
     char *email;
     email = user->email; //falta encapsulamento
@@ -141,7 +141,7 @@ PhoneNumber *getPhoneNumber(User *user) {
 
     return number;
 }
-
+*/
 Date *getAccountCreation(User *user) {
     Date *accountCreation;
     accountCreation = user->accountCreation;
@@ -196,14 +196,14 @@ void setCountry(Hashtable *hashtable, unsigned int key, char *country, char *id)
 //    data->country[0] = country[0];
 //    data->country[1] = country[1];
 }
-
+/*
 void setAdress(Hashtable *hashtable, unsigned int key, char *address, char *id) {
     User *data = getData(hashtable, key, id);
     char *oldAddress = data->address;
     data->address = strdup(address);
     free(oldAddress);
 }
-
+*/
 void setPassport(Hashtable *hashtable, unsigned int key, char *passport, char *id) {
     User *data = getData(hashtable, key, id);
     char *oldPassport = data->passport;
@@ -215,7 +215,7 @@ void setBirth(Hashtable *hashtable, unsigned int key, Date *birth, char *id) {
     User *data = getData(hashtable, key, id);
     data->birth = birth;
 }
-
+/*
 void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id) {
     User *data = getData(hashtable, key, id);
     char *oldEmail = data->email;
@@ -229,7 +229,7 @@ void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNu
     destroyPhoneNumber(data->phoneNumber);
     data->phoneNumber = phoneNumber;
 }
-
+*/
 void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id) {
     User *data = getData(hashtable, key, id);
     destroyDate(data->accountCreation);
@@ -246,11 +246,11 @@ void destroyUser(void *user) {
 //    destroyReservations(((User *) user)->reservationsByDate);
     destroyDate(((User *)user)->birth);
     destroyDate(((User *) user)->accountCreation);
-    destroyPhoneNumber(((User *) user)->phoneNumber);
-    free(((User *) user)->paymentMethod);
-    free(((User *) user)->email);
+    //destroyPhoneNumber(((User *) user)->phoneNumber);
+    //free(((User *) user)->paymentMethod);
+    //free(((User *) user)->email);
     free(((User *) user)->passport);
-    free(((User *) user)->address);
+    //free(((User *) user)->address);
 //    free(((User *) user)->country);
     free(((User *) user)->name);
     free(((User *) user)->id);

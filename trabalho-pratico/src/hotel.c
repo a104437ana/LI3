@@ -10,16 +10,16 @@ struct hotel {
     char *id;           //q1
     char *name;         //q1
     char stars;          //q3/q1
-    char *address;
+    //char *address;
     int cityTax;
     OrdList *reservationsByDate;        //q4
     double ratingsSum;
     int numberRatings;
 };
 
-Hotel *createHotel(char *id, char *name, char stars, char *address, int cityTax) {
+Hotel *createHotel(char *id, char *name, char stars, /*char *address,*/ int cityTax) {
     Hotel *hotel = malloc(sizeof(Hotel));
-    hotel->address = strdup(address); //address desaparece
+    //hotel->address = strdup(address); //address desaparece
     hotel->id = strdup(id);
     hotel->name = strdup(name);
     hotel->stars = stars;
@@ -81,11 +81,11 @@ double getHotelRatingsSum(Hotel *hotel) {
 int getHotelNumberRatings(Hotel *hotel) {
     return hotel->numberRatings;
 }
-
+/*
 char *getHotelAddress(Hotel *hotel) {
     return hotel->address; //falta encapsulamento
 }
-
+*/
 int getHotelCityTax(Hotel *hotel) {
     return hotel->cityTax;
 }
@@ -105,13 +105,13 @@ void setHName(Hotel *hotel, char *name) {
 void setHStars(Hotel *hotel, char stars) {
     hotel->stars = stars;
 }
-
+/*
 void setHAddress(Hotel *hotel, char *address) {
     char *oldAddress = address;
     hotel->address = strdup(address);
     free(oldAddress);
 }
-
+*/
 void setHCityTax(Hotel *hotel, int cityTax) {
     hotel->cityTax = cityTax;
 }
@@ -139,18 +139,18 @@ void removeHName(Hotel *hotel) {
     hotel->name = NULL;
 //    free(oldHotelName);
 }
-
+/*
 void removeHAddress(Hotel *hotel) {
 //    char *oldHotelAddress = hotel->address;
     hotel->address = NULL;
 //    free(oldHotelAddress);
 }
-
+*/
 void destroyHotel(void *hotel) {
     if (hotel == NULL) return;
 //    free(((Hotel *) hotel)->reservationsByDate);
 //    destroyOrdList(((Hotel *) hotel)->reservationsByDate, destroyReservation);
-    free(((Hotel *) hotel)->address);
+    //free(((Hotel *) hotel)->address);
     free(((Hotel *) hotel)->name);
     free(((Hotel *) hotel)->id);
     free(hotel);

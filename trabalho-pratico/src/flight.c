@@ -10,25 +10,25 @@ struct flight {
     char *id;
     char *airline;            //q1
     char *airplane;                //q1
-    int totalSeats;
+    //int totalSeats;
     char origin[4];             //q1
     char destination[4];            //q1
     Date *scheduleDeparture;           //q1/q2
     Date *scheduleArrival;           //q1
     Date *realDeparture;
     Date *realArrival;
-    char *pilot;
-    char *copilot;
+    //char *pilot;
+    //char *copilot;
     //char *notes;
     OrdList *passengers;    //q1
 };
 
-Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot/*, char *notes*/) {
+Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/) {
     Flight *flight = malloc(sizeof(Flight));
     flight->id = strdup(id);
     flight->airline = strdup(airline);
     flight->airplane = strdup(airplane);
-    flight->totalSeats = totalSeats;
+    //flight->totalSeats = totalSeats;
     //usar strncopy(destination, origin, size(characters))
     flight->origin[0] = origin[0];
     flight->origin[1] = origin[1];
@@ -42,8 +42,8 @@ Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, ch
     flight->scheduleArrival = scheduleArrival;
     flight->realDeparture = realDeparture;
     flight->realArrival = realArrival;
-    flight->pilot = strdup(pilot);
-    flight->copilot = strdup(copilot);
+    //flight->pilot = strdup(pilot);
+    //flight->copilot = strdup(copilot);
     //flight->notes = strdup(notes);
     flight->passengers = createOrdList(PASSENGER_LIST_INI_SIZE);
 
@@ -62,11 +62,11 @@ char *getFlightAirline(Flight *flight) {
 char *getFlightAirplane(Flight *flight) {
     return flight->airplane; //falta encapsulamento
 }
-
+/*
 int getFlightTotalSeats(Flight *flight) {
     return flight->totalSeats;
 }
-
+*/
 char *getFlightOrigin(Flight *flight) {
     char *origin = malloc(sizeof(char) * 4);
     memcpy(origin, flight->origin, 4);
@@ -106,7 +106,7 @@ int getFlightScheduleDepartureMonth(void *flight) {
 int getFlightScheduleDepartureYear(void *flight) {
     return ((Flight *) flight)->scheduleDeparture->year;
 }
-
+/*
 char *getFlightPilot(Flight *flight) {
     return flight->pilot;
 }
@@ -114,7 +114,7 @@ char *getFlightPilot(Flight *flight) {
 char *getFlightCopilot(Flight *flight) {
     return flight->copilot;
 }
-/*
+
 char *getFlightNotes(Flight *flight) {
     return flight->notes;
 }
@@ -139,11 +139,11 @@ void setFlightAirplane(Flight *flight, char *airplane) {
     flight->airplane = strdup(airplane);
     free(oldAirplane);
 }
-
+/*
 void setFlightTotalSeats(Flight *flight, int totalSeats) {
     flight->totalSeats = totalSeats;
 }
-
+*/
 void setFlightOrigin(Flight *flight, char origin[4]) {
     flight->origin[0] = origin[0];
     flight->origin[1] = origin[1];
@@ -171,7 +171,7 @@ void setFlightRealDeparture(Flight *flight, Date *realDeparture) {
 void setFlightRealArrival(Flight *flight, Date *realArrival) {
     flight->realArrival = realArrival;
 }
-
+/*
 void setFlightPilot(Flight *flight, char *pilot) {
     char *oldPilot = flight->pilot;
     flight->pilot = strdup(pilot);
@@ -183,7 +183,7 @@ void setFlightCopilot(Flight *flight, char *copilot) {
     flight->copilot = strdup(copilot);
     free(oldCopilot);
 }
-/*
+
 void setFlightNotes(Flight *flight, char *notes) {
     char *oldNotes = flight->notes;
     flight->notes = strdup(notes);
@@ -199,8 +199,8 @@ void destroyFlight(void *flight) {
     destroyDate(((Flight *) flight)->realDeparture);
     destroyDate(((Flight *) flight)->realArrival);
     //free(((Flight *) flight)->notes);
-    free(((Flight *) flight)->copilot);
-    free(((Flight *) flight)->pilot);
+    //free(((Flight *) flight)->copilot);
+    //free(((Flight *) flight)->pilot);
 //    free(((Flight *) flight)->destination);
 //    free(((Flight *) flight)->origin);
     free(((Flight *) flight)->airplane);

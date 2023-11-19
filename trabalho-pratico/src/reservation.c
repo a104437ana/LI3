@@ -19,7 +19,7 @@ struct reservation {
     //char *userComment;
 };
 
-Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, char *hotelAddress, int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, /*char *roomDetails,*/ char userClassification, /*char *userComment,*/ Hashtable *hotels) {
+Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, /*char *hotelAddress,*/ int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, /*char *roomDetails,*/ char userClassification, /*char *userComment,*/ Hashtable *hotels) {
     Reservation *reservation = malloc(sizeof(Reservation));
     reservation->id = strdup(id);
     reservation->id_user = strdup(id_user);
@@ -27,7 +27,7 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
     int existsHotel = existsData(hotels, hotelKey, id_hotel);
     Hotel *hotel;
     if (existsHotel == 0) {
-        hotel = createHotel(id_hotel, hotelName, hotelStars, hotelAddress, cityTax);
+        hotel = createHotel(id_hotel, hotelName, hotelStars, /*hotelAddress,*/ cityTax);
         addHashtable(hotels, hotelKey, hotel, id_hotel);
     } else
         hotel = (Hotel*) getData(hotels, hotelKey, id_hotel);
@@ -66,11 +66,11 @@ int getReservUserKey(Reservation *reservation) {
 char *getReservHotelName(Reservation *reservation) {
     return getHotelName(reservation->hotel);
 }
-
+/*
 char *getReservHotelAddress(Reservation *reservation) {
     return getHotelAddress(reservation->hotel);
 }
-/*
+
 char *getReservRoomDetails(Reservation *reservation) {
     return reservation->roomDetails; //falta encapsulamento
 }
@@ -164,13 +164,13 @@ void setCityTax(Hashtable *hashtable, unsigned int key, int cityTax, char *id) {
     Reservation *data = getData(hashtable, key, id);
     setHCityTax(data->hotel, cityTax);
 }
-
+/*
 void setHotelAdress(Hashtable *hashtable, unsigned int key, char *hotelAddress, char *id) {
     Reservation *data = getData(hashtable, key, id);
     removeHAddress(data->hotel);
     setHAddress(data->hotel, hotelAddress);
 }
-
+*/
 void setBeginDate(Hashtable *hashtable, unsigned int key, Date *begin, char *id) {
     Reservation *data = getData(hashtable, key, id);
     data->begin = begin;

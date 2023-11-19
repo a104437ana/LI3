@@ -66,7 +66,7 @@ void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_
 //                        UserId* userId = createUserId(id_user);
 //                        addUserIdToCatalog(usersCatalog,userId);
                     }
-                    User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,accountStatus);
+                    User* user = createUser(id_user,name,gender,country_code,/*address,*/passport,birth,/*email,0,*/accountCreation,/*pay_method,*/accountStatus);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
                     if (accountStatus) addUserToCatalogList(usersCatalog,user);
                 }
@@ -152,7 +152,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 token = strsep(&line_pointer,";"); //rating
                 char* rating = malloc(strlen(token) + 1);
                 strcpy(rating,token);
-                token = strsep(&line_pointer,";"); //comment
+                //token = strsep(&line_pointer,";"); comment
                 //char* comment = malloc(strlen(token) + 1);
                 //strcpy(comment,token);
                 //remove_new_line(comment);
@@ -163,7 +163,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                     if (includes_breakfast[0] == 't' || includes_breakfast[0] == 'T' || includes_breakfast[0] == '1') includesBreakfast = 1;
                     Date* begin = string_to_date(begin_date);
                     Date* end = string_to_date(end_date);
-                    Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars[0],address,cityTax,begin,end,pricePerNight,includesBreakfast,/*room_details,*/rating[0],/*comment,*/getHashtableHotelsCatalog(hotelsCatalog));
+                    Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars[0],/*address,*/cityTax,begin,end,pricePerNight,includesBreakfast,/*room_details,*/rating[0],/*comment,*/getHashtableHotelsCatalog(hotelsCatalog));
                     addReservToCatalog(reservationsCatalog,reservation,hashFunction(id_reservation),hotelsCatalog,usersCatalog);
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
@@ -245,17 +245,17 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 token = strsep(&line_pointer,";"); //copilot
                 char* copilot = malloc(strlen(token) + 1);
                 strcpy(copilot,token);
-                token = strsep(&line_pointer,";"); //notes
+                //token = strsep(&line_pointer,";"); notes
                 //char* notes = malloc(strlen(token) + 1);
                 //strcpy(notes,token);
                 //remove_new_line(notes);
                 if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,passengers_counter)) {
-                    int totalSeats = string_to_int(total_seats);
+                    //int totalSeats = string_to_int(total_seats);
                     Date* scheduleDeparture = string_to_date_hours(schedule_departure_date);
                     Date* scheduleArrival = string_to_date_hours(schedule_arrival_date);
                     Date* realDeparture = string_to_date_hours(real_departure_date);
                     Date* realArrival = string_to_date_hours(real_arrival_date);
-                    Flight *flight = createFlight(id_flight,airline,plane_model,totalSeats,origin,destination,scheduleDeparture,scheduleArrival,realDeparture,realArrival,pilot,copilot/*,notes*/);
+                    Flight *flight = createFlight(id_flight,airline,plane_model,/*totalSeats,*/origin,destination,scheduleDeparture,scheduleArrival,realDeparture,realArrival/*,pilot,copilot,notes*/);
                     addFlightToCatalog(flightsCatalog,flight,hashFunction(id_flight));
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
