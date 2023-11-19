@@ -173,16 +173,34 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
   int j;
   if (format_flag=='F'){
      for (j=0; j<output->N-1; j++){
+      if (getReservUserClassification(output->results[j])<0){
+       fprintf (file, "--- %d ---\n", (j+1));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+       fprintf (file, "\n");
+      }
+      else{
        fprintf (file, "--- %d ---\n", (j+1));
        fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
        fprintf (file, "\n");
+      }
      }
-    fprintf (file, "--- %d ---\n", (j+1));
-    fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
-    }
+      if (getReservUserClassification(output->results[j])<0){
+       fprintf (file, "--- %d ---\n", (j+1));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+      }
+      else{
+       fprintf (file, "--- %d ---\n", (j+1));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+      }
+  }
   else{
      for (j=0; j<output->N; j++){
+      if (getReservUserClassification(output->results[j])<0){
+        fprintf(file, "%s;%s;%s;%s;%.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+      }
+      else{
         fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+      }
      }
   }
   free(output->results);
