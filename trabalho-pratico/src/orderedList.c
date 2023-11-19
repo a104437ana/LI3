@@ -184,7 +184,7 @@ void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void
         int partition = partitionOrdList(list, lower, higher-1, pivotData, compareFunction, equal);
         swapOrdList(list, partition, higher);
         quickSort(list, lower, partition-1, compareFunction, equal);
-        quickSort(list, partition+1, higher, compareFunction, equal);
+        quickSort(list, partition, higher, compareFunction, equal);
     }
 }
 
