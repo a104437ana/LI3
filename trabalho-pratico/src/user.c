@@ -72,10 +72,17 @@ void addFlightToUser(User *user, void *flight) {
     user->nFlights++;
 }
 
+int compareFlightReservsIds(void *data1, void *data2) {
+    char *id1 = getIdResultQ2((ResultQ2 *)data1), *id2 = getIdResultQ2((ResultQ2 *)data2);
+    return strcoll(id1, id2);
+}
+
 void sortUserList(void *data) {
-    //falta sort por id
     User *user = (User *) data;
-    radixSortUserList(user->flightsReservationsByDate);
+    OrdList *list = user->flightsReservationsByDate;
+    quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, 0);
+    reverseOrdList(list);
+    radixSortUserList(list);
 }
 
 //gets

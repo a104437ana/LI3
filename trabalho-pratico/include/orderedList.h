@@ -22,6 +22,7 @@ void radixSortFlightDate(OrdList *list);
 void radixSortUserList(OrdList *list);
 void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*), int equal);
 void sortByName(char **names, int size);
+void reverseOrdList(OrdList* list);
 
 void *getDataOrdList(OrdList *ordList, int index);
 int getOrdListSize(OrdList *ordList);

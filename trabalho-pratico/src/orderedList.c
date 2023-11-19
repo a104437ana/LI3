@@ -188,6 +188,16 @@ void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void
     }
 }
 
+void reverseOrdList(OrdList* list){
+    int size = list->size;
+    int i = 0;
+    int j = size-1;
+    while(i<j){
+        swapOrdList(list, i, j);
+        i++; j--;
+    }
+}
+
 //void quickSortUserNames(OrdList *list) {
 //    qSort(list->data, list->size, strcmp);
 //}

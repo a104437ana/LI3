@@ -48,6 +48,7 @@ int compareReservsIds(void *reserv1, void *reserv2) {
 void sortHotelReservationsByDate(void *hotel) {
     OrdList *reservationsByDate = ((Hotel *) hotel)->reservationsByDate;
     quickSort(reservationsByDate, 0, getOrdListSize(reservationsByDate)-1, compareReservsIds, 0);
+    reverseOrdList(reservationsByDate);
     radixSortReservDate(reservationsByDate);
 }
 
