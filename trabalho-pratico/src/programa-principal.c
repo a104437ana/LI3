@@ -25,6 +25,14 @@ void printString(void *string) {
     printf(" %s", (char *) string);
 }
 
+int compareFunction(void *string1, void *string2) {
+    return strcmp((char *) string1, (char *) string2);
+}
+
+void printUserName(void *user) {
+    printf("%s\n", getName((User *) user));
+}
+
 int main (int argc, char** argv) {
 
     //inicialização de variáveis para medição de tempo
@@ -49,6 +57,8 @@ int main (int argc, char** argv) {
 //    printHotels(hotelsCatalog);
 //    printFlights(flightsCatalog);
 
+//    OrdList *usersByName = getUsersByName(usersCatalog);
+//    printOrdList(usersByName, printUserName);
 //    printHotelTableReservs(getHashtableHotelsCatalog(hotelsCatalog), printDate);
 
 //    char *id = strdup("Book0000000247");

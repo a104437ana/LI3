@@ -62,11 +62,12 @@ void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_
                     int accountStatus = 0;
                     if (account_status[0] == 'a' || account_status[0] == 'A') {
                         accountStatus = 1;
-                        UserId* userId = createUserId(id_user);
-                        addUserIdToCatalog(usersCatalog,userId);
+//                        UserId* userId = createUserId(id_user);
+//                        addUserIdToCatalog(usersCatalog,userId);
                     }
                     User* user = createUser(id_user,name,gender,country_code,address,passport,birth,email,0,accountCreation,pay_method,accountStatus);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
+                    if (accountStatus) addUserToCatalogList(usersCatalog,user);
                 }
                 else {
                     add_invalid_line_to_error_file(file_path_errors,line);

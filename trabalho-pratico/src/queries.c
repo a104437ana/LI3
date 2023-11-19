@@ -356,23 +356,55 @@ void ord_list_by_name (OrdList* list, int begin, int end, UsersManager *usersCat
   }
 }
 
-OrdList* Q9 (char* prefix,UsersManager *usersCatalog) {
-  OrdList* name_with_prefix = createOrdList(10000);
-  OrdList* usersId = getOrdListUser(usersCatalog);
-  int size_listId = getOrdListSize(usersId);
-  int i = 0;
-  while (i<size_listId) {
-    UserId* userId = getDataOrdList(usersId,i);
-    char* id = getId_UserId(userId);
-    User* user = getUserCatalog(usersCatalog,hashFunction(id),id);
-    char* name = getName(user);
-    int addToList = same_prefix(prefix,name);
-    free(id);
-    if (addToList) {
-      addOrdList(name_with_prefix,userId);
-    }
+int compareStrings(void *string1, void *string2) {
+  return strcmp((char *) string1, (char *) string2);
+}
+
+//OrdList* Q9 (char* prefix,UsersManager *usersCatalog) {
+//  OrdList* name_with_prefix = createOrdList(10000);
+//  OrdList* usersId = getOrdListUser(usersCatalog);
+//  int size_listId = getOrdListSize(usersId);
+//  int i = 0;
+//  while (i<size_listId) {
+//    UserId* userId = getDataOrdList(usersId,i);
+//    char* id = getId_UserId(userId);
+//    User* user = getUserCatalog(usersCatalog,hashFunction(id),id);
+//    char* name = getName(user);
+//    int addToList = same_prefix(prefix,name);
+//    free(id);
+//    if (addToList) {
+//      addOrdList(name_with_prefix,userId);
+//    }
+//    i++;
+//  }
+//  ord_list_by_name(name_with_prefix,0,getOrdListSize(name_with_prefix)-1,usersCatalog);
+//  return name_with_prefix;
+//}
+
+int isPrefix(void *prefix, void *user) {
+  int compare, prefixSize = strlen((char *) prefix);
+  char *namePrefix = malloc(sizeof(char) * (prefixSize + 1));
+  char *name = getName((User *) user);
+  namePrefix = strncpy(namePrefix, (char *) name, prefixSize);
+  namePrefix[prefixSize] = '\0';
+  compare = strcoll((char *) prefix, (char *) namePrefix);
+  free(namePrefix);
+
+  return compare;
+}
+
+OrdList *Q9(char *prefix, UsersManager *usersCatalog) {
+  OrdList *result = createOrdList(100);
+  OrdList *usersByName = getUsersByName(usersCatalog);
+  int size = getOrdListSize(usersByName);
+  int i = searchDataOrdList(usersByName, prefix, isPrefix, 0, 1);
+  if (i == -1) return usersByName;
+  User *user = getDataOrdList(usersByName, i);
+  while (i < size && isPrefix(prefix, user) == 0) {
+    addOrdList(result, user);
     i++;
+    user = getDataOrdList(usersByName, i);
   }
-  ord_list_by_name(name_with_prefix,0,size_listId-1,usersCatalog);
-  return name_with_prefix;
+
+  return result;
 }
