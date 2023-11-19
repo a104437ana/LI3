@@ -85,6 +85,7 @@ void destroyUsersCatalog(UsersManager *usersManager) {
     if (usersManager == NULL) return;
     destroyHashtable(usersManager->users, destroyUser);
     destroyOrdList(usersManager->usersId,destroyUserId);
+    destroyOnlyOrdList(usersManager->usersByName);
     free(usersManager);
 }
 

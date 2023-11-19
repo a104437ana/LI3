@@ -67,6 +67,7 @@ int main (int argc, char** argv) {
 //    printf("%s: %d/%d/%d\n", id, getDay(date), getMonth(date), getYear(date));
 
     destroyCatalogs(usersCatalog, reservationsCatalog, hotelsCatalog, flightsCatalog);
+    destroyOnlyOrdList(user_id_name);
 
     //print tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);

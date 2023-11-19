@@ -238,12 +238,6 @@ void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCre
 
 void destroyUser(void *user) {
     if (user == NULL) return;
-//    free(((User *) user)->flightsByDate);
-//    free(((User *) user)->reservationsByDate);
-//    destroyOrdList(((User *) user)->flightsByDate, destroyFlight);
-//    destroyOrdList(((User *) user)->reservationsByDate, destroyReservation);
-//    destroyFlights(((User *) user)->flightsByDate);
-//    destroyReservations(((User *) user)->reservationsByDate);
     destroyDate(((User *)user)->birth);
     destroyDate(((User *) user)->accountCreation);
     //destroyPhoneNumber(((User *) user)->phoneNumber);
@@ -254,5 +248,6 @@ void destroyUser(void *user) {
 //    free(((User *) user)->country);
     free(((User *) user)->name);
     free(((User *) user)->id);
+    destroyOnlyOrdList(((User *) user)->flightsReservationsByDate);
     free(user);
 }

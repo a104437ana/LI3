@@ -55,8 +55,8 @@ void setSeconds(Date *date, char seconds);
 void setMinutes(Date *date, char minutes);
 void setHours(Date *date, char hours);
 
-char* dateToString(Date *date);
-char* dateToStringNoHours(Date *date);
+char* dateToString(Date *date); //cria memory leaks no output (passada como parametro de funções)
+char* dateToStringNoHours(Date *date); //cria memory leaks no output (passada como parametro de funções)
 int string_to_day(char* string);
 int string_to_month(char* string);
 int daysBetweenDates(Date *begin, Date *end);

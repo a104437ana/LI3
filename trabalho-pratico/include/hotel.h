@@ -7,17 +7,19 @@
 
 #define HOTEL_RESERVATIONS_INI_SIZE 100
 
-//queries de estatistica receita total entre duas datas
-
 typedef struct hotel Hotel;
-//create apontador para address desaparece
+//cria um novo hotel
 Hotel *createHotel(char *id, char *name, char stars, /*char *address,*/ int cityTax);
+//adiciona reserva à lista de reservas de um hotel
 void addReservationToHotel(Hotel *hotel, void *reservation);
-void setReservationOnList(void *list, void *reservation);
+//ordena as reservas do hotel
 void sortHotelReservationsByDate(void *hotel);
 
+//obtem a lista de reservas do hotel
 OrdList *getHotelOrdList(Hotel *hotel);
+//obtem o id da reserva de um hotel
 char *getHotelReservation(Hotel *hotel, unsigned int key);
+
 //gets
 char *getHotelId(Hotel *hotel);
 char *getHotelName(Hotel *hotel);
@@ -26,7 +28,7 @@ double getHotelRatingsSum(Hotel *hotel);
 int getHotelNumberRatings(Hotel *hotel);
 //char *getHotelAddress(Hotel *hotel);
 int getHotelCityTax(Hotel *hotel);
-//sets falta libertar espaço em memória
+//sets
 void setHId(Hotel *hotel, char *id);
 void setHName(Hotel *hotel, char *name);
 void setHStars(Hotel *hotel, char stars);
@@ -39,6 +41,7 @@ void removeHId(Hotel *hotel);
 void removeHName(Hotel *hotel);
 //void removeHAddress(Hotel *hotel);
 
+//liberta espaço em memória do hotel
 void destroyHotel(void *hotel);
 
 #endif

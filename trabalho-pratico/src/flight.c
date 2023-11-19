@@ -192,8 +192,6 @@ void setFlightNotes(Flight *flight, char *notes) {
 */
 void destroyFlight(void *flight) {
     if (flight == NULL) return;
-//    free(((Flight *) flight)->passengers);
-//    destroyOrdList(((Flight *) flight)->passengers, destroyUser);
     destroyDate(((Flight *) flight)->scheduleDeparture);
     destroyDate(((Flight *) flight)->scheduleArrival);
     destroyDate(((Flight *) flight)->realDeparture);
@@ -206,5 +204,6 @@ void destroyFlight(void *flight) {
     free(((Flight *) flight)->airplane);
     free(((Flight *) flight)->airline);
     free(((Flight *) flight)->id);
+    destroyOnlyOrdList(((Flight *) flight)->passengers);
     free(flight);
 }
