@@ -91,8 +91,8 @@ int getReservPricePerNight(Reservation *reservation) {
     return reservation->pricePerNight;
 }
 
-char getReservUserClassification(Reservation *reservation) {
-    return reservation->userClassification;
+int getReservUserClassification(Reservation *reservation) {
+    return (reservation->userClassification-'0');
 }
 
 char getReservHotelStars(Reservation *reservation) {

@@ -23,7 +23,7 @@ char *getReservUserComment(Reservation *reservation);
 struct hotel *getReservHotel(Reservation *reservation);
 int getReservCityTax(Reservation *reservation);
 int getReservPricePerNight(Reservation *reservation);
-char getReservUserClassification(Reservation *reservation);
+int getReservUserClassification(Reservation *reservation);
 char getReservHotelStars(Reservation *reservation);
 Date *getReservBegin(Reservation *reservation);
 Date *getReservEnd(Reservation *reservation);
