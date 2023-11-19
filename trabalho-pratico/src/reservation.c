@@ -14,12 +14,12 @@ struct reservation {
     Date *end;                       //q1
     int pricePerNight;
     bool includesBreakfast;     //q1
-    char *roomDetails;
+    //char *roomDetails;
     char userClassification;
-    char *userComment;
+    //char *userComment;
 };
 
-Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, char *hotelAddress, int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, char *roomDetails, char userClassification, char *userComment, Hashtable *hotels) {
+Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *hotelName, char hotelStars, char *hotelAddress, int cityTax, Date *begin, Date *end, int pricePerNight, bool includesBreakfast, /*char *roomDetails,*/ char userClassification, /*char *userComment,*/ Hashtable *hotels) {
     Reservation *reservation = malloc(sizeof(Reservation));
     reservation->id = strdup(id);
     reservation->id_user = strdup(id_user);
@@ -39,9 +39,9 @@ Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *ho
     reservation->end = end;
     reservation->pricePerNight = pricePerNight;
     reservation->includesBreakfast = includesBreakfast;
-    reservation->roomDetails = strdup(roomDetails);
+    //reservation->roomDetails = strdup(roomDetails);
     reservation->userClassification = userClassification;
-    reservation->userComment = strdup(userComment);
+    //reservation->userComment = strdup(userComment);
 
     return reservation;
 }
@@ -70,7 +70,7 @@ char *getReservHotelName(Reservation *reservation) {
 char *getReservHotelAddress(Reservation *reservation) {
     return getHotelAddress(reservation->hotel);
 }
-
+/*
 char *getReservRoomDetails(Reservation *reservation) {
     return reservation->roomDetails; //falta encapsulamento
 }
@@ -78,7 +78,7 @@ char *getReservRoomDetails(Reservation *reservation) {
 char *getReservUserComment(Reservation *reservation) {
     return reservation->userComment; //falta encapsulamento
 }
-
+*/
 Hotel *getReservHotel(Reservation *reservation) {
     return reservation->hotel;
 }
@@ -190,26 +190,26 @@ void setIncludesBreakfast(Hashtable *hashtable, unsigned int key, bool includesB
     Reservation *data = getData(hashtable, key, id);
     data->includesBreakfast = includesBreakfast;
 }
-
+/*
 void setRoomDetails(Hashtable *hashtable, unsigned int key, char *roomDetails, char *id) {
     Reservation *data = getData(hashtable, key, id);
     char *oldRoomDetails = roomDetails;
     data->roomDetails = strdup(roomDetails);
     free(oldRoomDetails);
 }
-
+*/
 void setUserClassification(Hashtable *hashtable, unsigned int key, char userClassification, char *id) {
     Reservation *data = getData(hashtable, key, id);
     data->userClassification = userClassification;
 }
-
+/*
 void setUserComment(Hashtable *hashtable, unsigned int key, char *userComment, char *id) {
     Reservation *data = getData(hashtable, key, id);
     char *oldUserComment = userComment;
     data->userComment = strdup(userComment);
     free(oldUserComment);
 }
-
+*/
 Date *getBeginDateReservation(void *reservation) {
     return ((Reservation*)reservation)->begin;
 }
@@ -220,8 +220,8 @@ void destroyReservation(void *reservation) {
 //    destroyHotel(((Reservation *) reservation)->hotel);
     destroyDate(((Reservation *) reservation)->begin);
     destroyDate(((Reservation *) reservation)->end);
-    free(((Reservation *) reservation)->userComment);
-    free(((Reservation *) reservation)->roomDetails);
+    //free(((Reservation *) reservation)->userComment);
+    //free(((Reservation *) reservation)->roomDetails);
     free(((Reservation *) reservation)->id_user);
     free(((Reservation *) reservation)->id);
     free(reservation);

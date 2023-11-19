@@ -19,11 +19,11 @@ struct flight {
     Date *realArrival;
     char *pilot;
     char *copilot;
-    char *notes;
+    //char *notes;
     OrdList *passengers;    //q1
 };
 
-Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes) {
+Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot/*, char *notes*/) {
     Flight *flight = malloc(sizeof(Flight));
     flight->id = strdup(id);
     flight->airline = strdup(airline);
@@ -44,7 +44,7 @@ Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, ch
     flight->realArrival = realArrival;
     flight->pilot = strdup(pilot);
     flight->copilot = strdup(copilot);
-    flight->notes = strdup(notes);
+    //flight->notes = strdup(notes);
     flight->passengers = createOrdList(PASSENGER_LIST_INI_SIZE);
 
     return flight;
@@ -114,11 +114,11 @@ char *getFlightPilot(Flight *flight) {
 char *getFlightCopilot(Flight *flight) {
     return flight->copilot;
 }
-
+/*
 char *getFlightNotes(Flight *flight) {
     return flight->notes;
 }
-
+*/
 char *getFlightId(Flight *flight) {
     return flight->id;
 }
@@ -183,13 +183,13 @@ void setFlightCopilot(Flight *flight, char *copilot) {
     flight->copilot = strdup(copilot);
     free(oldCopilot);
 }
-
+/*
 void setFlightNotes(Flight *flight, char *notes) {
     char *oldNotes = flight->notes;
     flight->notes = strdup(notes);
     free(oldNotes);
 }
-
+*/
 void destroyFlight(void *flight) {
     if (flight == NULL) return;
 //    free(((Flight *) flight)->passengers);
@@ -198,7 +198,7 @@ void destroyFlight(void *flight) {
     destroyDate(((Flight *) flight)->scheduleArrival);
     destroyDate(((Flight *) flight)->realDeparture);
     destroyDate(((Flight *) flight)->realArrival);
-    free(((Flight *) flight)->notes);
+    //free(((Flight *) flight)->notes);
     free(((Flight *) flight)->copilot);
     free(((Flight *) flight)->pilot);
 //    free(((Flight *) flight)->destination);

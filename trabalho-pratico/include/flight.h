@@ -10,7 +10,7 @@
 
 typedef struct flight Flight;
 
-Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot, char *notes);
+Flight *createFlight(char *id, char *airline, char *airplane, int totalSeats, char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival, char *pilot, char *copilot/*, char *notes*/);
 void addUserToFlight(Flight *flight, void *user);
 
 //gets
@@ -28,7 +28,7 @@ int getFlightScheduleDepartureMonth(void *flight);
 int getFlightScheduleDepartureYear(void *flight);
 char *getFlightPilot(Flight *flight);
 char *getFlightCopilot(Flight *flight);
-char *getFlightNotes(Flight *flight);
+//char *getFlightNotes(Flight *flight);
 char *getFlightId(Flight *flight);
 OrdList * getPassengers(Flight* flight);
 
@@ -44,7 +44,7 @@ void setFlightRealDeparture(Flight *flight, Date *realDeparture);
 void setFlightRealArrival(Flight *flight, Date *realArrival);
 void setFlightPilot(Flight *flight, char *pilot);
 void setFlightCopilot(Flight *flight, char *copilot);
-void setFlightNotes(Flight *flight, char *notes);
+//void setFlightNotes(Flight *flight, char *notes);
 
 void destroyFlight(void *flight);
 
