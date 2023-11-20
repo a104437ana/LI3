@@ -93,6 +93,7 @@ int getBeginSeconds(void* data);
 int getBeginMinutes(void* data);
 int getBeginHours(void* data);
 char * getIdResultQ2(ResultQ2* data);
+void destroyResultQ2(void * data);
 
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog);
 

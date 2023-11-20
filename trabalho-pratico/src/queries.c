@@ -139,6 +139,10 @@ char * getIdResultQ2(ResultQ2* data){
   }
 }
 
+void destroyResultQ2(void * data){
+  free((ResultQ2*)data);
+}
+
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
     if(same_prefix("Book", id) == 1){
       ResultQ1* result = malloc(sizeof(ResultQ1));

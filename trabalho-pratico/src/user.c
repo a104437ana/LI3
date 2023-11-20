@@ -248,6 +248,6 @@ void destroyUser(void *user) {
 //    free(((User *) user)->country);
     free(((User *) user)->name);
     free(((User *) user)->id);
-    destroyOnlyOrdList(((User *) user)->flightsReservationsByDate);
+    destroyOrdList(((User *) user)->flightsReservationsByDate, destroyResultQ2);
     free(user);
 }

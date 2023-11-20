@@ -203,6 +203,7 @@ void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*)) {
     int size = ordlist->size;
     for (int i=0; i<size; i++)
         (*destroyDataFunction)(data[i]);
+    free(ordlist->data);
     free(ordlist);
 }
 //função que liberta apenas a memória alocada pela lista
