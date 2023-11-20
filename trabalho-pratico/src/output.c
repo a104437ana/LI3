@@ -34,7 +34,12 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     fprintf(file, "name: %s\nsex: %c\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",getName(output->result), sex, getAge(output->result), getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
    }
    if (output->resultType==FLIGHT){
-    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFlightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result)); 
+    char * origin = getFlightOrigin(output->result);
+    char * dest = getFlightDestination(output->result);
+    char * dep = dateToString(getFlightScheduleDeparture(output->result));
+    char * arrival = dateToString(getFlightScheduleArrival(output->result));
+    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",getFlightAirline(output->result), getFlightAirplane(output->result), origin, dest, dep, arrival, getNumberPassengers(output->result), getDelay(output->result)); 
+    free(origin); free(dest); free(dep); free (arrival);
    }
    if (output->resultType==RESERVATION){
     char breakfast[6];
@@ -44,7 +49,10 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       strcpy(breakfast, "False");
     }
-    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToStringNoHours(getReservBegin(output->result)), dateToStringNoHours(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
+    char * begin = dateToStringNoHours(getReservBegin(output->result));
+    char * end = dateToStringNoHours(getReservEnd(output->result));
+    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), begin, end, breakfast, getReservNights(output->result), getReservPrice(output->result));
+    free(begin); free(end);
    }
   }
   else{
@@ -59,7 +67,12 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     fprintf(file, "%s;%c;%d;%s;%s;%d;%d;%.3f\n",getName(output->result), sex, getAge(output->result), getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
    }
    if (output->resultType==FLIGHT){
-    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%d\n",getFlightAirline(output->result), getFlightAirplane(output->result), getFlightOrigin(output->result), getFlightDestination(output->result), dateToString(getFlightScheduleDeparture(output->result)), dateToString(getFlightScheduleArrival(output->result)), getNumberPassengers(output->result), getDelay(output->result));
+    char * origin = getFlightOrigin(output->result);
+    char * dest = getFlightDestination(output->result);
+    char * dep = dateToString(getFlightScheduleDeparture(output->result));
+    char * arrival = dateToString(getFlightScheduleArrival(output->result));
+    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%d\n",getFlightAirline(output->result), getFlightAirplane(output->result), origin, dest, dep, arrival, getNumberPassengers(output->result), getDelay(output->result));
+    free(origin); free(dest); free(dep); free (arrival);
    }
    if (output->resultType==RESERVATION){
     char breakfast[6];
@@ -69,7 +82,10 @@ void printOutputQ1 (char format_flag, ResultQ1* output, int i){
     else{
       strcpy(breakfast, "False");
     }
-    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), dateToStringNoHours(getReservBegin(output->result)), dateToStringNoHours(getReservEnd(output->result)), breakfast, getReservNights(output->result), getReservPrice(output->result));
+    char * begin = dateToStringNoHours(getReservBegin(output->result));
+    char * end = dateToStringNoHours(getReservEnd(output->result));
+    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result), getReservHotelStars(output->result), begin, end, breakfast, getReservNights(output->result), getReservPrice(output->result));
+    free(begin); free(end);
    }
   }
   free(output);
@@ -174,32 +190,50 @@ void printOutputQ4 (char format_flag, ResultsQ4* output, int i){
   if (format_flag=='F'){
      for (j=0; j<output->N-1; j++){
       if (getReservUserClassification(output->results[j])<0){
+       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservPrice(output->results[j]));
        fprintf (file, "\n");
+       free(begin); free(end);
       }
       else{
+       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
        fprintf (file, "\n");
+       free(begin); free(end);
       }
      }
       if (getReservUserClassification(output->results[j])<0){
+       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+       free(begin); free(end);
       }
       else{
+       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+       free(begin); free(end);
       }
   }
   else{
      for (j=0; j<output->N; j++){
       if (getReservUserClassification(output->results[j])<0){
-        fprintf(file, "%s;%s;%s;%s;%.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
+       fprintf(file, "%s;%s;%s;%s;%.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservPrice(output->results[j]));
+       free(begin); free(end);
       }
       else{
-        fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), dateToStringNoHours(getReservBegin(output->results[j])), dateToStringNoHours(getReservEnd(output->results[j])), getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
+       fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservUserClassification(output->results[j]), getReservPrice(output->results[j]));
+       free(begin); free(end);
       }
      }
   }
