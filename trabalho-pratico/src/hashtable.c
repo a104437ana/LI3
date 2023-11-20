@@ -204,5 +204,6 @@ void destroyHashtable(Hashtable *hashtable, void (*destroyDataFunction)(void*)) 
             node = nodeAux; //avança para o próximo nodo
         }
     }
+    free(hashtable->node);
     free(hashtable); //liberta a hashtable
 }
