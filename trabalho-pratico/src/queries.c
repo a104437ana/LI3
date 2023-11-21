@@ -318,7 +318,7 @@ int same_prefix (char* prefix, char* name) {
   }
   return same_prefix;
 }
-
+/*
 int bigger_user (char* id1, char* name1, char* id2, char* name2) {
   int bigger_user = 2;
   int result = strcoll(name1,name2);
@@ -384,7 +384,7 @@ int compareStrings(void *string1, void *string2) {
 //  ord_list_by_name(name_with_prefix,0,getOrdListSize(name_with_prefix)-1,usersCatalog);
 //  return name_with_prefix;
 //}
-
+*/
 int isPrefix(void *prefix, void *user) {
   int compare, prefixSize = strlen((char *) prefix);
   char *namePrefix = malloc(sizeof(char) * (prefixSize + 1));

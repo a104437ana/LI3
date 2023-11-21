@@ -11,7 +11,7 @@ struct usersManager {
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager)); //aloca espaço em memória para a estrutura do catálogo
     usersManager->users = createHashtable(size); //cria uma hastable para os utilizadores
-    usersManager->usersId = createOrdList(size);
+    //usersManager->usersId = createOrdList(size);
     usersManager->usersByName = createOrdList(size); //cria uma lista para os utilizadores
     return usersManager;
 }
@@ -23,10 +23,11 @@ void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) 
 void addUserToCatalogList(UsersManager *usersManager, User *user) {
     addOrdList(usersManager->usersByName, user);
 }
-
+/*
 void addUserIdToCatalog (UsersManager* usersManager, UserId* userId) {
     addOrdList(usersManager->usersId, userId);
 }
+*/
 //função que compara o nome de dois utilizadores
 int compareUsersNames(void *user1, void *user2) {
     char *name1 = getName((User *) user1), *name2 = getName((User *) user2);
@@ -87,7 +88,7 @@ void printUsers(UsersManager *usersManager) {
 void destroyUsersCatalog(UsersManager *usersManager) {
     if (usersManager == NULL) return; //se o catálogo não existir
     destroyHashtable(usersManager->users, destroyUser); //liberta a hashtable de utilizadores
-    destroyOrdList(usersManager->usersId,destroyUserId);
+    //destroyOrdList(usersManager->usersId,destroyUserId);
     destroyOnlyOrdList(usersManager->usersByName); //liberta a lista de utilizadores
     free(usersManager);
 }
