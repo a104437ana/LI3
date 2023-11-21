@@ -8,21 +8,21 @@
 
 struct flight {
     char *id;
-    char *airline;            //q1
-    char *airplane;                //q1
+    char *airline;
+    char *airplane;
     //int totalSeats;
-    char origin[4];             //q1
-    char destination[4];            //q1
-    Date *scheduleDeparture;           //q1/q2
-    Date *scheduleArrival;           //q1
+    char origin[4];
+    char destination[4];
+    Date *scheduleDeparture;
+    Date *scheduleArrival;
     Date *realDeparture;
     Date *realArrival;
     //char *pilot;
     //char *copilot;
     //char *notes;
-    OrdList *passengers;    //q1
+    OrdList *passengers;
 };
-
+//função que cria um novo voo
 Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/) {
     Flight *flight = malloc(sizeof(Flight));
     flight->id = strdup(id);
@@ -45,11 +45,11 @@ Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*
     //flight->pilot = strdup(pilot);
     //flight->copilot = strdup(copilot);
     //flight->notes = strdup(notes);
-    flight->passengers = createOrdList(PASSENGER_LIST_INI_SIZE);
+    flight->passengers = createOrdList(PASSENGER_LIST_INI_SIZE); //cria uma lista de passageiros desse voo
 
     return flight;
 }
-//talvez nao seja preciso
+//função que adiciona um utilizador à lista de passageiros de um voo
 void addUserToFlight(Flight *flight, void *user) {
     addOrdList(flight->passengers, user);
 }
@@ -190,9 +190,10 @@ void setFlightNotes(Flight *flight, char *notes) {
     free(oldNotes);
 }
 */
+//funcção que liberta o espaço em memória alocado por um voo
 void destroyFlight(void *flight) {
-    if (flight == NULL) return;
-    destroyDate(((Flight *) flight)->scheduleDeparture);
+    if (flight == NULL) return; //se o voo não existir
+    destroyDate(((Flight *) flight)->scheduleDeparture); //liberta as datas
     destroyDate(((Flight *) flight)->scheduleArrival);
     destroyDate(((Flight *) flight)->realDeparture);
     destroyDate(((Flight *) flight)->realArrival);
@@ -201,9 +202,9 @@ void destroyFlight(void *flight) {
     //free(((Flight *) flight)->pilot);
 //    free(((Flight *) flight)->destination);
 //    free(((Flight *) flight)->origin);
-    free(((Flight *) flight)->airplane);
+    free(((Flight *) flight)->airplane); //liberta as strings
     free(((Flight *) flight)->airline);
     free(((Flight *) flight)->id);
-    destroyOnlyOrdList(((Flight *) flight)->passengers);
+    destroyOnlyOrdList(((Flight *) flight)->passengers); //liberta a lista de passageiros
     free(flight);
 }

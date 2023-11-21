@@ -49,8 +49,8 @@ int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,vo
     void *compareData = list->data[i]; //elemento a comparar
     //enquanto os elementos não forem iguais e os limites não se cruzarem
     while ((compare = compareFunction(data, compareData)) != equal && (higher - lower) > 1) {
-        if (compare < equal) higher = i; //se for elemento for menor limite superior passa aser o indice do elemento
-        else lower = i; //caso contrário limite inferior passa a ser o indice do elemento
+        if (compare < equal) higher = i; //se o elemento for menor o limite superior passa a ser o indice do elemento
+        else lower = i; //caso contrário o limite inferior passa a ser o indice do elemento
         i = (higher + lower) / 2; //novo indice central entre os dois limites
         compareData = list->data[i]; //novo elemento a comparar
     }
@@ -134,7 +134,7 @@ int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int 
         }
         data = getDataOrdList(list, higher); //obtem o elemento do indice superior
         //enquanto o elemento do indice superior for maior ou igual que o pivô
-        while (higher >= lower && compareFunction(data, pivotData) >= equal) {
+        while (higher-1 >= lower && compareFunction(data, pivotData) >= equal) {
             higher--; //decrementa o indice superior
             data = getDataOrdList(list, higher);
         }

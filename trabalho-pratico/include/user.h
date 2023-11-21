@@ -12,14 +12,17 @@
 //    FEMALE,
 //} Gender;
 typedef struct user User;
-
+//cria um novo utilizador
 User *createUser(char *id, char *name, Gender gender, char country[3], /*char *address,*/ char *passport, Date *birth, /*char *email, PhoneNumber *phoneNumber,*/ Date *accountCreation, /*char *paymentMethod,*/ bool accountStatus);
+//adiciona uma reserva ao utilizador
 void addReservationToUser(User *user, void *reservation);
+//adiciona um voo ao utilizador
 void addFlightToUser(User *user, void *flight);
+//ordena a lista de voos e reservas de um utilizador
 void sortUserList(void *data);
+//compara o nome de dois utilizadores
 int compareUsersNames(void *user1, void *user2);
 
-//gets e sets fazer get multiplo e set multiplo
 //gets
 char *getName(User *user);
 Gender getGender(User *user);
@@ -48,6 +51,7 @@ void setBirth(Hashtable *hashtable, unsigned int key, Date *birth, char *id);
 //void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id);
 void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id);
 
+//liberta espaço em memória do utilizador
 void destroyUser(void *user);
 
 #endif

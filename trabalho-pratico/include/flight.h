@@ -9,8 +9,9 @@
 #define PASSENGER_LIST_INI_SIZE 100
 
 typedef struct flight Flight;
-
+//cria um novo voo
 Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/);
+//adiciona um utilizador a um voo
 void addUserToFlight(Flight *flight, void *user);
 
 //gets
@@ -46,6 +47,7 @@ void setFlightRealArrival(Flight *flight, Date *realArrival);
 //void setFlightCopilot(Flight *flight, char *copilot);
 //void setFlightNotes(Flight *flight, char *notes);
 
+//liberta espaço em memória de um voo
 void destroyFlight(void *flight);
 
 #endif

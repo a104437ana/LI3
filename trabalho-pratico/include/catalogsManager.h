@@ -8,7 +8,7 @@
 #include "airlinesManager.h"
 
 typedef struct catalogs Catalogs;
-
+//funções não implementadas
 void criaGestorUseres();
 //void adicionaUser();
 //void procuraUser();
@@ -39,8 +39,10 @@ void procuraAeroporto();
 void removeAeroporto();
 void destroiGestorAeroportos();
 
+//ordena todos os catálogos
 void sortCatalogs(UsersManager *usersManager, HotelsManager *hotelsManager);
 
+//liberta o espaço em memória de todos os catálogos
 void destroyCatalogs(UsersManager *usersManager, ReservationsManager *reservationsManager, HotelsManager *hotelsManager, FlightsManager *flightsManager);
 
 #endif
