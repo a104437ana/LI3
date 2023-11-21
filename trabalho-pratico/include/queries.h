@@ -1,6 +1,10 @@
 #ifndef _QUERIES_
 #define _QUERIES_
 
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <locale.h>
 #include "utility.h"
 #include "flight.h"
 #include "flightsManager.h"
@@ -12,7 +16,12 @@
 #include "usersManager.h"
 #include "utility.h"
 #include "hashtable.h"
-#include <locale.h>
+#include "orderedList.h"
+#include "parser.h"
+
+#define YEAR 2023
+#define MONTH 10
+#define DAY 01
 
 typedef enum{
    USER,
