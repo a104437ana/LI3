@@ -159,6 +159,16 @@ void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void
         quickSort(list, partition, higher, compareFunction, equal); //chamada recursiva para a metade direita da sublista
     }
 }
+//função que inverte a posição de todos os elementos de uma lista
+void reverseOrdList(OrdList* list){
+    int size = list->size;
+    int i = 0;
+    int j = size-1;
+    while(i<j){
+        swapOrdList(list, i, j);
+        i++; j--;
+    }
+}
 
 //void quickSortUserNames(OrdList *list) {
 //    qSort(list->data, list->size, strcmp);

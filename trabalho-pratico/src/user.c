@@ -74,13 +74,14 @@ void addFlightToUser(User *user, void *flight) {
 //função que compara os ids de dois voos ou reservas
 int compareFlightReservsIds(void *data1, void *data2) {
     char *id1 = getIdResultQ2((ResultQ2 *)data1), *id2 = getIdResultQ2((ResultQ2 *)data2);
-    return  0 - strcoll(id1, id2);
+    return strcoll(id1, id2);
 }
 //função que ordena a lista de voos e reservas de um utilizador
 void sortUserList(void *data) {
     User *user = (User *) data;
     OrdList *list = user->flightsReservationsByDate;
     quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, 0);
+    reverseOrdList(list);
     radixSortUserList(list);
 }
 

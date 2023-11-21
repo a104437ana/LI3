@@ -38,13 +38,14 @@ void addReservationToHotel(Hotel *hotel, void *reservation) {
 //função que compara os ids de duas reservas
 int compareReservsIds(void *reserv1, void *reserv2) {
     char *id1 = getReservId((Reservation *) reserv1), *id2 = getReservId((Reservation *) reserv2);
-    return 0 - strcoll(id1, id2);
+    return strcoll(id1, id2);
 }
 //função que ordena a lista de reservas de um hotel
 void sortHotelReservationsByDate(void *hotel) {
     OrdList *reservationsByDate = ((Hotel *) hotel)->reservationsByDate; //obtem lista de reservas
     //ordena as reservas por ids
     quickSort(reservationsByDate, 0, getOrdListSize(reservationsByDate)-1, compareReservsIds, 0);
+    reverseOrdList(reservationsByDate); //inverte a lista
     radixSortReservDate(reservationsByDate); //ordena as reservas por data
 }
 //função que retorn a lista de reservas de um hotel
