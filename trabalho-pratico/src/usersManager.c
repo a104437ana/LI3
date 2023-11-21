@@ -4,7 +4,7 @@
 
 struct usersManager {
     Hashtable *users;
-    OrdList *usersId;
+    //OrdList *usersId;
     OrdList *usersByName;
 };
 //função que cria um novo catálogo de utilizadores
@@ -68,10 +68,11 @@ OrdList *getUsersByName (UsersManager *usersManager) {
     return usersManager->usersByName;
 }
 
+/*
 OrdList *getOrdListUser (UsersManager *usersManager) {
     return usersManager->usersId;
 }
-
+*/
 //função que imprime um utilizador
 void printFunctionUser(void *data) {
     char *userId = getUserId((User *) data);
