@@ -20,7 +20,6 @@ void radixSortFlightDate(OrdList *list);
 void radixSortUserList(OrdList *list);
 //quicksorts
 void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*), int equal);
-void reverseOrdList(OrdList* list);
 
 //obetem elemento da lista
 void *getDataOrdList(OrdList *ordList, int index);
