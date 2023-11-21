@@ -1,7 +1,13 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "orderedList.h"
 #include "queries.h"
+#include "flight.h"
+#include "hotel.h"
+#include "reservation.h"
+#include "user.h"
+#include "utility.h"
 
 
 #ifndef _OUTPUT_

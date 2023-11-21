@@ -231,6 +231,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
 
 double Q3(char *id, HotelsManager *hotelsCatalog) {
   Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
+  if (hotel==NULL) return -1;
   int numberClassifications = getOrdListSize(getHotelOrdList(hotel));
   double result = getHotelRatingsSum(hotel);
   result /= numberClassifications;
@@ -289,8 +290,9 @@ int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end,
 }
 
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
-  OrdList *reservations = getHotelOrdList(getHotelCatalog(hotelsCatalog, hashFunction(id), id));
-//  int index = searchDateOrdList(reservations, begin, compareDates); //procura indice da reserva inicial
+  Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
+  if (hotel==NULL) return -1;
+  OrdList *reservations = getHotelOrdList(hotel);
   int size = getOrdListSize(reservations);
   Reservation *reservation = getDataOrdList(reservations, 0);
   Date *reservBegin = getReservBegin(reservation), *reservEnd = getReservEnd(reservation);
