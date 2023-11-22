@@ -46,31 +46,16 @@ int main (int argc, char** argv) {
     ReservationsManager *reservationsCatalog = createReservsCatalog(RESERVATIONS_HASHTABLE_INI_SIZE);
     HotelsManager *hotelsCatalog = createHotelsCatalog(HOTELS_HASHTABLE_INI_SIZE);
     FlightsManager *flightsCatalog = createFlightsCatalog(FLIGHTS_HASHTABLE_INI_SIZE);
-    //OrdList* user_id_name = createOrdList(USER_ID_NAME_LIST_SIZE);
     if (argc == 3) {
     parse_all_files(argv[1],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
     sortCatalogs(usersCatalog, hotelsCatalog);
     parseCommandFile(argv[2],usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
     }
 
-//    printUsers(usersCatalog);
-//    printReservations(reservationsCatalog);
-//    printHotels(hotelsCatalog);
-//    printFlights(flightsCatalog);
-
-//    OrdList *usersByName = getUsersByName(usersCatalog);
-//    printOrdList(usersByName, printUserName);
-//    printHotelTableReservs(getHashtableHotelsCatalog(hotelsCatalog), printDate);
-
-//    char *id = strdup("Book0000000247");
-//    Date *date = getReservBegin((Reservation *) getData(getHashtableReservCatalog(reservationsCatalog), hashFunction(id), id));
-//
-//    printf("%s: %d/%d/%d\n", id, getDay(date), getMonth(date), getYear(date));
-
+    //liberta o espaço em memória dos catalogos
     destroyCatalogs(usersCatalog, reservationsCatalog, hotelsCatalog, flightsCatalog);
-    //destroyOnlyOrdList(user_id_name);
 
-    //print tempo de execução
+    //imprime tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);
     elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("Elapsed time: %.6f seconds\n", elapsed);

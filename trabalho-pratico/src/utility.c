@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include "utility.h"
 
+//função que cria uma nova data sem horas
 Date *createDate(char day, char month, int year) {
-    Date *date = malloc(sizeof(Date));
+    Date *date = malloc(sizeof(Date)); //aloca espaço para a estrutura data
     date->day = day;
     date->month = month;
     date->year = year;
@@ -12,20 +13,20 @@ Date *createDate(char day, char month, int year) {
 
     return date;
 }
-
+//função que cria uma nova data com horas
 Date *createDateHours(char day, char month, int year, char hours, char minutes, char seconds) {
-    Date *date = malloc(sizeof(Date));
+    Date *date = malloc(sizeof(Date)); //aloca espaço para a estrutura data
     date->day = day;
     date->month = month;
     date->year = year;
     date->hasHours = 1;
-    date->hour = createHour(hours, minutes, seconds);
+    date->hour = createHour(hours, minutes, seconds); //cria uma nova hora
 
     return date;
 }
-
+//função que cria uma nova hora
 Hour *createHour(char hours, char minutes, char seconds) {
-    Hour *hour = malloc(sizeof(Hour));
+    Hour *hour = malloc(sizeof(Hour)); //aloca espaço para a estrutura hora
     hour->hours = hours;
     hour->minutes = minutes;
     hour->seconds = seconds;
@@ -55,6 +56,7 @@ Date* string_to_date_hours (char* string) {
     return date;
 }
 
+//gets
 int getDay(void *date) {
     return (int) ((Date *) date)->day;
 }
@@ -85,6 +87,7 @@ void getDayMonthYear(Date *date, int *day, int *month, int *year) {
     *year = date->year;
 }
 
+//sets
 void setDay(Date *date, char day) {
     date->day = day;
 }
@@ -138,19 +141,20 @@ int string_to_month(char* string) {
     int month = (string[5] - '0') * 10 + (string[6] - '0');
     return month;
 }
-
+//funçaõ que calcula o total de anos bissextos de uma data
 int totalLeapYears(int year, int month) {
   if (month <= 2) year--; //se o mês for menor que 3 não precisa de contar ano atual
   return (year / 4) - (year / 100) + (year / 400); //total de anos bissextos
+  //um ano é bissexto se for multiplo de 4 mas não de 100 ou se for multiplo de 400
 }
-
+//função que calcula o total de dias dos meses dessa data
 int totalDaysInMonths(int month) {
   int nDays = 0, daysOfMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
   for (int i=0; i <month-1; i++) //conta numero de dias até ao mês anterior ao atual
     nDays += daysOfMonth[i];
   return nDays;
 }
-
+//função que calcula o total de dias entre duas datas
 int daysBetweenDates(Date *begin, Date *end) {
   int beginDay = getDay(begin), beginMonth = getMonth(begin), beginYear = getYear(begin);
   int endDay = getDay(end), endMonth = getMonth(end), endYear = getYear(end);
@@ -163,7 +167,7 @@ int daysBetweenDates(Date *begin, Date *end) {
 
   return nDays;
 }
-
+//função que compara duas datas
 int compareDates(Date *date1, Date *date2) {
   int day1 = getDay(date1), month1 = getMonth(date1), year1 = getYear(date1);
   int day2 = getDay(date2), month2 = getMonth(date2), year2 = getYear(date2);
@@ -178,10 +182,10 @@ int compareDates(Date *date1, Date *date2) {
 
   return result;
 }
-
+//função que liberta o espaço em memória alocado por uma data
 void destroyDate(Date *date) {
-    if (date == NULL) return;
-    if (date->hour != NULL) free(date->hour);
+    if (date == NULL) return; //se não existir a data
+    if (date->hour != NULL) free(date->hour); //se existir horas
     free(date);
 }
 /*

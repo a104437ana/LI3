@@ -64,8 +64,6 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
                     int accountStatus = 0;
                     if (account_status[0] == 'a' || account_status[0] == 'A') {
                         accountStatus = 1;
-//                        UserId* userId = createUserId(id_user);
-//                        addUserIdToCatalog(usersCatalog,userId);
                     }
                     User* user = createUser(id_user,name,gender,country_code,/*address,*/passport,birth,/*email,0,*/accountCreation,/*pay_method,*/accountStatus);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));

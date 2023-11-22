@@ -99,6 +99,68 @@ void destroyResultQ2(void * data){
   free((ResultQ2*)data);
 }
 
+//verifica se uma string é um prefixo de outra
+int same_prefix (char* prefix, char* name) { 
+  int same_prefix = 0;
+  if (strlen(name) >= strlen(prefix)) {
+    int i = 0;
+    while (prefix[i] != '\0') {
+      if (prefix[i] != name[i]) break;
+      i++;
+    }
+    if (prefix[i] == '\0') same_prefix = 1;
+  }
+  return same_prefix;
+}
+
+//calcula o numero de dias (noites) de uma reserva que estão dentro de duas datas limites
+int daysInsideDates(Date *begin, Date *end, Date *reservBegin, Date *reservEnd) {
+  int nDays = 0;
+  int reservBegin_begin, reservEnd_end, reservBegin_end, reservEnd_begin;
+  Date *lower, *higher;
+  reservEnd_begin = compareDates(reservEnd, begin); //compara a data de fim da reserva e inicio do limite
+  if (reservEnd_begin > 0) return -1; //se a data de fim da reserva for maior que a de inicio do limite
+  reservBegin_begin = compareDates(reservBegin, begin); //compara a data de inicio da reserva e inicio do limite
+  reservEnd_end = compareDates(reservEnd, end); //compara a data de fim da reserva e fim do limite
+  reservBegin_end  = compareDates(reservBegin, end); //compara a data de inicio da reserva e fim do limite
+  if (reservBegin_end < 0) return -1; //se a data de inicio da reserva for maior que a de fim do limite
+
+  //se a data de inicio da reserva for maior que a de inicio do limite
+  if (reservBegin_begin >= 0) lower = begin; //a primeira data de contagem é a data de inicio do limite
+  else lower = reservBegin; //caso contrário é a data de inicio da reserva
+  //se a data de fim da reserva for maior que a de fim do limite
+  if (reservEnd_end <= 0) higher = end; //a última data de contagem é a data de fim do limite
+  else higher = reservEnd; //caso contrário é a data de fim da reserva
+  //o número de dias é a diferença entre as datas de contagem
+  nDays = daysBetweenDates(lower, higher) + 1; //caso ambas as datas da reserva não estiverem dentro do intervalo de contagem temos que adicionar mais um dia
+  if (reservBegin_begin <= 0 && reservEnd_end >= 0) //caso contrário retiramos o dia adicionado
+    nDays --;
+
+  return nDays;
+}
+
+//calcula o preço de uma reserva entre duas datas limites
+int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end, Date *reservBegin, Date *reservEnd) {
+  int pricePerNight = getReservPricePerNight(reservation); //preço por noite da reserva
+  int nDays = daysInsideDates(begin, end, reservBegin, reservEnd); //número de noites entre as datas limites
+  if (nDays == -1) return 0;
+  int total = (pricePerNight * nDays); //preço total
+  return total;
+}
+
+//verifica se uma string é um prefixo do nome de um utilizador
+int isPrefix(void *prefix, void *user) {
+  int compare, prefixSize = strlen((char *) prefix);
+  char *namePrefix = malloc(sizeof(char) * (prefixSize + 1));
+  char *name = getName((User *) user); //nome do utilizador
+  namePrefix = strncpy(namePrefix, (char *) name, prefixSize); //prefixo do utilizador com o mesmo tamanho do prefixo a comparar
+  namePrefix[prefixSize] = '\0';
+  compare = strcoll((char *) prefix, (char *) namePrefix); //compara os dois prefixos
+  free(namePrefix); //liberta o prefixo do utilizador
+
+  return compare;
+}
+
 //query 1 - retorna o utilizador, reserva ou voo com o id passado como argumento (se existir e não for um utilizador inativo)
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
     if(same_prefix("Book", id) == 1){ //se o id for de uma reserva
@@ -214,45 +276,10 @@ ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
     return results;
 }
 
-//imprime o primeiro dia de uma reserva
-void printDay(void *reservation) {
-  printf(", %d", getReservBeginDay((Reservation *) reservation));
-}
-
-int daysInsideDates(Date *begin, Date *end, Date *reservBegin, Date *reservEnd) {
-  int nDays = 0;
-  int reservBegin_begin, reservEnd_end, reservBegin_end, reservEnd_begin;
-  Date *lower, *higher;
-  reservEnd_begin = compareDates(reservEnd, begin);
-  if (reservEnd_begin > 0) return -1;
-  reservBegin_begin = compareDates(reservBegin, begin);
-  reservEnd_end = compareDates(reservEnd, end);
-  reservBegin_end  = compareDates(reservBegin, end);
-  if (reservBegin_end < 0) return -1;
-
-  if (reservBegin_begin >= 0) lower = begin;
-  else lower = reservBegin;
-  if (reservEnd_end <= 0) higher = end;
-  else higher = reservEnd;
-
-  nDays = daysBetweenDates(lower, higher) + 1;
-  if (reservBegin_begin <= 0 && reservEnd_end >= 0)
-    nDays --;
-
-  return nDays;
-}
-
-int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end, Date *reservBegin, Date *reservEnd) {
-  int pricePerNight = getReservPricePerNight(reservation);
-  int nDays = daysInsideDates(begin, end, reservBegin, reservEnd);
-  if (nDays == -1) return 0;
-  int total = (pricePerNight * nDays);
-  return total;
-}
-
+//quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
   Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
-  if (hotel==NULL) return -1;
+  if (hotel==NULL) return -1; //se o hotel não existir
   OrdList *reservations = getHotelOrdList(hotel);
   int size = getOrdListSize(reservations);
   Reservation *reservation = getDataOrdList(reservations, 0);
@@ -269,106 +296,16 @@ int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
   return total;
 }
 
-int same_prefix (char* prefix, char* name) { 
-  int same_prefix = 0;
-  if (strlen(name) >= strlen(prefix)) {
-    int i = 0;
-    while (prefix[i] != '\0') {
-      if (prefix[i] != name[i]) break;
-      i++;
-    }
-    if (prefix[i] == '\0') same_prefix = 1;
-  }
-  return same_prefix;
-}
-/*
-int bigger_user (char* id1, char* name1, char* id2, char* name2) {
-  int bigger_user = 2;
-  int result = strcoll(name1,name2);
-  if (result == 0) {
-    result = strcoll(id1,id2);
-  }
-  if (result > 0) bigger_user = 1;
-  return bigger_user;
-}
-
-void ord_list_by_name (OrdList* list, int begin, int end, UsersManager *usersCatalog) {
-  if (begin < end) {
-    void* pivo2 = getDataOrdList(list,end);
-    UserId* pivoId = (UserId*) pivo2;
-    char* id1 = getId_UserId(pivoId);
-    User* pivo = getUserCatalog(usersCatalog,hashFunction(id1),id1);
-    char* name1 = getName(pivo);
-    int i = begin-1;
-    int j = begin;
-    while (j < end) {
-      UserId* userId = getDataOrdList(list,j);
-      char* id2 = getId_UserId(userId);
-      User* user = getUserCatalog(usersCatalog,hashFunction(id2),id2);
-      char* name2 = getName(user);
-      if (bigger_user(id1,id2,name1,name2) == 1) {
-        j++;
-      }
-      else {
-        i++;
-        swap(list,i,j);
-      }
-    }
-    if (j == end) {
-      i++;
-      swap(list,i,j);
-    }
-    ord_list_by_name(list,begin,i-1,usersCatalog);
-    ord_list_by_name(list,i+1,end,usersCatalog);
-  }
-}
-
-int compareStrings(void *string1, void *string2) {
-  return strcmp((char *) string1, (char *) string2);
-}
-
-//OrdList* Q9 (char* prefix,UsersManager *usersCatalog) {
-//  OrdList* name_with_prefix = createOrdList(10000);
-//  OrdList* usersId = getOrdListUser(usersCatalog);
-//  int size_listId = getOrdListSize(usersId);
-//  int i = 0;
-//  while (i<size_listId) {
-//    UserId* userId = getDataOrdList(usersId,i);
-//    char* id = getId_UserId(userId);
-//    User* user = getUserCatalog(usersCatalog,hashFunction(id),id);
-//    char* name = getName(user);
-//    int addToList = same_prefix(prefix,name);
-//    free(id);
-//    if (addToList) {
-//      addOrdList(name_with_prefix,userId);
-//    }
-//    i++;
-//  }
-//  ord_list_by_name(name_with_prefix,0,getOrdListSize(name_with_prefix)-1,usersCatalog);
-//  return name_with_prefix;
-//}
-*/
-int isPrefix(void *prefix, void *user) {
-  int compare, prefixSize = strlen((char *) prefix);
-  char *namePrefix = malloc(sizeof(char) * (prefixSize + 1));
-  char *name = getName((User *) user);
-  namePrefix = strncpy(namePrefix, (char *) name, prefixSize);
-  namePrefix[prefixSize] = '\0';
-  compare = strcoll((char *) prefix, (char *) namePrefix);
-  free(namePrefix);
-
-  return compare;
-}
-
+//query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
 OrdList *Q9(char *prefix, UsersManager *usersCatalog) {
   OrdList *result = createOrdList(100);
-  OrdList *usersByName = getUsersByName(usersCatalog);
+  OrdList *usersByName = getUsersByName(usersCatalog); //obtem lista ordenada por nome dos utilizadores
   int size = getOrdListSize(usersByName);
-  int i = searchDataOrdList(usersByName, prefix, isPrefix, 0, 1);
-  if (i == -1) return result;
+  int i = searchDataOrdList(usersByName, prefix, isPrefix, 0, 1); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
+  if (i == -1) return result; //se não existir nomes começados pelo prefixo dado
   User *user = getDataOrdList(usersByName, i);
-  while (i < size && isPrefix(prefix, user) == 0) {
-    addOrdList(result, user);
+  while (i < size && isPrefix(prefix, user) == 0) { //enquanto um nome começar pelo prefixo dado
+    addOrdList(result, user); //adiciona à lista resultado
     i++;
     user = getDataOrdList(usersByName, i);
   }
