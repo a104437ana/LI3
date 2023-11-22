@@ -1,4 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "hotel.h"
 #include "flight.h"
+#include "user.h"
+#include "orderedList.h"
 
 struct flight {
     char *id;

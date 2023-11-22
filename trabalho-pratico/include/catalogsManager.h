@@ -1,11 +1,8 @@
 #ifndef _CATALOG_MANAGER_
 #define _CATALOG_MANAGER_
 
-#include <stdio.h>
-#include "usersManager.h"
 #include "flightsManager.h"
 #include "reservationsManager.h"
-#include "hotelsManager.h"
 #include "airlinesManager.h"
 
 typedef struct catalogs Catalogs;

@@ -1,8 +1,6 @@
 #ifndef _USERS_MANAGER_
 #define _USERS_MANAGER_
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "user.h"
 #include "userId.h"
 #include "hashtable.h"

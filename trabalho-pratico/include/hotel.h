@@ -1,9 +1,6 @@
 #ifndef _HOTEL_
 #define _HOTEL_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "utility.h"
 #include "reservation.h"
 #include "orderedList.h"

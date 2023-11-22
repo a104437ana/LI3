@@ -1,4 +1,5 @@
 #include "hashtable.h"
+#include "hotel.h"
 
 typedef enum typeOfData {
     user,

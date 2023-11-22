@@ -1,11 +1,9 @@
 #ifndef _FLIGHTS_MANAGER_
 #define _FLIGHTS_MANAGER_
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "usersManager.h"
 #include "flight.h"
 #include "hashtable.h"
-#include "usersManager.h"
 
 typedef struct flightsManager FlightsManager;
 //cria um catalogo de voos

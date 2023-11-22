@@ -5,9 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utility.h"
-#include "reservation.h"
-#include "flight.h"
-#include "queries.h"
 
 typedef struct ordList OrdList;
 //cria uma nova lista
