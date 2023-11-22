@@ -1,27 +1,13 @@
-#include <stdlib.h>
-#include <string.h>
 #include "interpreter.h"
-#include "output.h"
-#include "queries.h"
-#include <stdlib.h>
-#include "flight.h"
-#include "hotel.h"
-#include "reservation.h"
-#include "user.h"
-#include "utility.h"
-#include "flightsManager.h"
-#include "hotelsManager.h"
-#include "reservationsManager.h"
-#include "usersManager.h"
-
 
 struct command {
  int query_id; //número da query
  char format_flag;
- char args[3][100]; //as queries têm no maśximo 3 argumentos
+ char args[3][100]; //as queries têm no máximo 3 argumentos
  int n_args; //número de argumentos
 };
 
+//função que processa um comando, chamando a respetiva query e a função que imprime o resultado
 void processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog){
    createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
@@ -117,6 +103,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else return; 
 }
 
+//lê uma linha do ficheiro de comandos e devolve um comando
 Command* parseCommandLine (char* line){
     Command* command = malloc(sizeof(Command));
     command->query_id= line[0]-'0';
@@ -156,6 +143,7 @@ Command* parseCommandLine (char* line){
     return command;
 }
 
+//processa o ficheiro de comandos
 void parseCommandFile (char* name,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog){
  char* line = NULL;
  ssize_t read;

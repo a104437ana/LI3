@@ -1,8 +1,12 @@
 #ifndef _RESERVATION_
 #define _RESERVATION_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "utility.h"
 #include "hotel.h"
+#include "hotelsManager.h"
 #include "hashtable.h"
 
 typedef struct reservation Reservation;

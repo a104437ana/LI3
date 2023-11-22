@@ -1,7 +1,4 @@
-#include <stdio.h>
 #include "catalogsManager.h"
-#include "hotelsManager.h"
-#include "usersManager.h"
 
 struct catalogsManager {
     UsersManager *usersManager;

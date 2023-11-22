@@ -1,7 +1,13 @@
 #ifndef _ORDERED_LIST_
 #define _ORDERED_LIST_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "utility.h"
+#include "reservation.h"
+#include "flight.h"
+#include "queries.h"
 
 typedef struct ordList OrdList;
 //cria uma nova lista
@@ -38,5 +44,7 @@ void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*));
 void destroyOnlyOrdList(OrdList *list);
 //troca posição de dois elementos da lista
 void swap (OrdList *ordlist, int i, int j);
+//inverte uma lista
+void reverseOrdList(OrdList* list);
 
 #endif

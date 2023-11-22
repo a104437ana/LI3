@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "hashtable.h"
-#include "hotel.h"
 
 typedef enum typeOfData {
     user,

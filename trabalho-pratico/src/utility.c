@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "utility.h"
 
 //função que cria uma nova data sem horas

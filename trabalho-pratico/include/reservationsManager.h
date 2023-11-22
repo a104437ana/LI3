@@ -1,6 +1,8 @@
 #ifndef _RESERVATIONS_MANAGER_
 #define _RESERVATIONS_MANAGER_
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "reservation.h"
 #include "hashtable.h"
 #include "hotelsManager.h"

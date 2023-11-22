@@ -1,6 +1,8 @@
 #ifndef _UTILITY_
 #define _UTILITY_
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #define BEGIN_YEAR 1900

@@ -1,8 +1,13 @@
 #ifndef _FLIGHT_
 #define _FLIGHT_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "hotel.h"
 #include "utility.h"
 #include "passenger.h"
+#include "user.h"
 #include "hashtable.h"
 #include "orderedList.h"
 

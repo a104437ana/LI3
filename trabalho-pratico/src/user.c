@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "user.h"
-#include "flight.h"
-#include "reservation.h"
-#include "orderedList.h"
-#include "queries.h"
 
 //enum gender {
 //    MALE,

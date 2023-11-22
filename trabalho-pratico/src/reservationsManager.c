@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "reservationsManager.h"
-#include "hotelsManager.h"
-#include "usersManager.h"
-#include "hashtable.h"
 
 struct reservationsManager {
     Hashtable *reservations;

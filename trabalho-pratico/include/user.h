@@ -1,9 +1,15 @@
 #ifndef _USER_
 #define _USER_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "utility.h"
 #include "hashtable.h"
 #include "orderedList.h"
+#include "flight.h"
+#include "reservation.h"
+#include "queries.h"
 
 #define USER_LIST_INI_SIZE 200
 

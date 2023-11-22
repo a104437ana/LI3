@@ -1,7 +1,17 @@
+#include <stdlib.h>
+#include <string.h>
+#include <stdlib.h>
 #include "flightsManager.h"
 #include "hotelsManager.h"
 #include "reservationsManager.h"
 #include "usersManager.h"
+#include "output.h"
+#include "queries.h"
+#include "flight.h"
+#include "hotel.h"
+#include "reservation.h"
+#include "user.h"
+#include "utility.h"
 
 #ifndef _INTERPRETER_
 #define _INTERPRETER_ //header file para o interpretador de comandos

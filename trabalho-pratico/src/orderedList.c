@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "orderedList.h"
-#include "utility.h"
-#include "reservation.h"
-#include "flight.h"
-#include "queries.h"
 
 struct ordList {
     int maxSize;
