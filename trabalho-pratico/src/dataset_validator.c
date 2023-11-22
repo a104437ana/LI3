@@ -242,11 +242,11 @@ a função retorna 1. Se não, retorna 0. */
 int valid_par_of_dates (char* date1, char* date2) {
     int valid = 0;
     if (strlen(date1) == 10) {
-        if (strlen(date2) == 10) { //reservas
+        if (strlen(date2) == 10) { //datas nas reservas
             if (the_bigger_date(date1,date2) == 2) valid = 1;
         }
         else {
-            if (strlen(date2) == 19) { //utilizadores
+            if (strlen(date2) == 19) { //datas nos utilizadores
                 if (the_bigger_date(date1,date2) == 2) valid = 1;
                 else {
                     if (the_bigger_date(date1,date2) == 0) {
@@ -257,7 +257,7 @@ int valid_par_of_dates (char* date1, char* date2) {
         }
     }
     else {
-        if (strlen(date1) == 19 && strlen(date2) == 19) { //voos
+        if (strlen(date1) == 19 && strlen(date2) == 19) { //datas nos voos
             if (the_bigger_date(date1,date2) == 2) valid = 1;
             else {
                 if (the_bigger_date(date1,date2) == 0) {
@@ -542,7 +542,8 @@ void destroyPassengersPerFlight (void* passengers_per_flight) {
 
 /* A estrutura passengers_counter é uma hashtable usada para guardar o número total de passageiros por id de voo. Logo é uma hashtable constítuida por 
 estruturas passengers_per_flight. Nesta hashtable iremos guardar o número de passageiros que contarmos por id de voo, logo o propósito desta hashtable é
-contar o número de passageiros por voo. Iremos fazer isto para depois sabermos se os lugares disponíveis no voo são superiores ou iguais aos números de*/
+contar o número de passageiros por voo. Iremos fazer isto para depois sabermos se os lugares disponíveis no voo são superiores ou iguais aos números de
+passageiros, ou seja, para sabermos se um número de lugares disponíveis num voo é válido.*/
 struct passengers_counter {
     Hashtable* passengers_per_flight;
 };
@@ -555,12 +556,14 @@ PassengersCounter *createPassengersCounter (int size) {
     return passengers_counter;
 }
 
-/* A função addPassengersPerFlight_ToPassengersCounter addiciona a hashtable, e em */
+/* A função addPassengersPerFlight_ToPassengersCounter addiciona à hashtable uma estrutura passengers_per_flight, dada essa estrutura, a
+hashtable passengers_counter, o id de voo e a chave.*/
 void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight) {
     addHashtable(passengers_counter->passengers_per_flight, key, passengers_per_flight, id_flight);
 }
 
-/* A função existsPassengersPerFlight*/
+/* A função existsPassengersPerFlight verifica se para um id de voo existe uma estrutura passangers_per_flight na hashtable passengers_counter.
+Se existir, a função retorna 1. Se não, a função retorna 0.*/
 int existsPassengersPerFlight (PassengersCounter* passengers_counter, char* id_flight) {
     int exist = 1;
     int key = hashFunction(id_flight);
@@ -569,20 +572,22 @@ int existsPassengersPerFlight (PassengersCounter* passengers_counter, char* id_f
     return exist;
 }
 
-/* A função addPassenger_ToPassengersPerFlight*/
+/* A função addPassenger_ToPassengersPerFlight adiciona um ao número de passageiros de um voo guardados na hashtable passengers_counter, dado
+um id de voo, uma chave e a hashtable passengers_counter. */
 void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, unsigned int key, char *id) {
     PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, key, id);
     data->number++;
 }
 
-/* A função getPassengersNumber */
+/* A função getPassengersNumber retorna o número de passageiros de um determinado voo, dado o id do voo, a chave e a hashtable passengers_counter.*/
 int getPassengersNumber (PassengersCounter* passengers_counter, unsigned int key, char *id) {
     PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, key, id);
     int passengers = data->number;
     return passengers;
 }
 
-/* A função destroyPassengersCounter*/
+/* A função destroyPassengersCounter destroi a hashtable passengers_counter, ou seja, liberta a memória dinámica que guardava a hashtable e
+liberta a memória dinámica que guardava cada estrutura passengers_per_flight. */
 void destroyPassengersCounter (PassengersCounter* passengers_counter) {
     if (passengers_counter != NULL) {
         destroyHashtable(passengers_counter->passengers_per_flight, destroyPassengersPerFlight);
@@ -590,14 +595,23 @@ void destroyPassengersCounter (PassengersCounter* passengers_counter) {
     }
 }
 
-/* A função count_passengers */
+/* A função count_passengers conta para cada id de voo (para cada voo) o número de passageiros nesse voo. Esta função começa por 
+construir o caminho para o ficheiro passengers.csv. Para isso, junta a string dada, que nos indica o caminho absoluto para a 
+diretoria onde o ficheiro se encontra, com a string "/passengers.csv", para assim obtermos o caminho absoluto para o ficheiro.
+Depois verifica se o ficheiro existe. Depois se este ficheiro realmente existir, iremos abrir o ficheiro para o poder ler. Primeiro 
+lemos a primeira linha onde se encontra o header (o cabeçalho). Esta linha não apresenta informação relevante para contar os passageiros,
+logo não fazemos nada com ela. Depois iremos ler as próximas linhas. A cada linha que lemos, iremos pegar nela e dividi-la em várias partes 
+(id de utilizador e id de voo). Com o id de utilizador iremos verificar se o utilizador já existe no catálogo de utilizadores válidos. Se
+não, não iremos fazer nada. Se existir, iremos verificar se o id de voo já tem estrutura na hashtable. Se não, iremos inicializar a estrutura
+e adicionamos um passageiro. Se já existia, adicionamos mais um passageiro a estrutura já existente. Por fim, libertamos a memória alocada e 
+fechamos o ficheiro. E no final, conseguimos contar todos os passageiros de cada voo.*/
 void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCounter* passengers_counter) {
     char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/passengers.csv");
     if (exist_file(file_path)) {
         FILE *file;
-        file = fopen(file_path,"r");
+        file = fopen(file_path,"r"); //abertura do ﬁcheiro em modo de leitura. O ﬁcheiro deve existir.
         char* line = NULL;
         size_t n;
         ssize_t read;
@@ -633,9 +647,11 @@ void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCo
 
 /* A função valid_total_seats verifica se o número de lugares totais disponíveis num voo é válido, dado esse número, dada a hashtable com o
 número de passageiros por id de voo e dado o id do voo. Primeiro, a função verifica se o número de lugares é um inteiro positivo.
-Se não for, o número é inválido, logo a função irá restornar 0. Se for, a função irá agora verificar se 
-Esta função verifica se o número de passageiros guardado na hashtable na posição relativa
-ao id deste voo é menor ou igual ao núm*/
+Se não for, o número é inválido, logo a função irá restornar 0. Se for, a função irá agora ver se o id de voo está associado a alguma
+estrutura na hashtable. Se não estiver, significa que não foi criada estrutura para esse voo, logo esse voo não apresenta qualquer passageiro.
+Como 0 passageiros é sempre inferior a um número inteiro positivo de lugares, então o número é válido e a função retorna 1. Se estiver na 
+hashtable, então agora é só verificar se o número de lugares do voo é superior ou igual ao número de passageiros. Se sim, o número é válido
+e a função retorna 1. Se não, o número é inválido e a função retorna 0. */
 int valid_total_seats (char* total_seats,PassengersCounter* passengers_counter, char* id_flight) {
     int valid = 0;
     if (is_positive_integer(total_seats)) {

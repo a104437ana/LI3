@@ -4,9 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "usersManager.h"
-#include "reservationsManager.h"
-#include "flightsManager.h"
+#include "catalogsManager.h"
 
 #define PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE 10000
 
@@ -37,12 +35,10 @@ int valid_origin_or_destination (char* local);
 int valid_par_of_origin_and_destination (char* origin, char* destination);
 
 typedef struct passengers_per_flight PassengersPerFlight;
-
 PassengersPerFlight *createPassengersPerFlight ();
 void destroyPassengersPerFlight (void* passengers_per_flight);
 
 typedef struct passengers_counter PassengersCounter;
-
 PassengersCounter *createPassengersCounter (int size);
 void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight);
 int existsPassengersPerFlight (PassengersCounter* passengers_counter, char* id_flight);

@@ -1,9 +1,6 @@
 #ifndef _PARSER_
 #define _PARSER_
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "utility.h"
 #include "dataset_validator.h"
 
