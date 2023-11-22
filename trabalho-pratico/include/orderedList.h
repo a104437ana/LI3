@@ -26,6 +26,7 @@ void radixSortFlightDate(OrdList *list);
 void radixSortUserList(OrdList *list);
 //quicksorts
 void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*), int equal);
+//inverte uma lista
 void reverseOrdList(OrdList* list);
 
 //obetem elemento da lista
@@ -44,7 +45,5 @@ void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*));
 void destroyOnlyOrdList(OrdList *list);
 //troca posição de dois elementos da lista
 void swap (OrdList *ordlist, int i, int j);
-//inverte uma lista
-void reverseOrdList(OrdList* list);
 
 #endif

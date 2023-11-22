@@ -88,18 +88,21 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
     list->data = newData; //retorna uma nova lista ordenada pelo valor do parametro dado
 }
 
+//ordena reservas por data
 void radixSortReservDate(OrdList *list) {
     radixSort(list, getReservBeginDay, 31, 0);
     radixSort(list, getReservBeginMonth, 12, 0);
     radixSort(list, getReservBeginYear, N_YEARS, BEGIN_YEAR);
 }
 
+//ordena voos por data
 void radixSortFlightDate(OrdList *list) {
     radixSort(list, getFlightScheduleDepartureDay, 31, 0);
     radixSort(list, getFlightScheduleDepartureMonth, 12, 0);
     radixSort(list, getFlightScheduleDepartureYear, N_YEARS, BEGIN_YEAR);
 }
 
+//ordena reservas e voos por data
 void radixSortUserList(OrdList *list) {
     radixSort(list, getBeginSeconds, 60, 0);
     radixSort(list, getBeginMinutes, 60, 0);
