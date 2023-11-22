@@ -1,13 +1,21 @@
 #include "parser.h"
 
-//A função parse_users_file lê o ficheiro users.csv e faz o parsing
+/* A função parse_users_file lê o ficheiro users.csv e faz o parsing. Esta função começa por construir o caminho para o ficheiro
+users.csv. Para isso, junta a string dada, que nos indica o caminho absoluto para a diretoria onde o ficheiro se encontra, com a 
+string "/users.csv", para assim obtermos o caminho absoluto para o ficheiro. Depois se este ficheiro realmente existir, iremos 
+abrir o ficheiro para o poder ler. Primeiro lemos a primeira linha onde se encontra o header (o cabeçalho). Iremos colocar o 
+header no ficheiro de erros, cujo o caminho relativo é "Resultados/users_errors.csv". Depois iremos ler as próximas linhas. A cada
+linha que lemos, iremos pegar nela e dividi-la em várias partes (id, nome, etc...). Com todas estas strings iremos verificar se o
+utilizador é válido. Se for iremos transformar todas estas strings num tipo adequado e passar esses parametros para a estrutura de
+dados, neste caso para o catálogo de utilizadores válidos. Se o utilizador for inválido, então iremos pegar na linha não modificada
+e iremos acrescenta-la ao ficheiro de erros. Por fim, libertamos a memória alocada e fechamos o ficheiro. */
 void parse_users_file (char* directory,UsersManager *usersCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/users.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/users.csv");
     if (exist_file(file_path)) {
         FILE *file;
-        file = fopen(file_path,"r");
+        file = fopen(file_path,"r"); //abertura do ﬁcheiro em modo de leitura. O ﬁcheiro deve existir.
         char* line = NULL;
         size_t n;
         ssize_t read;
@@ -65,7 +73,7 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
                     if (account_status[0] == 'a' || account_status[0] == 'A') {
                         accountStatus = 1;
                     }
-                    User* user = createUser(id_user,name,gender,country_code,/*address,*/passport,birth,/*email,0,*/accountCreation,/*pay_method,*/accountStatus);
+                    User* user = createUser(id_user,name,gender,country_code,passport,birth,accountCreation,accountStatus);
                     addUserToCatalog(usersCatalog,user,hashFunction(id_user));
                     if (accountStatus) addUserToCatalogList(usersCatalog,user);
                 }
@@ -94,14 +102,22 @@ void parse_users_file (char* directory,UsersManager *usersCatalog) {
     free(file_path);
 }
 
-//A função parse_reservations_file lê 
+/* A função parse_reservations_file lê o ficheiro reservations.csv e faz o parsing. Esta função começa por construir o caminho para 
+o ficheiro reservations.csv. Para isso, junta a string dada, que nos indica o caminho absoluto para a diretoria onde o ficheiro se 
+encontra, com a string "/reservations.csv", para assim obtermos o caminho absoluto para o ficheiro. Depois se este ficheiro realmente 
+existir, iremos abrir o ficheiro para o poder ler. Primeiro lemos a primeira linha onde se encontra o header (o cabeçalho). Iremos colocar
+o header no ficheiro de erros, cujo o caminho relativo é "Resultados/reservations_errors.csv". Depois iremos ler as próximas linhas. A cada
+linha que lemos, iremos pegar nela e dividi-la em várias partes (id, nome do hotel, etc...). Com todas estas strings iremos verificar se a
+reserva é válida. Se for iremos transformar todas estas strings num tipo adequado e passar esses parametros para a estrutura de dados, neste
+caso para o catálogo de reservas válidas. Se a reserva for inválida, então iremos pegar na linha não modificada e iremos acrescenta-la ao
+ficheiro de erros. Por fim, libertamos a memória alocada e fechamos o ficheiro.*/
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/reservations.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/reservations.csv");
     if (exist_file(file_path)) {
         FILE *file;
-        file = fopen(file_path,"r");
+        file = fopen(file_path,"r"); //abertura do ﬁcheiro em modo de leitura. O ﬁcheiro deve existir.
         char* line = NULL;
         size_t n;
         ssize_t read;
@@ -147,15 +163,10 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 char* includes_breakfast = malloc(strlen(token) + 1);
                 strcpy(includes_breakfast,token);
                 token = strsep(&line_pointer,";"); //room details
-                //char*  room_details= malloc(strlen(token) + 1);
-                //strcpy(room_details,token);
                 token = strsep(&line_pointer,";"); //rating
                 char* rating = malloc(strlen(token) + 1);
                 strcpy(rating,token);
-                //token = strsep(&line_pointer,";"); comment
-                //char* comment = malloc(strlen(token) + 1);
-                //strcpy(comment,token);
-                //remove_new_line(comment);
+                //comment
                 if (valid_reservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars,city_tax,address,begin_date,end_date,price_per_night,includes_breakfast,rating,usersCatalog)) {
                     int cityTax = string_to_int(city_tax);
                     int pricePerNight = atoi(price_per_night);
@@ -163,7 +174,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                     if (includes_breakfast[0] == 't' || includes_breakfast[0] == 'T' || includes_breakfast[0] == '1') includesBreakfast = 1;
                     Date* begin = string_to_date(begin_date);
                     Date* end = string_to_date(end_date);
-                    Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars[0],/*address,*/cityTax,begin,end,pricePerNight,includesBreakfast,/*room_details,*/rating[0],/*comment,*/getHashtableHotelsCatalog(hotelsCatalog));
+                    Reservation* reservation = createReservation(id_reservation,id_user,id_hotel,hotel_name,hotel_stars[0],cityTax,begin,end,pricePerNight,includesBreakfast,rating[0],getHashtableHotelsCatalog(hotelsCatalog));
                     addReservToCatalog(reservationsCatalog,reservation,hashFunction(id_reservation),hotelsCatalog,usersCatalog);
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
@@ -179,9 +190,7 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
                 free(end_date);
                 free(price_per_night);
                 free(includes_breakfast);
-                //free(room_details);
                 free(rating);
-                //free(comment);
             }
             free(file_path_errors);
         }
@@ -191,13 +200,22 @@ void parse_reservations_file (char* directory, UsersManager* usersCatalog, Reser
     free(file_path);
 }
 
+/* A função parse_flights_file lê o ficheiro flights.csv e faz o parsing. Esta função começa por construir o caminho para 
+o ficheiro flights.csv. Para isso, junta a string dada, que nos indica o caminho absoluto para a diretoria onde o ficheiro se 
+encontra, com a string "/flights.csv", para assim obtermos o caminho absoluto para o ficheiro. Depois se este ficheiro realmente 
+existir, iremos abrir o ficheiro para o poder ler. Primeiro lemos a primeira linha onde se encontra o header (o cabeçalho). Iremos colocar
+o header no ficheiro de erros, cujo o caminho relativo é "Resultados/flights_errors.csv". Depois iremos ler as próximas linhas. A cada
+linha que lemos, iremos pegar nela e dividi-la em várias partes (id, aeroporto, etc...). Com todas estas strings iremos verificar se o
+voo é válido. Se for iremos transformar todas estas strings num tipo adequado e passar esses parametros para a estrutura de dados, neste
+caso para o catálogo de voos válidos. Se o voo for inválido, então iremos pegar na linha não modificada e iremos acrescenta-la ao
+ficheiro de erros. Por fim, libertamos a memória alocada e fechamos o ficheiro.*/
 void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog, PassengersCounter* passengers_counter) {
     char* file_path = malloc(strlen(directory) + strlen("/flights.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/flights.csv");
     if (exist_file(file_path)) {
         FILE *file;
-        file = fopen(file_path,"r");
+        file = fopen(file_path,"r"); //abertura do ficheiro em modo de leitura. O ficheiro deve existir.
         char* line = NULL;
         size_t n;
         ssize_t read;
@@ -245,17 +263,13 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 token = strsep(&line_pointer,";"); //copilot
                 char* copilot = malloc(strlen(token) + 1);
                 strcpy(copilot,token);
-                //token = strsep(&line_pointer,";"); notes
-                //char* notes = malloc(strlen(token) + 1);
-                //strcpy(notes,token);
-                //remove_new_line(notes);
+                //notes
                 if (valid_flight(id_flight,airline,plane_model,total_seats,origin,destination,schedule_departure_date,schedule_arrival_date,real_departure_date,real_arrival_date,pilot,copilot,passengers_counter)) {
-                    //int totalSeats = string_to_int(total_seats);
                     Date* scheduleDeparture = string_to_date_hours(schedule_departure_date);
                     Date* scheduleArrival = string_to_date_hours(schedule_arrival_date);
                     Date* realDeparture = string_to_date_hours(real_departure_date);
                     Date* realArrival = string_to_date_hours(real_arrival_date);
-                    Flight *flight = createFlight(id_flight,airline,plane_model,/*totalSeats,*/origin,destination,scheduleDeparture,scheduleArrival,realDeparture,realArrival/*,pilot,copilot,notes*/);
+                    Flight *flight = createFlight(id_flight,airline,plane_model,origin,destination,scheduleDeparture,scheduleArrival,realDeparture,realArrival);
                     addFlightToCatalog(flightsCatalog,flight,hashFunction(id_flight));
                 }
                 else add_invalid_line_to_error_file(file_path_errors,line);
@@ -272,7 +286,6 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
                 free(real_arrival_date);
                 free(pilot);
                 free(copilot);
-                //free(notes);
             }
             free(file_path_errors);
         }
@@ -282,13 +295,23 @@ void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsMan
     free(file_path);
 }
 
+
+/* A função parse_passengers_file lê o ficheiro passengers.csv e faz o parsing. Esta função começa por construir o caminho para 
+o ficheiro passengers.csv. Para isso, junta a string dada, que nos indica o caminho absoluto para a diretoria onde o ficheiro se 
+encontra, com a string "/passengers.csv", para assim obtermos o caminho absoluto para o ficheiro. Depois se este ficheiro realmente 
+existir, iremos abrir o ficheiro para o poder ler. Primeiro lemos a primeira linha onde se encontra o header (o cabeçalho). Iremos colocar
+o header no ficheiro de erros, cujo o caminho relativo é "Resultados/flights_errors.csv". Depois iremos ler as próximas linhas. A cada
+linha que lemos, iremos pegar nela e dividi-la em várias partes (id do utilizador e id do voo). Com todas estas strings iremos verificar se o
+passageiro é válido. Se for iremos transformar todas estas strings num tipo adequado e passar esses parametros para a estrutura de dados, neste
+caso para o catálogo de passageiros válidos. Se o passageiro for inválido, então iremos pegar na linha não modificada e iremos acrescenta-la ao
+ficheiro de erros. Por fim, libertamos a memória alocada e fechamos o ficheiro.*/
 void parse_passengers_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/passengers.csv");
     if (exist_file(file_path)) {
         FILE *file;
-        file = fopen(file_path,"r");
+        file = fopen(file_path,"r"); //abertura do ﬁcheiro em modo de leitura. O ﬁcheiro deve existir.
         char* line = NULL;
         size_t n;
         ssize_t read;
@@ -323,7 +346,10 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
     free(file_path);
 }
 
-//Faz o parsing de todos os tipos de ficheiros. Faz parsing dos 
+/* A função parse_all_files lê todos os ficheiros de entrada CSV e efetua um parsing genérico. Para além disso, nesta função é criada uma hashtable
+com os números de passageiros por id de voo e é chamada uma função que contará o número de passageiros por voo. Os resultados desta função
+serão usados para verificar se os voos são válidos e para assim sabermos se devemos guardar o voo na estrutura de dados ou se devemos coloca-
+-lo no ficheiro de erros. Após a utilização destes resultados para validar os voos, destruimos a hashtable.*/
 void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
     parse_users_file(directory,usersCatalog);
     parse_reservations_file(directory,usersCatalog,reservationsCatalog,hotelsCatalog);

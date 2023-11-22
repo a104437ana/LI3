@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "utility.h"
-
 #include "dataset_validator.h"
 
 void parse_users_file (char* directory,UsersManager *usersCatalog);
