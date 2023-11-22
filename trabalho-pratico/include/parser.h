@@ -8,10 +8,10 @@
 
 #include "dataset_validator.h"
 
-void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_id_name);
+void parse_users_file (char* directory,UsersManager *usersCatalog);
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog);
 void parse_flights_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog,PassengersCounter* passengers_counter);
 void parse_passengers_file (char* directory, UsersManager* usersCatalog, FlightsManager* flightsCatalog);
-void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog,OrdList* user_id_name);
+void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog);
 
 #endif

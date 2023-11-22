@@ -1,6 +1,7 @@
 #include "parser.h"
 
-void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_id_name) {
+//A função parse_users_file lê o ficheiro users.csv e faz o parsing
+void parse_users_file (char* directory,UsersManager *usersCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/users.csv") + 1);
     strcpy(file_path, directory);
     strcat(file_path,"/users.csv");
@@ -95,6 +96,7 @@ void parse_users_file (char* directory,UsersManager *usersCatalog,OrdList* user_
     free(file_path);
 }
 
+//A função parse_reservations_file lê 
 void parse_reservations_file (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog) {
     char* file_path = malloc(strlen(directory) + strlen("/reservations.csv") + 1);
     strcpy(file_path, directory);
@@ -323,9 +325,9 @@ void parse_passengers_file (char* directory, UsersManager* usersCatalog, Flights
     free(file_path);
 }
 
-//Faz o parsing de todos os tipos de ficheiros
-void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog,OrdList* user_id_name) {
-    parse_users_file(directory,usersCatalog,user_id_name);
+//Faz o parsing de todos os tipos de ficheiros. Faz parsing dos 
+void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
+    parse_users_file(directory,usersCatalog);
     parse_reservations_file(directory,usersCatalog,reservationsCatalog,hotelsCatalog);
     PassengersCounter* passengers_counter = createPassengersCounter(PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE);
     count_passengers(directory,usersCatalog,passengers_counter);
