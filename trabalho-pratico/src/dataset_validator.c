@@ -25,7 +25,7 @@ int base_e_expoente (int base, int expoente) {
 }
 
 /* A função string_to_int recebe uma string e retorna o número inteiro que essa string representa.
-Usar apenas esta função quando sabemos que a string representa um número inteiro.*/
+Usar apenas esta função quando sabemos que a string representa um número inteiro (pré-condição).*/
 int string_to_int (char* string) {
     int number = 0;
     int i = 0;
@@ -61,7 +61,11 @@ int length_bigger_than_zero (char* string) {
     return bigger;
 }
 
-/* A função valid_email verifica se um email é válido, dado o email. */
+/* A função valid_email verifica se um email é válido, dado o email. Para o email ser válido tem de ter
+o seguinte formato “<username>@<domain>.<TLD>”, sendo que o username e domain tem de ter pelo menos comprimento
+igual a 1 e o TDL tem de ter pelo menos comprimento igual a 2. Assim para ser válido, o email tem de ter pelo menos
+comprimento 6 e tem de respeitar o seu formato. Se o email for válido, a função retorna 1. Se não,
+a função retorna 0. */
 int valid_email (char* email) {
     int valid = 0;
     if (strlen(email) >= 6) {
@@ -102,7 +106,8 @@ int valid_country_code (char* country_code) {
 
 /* A função valid_account_status verifica se o estado da conta é válido. Esta função verifica se
 o estado da conta tem comprimento 6 ou 8 (as únicas maneiras de ser válido pois "active" tem 
-comprimento 6 e "inactive" tem comprimento 8) e se é igual a "active" ou a "inactive".*/
+comprimento 6 e "inactive" tem comprimento 8) e se é igual a uma combinação de maiúsculas e minúsculas
+de "active" ou de "inactive". Se for válido, retorna 1. Se não, retorna 0. */
 int valid_account_status (char* account_status) {
     int valid = 0;
     if (strlen(account_status) == 6 || strlen(account_status) == 8) {
@@ -149,7 +154,10 @@ int is_digit (char n) {
     return digit;
 }
 
-/* A função valid_date_ymd*/
+/* A função valid_date_ymd verifica se uma data (com ano, mês e dia) é válida, dada essa data (string). Para esta data ser
+válida tem de ter o seguinte formato "nnnn/nn/nn", onde n é um número entre 0 e 9 (inclusivo). Para além disso, para ser
+uma data válida, o mês precisa de estar entre 1 e 12 (inclusive) e o dia precisa de estar entre 1 e 31 (inclusive). Se a
+data for válida, a função retorna 1. Se não, retorna 0.*/
 int valid_date_ymd (char* date) {
     int valid = 0;
     if (strlen(date) == 10) {
@@ -166,7 +174,12 @@ int valid_date_ymd (char* date) {
     return valid;
 }
 
-/* A função valid_date_ymd_hms*/
+/* A função valid_date_ymd_hms verifica se uma data (com ano, mês e dia) com tempo (com hora, minuto e segundo) é válida,
+dada essa data (string). Para esta data com tempo ser válida tem de ter o seguinte formato "nnnn/nn/nn nn:nn:nn", onde n é 
+um número entre 0 e 9 (inclusivo). Para além disso, para ser uma data com tempo válida, o mês precisa de estar entre 1 e 12 
+(inclusive), o dia precisa de estar entre 1 e 31 (inclusive), a hora precisa de estar entre 0 e 23 (inclusive), os minutos
+precisam de estar entre 0 e 59 (inclusive) e os segundos precisam de estar entre 0 e 59 (inclusive). Se a data com tempo for
+válida, a função retorna 1. Se não, retorna 0.*/
 int valid_date_ymd_hms (char* date) {
     int valid = 0;
     if (strlen(date) == 19) {
@@ -192,7 +205,9 @@ int valid_date_ymd_hms (char* date) {
     return valid;
 }
 
-/* A função the bigger_date*/
+/* A função the bigger_date calcula qual é a string que representa a maior data, dadas duas strings que representam
+datas (sem tempo) no formato válido (pré-condição). Se a maior data for a primeira string, a função retorna 1. Se a 
+maior data for a segunda string, a função retorna 2. Se as duas datas forem iguais, a função retorna 0.*/
 int the_bigger_date (char* date1, char* date2) {
     int bigger_date = 1;
     int year1 = (date1[0] - '0') * 1000 + (date1[1] - '0') * 100 + (date1[2] - '0') * 10 + (date1[3] - '0');
@@ -218,15 +233,20 @@ int the_bigger_date (char* date1, char* date2) {
     return bigger_date;
 }
 
-/* A função valid_par_of_dates*/
+/* A função valid_par_of_dates verifica se um par de datas é válido, dadas duas strings que representam datas com
+formato válido (pré-condição). Um par de datas é válido se a data inicial não for superior a data final. Nos
+utilizadores, o birth_date tem que vir antes de account_creation (a não ser que criem a conta no mesmo dia em que
+a pessoa nasceu). Nos voos, o schedule_departure_date tem que vir antes de schedule_arrival_date, e o real_departure_date
+tem que vir antes de real_arrival_date. E nas reservas, o begin_date tem que vir antes do end_date. Se o par é válido,
+a função retorna 1. Se não, retorna 0. */
 int valid_par_of_dates (char* date1, char* date2) {
     int valid = 0;
     if (strlen(date1) == 10) {
-        if (strlen(date2) == 10) {
+        if (strlen(date2) == 10) { //reservas
             if (the_bigger_date(date1,date2) == 2) valid = 1;
         }
         else {
-            if (strlen(date2) == 19) {
+            if (strlen(date2) == 19) { //utilizadores
                 if (the_bigger_date(date1,date2) == 2) valid = 1;
                 else {
                     if (the_bigger_date(date1,date2) == 0) {
@@ -237,7 +257,7 @@ int valid_par_of_dates (char* date1, char* date2) {
         }
     }
     else {
-        if (strlen(date1) == 19 && strlen(date2) == 19) {
+        if (strlen(date1) == 19 && strlen(date2) == 19) { //voos
             if (the_bigger_date(date1,date2) == 2) valid = 1;
             else {
                 if (the_bigger_date(date1,date2) == 0) {
@@ -299,8 +319,8 @@ int valid_user (char *id_user, char* name, char* email, char* phone_number, char
 }
 
 /* A função valid_hotel_stars verifica se o número de estrelas de um hotel é válido, dado um número de estrelas
-de um hotel. Esta função verifica se o número de estrelas é um número inteiro, e se está entre 1 e 5 ou se é 1
-ou se é 5. Se sim, retorna 1. Se não, retorna 0. */
+de um hotel. Esta função verifica se o número de estrelas é um número inteiro, e se está entre 1 e 5 (inclusive). 
+Se sim, retorna 1. Se não, retorna 0. */
 int valid_hotel_stars (char *hotel_stars) {
     int valid = 0;
     if (hotel_stars[0] >= '1' && hotel_stars[0] <= '5' ) {
@@ -513,26 +533,29 @@ PassengersPerFlight *createPassengersPerFlight () {
 }
 
 /* A função destroyPassengersPerFlight destroi uma estrutura passengers_per_flight já existente, ou seja, liberta a memória dinámica que guardava a
-estrutura passengers_per_flight se esta estrutura já existir (se for diferente de NULL). */
+estrutura passengers_per_flight, se esta estrutura já existir (se for diferente de NULL). */
 void destroyPassengersPerFlight (void* passengers_per_flight) {
     if (passengers_per_flight != NULL) {
         free(passengers_per_flight);
     }
 }
 
-/* A estrutura passengers_counter é uma hashtable usada para contar*/
+/* A estrutura passengers_counter é uma hashtable usada para guardar o número total de passageiros por id de voo. Logo é uma hashtable constítuida por 
+estruturas passengers_per_flight. Nesta hashtable iremos guardar o número de passageiros que contarmos por id de voo, logo o propósito desta hashtable é
+contar o número de passageiros por voo. Iremos fazer isto para depois sabermos se os lugares disponíveis no voo são superiores ou iguais aos números de*/
 struct passengers_counter {
     Hashtable* passengers_per_flight;
 };
 
-/* A função createPassengersCounter */
+/* A função createPassengersCounter cria a hashtable passengers_counter, ou seja aloca memória dinamicamente para essa estrutura e depois cria uma
+hashtable. Esta função recebe um número que será o tamanho da hashtable criada. Esta função retorna a estrutura passengers_counter. */
 PassengersCounter *createPassengersCounter (int size) {
     PassengersCounter* passengers_counter = malloc(sizeof(PassengersCounter));
     passengers_counter->passengers_per_flight = createHashtable(size);
     return passengers_counter;
 }
 
-/* A função addPassengersPerFlight_ToPassengersCounter*/
+/* A função addPassengersPerFlight_ToPassengersCounter addiciona a hashtable, e em */
 void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight) {
     addHashtable(passengers_counter->passengers_per_flight, key, passengers_per_flight, id_flight);
 }
@@ -552,7 +575,7 @@ void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, 
     data->number++;
 }
 
-/* A função getPassengersNumber*/
+/* A função getPassengersNumber */
 int getPassengersNumber (PassengersCounter* passengers_counter, unsigned int key, char *id) {
     PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, key, id);
     int passengers = data->number;
