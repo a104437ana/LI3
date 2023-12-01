@@ -73,7 +73,7 @@ void parse_file (char* file_path, char* error_file_path, UsersManager* usersCata
                                     Date* scheduleArrival = string_to_date_hours(token[7]);
                                     Date* realDeparture = string_to_date_hours(token[8]);
                                     Date* realArrival = string_to_date_hours(token[9]);
-                                    Flight *flight = createFlight(token[0],token[1],token[2],token[3],token[4],scheduleDeparture,scheduleArrival,realDeparture,realArrival);
+                                    Flight *flight = createFlight(token[0],token[1],token[2],token[4],token[5],scheduleDeparture,scheduleArrival,realDeparture,realArrival);
                                     addFlightToCatalog(flightsCatalog,flight,hashFunction(token[0]));
                                }
                                else add_invalid_line_to_error_file(error_file_path,line);
