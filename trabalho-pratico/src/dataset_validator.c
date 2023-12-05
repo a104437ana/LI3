@@ -606,10 +606,12 @@ não, não iremos fazer nada. Se existir, iremos verificar se o id de voo já te
 e adicionamos um passageiro. Se já existia, adicionamos mais um passageiro a estrutura já existente. Por fim, libertamos a memória alocada e 
 fechamos o ficheiro. E no final, conseguimos contar todos os passageiros de cada voo.*/
 void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCounter* passengers_counter) {
-    char* file_path = malloc(strlen(directory) + strlen("/passengers.csv") + 1);
+    int size = strlen(directory) + 16;
+    char* file_path = malloc(size);
     strcpy(file_path, directory);
     strcat(file_path,"/passengers.csv");
     if (exist_file(file_path)) {
+        char **token = malloc(sizeof(char*)*2);
         FILE *file;
         file = fopen(file_path,"r"); //abertura do ﬁcheiro em modo de leitura. O ﬁcheiro deve existir.
         char* line = NULL;
@@ -617,30 +619,26 @@ void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCo
         ssize_t read;
         if ((read = getline(&line,&n,file)) != -1) {
             while((read = getline(&line,&n,file)) != -1){
-                char* line_modified = malloc(strlen(line) + 1);
+                int size_line = strlen(line) + 1;
+                char* line_modified = malloc(size_line);
                 strcpy(line_modified,line);
                 char* line_pointer = line_modified;
-                char* token = strsep(&line_pointer,";"); //id flight
-                char* id_flight = malloc(strlen(token) + 1);
-                strcpy(id_flight,token);
-                token = strsep(&line_pointer,";"); //id user
-                char* id_user = malloc(strlen(token) + 1);
-                strcpy(id_user,token);
-                remove_new_line(id_user);
-                if (existsUser(usersCatalog,id_user)) {
-                    if (!(existsPassengersPerFlight(passengers_counter,id_flight))) {
+                token[0] = strsep(&line_pointer,";");
+                token[1] = strsep(&line_pointer,";");
+                remove_new_line(token[1]);
+                if (existsUser(usersCatalog,token[1])) {
+                    if (!(existsPassengersPerFlight(passengers_counter,token[0]))) {
                         PassengersPerFlight* passengers_per_flight = createPassengersPerFlight();
-                        addPassengersPerFlight_ToPassengersCounter(passengers_counter,passengers_per_flight,hashFunction(id_flight),id_flight);
+                        addPassengersPerFlight_ToPassengersCounter(passengers_counter,passengers_per_flight,hashFunction(token[0]),token[0]);
                     }
-                    addPassenger_ToPassengersPerFlight(passengers_counter,hashFunction(id_flight),id_flight);
+                    addPassenger_ToPassengersPerFlight(passengers_counter,hashFunction(token[0]),token[0]);
                 }
                 free(line_modified);
-                free(id_flight);
-                free(id_user);
             }
         }
         free(line);
         fclose(file);
+        free(token);
     }
     free(file_path);
 }

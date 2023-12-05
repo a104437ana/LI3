@@ -29,13 +29,13 @@ void parse_file (char* file_path, char* error_file_path, UsersManager* usersCata
         if ((read = getline(&line,&n,file)) != -1) {
             add_invalid_line_to_error_file(error_file_path,line);
             while((read = getline(&line,&n,file)) != -1) {
-                char* line_modified = malloc(strlen(line) + 1);
+                int size_line = strlen(line) + 1;
+                char* line_modified = malloc(size_line);
                 strcpy(line_modified,line);
                 char *line_pointer = line_modified;
-                int i = -1;
-                do {
-                    token[++i] = strsep(&line_pointer,";");
-                } while (i<size-1);
+                for (int i = 0; i < size; i++) {
+                    token[i] = strsep(&line_pointer,";");
+                }
                 switch (type_file) {
                     //users
                     case 'u' : remove_new_line(token[11]);
@@ -103,9 +103,10 @@ coloca-lo no ficheiro de erros. Após a utilização destes resultados para vali
 fazer o parsing de cada ficheiro, chamamos a função parse_file.*/
 void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
     PassengersCounter* passengers_counter = createPassengersCounter(PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE);
-    
-    char* file_path = malloc(strlen(directory) + strlen("/reservations.csv") + 1);
-    char* error_file_path = malloc(strlen("Resultados/reservations_errors.csv") + 1);
+
+    int size = strlen(directory) + 18;
+    char* file_path = malloc(size);
+    char* error_file_path = malloc(35);
 
     strcpy(file_path,directory);
     strcat(file_path,"/users.csv");
