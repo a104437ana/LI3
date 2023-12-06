@@ -10,8 +10,9 @@
 #include "catalogsManager.h"
 #include "interpreter.h"
 #include <locale.h>
+#include <sys/resource.h>
 
-#define USERS_HASHTABLE_INI_SIZE 100000000
+#define USERS_HASHTABLE_INI_SIZE 100000
 #define RESERVATIONS_HASHTABLE_INI_SIZE 40000
 #define HOTELS_HASHTABLE_INI_SIZE 100
 #define FLIGHTS_HASHTABLE_INI_SIZE 1000
@@ -59,6 +60,9 @@ int main (int argc, char** argv) {
     clock_gettime(CLOCK_REALTIME, &end);
     elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("Elapsed time: %.6f seconds\n", elapsed);
+    struct rusage r_usage;
+    getrusage(RUSAGE_SELF, &r_usage);
+    printf("Memory usage: %ld KB\n", r_usage.ru_maxrss);
 
     return 0;
 }
