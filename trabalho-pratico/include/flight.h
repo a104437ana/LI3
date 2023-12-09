@@ -10,7 +10,7 @@
 
 typedef struct flight Flight;
 //cria um novo voo
-Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/);
+Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/, Hashtable *airports);
 //adiciona um utilizador a um voo
 void addUserToFlight(Flight *flight, void *user);
 
@@ -27,6 +27,9 @@ Date *getFlightRealArrival(Flight *flight);
 int getFlightScheduleDepartureDay(void *flight);
 int getFlightScheduleDepartureMonth(void *flight);
 int getFlightScheduleDepartureYear(void *flight);
+int getFlightScheduleDepartureSeconds(void *flight);
+int getFlightScheduleDepartureMinutes(void *flight);
+int getFlightScheduleDepartureHours(void *flight);
 //char *getFlightPilot(Flight *flight);
 //char *getFlightCopilot(Flight *flight);
 //char *getFlightNotes(Flight *flight);

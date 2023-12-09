@@ -2,9 +2,9 @@
 #define _RESERVATIONS_MANAGER_
 
 #include "reservation.h"
-#include "hashtable.h"
 #include "hotelsManager.h"
 #include "usersManager.h"
+#include "hashtable.h"
 
 typedef struct reservationsManager ReservationsManager;
 //cria um novo catálogo de reservas

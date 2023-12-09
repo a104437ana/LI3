@@ -101,6 +101,9 @@ void radixSortReservDate(OrdList *list) {
 
 //ordena voos por data
 void radixSortFlightDate(OrdList *list) {
+    radixSort(list, getFlightScheduleDepartureSeconds, 60, 0);
+    radixSort(list, getFlightScheduleDepartureMinutes, 60, 0);
+    radixSort(list, getFlightScheduleDepartureHours, 24, 0);
     radixSort(list, getFlightScheduleDepartureDay, 31, 0);
     radixSort(list, getFlightScheduleDepartureMonth, 12, 0);
     radixSort(list, getFlightScheduleDepartureYear, N_YEARS, BEGIN_YEAR);

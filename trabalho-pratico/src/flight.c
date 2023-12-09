@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hotel.h"
 #include "flight.h"
-#include "user.h"
+#include "airport.h"
+#include "airportsManager.h"
 #include "orderedList.h"
 
 struct flight {
@@ -23,13 +23,21 @@ struct flight {
     OrdList *passengers;
 };
 //função que cria um novo voo
-Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/) {
+Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/, Hashtable *airports) {
     Flight *flight = malloc(sizeof(Flight));
     flight->id = strdup(id);
     flight->airline = strdup(airline);
     flight->airplane = strdup(airplane);
-    //flight->totalSeats = totalSeats;
-    //usar strncopy(destination, origin, size(characters))
+    //verifica se existe o aeroporto ou se cria um novo
+    unsigned int airportKey = hashFunction(origin);
+    int existsAirport = existsData(airports, airportKey, origin); //verifica se o aeroporto já existe no catálogo de aeroportos
+    Airport *airport;
+    if (existsAirport == 0) { //caso não exista cria um novo aeroporto
+        airport = createAirport(origin);
+        addHashtable(airports, airportKey, airport, origin); //adiciona o hotel ao catálogo dos aeroportos
+    } else //caso já exista
+        airport = (Airport*) getData(airports, airportKey, origin); //obtem apontador para o aeroporto do catálogo dos aeroporotos
+    addFlightToAirport(airport, flight); //adiciona o apontador do voo aos voos do aeroporto
     flight->origin[0] = origin[0];
     flight->origin[1] = origin[1];
     flight->origin[2] = origin[2];
@@ -105,6 +113,18 @@ int getFlightScheduleDepartureMonth(void *flight) {
 
 int getFlightScheduleDepartureYear(void *flight) {
     return ((Flight *) flight)->scheduleDeparture->year;
+}
+
+int getFlightScheduleDepartureSeconds(void *flight) {
+    return ((Flight *) flight)->scheduleDeparture->hour->seconds;
+}
+
+int getFlightScheduleDepartureMinutes(void *flight) {
+    return ((Flight *) flight)->scheduleDeparture->hour->minutes;
+}
+
+int getFlightScheduleDepartureHours(void *flight) {
+    return ((Flight *) flight)->scheduleDeparture->hour->hours;
 }
 /*
 char *getFlightPilot(Flight *flight) {

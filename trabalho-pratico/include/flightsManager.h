@@ -1,8 +1,9 @@
 #ifndef _FLIGHTS_MANAGER_
 #define _FLIGHTS_MANAGER_
 
-#include "usersManager.h"
 #include "flight.h"
+#include "airportsManager.h"
+#include "usersManager.h"
 #include "hashtable.h"
 
 typedef struct flightsManager FlightsManager;

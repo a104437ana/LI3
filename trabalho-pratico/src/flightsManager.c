@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "flightsManager.h"
+#include "airportsManager.h"
+#include "hashtable.h"
 
 struct flightsManager {
     Hashtable *flights;

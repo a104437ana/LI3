@@ -1,4 +1,6 @@
 #include "parser.h"
+#include <time.h>
+#include <sys/resource.h>
 
 /* A função parse_file lê um ficheiro de entrada CSV e efetua o seu parsing genérico. Esta função recebe o caminho absoluto para o ficheiro de entrada CSV
 e o caminho relativo para o ficheiro de erros. Primeiro, verificamos se o ficheiro de entrada CSV existe. Depois com o caminho para o ficheiro de erros,
@@ -8,7 +10,7 @@ Depois iremos ler as próximas linhas. A cada linha que lemos, iremos pegar nela
 na lista criada no início da função. Depois, utilizando as várias partes da linha, iremos verificar se uma determinada identidade (que depende do tipo de ficheiro) 
 é válida. Se for iremos transformar todas estas strings num tipo adequado e passar esses parametros para a estrutura de dados. Se for inválido, então iremos 
 pegar na linha não modificada e iremos acrescenta-la ao ficheiro de erros. Por fim, libertamos a memória alocada e fechamos o ficheiro. */
-void parse_file (char* file_path, char* error_file_path, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog, PassengersCounter* passengers_counter) {
+void parse_file (char* file_path, char* error_file_path, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog, AirportsManager *airportsCatalog, PassengersCounter* passengers_counter) {
     if (exist_file(file_path)) {
         char type_file = error_file_path[11];
         int size;
@@ -73,7 +75,7 @@ void parse_file (char* file_path, char* error_file_path, UsersManager* usersCata
                                     Date* scheduleArrival = string_to_date_hours(token[7]);
                                     Date* realDeparture = string_to_date_hours(token[8]);
                                     Date* realArrival = string_to_date_hours(token[9]);
-                                    Flight *flight = createFlight(token[0],token[1],token[2],token[4],token[5],scheduleDeparture,scheduleArrival,realDeparture,realArrival);
+                                    Flight *flight = createFlight(token[0],token[1],token[2],token[4],token[5],scheduleDeparture,scheduleArrival,realDeparture,realArrival,getHashtableAirportsCatalog(airportsCatalog));
                                     addFlightToCatalog(flightsCatalog,flight,hashFunction(token[0]));
                                }
                                else add_invalid_line_to_error_file(error_file_path,line);
@@ -101,7 +103,13 @@ hashtable com os números de passageiros por id de voo e é chamada uma função
 função serão usados para verificar se os voos são válidos e para assim sabermos se devemos guardar o voo na estrutura de dados ou se devemos 
 coloca-lo no ficheiro de erros. Após a utilização destes resultados para validar os voos, destruimos a hashtable. Para efetivamente ler e
 fazer o parsing de cada ficheiro, chamamos a função parse_file.*/
-void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog) {
+void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog, AirportsManager *airportsCatalog) {
+
+        //inicialização de variáveis para medição de tempo
+        struct timespec start, end, interm;
+        double use, res, passc, fli, pass, des, total;
+        clock_gettime(CLOCK_REALTIME, &start);
+
     PassengersCounter* passengers_counter = createPassengersCounter(PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE);
 
     int size = strlen(directory) + 18;
@@ -111,27 +119,56 @@ void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsM
     strcpy(file_path,directory);
     strcat(file_path,"/users.csv");
     strcpy(error_file_path,"Resultados/users_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+        clock_gettime(CLOCK_REALTIME, &interm);
+        use = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
 
     strcpy(file_path,directory);
     strcat(file_path,"/reservations.csv");
     strcpy(error_file_path,"Resultados/reservations_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+        clock_gettime(CLOCK_REALTIME, &end);
+        res = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
     count_passengers(directory,usersCatalog,passengers_counter);
+        clock_gettime(CLOCK_REALTIME, &interm);
+        passc = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     strcpy(file_path,directory);
     strcat(file_path,"/flights.csv");
     strcpy(error_file_path,"Resultados/flights_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+        clock_gettime(CLOCK_REALTIME, &end);
+        fli = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
     strcpy(file_path,directory);
     strcat(file_path,"/passengers.csv");
     strcpy(error_file_path,"Resultados/passengers_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+        clock_gettime(CLOCK_REALTIME, &interm);
+        pass = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     free(file_path);
     free(error_file_path);
 
     destroyPassengersCounter(passengers_counter);
-}
+        clock_gettime(CLOCK_REALTIME, &end);
+        des = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+
+        // Tamanho dos dados processados
+        // use = 10001
+        // fli = 1000
+        // pass = 81204
+        // res = 40953
+
+        //imprime tempo de execução
+        total = use + res + passc + fli + pass + des;
+        printf(" Parser:\n");
+        printf("  user:\t\t %.6f seconds (%5.2f%%)\n", use, (use/total)*100);
+        printf("  reservation:\t %.6f seconds (%5.2f%%)\n", res, (res/total)*100);
+        printf("  passenger_c:\t %.6f seconds (%5.2f%%)\n", passc, (passc/total)*100);
+        printf("  flight:\t %.6f seconds (%5.2f%%)\n", fli, (fli/total)*100);
+        printf("  passenger:\t %.6f seconds (%5.2f%%)\n", pass, (pass/total)*100);
+        printf("  destroy:\t %.6f seconds (%5.2f%%)\n", des, (des/total)*100);
+        printf("  total:\t %.6f seconds\n", total);
+ }
