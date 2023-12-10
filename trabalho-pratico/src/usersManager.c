@@ -41,7 +41,7 @@ int compareUsersNames(void *user1, void *user2) {
 }
 //função que ordena o catálogo de utilizadores
 void sortUserCatalog(UsersManager *usersManager) {
-    sortOrdlistHashtable(usersManager->users, sortUserList); //ordena a lista de voos e reservas de todos os utilizadores
+    //sortOrdlistHashtable(usersManager->users, sortUserList); //ordena a lista de voos e reservas de todos os utilizadores
     OrdList *usersByName = usersManager->usersByName;
     quickSort(usersByName, 0, getOrdListSize(usersByName)-1, compareUsersNames, 0); //ordena os utilizadores por nome na lista de utilizadores
 }

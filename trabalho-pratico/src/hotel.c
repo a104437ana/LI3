@@ -47,6 +47,7 @@ void sortHotelReservationsByDate(void *hotel) {
     quickSort(reservationsByDate, 0, getOrdListSize(reservationsByDate)-1, compareReservsIds, 0);
     reverseOrdList(reservationsByDate); //inverte a lista
     radixSortReservDate(reservationsByDate); //ordena as reservas por data
+    setOrdListOrd(reservationsByDate, 1);
 }
 //função que retorn a lista de reservas de um hotel
 OrdList *getHotelOrdList(Hotel *hotel) {

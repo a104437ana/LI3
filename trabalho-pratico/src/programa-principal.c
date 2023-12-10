@@ -40,7 +40,7 @@ int main (int argc, char** argv) {
         clock_gettime(CLOCK_REALTIME, &end);
         par = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
-    sortCatalogs(usersCatalog, hotelsCatalog);
+    sortUserCatalog(usersCatalog);
         clock_gettime(CLOCK_REALTIME, &interm);
         sor = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 

@@ -208,6 +208,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     ResultsQ2 *results = malloc(sizeof(ResultsQ2));
     if (type==FLIGHTS){ //se for pedida a lista de voos
       OrdList* userList = getUserList(user);
+      if (getOrdListOrd(userList) == 0) sortUserList(user);
       int listSize = getOrdListSize(userList);
       int nFlights = getNumberFlights(user);
       results->N = nFlights;
@@ -223,6 +224,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     }
     else if (type==RESERVATIONS){ //se for pedida a lista de reservas
       OrdList* userList = getUserList(user);
+      if (getOrdListOrd(userList) == 0) sortUserList(user);
       int listSize = getOrdListSize(userList);
       int nReservations = getNumberReservations(user);
       results->N = nReservations;
@@ -238,6 +240,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     }
     else{ //se for pedida a lista de voos e reservas
       OrdList* userList = getUserList(user);
+      if (getOrdListOrd(userList) == 0) sortUserList(user);
       int listSize = getOrdListSize(userList);
       results->N = listSize;
       results->results = malloc(sizeof(ResultQ2)*listSize);
@@ -266,6 +269,7 @@ ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
     int i;
     ResultsQ4 *results = malloc(sizeof(ResultsQ4));
     OrdList *reservations = getHotelOrdList(hotel);
+    if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel);
     int listSize = getOrdListSize(reservations);
     results->N = listSize;
     results->results = malloc(sizeof(Reservation*)*listSize);
@@ -281,6 +285,7 @@ int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
   Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
   if (hotel==NULL) return -1; //se o hotel não existir
   OrdList *reservations = getHotelOrdList(hotel);
+  if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel);
   int size = getOrdListSize(reservations);
   Reservation *reservation = getDataOrdList(reservations, 0);
   Date *reservBegin = getReservBegin(reservation), *reservEnd = getReservEnd(reservation);

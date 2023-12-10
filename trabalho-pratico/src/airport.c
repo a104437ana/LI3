@@ -39,6 +39,7 @@ void sortAirportFlightsByDepartureDate(void *airport) {
     OrdList *flightsByDepartureDate = ((Airport *) airport)->flightsByDepartureDate;
     quickSort(flightsByDepartureDate, 0, getOrdListSize(flightsByDepartureDate)-1, compareFlightsIds, 0);
     radixSortFlightDate(flightsByDepartureDate);
+    setOrdListOrd(flightsByDepartureDate, 1);
 }
 
 //obtem a lista de voos do aeroporto

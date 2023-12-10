@@ -7,6 +7,7 @@
 struct ordList {
     int maxSize;
     int size;
+    bool ord; //1 se a lista está ordenada, 0 se não
     void **data;
 };
 //função que cria uma nova lista vazia com um certo tamanho
@@ -16,6 +17,7 @@ OrdList *createOrdList(int size) {
     ordList->maxSize = size;
     ordList->size = 0;
     ordList->data = data;
+    ordList->ord = 0;
 
     return ordList;
 }
@@ -184,11 +186,19 @@ void *getDataOrdList(OrdList *ordList, int index) {
 int getOrdListSize(OrdList *ordList) {
     return ordList->size;
 }
+//função que verifica se uma lista está ordenada
+bool getOrdListOrd(OrdList *ordList) {
+    return ordList->ord;
+}
 //função que altera um elemento da lista dado um indice
 void setDataOrdList (OrdList *ordList, int index, void* data) {
     void *oldData = ordList->data[index];
     ordList->data[index] = data;
     free(oldData);
+}
+//função que altera o campo de uma lista que diz se ela está ou não ordenada
+void setOrdListOrd (OrdList *ordList, bool ord) {
+    ordList->ord = ord;
 }
 //função que imprime todos os elementos de uma lista, para efeitos de teste
 void printOrdList(OrdList *ordList, void (*printFunction)(void*)) {

@@ -26,19 +26,23 @@ void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void
 //inverte uma lista
 void reverseOrdList(OrdList* list);
 
-//obetem elemento da lista
+//obtem elemento da lista
 void *getDataOrdList(OrdList *ordList, int index);
 //obtem numero de elementos da lista
 int getOrdListSize(OrdList *ordList);
-//modifical elemento da lista
+//verifica de uma lista está ordenada
+bool getOrdListOrd(OrdList *ordList);
+//modifica elemento da lista
 void setDataOrdList (OrdList *ordList, int index, void* data);
+//função que altera o campo de uma lista que diz se ela está ou não ordenada
+void setOrdListOrd (OrdList *ordList, bool ord);
 
 //imprime todos os elementos da lista, para efeitos de testes
 void printOrdList(OrdList *ordList, void (*printFunction)(void*));
 
 //liberta espaço em memória da lista
 void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*));
-//liberta apenas espaço em memóra da lista
+//liberta apenas espaço em memória da lista
 void destroyOnlyOrdList(OrdList *list);
 //troca posição de dois elementos da lista
 void swap (OrdList *ordlist, int i, int j);

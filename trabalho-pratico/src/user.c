@@ -83,6 +83,7 @@ void sortUserList(void *data) {
     quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, 0);
     reverseOrdList(list);
     radixSortUserList(list);
+    setOrdListOrd(list, 1);
 }
 
 //gets
