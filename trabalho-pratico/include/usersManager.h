@@ -2,7 +2,6 @@
 #define _USERS_MANAGER_
 
 #include "user.h"
-#include "userId.h"
 #include "hashtable.h"
 #include "orderedList.h"
 
@@ -10,12 +9,9 @@ typedef struct usersManager UsersManager;
 //cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size);
 //adiciona um utilizador ao catálogo de utilizadores
-void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key);
-//void addUserIdToCatalog (UsersManager* usersManager, UserId* userId);
+void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog);
 //adiciona um utilizador à lista de utilizadores ordenada por nome do catálogo de utilizadores
 void addUserToCatalogList(UsersManager *usersManager, User *user);
-//ordena o catálogo de utilizadores
-void sortUserCatalog(UsersManager *usersManager);
 
 //gets
 User *getUserCatalog(UsersManager *usersManager, unsigned int key, char *id);

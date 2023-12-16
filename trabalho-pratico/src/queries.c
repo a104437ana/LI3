@@ -38,51 +38,51 @@ int getReservNights(Reservation* reservation){
 }
 
 //calcula o preço de uma reserva
-double getReservPrice(Reservation* reservation){
+double getReservPrice(Reservation* reservation, Hashtable *hotels){
      int ppn = getReservPricePerNight(reservation); //preço por noite
      int nnights = getReservNights(reservation); //número de noites
-     int cityTax = getReservCityTax(reservation); //taxa turística
+     int cityTax = getReservCityTax(reservation, hotels); //taxa turística
      double res = (ppn*nnights)+(((float)(ppn*nnights)/100)*cityTax);
      return res;
 }
 
 //devolve o dia de início de uma reserva ou de um voo
-int getBeginDay(void* data){
+int getBeginDay(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
   if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->day);
   else return (getReservBeginDay((Reservation *)res->result));
 }
 
 //devolve o mês de início de uma reserva ou de um voo
-int getBeginMonth(void* data){
+int getBeginMonth(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
   if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->month);
   else return (getReservBeginMonth((Reservation *)res->result));
 }
 
 //devolve o ano de início de uma reserva ou de um voo
-int getBeginYear(void* data){
+int getBeginYear(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
   if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->year);
   else return (getReservBeginYear((Reservation *)res->result));
 }
 
 //devolve o segundo de início de um voo
-int getBeginSeconds(void* data) {
+int getBeginSeconds(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
   if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->hour->seconds);
   else return (0);
 }
 
 //devolve o minuto de início de um voo
-int getBeginMinutes(void* data) {
+int getBeginMinutes(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
   if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->hour->minutes);
   else return (0);
 }
 
 //devolve a hora de início de um voo
-int getBeginHours(void* data) {
+int getBeginHours(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
   if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->hour->hours);
   else return (0);
@@ -165,7 +165,7 @@ int isPrefix(void *prefix, void *user) {
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
     if(same_prefix("Book", id) == 1){ //se o id for de uma reserva
       ResultQ1* result = malloc(sizeof(ResultQ1));
-      result->result = getReservCatalog(reservationsCatalog, hashFunction(id), id);
+      result->result = getReservCatalog(getHashtableReservCatalog(reservationsCatalog), hashFunction(id), id);
       if (result->result==NULL){ //se o id não existir
         free(result);
         return NULL;
@@ -208,7 +208,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     ResultsQ2 *results = malloc(sizeof(ResultsQ2));
     if (type==FLIGHTS){ //se for pedida a lista de voos
       OrdList* userList = getUserList(user);
-      if (getOrdListOrd(userList) == 0) sortUserList(user);
+      if (getOrdListOrd(userList) == 0) sortUserList(user, NULL);
       int listSize = getOrdListSize(userList);
       int nFlights = getNumberFlights(user);
       results->N = nFlights;
@@ -224,7 +224,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     }
     else if (type==RESERVATIONS){ //se for pedida a lista de reservas
       OrdList* userList = getUserList(user);
-      if (getOrdListOrd(userList) == 0) sortUserList(user);
+      if (getOrdListOrd(userList) == 0) sortUserList(user, NULL);
       int listSize = getOrdListSize(userList);
       int nReservations = getNumberReservations(user);
       results->N = nReservations;
@@ -240,7 +240,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     }
     else{ //se for pedida a lista de voos e reservas
       OrdList* userList = getUserList(user);
-      if (getOrdListOrd(userList) == 0) sortUserList(user);
+      if (getOrdListOrd(userList) == 0) sortUserList(user, NULL);
       int listSize = getOrdListSize(userList);
       results->N = listSize;
       results->results = malloc(sizeof(ResultQ2)*listSize);
@@ -254,7 +254,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
 
 //query 3 - calcula a avaliação média do hotel com o id passado como argumento, se existir
 double Q3(char *id, HotelsManager *hotelsCatalog) {
-  Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
+  Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
   if (hotel==NULL) return -1; //se o id não existir
   int numberClassifications = getOrdListSize(getHotelOrdList(hotel));
   double result = getHotelRatingsSum(hotel);
@@ -263,37 +263,43 @@ double Q3(char *id, HotelsManager *hotelsCatalog) {
 }
 
 //query 4 - devolve a lista de reservas do hotel com o id passado como argumento, se existir
-ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog){
-    Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
+ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog){
+    Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
     if (hotel==NULL) return NULL; //se o id não existir
     int i;
     ResultsQ4 *results = malloc(sizeof(ResultsQ4));
     OrdList *reservations = getHotelOrdList(hotel);
-    if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel);
+    if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel, getHashtableReservCatalog(reservationsCatalog));
     int listSize = getOrdListSize(reservations);
     results->N = listSize;
     results->results = malloc(sizeof(Reservation*)*listSize);
     for(i=0;i<listSize; i++){
-      Reservation * data = (Reservation *)getDataOrdList(reservations, i);
+      char *id = getDataOrdList(reservations, i);
+      unsigned int key = hashFunction(id);
+      Reservation * data = (Reservation *) getData(getHashtableReservCatalog(reservationsCatalog), key, id);
       results->results[listSize-i-1] = data; //coloca os dados na lista resposta do mais recente para o mais antigo
     }
     return results;
 }
 
 //quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
-int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog) {
-  Hotel *hotel = getHotelCatalog(hotelsCatalog, hashFunction(id), id);
+int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog) {
+  Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
   if (hotel==NULL) return -1; //se o hotel não existir
   OrdList *reservations = getHotelOrdList(hotel);
-  if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel);
+  if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel, getHashtableReservCatalog(reservationsCatalog));
   int size = getOrdListSize(reservations);
-  Reservation *reservation = getDataOrdList(reservations, 0);
+  char *id_reserv = getDataOrdList(reservations, 0);
+  unsigned int key = hashFunction(id_reserv);
+  Reservation *reservation = (Reservation *) getData(getHashtableReservCatalog(reservationsCatalog), key, id_reserv);
   Date *reservBegin = getReservBegin(reservation), *reservEnd = getReservEnd(reservation);
   int total = 0;
 
   for (int i=0; i<size && compareDates(reservBegin, end) >= 0; i++) { //enquanto dia limite maior ou igual a dia atual
     total += getReservPriceBetweenDates(reservation, begin, end, reservBegin, reservEnd);
-    reservation = getDataOrdList(reservations, i+1); //proxima reserva
+    id_reserv = getDataOrdList(reservations, i+1);
+    key = hashFunction(id_reserv);
+    reservation = (Reservation *) getData(getHashtableReservCatalog(reservationsCatalog), key, id_reserv); //proxima reserva
     reservBegin = getReservBegin(reservation); //dia inicio da reserva
     reservEnd = getReservEnd(reservation); //dia fim da reserva
   }

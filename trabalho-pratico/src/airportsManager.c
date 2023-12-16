@@ -14,15 +14,17 @@ AirportsManager *createAirportsCatalog(int size) {
     return airportsManager;
 }
 
-//adiciona um hotel ao catálogo de aeroportos
-void addAirportToCatalog(AirportsManager *airportsManager, Airport *airport, Flight *flight, unsigned int key) {
-    addFlightToAirport(airport, flight);
-    addHashtable(airportsManager->airports, key, airport, getAirportId(airport));
-}
-
-//ordena o catálogo de aeroportos
-void sortAirportCatalog(AirportsManager *airportsManager) {
-    sortOrdlistHashtable(airportsManager->airports, sortAirportFlightsByDepartureDate);
+//atualiza o catálogo de aeroportos
+void updateAirportCatalog(char *id, char *id_flight, AirportsManager *airportsCatalog) {
+    unsigned int key = hashFunction(id);
+    int existsAirport = existsData(airportsCatalog->airports, key, id); //verifica se o aeroporto já existe no catálogo de aeroportos
+    Airport *airport;
+    if (existsAirport == 0) { //caso não exista cria um novo aeroporto
+        airport = createAirport(id);
+        addHashtable(airportsCatalog->airports, key, airport, id); //adiciona o aeroporto ao catálogo dos aeroportos
+    } else //caso já exista
+        airport = (Airport*) getData(airportsCatalog->airports, key, id); //obtem apontador para o aeroporto do catálogo dos aeroporotos
+    addFlightToAirport(airport, id_flight); //adiciona o apontador do voo aos voos do aeroporto
 }
 
 //gets

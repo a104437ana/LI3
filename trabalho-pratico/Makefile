@@ -7,7 +7,7 @@ OBJFILES=src/parser.o src/dataset_validator.o src/orderedList.o src/utility.o sr
 all: programa-principal programa-testes
 
 programa-principal: src/programa-principal.o $(OBJFILES)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -g -o $@
 
 programa-testes: src/programa-testes.o $(OBJFILES)
 	$(CC) $(CFLAGS) $^ -o $@
@@ -16,10 +16,13 @@ src/programa-principal.o : src/programa-principal.c
 src/programa-testes.o : src/programa-testes.c
 
 $(OBJFILES): src/%.o : src/%.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+	$(CC) $(CFLAGS) -g -c $^ -o $@
 
 clean:
 	rm -f programa-principal programa-testes src/*.o
 
 clean_results:
 	rm -f Resultados/*.txt Resultados/*.csv
+
+clean_diffs:
+	rm -f ./diffs.txt ./diffs/*.txt

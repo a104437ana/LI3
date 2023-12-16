@@ -15,22 +15,14 @@ ReservationsManager *createReservsCatalog(int size) {
     return reservationsManager;
 }
 //função que adiciona uma reserva ao catálogo de reservas
-void addReservToCatalog(ReservationsManager *reservationsManager, Reservation *reservation, unsigned int key, HotelsManager *hotelsManager, UsersManager *usersManager) {
+void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog, UsersManager *usersCatalog, Hashtable *hotels) {
     //adiciona reserva ao catalogo de reservas
-    addHashtable(reservationsManager->reservations, key, reservation, getReservId(reservation));
-    //adiciona reserva à lista de reservas do hotel
-    //adiciona reserva à lista de reservas do utilizador
-    int userKey = getReservUserKey(reservation);
-    User *user = getUserCatalog(usersManager, userKey, getReservUserId(reservation));
-    addReservationToUser(user, reservation);
+    unsigned int key = hashFunction(id);
+    Reservation *reservation = createReservation(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification, usersCatalog, hotels);
+    addHashtable(reservationsCatalog->reservations, key, reservation, id);
 }
 
 //gets
-Reservation *getReservCatalog(ReservationsManager *reservationsManager, unsigned int key, char *id) {
-    Reservation *reservation = (Reservation *) getData(reservationsManager->reservations, key, id);
-    return reservation;
-}
-
 Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
     return reservationsManager->reservations;
 }

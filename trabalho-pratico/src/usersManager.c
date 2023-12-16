@@ -4,30 +4,27 @@
 
 struct usersManager {
     Hashtable *users;
-    //OrdList *usersId;
     OrdList *usersByName;
 };
 //função que cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager)); //aloca espaço em memória para a estrutura do catálogo
     usersManager->users = createHashtable(size); //cria uma hastable para os utilizadores
-    //usersManager->usersId = createOrdList(size);
     usersManager->usersByName = createOrdList(size); //cria uma lista para os utilizadores
     return usersManager;
 }
 //função que adiciona um utilizador ao catálogo de utilizadores
-void addUserToCatalog(UsersManager *usersManager, User *user, unsigned int key) {
-    addHashtable(usersManager->users, key, user, getUserId(user));
+void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = createUser(id, name, gender, country, passport, birth, accountCreation, accountStatus);
+    addHashtable(usersCatalog->users, key, user, id);
+    if (accountStatus)
+        addOrdList(usersCatalog->usersByName, user); //mudar para id
 }
 //função que adiciona um utilizador à lista de utilizadores ordenada por nome do catálogo de utilizadores
 void addUserToCatalogList(UsersManager *usersManager, User *user) {
     addOrdList(usersManager->usersByName, user);
 }
-/*
-void addUserIdToCatalog (UsersManager* usersManager, UserId* userId) {
-    addOrdList(usersManager->usersId, userId);
-}
-*/
 //função que compara o nome de dois utilizadores
 int compareUsersNames(void *user1, void *user2) {
     char *name1 = getName((User *) user1), *name2 = getName((User *) user2);
@@ -38,12 +35,6 @@ int compareUsersNames(void *user1, void *user2) {
     }
 
     return compare;
-}
-//função que ordena o catálogo de utilizadores
-void sortUserCatalog(UsersManager *usersManager) {
-    //sortOrdlistHashtable(usersManager->users, sortUserList); //ordena a lista de voos e reservas de todos os utilizadores
-    OrdList *usersByName = usersManager->usersByName;
-    quickSort(usersByName, 0, getOrdListSize(usersByName)-1, compareUsersNames, 0); //ordena os utilizadores por nome na lista de utilizadores
 }
 
 //gets

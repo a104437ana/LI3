@@ -8,10 +8,8 @@
 typedef struct airportsManager AirportsManager;
 //cria um novo catálogo de aeroportos
 AirportsManager *createAirportsCatalog(int size);
-//adiciona um hotel ao catálogo de aeroportos
-void addAirportToCatalog(AirportsManager *airportsManager, Airport *airport, Flight *flight, unsigned int key);
-//ordena o catálogo de aeroportos
-void sortAirportCatalog(AirportsManager *airportsManager);
+//atualiza o catálogo de aeroportos
+void updateAirportCatalog(char *id, char *id_flight, AirportsManager *airportsCatalog);
 
 //gets
 Airport *getAirportCatalog(AirportsManager *airportsManager, unsigned int key, char *id);

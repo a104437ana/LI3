@@ -14,7 +14,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
      if (command->n_args==0) return;
      else{
         ResultQ1* output = Q1(command->args[0],usersCatalog,reservationsCatalog,flightsCatalog);
-        printOutputQ1(command->format_flag, output,i);
+        printOutputQ1(command->format_flag, output,i,hotelsCatalog);
      }
    }
     else if (command->query_id==2){
@@ -47,8 +47,8 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else if (command->query_id==4){
      if (command->n_args==0) return;
      else{
-        ResultsQ4* output = Q4(command->args[0], hotelsCatalog);
-        printOutputQ4(command->format_flag, output, i);
+        ResultsQ4* output = Q4(command->args[0], hotelsCatalog, reservationsCatalog);
+        printOutputQ4(command->format_flag, output, i, hotelsCatalog);
      }
    }
     else if (command->query_id==5){
@@ -80,7 +80,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
      else{
         Date *begin = string_to_date(command->args[1]);
         Date *end = string_to_date(command->args[2]);
-        int output = Q8(command->args[0], begin, end, hotelsCatalog);
+        int output = Q8(command->args[0], begin, end, hotelsCatalog, reservationsCatalog);
         printOutputQ8(command->format_flag, output, i);
         destroyDate(begin);
         destroyDate(end);
@@ -144,11 +144,16 @@ Command* parseCommandLine (char* line){
 }
 
 //processa o ficheiro de comandos
-void parseCommandFile (char* name,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog){
+void parseCommandFile (char* name,Catalogs *catalogs){
  char* line = NULL;
  ssize_t read;
  size_t len;
  int i = 1;
+ UsersManager *usersCatalog = getUsersCatalog(catalogs);
+ FlightsManager *flightsCatalog = getFlightsCatalog(catalogs);
+ ReservationsManager *reservationsCatalog = getReservationsCatalog(catalogs);
+ HotelsManager *hotelsCatalog = getHotelsCatalog(catalogs);
+// AirportsManager *airportsCatalog = getAirportsCatalog(catalogs);
 
  FILE* file = fopen(name, "r");
     if (file != NULL) {

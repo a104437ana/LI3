@@ -31,7 +31,7 @@ void *getData(Hashtable *hashtable, unsigned int key, char *id);
 //modifica elemento da hashtable
 void setData(Hashtable *hashtable, unsigned int key, void *data, char *id);
 //ordena um parametro de todos os elementos da hashtable
-void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*));
+void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*,Hashtable*), Hashtable *lookupTable);
 
 //para efeitos de teste
 //imprime todos os elemntos da hashtable

@@ -3,17 +3,18 @@
 
 #include "utility.h"
 #include "reservation.h"
+#include "hashtable.h"
 #include "orderedList.h"
 
 #define HOTEL_RESERVATIONS_INI_SIZE 100
 
 typedef struct hotel Hotel;
 //cria um novo hotel
-Hotel *createHotel(char *id, char *name, char stars, /*char *address,*/ int cityTax);
+Hotel *createHotel(char *id, char *name, char stars, int cityTax);
 //adiciona reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, void *reservation);
+void addReservationToHotel(Hotel *hotel, char *id_reserv);
 //ordena as reservas do hotel
-void sortHotelReservationsByDate(void *hotel);
+void sortHotelReservationsByDate(void *hotel, Hashtable *lookupTable);
 
 //obtem a lista de reservas do hotel
 OrdList *getHotelOrdList(Hotel *hotel);
@@ -21,13 +22,13 @@ OrdList *getHotelOrdList(Hotel *hotel);
 char *getHotelReservation(Hotel *hotel, unsigned int key);
 
 //gets
+Hotel *getHotelCatalog(Hashtable *hotels, unsigned int key, char *id);
 char *getHotelId(Hotel *hotel);
-char *getHotelName(Hotel *hotel);
-char getHotelStars(Hotel *hotel);
+char *getHotelName(char *id, Hashtable *hotels);
+char getHotelStars(char *id, Hashtable *hotels);
 double getHotelRatingsSum(Hotel *hotel);
 int getHotelNumberRatings(Hotel *hotel);
-//char *getHotelAddress(Hotel *hotel);
-int getHotelCityTax(Hotel *hotel);
+int getHotelCityTax(char *id, Hashtable *hotels);
 //sets
 void setHId(Hotel *hotel, char *id);
 void setHName(Hotel *hotel, char *name);

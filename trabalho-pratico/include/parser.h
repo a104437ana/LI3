@@ -4,7 +4,7 @@
 #include "utility.h"
 #include "dataset_validator.h"
 
-void parse_file(char* file_path, char* error_file_path, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog, AirportsManager *airportsCatalog, PassengersCounter* passengers_counter);
-void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog, AirportsManager *airportsCatalog);
+void parse_file(char* file_path, char* error_file_path, Catalogs *catalogs, PassengersCounter* passengers_counter);
+void parse_all_files (char* directory, Catalogs *catalogs);
 
 #endif

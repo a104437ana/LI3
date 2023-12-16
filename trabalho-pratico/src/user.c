@@ -17,13 +17,9 @@ struct user {
     char *name;
     Gender gender;
     char country[3];
-    //char *address;
     char *passport;
     Date *birth;
-    //char *email;
-    //PhoneNumber *phoneNumber;
     Date *accountCreation;
-    //char *paymentMethod;
     bool accounStatus;          
     OrdList *flightsReservationsByDate;      
     double totalSpent;
@@ -31,21 +27,17 @@ struct user {
     int nReservations;
 };
 //função que cria um novo utilizador
-User *createUser(char *id, char *name, Gender gender, char country[3], /*char *address,*/ char *passport, Date *birth, /*char *email, PhoneNumber *phoneNumber,*/ Date *accountCreation, /*char *paymentMethod,*/ bool accountStatus) {
+User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus) {
     User *user = malloc(sizeof(User)); //aloca espaço a estrutura do utilizador
     user->id = strdup(id); //preenche os diferentes campos com a informação dada
     user->name = strdup(name);
     user->gender = gender;
     memcpy(user->country, country, 3);
-//    user->country[0] = country[0];
-//    user->country[1] = country[1];
-    //user->address = strdup(address);
     user->passport = strdup(passport);
-    user->birth = birth;
-    //user->email = strdup(email);
-    //user->phoneNumber = phoneNumber;
-    user->accountCreation = accountCreation;
-    //user->paymentMethod = strdup(paymentMethod);
+    Date *birthDate = string_to_date(birth);
+    user->birth = birthDate;
+    Date *accountCreationDate = string_to_date(accountCreation);
+    user->accountCreation = accountCreationDate;
     user->accounStatus = accountStatus;
     user->totalSpent = 0;
     user->flightsReservationsByDate = createOrdList(USER_LIST_INI_SIZE); //cria a lista de voos e reservas do utilizador
@@ -55,13 +47,13 @@ User *createUser(char *id, char *name, Gender gender, char country[3], /*char *a
     return user;
 }
 //função que adiciona uma reserva à lista de reservas de um utilizador
-void addReservationToUser(User *user, void *reservation) {
+void addReservationToUser(User *user, void *reservation, Hashtable *hotels) {
     ResultQ2* res = malloc(sizeof(ResultQ2));
     res->resultType=RESERVATIONS;
     res->result = reservation;
     addOrdList(user->flightsReservationsByDate, res);
     user->nReservations++;
-    user->totalSpent+=getReservPrice((Reservation*)reservation);
+    user->totalSpent+=getReservPrice((Reservation*)reservation, hotels);
 }
 //função que adiciona um voo à lista de voos de um utilizador
 void addFlightToUser(User *user, void *flight) {
@@ -77,12 +69,12 @@ int compareFlightReservsIds(void *data1, void *data2) {
     return strcoll(id1, id2);
 }
 //função que ordena a lista de voos e reservas de um utilizador
-void sortUserList(void *data) {
+void sortUserList(void *data, Hashtable *lookupTable) {
     User *user = (User *) data;
     OrdList *list = user->flightsReservationsByDate;
     quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, 0);
     reverseOrdList(list);
-    radixSortUserList(list);
+    radixSortUserList(list, lookupTable);
     setOrdListOrd(list, 1);
 }
 

@@ -94,13 +94,13 @@ int getAge(User* user);
 int getNumberPassengers(Flight* flight);
 int getDelay(Flight* flight);
 int getReservNights(Reservation* reservation);
-double getReservPrice(Reservation* reservation);
-int getBeginDay(void* data);
-int getBeginMonth(void* data);
-int getBeginYear(void* data);
-int getBeginSeconds(void* data);
-int getBeginMinutes(void* data);
-int getBeginHours(void* data);
+double getReservPrice(Reservation* reservation, Hashtable *hotels);
+int getBeginDay(void* data, Hashtable *lookupTable);
+int getBeginMonth(void* data, Hashtable *lookupTable);
+int getBeginYear(void* data, Hashtable *lookupTable);
+int getBeginSeconds(void* data, Hashtable *lookupTable);
+int getBeginMinutes(void* data, Hashtable *lookupTable);
+int getBeginHours(void* data, Hashtable *lookupTable);
 char * getIdResultQ2(ResultQ2* data);
 void destroyResultQ2(void * data);
 
@@ -110,7 +110,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog);
 
 double Q3(char *id, HotelsManager *hotelsCatalog);
 
-ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog);
+ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog);
 
 ResultsQ5* Q5(char *name, Date begin, Date end);
 
@@ -118,7 +118,7 @@ ResultsQ6* Q6(int year, int N);
 
 ResultsQ7* Q7(int N);
 
-int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog);
+int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog);
 
 int same_prefix (char* prefix, char* name);
 //int bigger_user (char* id1, char* id2, char* name1, char* name2);

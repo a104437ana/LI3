@@ -464,7 +464,7 @@ número de estrelas do hotel, percentagem do imposto da cidade, morada, data de 
 diz se inclui pequeno-almoço ou não, a classificação atribuída pelo utilizador e dado o catálogo de utilizadores válidos. Esta 
 função verifica se cada um dos parametros listados anteriormente são válidos e se o utilizador da reserva existe no catálogo de 
 utilizadores válidos. Se sim, retorna 1. Se não, retorna 0.*/
-int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating, UsersManager* usersCatalog) {
+int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char* hotel_name, char* hotel_stars, char* city_tax, char* address, char* begin_date, char* end_date, char* price_per_night, char* includes_breakfast, char* rating, Catalogs* catalogs) {
     int valid = 0;
     if (length_bigger_than_zero(id_reservation)) {
         if (length_bigger_than_zero(id_user)) { 
@@ -479,7 +479,7 @@ int valid_reservation (char* id_reservation, char* id_user, char* id_hotel, char
                                             if (valid_includes_breakfast(includes_breakfast)) {
                                                 if (valid_rating(rating)) {
                                                     if (valid_par_of_dates(begin_date,end_date)) {
-                                                        if (existsUser(usersCatalog,id_user)) valid = 1;
+                                                        if (userExists(id_user,catalogs)) valid = 1;
                                                     }
                                                 }
                                             }
@@ -605,7 +605,7 @@ logo não fazemos nada com ela. Depois iremos ler as próximas linhas. A cada li
 não, não iremos fazer nada. Se existir, iremos verificar se o id de voo já tem estrutura na hashtable. Se não, iremos inicializar a estrutura
 e adicionamos um passageiro. Se já existia, adicionamos mais um passageiro a estrutura já existente. Por fim, libertamos a memória alocada e 
 fechamos o ficheiro. E no final, conseguimos contar todos os passageiros de cada voo.*/
-void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCounter* passengers_counter) {
+void count_passengers (char* directory, Catalogs *catalogs, PassengersCounter* passengers_counter) {
     int size = strlen(directory) + 16;
     char* file_path = malloc(size);
     strcpy(file_path, directory);
@@ -626,7 +626,7 @@ void count_passengers (char* directory, UsersManager* usersCatalog, PassengersCo
                 token[0] = strsep(&line_pointer,";");
                 token[1] = strsep(&line_pointer,";");
                 remove_new_line(token[1]);
-                if (existsUser(usersCatalog,token[1])) {
+                if (userExists(token[1],catalogs)) {
                     if (!(existsPassengersPerFlight(passengers_counter,token[0]))) {
                         PassengersPerFlight* passengers_per_flight = createPassengersPerFlight();
                         addPassengersPerFlight_ToPassengersCounter(passengers_counter,passengers_per_flight,hashFunction(token[0]),token[0]);
@@ -704,10 +704,10 @@ int valid_flight (char* id_flight, char* airline, char* plane_model, char* total
 /* A função valid_passenger verifica se um passageiro é válido, dado o id de voo do passageiro, o id de utilizador do passageiro,
 o catálogo de utilizadores válidos e o catálogo de voos válidos. A função verifica se o utilizador existe no catálogo de utilizadores válidos e se o voo
 existe no catálogo de voos válidos. Se sim, o passageiro é válido e a função retorna 1. Se não, o passageiro é inválido e a função retorna 0. */
-int valid_passenger (char* id_flight, char* id_user, UsersManager* usersCatalog, FlightsManager* flightsCatalog) {
+int valid_passenger (char* id_flight, char* id_user, Catalogs* catalogs) {
     int valid = 0;
-    if (existsUser(usersCatalog,id_user)) {
-        if (existsFlight(flightsCatalog,id_flight)) valid = 1;
+    if (userExists(id_user,catalogs)) {
+        if (flightExists(id_flight,catalogs)) valid = 1;
     }
     return valid;
 }

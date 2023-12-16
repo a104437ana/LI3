@@ -130,14 +130,14 @@ void setData(Hashtable *hashtable, unsigned int key, void *data, char *id) {
     free(oldData);
 }
 //função que ordena um parametro de todos os elementos de uma hashtable dada uma função de ordenação
-void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*)) {
+void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*,Hashtable*), Hashtable *lookupTable) {
     HashtableNode **node = hashtable->node; //todos os nodos da hashtable
     int size = hashtable->size; //tamanho da hashtable
     HashtableNode *iNode; //nodo de indice i da hashtable
     for (int i=0; i<size; i++) { //para cada indice da hashtable
         iNode = node[i];
         while (iNode != NULL) { //percorre todos os nodos
-            sortFunction(iNode->data); //e aplica a função de ordenação a cada elemento da hashtable
+            sortFunction(iNode->data, lookupTable); //e aplica a função de ordenação a cada elemento da hashtable
             iNode = iNode->next;
         }
     }

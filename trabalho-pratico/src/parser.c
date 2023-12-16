@@ -10,7 +10,7 @@ Depois iremos ler as próximas linhas. A cada linha que lemos, iremos pegar nela
 na lista criada no início da função. Depois, utilizando as várias partes da linha, iremos verificar se uma determinada identidade (que depende do tipo de ficheiro) 
 é válida. Se for iremos transformar todas estas strings num tipo adequado e passar esses parametros para a estrutura de dados. Se for inválido, então iremos 
 pegar na linha não modificada e iremos acrescenta-la ao ficheiro de erros. Por fim, libertamos a memória alocada e fechamos o ficheiro. */
-void parse_file (char* file_path, char* error_file_path, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog, AirportsManager *airportsCatalog, PassengersCounter* passengers_counter) {
+void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, PassengersCounter* passengers_counter) {
     if (exist_file(file_path)) {
         char type_file = error_file_path[11];
         int size;
@@ -41,49 +41,40 @@ void parse_file (char* file_path, char* error_file_path, UsersManager* usersCata
                 switch (type_file) {
                     //users
                     case 'u' : remove_new_line(token[11]);
+                               //              id      name     email    phone_n  birth    gender   passport country  address  ac_creat pay_m     ac_status
                                if (valid_user(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[11])) {
                                     int gender = 0;
-                                    if (token[5][0] == 'F' || token[5][0] == 'f') gender = 1;
-                                    Date* birth = string_to_date(token[4]);
-                                    Date* accountCreation = string_to_date(token[9]);
                                     int accountStatus = 0;
-                                    if (token[11][0] == 'a' || token[11][0] == 'A') {
-                                        accountStatus = 1;
-                                    }
-                                    User* user = createUser(token[0],token[1],gender,token[7],token[6],birth,accountCreation,accountStatus);
-                                    addUserToCatalog(usersCatalog,user,hashFunction(token[0]));
-                                    if (accountStatus) addUserToCatalogList(usersCatalog,user);
+                                    if (token[5][0] == 'F' || token[5][0] == 'f') gender = 1;
+                                    if (token[11][0] == 'a' || token[11][0] == 'A') accountStatus = 1;
+                                    addUser(token[0],token[1],gender,token[7],token[6],token[4],token[9],accountStatus,catalogs);
                                }
                                else add_invalid_line_to_error_file(error_file_path,line);
                                break;
-                    //reservations
-                    case 'r' : if (valid_reservation(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[12],usersCatalog)) {
+                    //reservations                    id      id_user  id_hotel h_name   h_stars  cityTax  address  begin    end      pricePN  inc_break userClass
+                    case 'r' : if (valid_reservation(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[12],catalogs)) {
                                     int cityTax = string_to_int(token[5]);
                                     int pricePerNight = atoi(token[9]);
                                     int includesBreakfast = 0;
+                                    char hotelStars = token[4][0];
+                                    char userClassification = token[12][0];
                                     if (token[10][0] == 't' || token[10][0] == 'T' || token[10][0] == '1') includesBreakfast = 1;
-                                    Date* begin = string_to_date(token[7]);
-                                    Date* end = string_to_date(token[8]);
-                                    Reservation* reservation = createReservation(token[0],token[1],token[2],token[3],token[4][0],cityTax,begin,end,pricePerNight,includesBreakfast,token[12][0],getHashtableHotelsCatalog(hotelsCatalog));
-                                    addReservToCatalog(reservationsCatalog,reservation,hashFunction(token[0]),hotelsCatalog,usersCatalog);
+                                    addHotel(token[2],token[3],hotelStars,cityTax,userClassification,token[0],catalogs);
+                                    addReservation(token[0],token[1],token[2],token[7],token[8],pricePerNight,includesBreakfast,userClassification,catalogs);
                                }
                                else add_invalid_line_to_error_file(error_file_path,line);
                                break;
-                    //flights
+                    //flights                   id       airline  airplane t_seats  origin   dest     s_depart s_arriv  r_depart r_arriv  pilot     copilot
                     case 'f' : if (valid_flight(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[11],passengers_counter)) {   
-                                    Date* scheduleDeparture = string_to_date_hours(token[6]);
-                                    Date* scheduleArrival = string_to_date_hours(token[7]);
-                                    Date* realDeparture = string_to_date_hours(token[8]);
-                                    Date* realArrival = string_to_date_hours(token[9]);
-                                    Flight *flight = createFlight(token[0],token[1],token[2],token[4],token[5],scheduleDeparture,scheduleArrival,realDeparture,realArrival,getHashtableAirportsCatalog(airportsCatalog));
-                                    addFlightToCatalog(flightsCatalog,flight,hashFunction(token[0]));
+                                    addFlight(token[0],token[1],token[2],token[4],token[5],token[6],token[7],token[8],token[9],catalogs);
+                                    addAirport(token[4],token[0],catalogs);
                                }
                                else add_invalid_line_to_error_file(error_file_path,line);
                                break;
                     //passengers
                     case 'p' : remove_new_line(token[1]);
-                               if (valid_passenger(token[0],token[1],usersCatalog,flightsCatalog)) {
-                                    addPassengerToCatalog(flightsCatalog,hashFunction(token[0]),usersCatalog,hashFunction(token[1]),token[0],token[1]);
+                               if (valid_passenger(token[0],token[1],catalogs)) {
+                                    addPassenger(token[0], token[1], catalogs);
                                }
                                else add_invalid_line_to_error_file(error_file_path,line);
                                break;
@@ -103,7 +94,7 @@ hashtable com os números de passageiros por id de voo e é chamada uma função
 função serão usados para verificar se os voos são válidos e para assim sabermos se devemos guardar o voo na estrutura de dados ou se devemos 
 coloca-lo no ficheiro de erros. Após a utilização destes resultados para validar os voos, destruimos a hashtable. Para efetivamente ler e
 fazer o parsing de cada ficheiro, chamamos a função parse_file.*/
-void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsManager* reservationsCatalog, HotelsManager* hotelsCatalog, FlightsManager* flightsCatalog, AirportsManager *airportsCatalog) {
+void parse_all_files (char* directory, Catalogs *catalogs) {
 
         //inicialização de variáveis para medição de tempo
         struct timespec start, end, interm;
@@ -119,32 +110,32 @@ void parse_all_files (char* directory, UsersManager* usersCatalog, ReservationsM
     strcpy(file_path,directory);
     strcat(file_path,"/users.csv");
     strcpy(error_file_path,"Resultados/users_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,catalogs,passengers_counter);
         clock_gettime(CLOCK_REALTIME, &interm);
         use = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
 
     strcpy(file_path,directory);
     strcat(file_path,"/reservations.csv");
     strcpy(error_file_path,"Resultados/reservations_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,catalogs,passengers_counter);
         clock_gettime(CLOCK_REALTIME, &end);
         res = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
-    count_passengers(directory,usersCatalog,passengers_counter);
+    count_passengers(directory,catalogs,passengers_counter);
         clock_gettime(CLOCK_REALTIME, &interm);
         passc = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     strcpy(file_path,directory);
     strcat(file_path,"/flights.csv");
     strcpy(error_file_path,"Resultados/flights_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,catalogs,passengers_counter);
         clock_gettime(CLOCK_REALTIME, &end);
         fli = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
     strcpy(file_path,directory);
     strcat(file_path,"/passengers.csv");
     strcpy(error_file_path,"Resultados/passengers_errors.csv");
-    parse_file(file_path,error_file_path,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,airportsCatalog,passengers_counter);
+    parse_file(file_path,error_file_path,catalogs,passengers_counter);
         clock_gettime(CLOCK_REALTIME, &interm);
         pass = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 

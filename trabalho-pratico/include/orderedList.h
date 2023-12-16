@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utility.h"
+#include "hashtable.h"
 
 typedef struct ordList OrdList;
 //cria uma nova lista
@@ -17,10 +18,10 @@ void removeOrdList(OrdList *ordList, unsigned int key);
 
 //ordenação
 //radixsorts
-void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset);
-void radixSortReservDate(OrdList *list);
-void radixSortFlightDate(OrdList *list);
-void radixSortUserList(OrdList *list);
+void radixSort(OrdList *list, int (*getParameterFunction)(void*,Hashtable*), Hashtable *lookupTable, int interval, int offset);
+void radixSortReservDate(OrdList *list, Hashtable *lookupTable);
+void radixSortFlightDate(OrdList *list, Hashtable *lookupTable);
+void radixSortUserList(OrdList *list, Hashtable *lookupTable);
 //quicksorts
 void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*), int equal);
 //inverte uma lista

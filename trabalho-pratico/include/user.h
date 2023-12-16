@@ -13,13 +13,13 @@
 //} Gender;
 typedef struct user User;
 //cria um novo utilizador
-User *createUser(char *id, char *name, Gender gender, char country[3], /*char *address,*/ char *passport, Date *birth, /*char *email, PhoneNumber *phoneNumber,*/ Date *accountCreation, /*char *paymentMethod,*/ bool accountStatus);
+User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus);
 //adiciona uma reserva ao utilizador
-void addReservationToUser(User *user, void *reservation);
+void addReservationToUser(User *user, void *reservation, Hashtable *hotels);
 //adiciona um voo ao utilizador
 void addFlightToUser(User *user, void *flight);
 //ordena a lista de voos e reservas de um utilizador
-void sortUserList(void *data);
+void sortUserList(void *data, Hashtable *lookupTable);
 //compara o nome de dois utilizadores
 int compareUsersNames(void *user1, void *user2);
 

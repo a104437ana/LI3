@@ -1,8 +1,4 @@
 #include "orderedList.h"
-#include "utility.h"
-#include "reservation.h"
-#include "flight.h"
-#include "queries.h"
 
 struct ordList {
     int maxSize;
@@ -70,7 +66,7 @@ void removeOrdList(OrdList *ordList, unsigned int key) {
 }
 //radixsort ordena uma lista por valores que estejam num intervalo conhecido
 //recebe uma função que devolve o valor do parametro para o qual queremos ordenar os elementos
-void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, int offset) {
+void radixSort(OrdList *list, int (*getParameterFunction)(void*,Hashtable*), Hashtable *lookupTable, int interval, int offset) {
     int size = list->size;
     void **newData = malloc(sizeof(void *) * size); //cria nova lista que irá ficar ordenada
     void *data;
@@ -79,13 +75,13 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
     for (j=0; j<size; j++) {
         //conta ocorrencias de cada parametro no indice correspondente ao valor desse parametro
         data = list->data[j]; //obtem elemento da lista
-        i = (*getParameterFunction)(data) - offset; //obtem valor do parametro a considerar desse elemento
+        i = (*getParameterFunction)(data, lookupTable) - offset; //obtem valor do parametro a considerar desse elemento
         count[i] += 1; //incrementa a contagem desse valor no array
     }
     for (i=1; i<=interval; i++) count[i] += count[i-1]; //incrementa todas as posições com o valor da posição anterior
     for (j=size-1; j>=0; j--) { //começando no fim da lista e até chegar ao início
         data = list->data[j]; //obtem elemento da lista
-        i = (*getParameterFunction)(data) - offset; //obtem o valor do parametro
+        i = (*getParameterFunction)(data, lookupTable) - offset; //obtem o valor do parametro
         //introduz o elemento na nova lista na posição do numero de contagens do valor do parametro desse elemento menos um
         newData[count[i]-1] = data;
         count[i] -= 1; //decrementa o numero de contagens desse elemento
@@ -94,32 +90,6 @@ void radixSort(OrdList *list, int (*getParameterFunction)(void*), int interval, 
     list->data = newData; //retorna uma nova lista ordenada pelo valor do parametro dado
 }
 
-//ordena reservas por data
-void radixSortReservDate(OrdList *list) {
-    radixSort(list, getReservBeginDay, 31, 0);
-    radixSort(list, getReservBeginMonth, 12, 0);
-    radixSort(list, getReservBeginYear, N_YEARS, BEGIN_YEAR);
-}
-
-//ordena voos por data
-void radixSortFlightDate(OrdList *list) {
-    radixSort(list, getFlightScheduleDepartureSeconds, 60, 0);
-    radixSort(list, getFlightScheduleDepartureMinutes, 60, 0);
-    radixSort(list, getFlightScheduleDepartureHours, 24, 0);
-    radixSort(list, getFlightScheduleDepartureDay, 31, 0);
-    radixSort(list, getFlightScheduleDepartureMonth, 12, 0);
-    radixSort(list, getFlightScheduleDepartureYear, N_YEARS, BEGIN_YEAR);
-}
-
-//ordena reservas e voos por data
-void radixSortUserList(OrdList *list) {
-    radixSort(list, getBeginSeconds, 60, 0);
-    radixSort(list, getBeginMinutes, 60, 0);
-    radixSort(list, getBeginHours, 24, 0);
-    radixSort(list, getBeginDay, 31, 0);
-    radixSort(list, getBeginMonth, 12, 0);
-    radixSort(list, getBeginYear, N_YEARS, BEGIN_YEAR);
-}
 //função que troca duas posições de uma lista
 void swapOrdList(OrdList *list, int i, int j) {
     void *aux = list->data[i];

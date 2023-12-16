@@ -10,10 +10,9 @@ typedef struct reservationsManager ReservationsManager;
 //cria um novo catálogo de reservas
 ReservationsManager *createReservsCatalog(int size);
 //adiciona uma reserva ao catálogo de reservas
-void addReservToCatalog(ReservationsManager *reservationsManager, Reservation *reservation, unsigned int key, HotelsManager *hotelsManager, UsersManager *usersManager);
+void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog, UsersManager *usersCatalog, Hashtable *hotels);
 
 //gets
-Reservation *getReservCatalog(ReservationsManager *reservationsManager, unsigned int key, char *id);
 Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
 
 //imprime o catálogo de reservas

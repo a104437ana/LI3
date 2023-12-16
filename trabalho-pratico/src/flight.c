@@ -10,49 +10,30 @@ struct flight {
     char *id;
     char *airline;
     char *airplane;
-    //int totalSeats;
     char origin[4];
     char destination[4];
     Date *scheduleDeparture;
     Date *scheduleArrival;
     Date *realDeparture;
     Date *realArrival;
-    //char *pilot;
-    //char *copilot;
-    //char *notes;
-    OrdList *passengers;
+    OrdList *passengers; //não necessário apenas número de passageiros
 };
 //função que cria um novo voo
-Flight *createFlight(char *id, char *airline, char *airplane, /*int totalSeats,*/ char origin[4], char destination[4], Date *scheduleDeparture, Date *scheduleArrival, Date *realDeparture, Date *realArrival/*, char *pilot, char *copilot, char *notes*/, Hashtable *airports) {
+Flight *createFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival) {
     Flight *flight = malloc(sizeof(Flight));
     flight->id = strdup(id);
     flight->airline = strdup(airline);
     flight->airplane = strdup(airplane);
-    //verifica se existe o aeroporto ou se cria um novo
-    unsigned int airportKey = hashFunction(origin);
-    int existsAirport = existsData(airports, airportKey, origin); //verifica se o aeroporto já existe no catálogo de aeroportos
-    Airport *airport;
-    if (existsAirport == 0) { //caso não exista cria um novo aeroporto
-        airport = createAirport(origin);
-        addHashtable(airports, airportKey, airport, origin); //adiciona o hotel ao catálogo dos aeroportos
-    } else //caso já exista
-        airport = (Airport*) getData(airports, airportKey, origin); //obtem apontador para o aeroporto do catálogo dos aeroporotos
-    addFlightToAirport(airport, flight); //adiciona o apontador do voo aos voos do aeroporto
-    flight->origin[0] = origin[0];
-    flight->origin[1] = origin[1];
-    flight->origin[2] = origin[2];
-    flight->origin[3] = origin[3];
-    flight->destination[0] = destination[0];
-    flight->destination[1] = destination[1];
-    flight->destination[2] = destination[2];
-    flight->destination[3] = origin[3];
-    flight->scheduleDeparture = scheduleDeparture;
-    flight->scheduleArrival = scheduleArrival;
-    flight->realDeparture = realDeparture;
-    flight->realArrival = realArrival;
-    //flight->pilot = strdup(pilot);
-    //flight->copilot = strdup(copilot);
-    //flight->notes = strdup(notes);
+    memcpy(flight->origin, origin, 4);
+    memcpy(flight->destination, destination, 4);
+    Date *scheduleDepartureDate = string_to_date_hours(scheduleDeparture);
+    Date *scheduleArrivalDate = string_to_date_hours(scheduleArrival);
+    Date *realDepartureDate = string_to_date_hours(realDeparture);
+    Date *realArrivalDate = string_to_date_hours(realArrival);
+    flight->scheduleDeparture = scheduleDepartureDate;
+    flight->scheduleArrival = scheduleArrivalDate;
+    flight->realDeparture = realDepartureDate;
+    flight->realArrival = realArrivalDate;
     flight->passengers = createOrdList(PASSENGER_LIST_INI_SIZE); //cria uma lista de passageiros desse voo
 
     return flight;
@@ -70,11 +51,7 @@ char *getFlightAirline(Flight *flight) {
 char *getFlightAirplane(Flight *flight) {
     return flight->airplane; //falta encapsulamento
 }
-/*
-int getFlightTotalSeats(Flight *flight) {
-    return flight->totalSeats;
-}
-*/
+
 char *getFlightOrigin(Flight *flight) {
     char *origin = malloc(sizeof(char) * 4);
     memcpy(origin, flight->origin, 4);
@@ -103,28 +80,40 @@ Date *getFlightRealArrival(Flight *flight) {
     return flight->realArrival;
 }
 
-int getFlightScheduleDepartureDay(void *flight) {
-    return ((Flight *) flight)->scheduleDeparture->day;
+int getFlightScheduleDepartureDay(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Flight *flight = getData(lookupTable, key, id);
+    return flight->scheduleDeparture->day;
 }
 
-int getFlightScheduleDepartureMonth(void *flight) {
-    return ((Flight *) flight)->scheduleDeparture->month;
+int getFlightScheduleDepartureMonth(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Flight *flight = getData(lookupTable, key, id);
+    return flight->scheduleDeparture->month;
 }
 
-int getFlightScheduleDepartureYear(void *flight) {
-    return ((Flight *) flight)->scheduleDeparture->year;
+int getFlightScheduleDepartureYear(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Flight *flight = getData(lookupTable, key, id);
+    return flight->scheduleDeparture->year;
 }
 
-int getFlightScheduleDepartureSeconds(void *flight) {
-    return ((Flight *) flight)->scheduleDeparture->hour->seconds;
+int getFlightScheduleDepartureSeconds(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Flight *flight = getData(lookupTable, key, id);
+    return flight->scheduleDeparture->hour->seconds;
 }
 
-int getFlightScheduleDepartureMinutes(void *flight) {
-    return ((Flight *) flight)->scheduleDeparture->hour->minutes;
+int getFlightScheduleDepartureMinutes(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Flight *flight = getData(lookupTable, key, id);
+    return flight->scheduleDeparture->hour->minutes;
 }
 
-int getFlightScheduleDepartureHours(void *flight) {
-    return ((Flight *) flight)->scheduleDeparture->hour->hours;
+int getFlightScheduleDepartureHours(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Flight *flight = getData(lookupTable, key, id);
+    return flight->scheduleDeparture->hour->hours;
 }
 /*
 char *getFlightPilot(Flight *flight) {

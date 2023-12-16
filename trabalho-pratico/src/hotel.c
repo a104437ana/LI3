@@ -2,24 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hotel.h"
-#include "reservation.h"
-#include "orderedList.h"
-#include "utility.h"
 
 struct hotel {
     char *id;
     char *name;
     char stars;
-    //char *address;
     int cityTax;
     OrdList *reservationsByDate;
     double ratingsSum;
     int numberRatings;
 };
 //função que cria um novo hotel
-Hotel *createHotel(char *id, char *name, char stars, /*char *address,*/ int cityTax) {
+Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     Hotel *hotel = malloc(sizeof(Hotel)); //aloca espaço em memória para o hotel
-    //hotel->address = strdup(address); //address desaparece
     hotel->id = strdup(id);
     hotel->name = strdup(name);
     hotel->stars = stars;
@@ -31,22 +26,22 @@ Hotel *createHotel(char *id, char *name, char stars, /*char *address,*/ int city
     return hotel;
 }
 //função que adiciona uma reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, void *reservation) {
-    addOrdList(hotel->reservationsByDate, reservation);
+void addReservationToHotel(Hotel *hotel, char *id_reserv) {
+    addOrdList(hotel->reservationsByDate, strdup(id_reserv));
 }
 
 //função que compara os ids de duas reservas
-int compareReservsIds(void *reserv1, void *reserv2) {
-    char *id1 = getReservId((Reservation *) reserv1), *id2 = getReservId((Reservation *) reserv2);
+int compareReservsIds(void *id1, void *id2) {
+//    char *id1 = getReservId((Reservation *) reserv1), *id2 = getReservId((Reservation *) reserv2);
     return strcoll(id1, id2);
 }
 //função que ordena a lista de reservas de um hotel
-void sortHotelReservationsByDate(void *hotel) {
+void sortHotelReservationsByDate(void *hotel, Hashtable *lookupTable) {
     OrdList *reservationsByDate = ((Hotel *) hotel)->reservationsByDate; //obtem lista de reservas
     //ordena as reservas por ids
     quickSort(reservationsByDate, 0, getOrdListSize(reservationsByDate)-1, compareReservsIds, 0);
     reverseOrdList(reservationsByDate); //inverte a lista
-    radixSortReservDate(reservationsByDate); //ordena as reservas por data
+    radixSortReservDate(reservationsByDate, lookupTable); //ordena as reservas por data
     setOrdListOrd(reservationsByDate, 1);
 }
 //função que retorn a lista de reservas de um hotel
@@ -60,15 +55,23 @@ char *getHotelReservation(Hotel *hotel, unsigned int key) {
 }
 
 //gets dos campos do hotel
+Hotel *getHotelCatalog(Hashtable *hotels, unsigned int key, char *id) {
+    Hotel *hotel = (Hotel *) getData(hotels, key, id);
+    return hotel;
+}
 char *getHotelId(Hotel *hotel) {
     return hotel->id; //falta encapsulamento
 }
 
-char *getHotelName(Hotel *hotel) {
+char *getHotelName(char *id, Hashtable *hotels) {
+    unsigned int key = hashFunction(id);
+    Hotel *hotel = getData(hotels, key, id);
     return hotel->name; //falta encapsulamento
 }
 
-char getHotelStars(Hotel *hotel) {
+char getHotelStars(char *id, Hashtable *hotels) {
+    unsigned int key = hashFunction(id);
+    Hotel *hotel = getData(hotels, key, id);
     return hotel->stars;
 }
 
@@ -84,7 +87,9 @@ char *getHotelAddress(Hotel *hotel) {
     return hotel->address; //falta encapsulamento
 }
 */
-int getHotelCityTax(Hotel *hotel) {
+int getHotelCityTax(char *id, Hashtable *hotels) {
+    unsigned int key = hashFunction(id);
+    Hotel *hotel = getData(hotels, key, id);
     return hotel->cityTax;
 }
 //sets dos campos do hotel
