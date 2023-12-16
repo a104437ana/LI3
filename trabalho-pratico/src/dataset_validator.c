@@ -35,7 +35,7 @@ int string_to_int (char* string) {
     i--;
     int j = 0;
     while (i>=0) {
-        number = (string[i]-'0')*base_e_expoente(10,j);
+        number += (string[i]-'0')*base_e_expoente(10,j);
         j++;
         i--;
     }
