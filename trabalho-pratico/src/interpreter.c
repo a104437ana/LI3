@@ -8,7 +8,7 @@ struct command {
 };
 
 //função que processa um comando, chamando a respetiva query e a função que imprime o resultado
-void processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog){
+void processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs){
    createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
      if (command->n_args==0) return;
@@ -40,7 +40,7 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
     else if (command->query_id==3){
      if (command->n_args==0) return;
      else{
-        double output = Q3(command->args[0], hotelsCatalog);
+        double output = Q3(command->args[0], catalogs);
         printOutputQ3(command->format_flag, output, i);
      }
    }
@@ -160,7 +160,7 @@ void parseCommandFile (char* name,Catalogs *catalogs){
  while((read = getline(&line, &len, file))!= -1){
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
-    processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog);
+    processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,catalogs);
     i++;
     free(command);
  }

@@ -253,6 +253,10 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
 }
 
 //query 3 - calcula a avaliação média do hotel com o id passado como argumento, se existir
+double Q3 (char* id_hotel, Catalogs* catalogs) {
+  return catalogs_compute_Q3(id_hotel,catalogs);
+}
+/*
 double Q3(char *id, HotelsManager *hotelsCatalog) {
   Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
   if (hotel==NULL) return -1; //se o id não existir
@@ -260,7 +264,7 @@ double Q3(char *id, HotelsManager *hotelsCatalog) {
   double result = getHotelRatingsSum(hotel);
   result /= numberClassifications;
   return result;
-}
+}*/
 
 //query 4 - devolve a lista de reservas do hotel com o id passado como argumento, se existir
 ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog){

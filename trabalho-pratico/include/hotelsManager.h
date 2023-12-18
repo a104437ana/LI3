@@ -21,4 +21,7 @@ void printHotels(HotelsManager *hotelsManager);
 //liberta espaço em memória do catálogo de hoteis
 void destroyHotelsCatalog(HotelsManager *hotelsManager);
 
+// queries
+double hotel_catalog_compute_Q3(char* id_hotel,HotelsManager* hotel_catalog);
+
 #endif

@@ -44,6 +44,11 @@ void sortHotelReservationsByDate(void *hotel, Hashtable *lookupTable) {
     radixSortReservDate(reservationsByDate, lookupTable); //ordena as reservas por data
     setOrdListOrd(reservationsByDate, 1);
 }
+
+int getHotelNumberOfReservations(Hotel* hotel) {
+    return getOrdListSize(hotel->reservationsByDate);
+}
+
 //função que retorn a lista de reservas de um hotel
 OrdList *getHotelOrdList(Hotel *hotel) {
     return hotel->reservationsByDate;

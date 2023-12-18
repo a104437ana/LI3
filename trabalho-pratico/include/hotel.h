@@ -16,6 +16,7 @@ void addReservationToHotel(Hotel *hotel, char *id_reserv);
 //ordena as reservas do hotel
 void sortHotelReservationsByDate(void *hotel, Hashtable *lookupTable);
 
+int getHotelNumberOfReservations(Hotel* hotel);
 //obtem a lista de reservas do hotel
 OrdList *getHotelOrdList(Hotel *hotel);
 //obtem o id da reserva de um hotel

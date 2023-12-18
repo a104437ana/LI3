@@ -139,3 +139,8 @@ void destroyCatalogs(Catalogs *catalogs) {
     destroyFlightsCatalog(catalogs->flightsCatalog); //liberta o catálogo de voos
     destroyAirportsCatalog(catalogs->airportsCatalog); //liberta o catálogo de aeroportos
 }
+
+//queries
+double catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs) {
+    return hotel_catalog_compute_Q3(id_hotel,catalogs->hotelsCatalog);
+}

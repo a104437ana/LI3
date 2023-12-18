@@ -44,4 +44,7 @@ AirportsManager *getAirportsCatalog(Catalogs *catalogs);
 //liberta o espaço em memória de todos os catálogos
 void destroyCatalogs(Catalogs *catalogs);
 
+//queries
+double catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs);
+
 #endif
