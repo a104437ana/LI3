@@ -1,4 +1,5 @@
 #include "interpreter.h"
+#include <time.h>
 
 struct command {
  int query_id; //número da query
@@ -8,75 +9,81 @@ struct command {
 };
 
 //função que processa um comando, chamando a respetiva query e a função que imprime o resultado
-void processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs, Results* results){
+int processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs, Results* results){
    createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
-     if (command->n_args==0) return;
+     if (command->n_args==0) return 0;
      else{
         ResultQ1* output = Q1(command->args[0],usersCatalog,reservationsCatalog,flightsCatalog);
         printOutputQ1(command->format_flag, output,i,hotelsCatalog);
+        return 1;
      }
    }
     else if (command->query_id==2){
-     if (command->n_args==0) return;
+     if (command->n_args==0) return 0;
      else{
         if (command->n_args==1){ //se só tiver o id como argumento,
            ResultsQ2* output = Q2(command->args[0], BOTH, usersCatalog);
            printOutputQ2(command->format_flag, BOTH, output, i);
+           return 2;
         }
         else{
           if ((strcmp(command->args[1], "flights")==0)){
             ResultsQ2* output = Q2(command->args[0], FLIGHTS, usersCatalog);
             printOutputQ2(command->format_flag, FLIGHTS, output, i);
+            return 2;
           }
           else if ((strcmp(command->args[1], "reservations")==0)){
            ResultsQ2* output = Q2(command->args[0], RESERVATIONS, usersCatalog);
            printOutputQ2(command->format_flag, RESERVATIONS, output, i);
+           return 2;
           }
-          else return;
+          else return 0;
         }
      }
    }
     else if (command->query_id==3){
-     if (command->n_args==0) return;
+     if (command->n_args==0) return 0;
      else{
         Q3(command->args[0], catalogs, results);
         printOutputQ3(command->format_flag, results, i);
+        return 3;
      }
    }
     else if (command->query_id==4){
-     if (command->n_args==0) return;
+     if (command->n_args==0) return 0;
      else{
         ResultsQ4* output = Q4(command->args[0], hotelsCatalog, reservationsCatalog);
         printOutputQ4(command->format_flag, output, i, hotelsCatalog);
+        return 4;
      }
    }
     else if (command->query_id==5){
-     if (command->n_args<3) return;
+     if (command->n_args<3) return 0;
      else{
         //ResultsQ5* output = Q5(command->args[0], toDate(command->args[1]), toDate(command->args[2])); //falta funcao toDate
         //printOutputQ5(command->format_flag, output, i);
-        return;
+        return 0;
      }
    }
     else if (command->query_id==6){
-     if (command->n_args<2) return;
+     if (command->n_args<2) return 0;
      else{
         //ResultsQ6* output = Q6(atoi(command->args[0]), atoi(command->args[1]));
         //printOutputQ6(command->format_flag, output, i);
-        return;
+        return 0;
      }
    }
     else if (command->query_id==7){
-     if (command->n_args==0) return;
+     if (command->n_args==0) return 0;
      else{
         //ResultsQ7* output = Q7(atoi(command->args[0]));
         //printOutputQ7(command->format_flag, output, i);
-        return;
+        return 0;
      }
    }
     else if (command->query_id==8){
-     if (command->n_args<3) return;
+     if (command->n_args<3) return 0;
      else{
         Date *begin = string_to_date(command->args[1]);
         Date *end = string_to_date(command->args[2]);
@@ -84,23 +91,23 @@ void processCommand(Command* command, int i,UsersManager *usersCatalog,Reservati
         printOutputQ8(command->format_flag, output, i);
         destroyDate(begin);
         destroyDate(end);
-        return;
+        return 8;
      }
    }
     else if (command->query_id==9){
-     if (command->n_args==0) return;
+     if (command->n_args==0) return 0;
      else{
         OrdList* list = Q9(command->args[0],usersCatalog);
         printOutputQ9(command->format_flag, list, i);
         destroyOnlyOrdList(list);
-        return;
+        return 9;
      }
    }
     /*else if (command->query_id==10){
       // Q10(atoi(command->args[0]), command->args[1]); //confirmar o que recebe
       return;
    }*/
-    else return; 
+    else return 0;
 }
 
 //lê uma linha do ficheiro de comandos e devolve um comando
@@ -145,6 +152,11 @@ Command* parseCommandLine (char* line){
 
 //processa o ficheiro de comandos
 void parseCommandFile (char* name,Catalogs *catalogs, Results* results){
+   //inicialização de variáveis para medição de tempo
+   struct timespec start, end;
+   double qTime[11]; // indice 0 - tempo total, 1 - query 1, etc..
+   int j; for (j=0; j<11; j++) qTime[j] = 0;
+
  char* line = NULL;
  ssize_t read;
  size_t len;
@@ -158,14 +170,24 @@ void parseCommandFile (char* name,Catalogs *catalogs, Results* results){
  FILE* file = fopen(name, "r");
     if (file != NULL) {
  while((read = getline(&line, &len, file))!= -1){
+    clock_gettime(CLOCK_REALTIME, &start);
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
-    processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,catalogs,results);
+    int q = processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,catalogs,results);
     i++;
     free(command);
+    clock_gettime(CLOCK_REALTIME, &end);
+    double dif = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    qTime[0]+=dif; if (q!=0) qTime[q]+=dif;
  }
     }
  free(line);
  if (file != NULL)
  fclose(file);
+ //imprime tempo de execução
+  printf(" Interpreter/queries:\n");
+  for (j=1; j<11; j++){
+    printf("Query %d :\t\t %.6f seconds (%5.2f%%)\n",j, qTime[j], (qTime[j]/qTime[0])*100);
+  }
+   printf("  total:\t %.6f seconds\n", qTime[0]);
 }
