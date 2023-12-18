@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "catalogsManager.h"
 #include "queries.h"
+#include "results.h"
 
 struct catalogsManager {
     UsersManager *usersCatalog;
@@ -142,6 +143,6 @@ void destroyCatalogs(Catalogs *catalogs) {
 }
 
 //queries
-double catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs) {
-    return hotel_catalog_compute_Q3(id_hotel,catalogs->hotelsCatalog);
+void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, Results* results) {
+    hotel_catalog_compute_Q3(id_hotel,catalogs->hotelsCatalog,results);
 }

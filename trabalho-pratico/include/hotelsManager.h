@@ -5,6 +5,7 @@
 #include "reservationsManager.h"
 #include "hashtable.h"
 #include "orderedList.h"
+#include "results.h"
 
 typedef struct hotelsManager HotelsManager;
 //cria um novo catálogo de hoteis
@@ -22,6 +23,6 @@ void printHotels(HotelsManager *hotelsManager);
 void destroyHotelsCatalog(HotelsManager *hotelsManager);
 
 // queries
-double hotel_catalog_compute_Q3(char* id_hotel,HotelsManager* hotel_catalog);
+void hotel_catalog_compute_Q3(char* id_hotel,HotelsManager* hotel_catalog, Results* results);
 
 #endif

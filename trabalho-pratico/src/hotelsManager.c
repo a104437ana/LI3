@@ -52,11 +52,11 @@ void destroyHotelsCatalog(HotelsManager *hotelsManager) {
 }
 
 //queries
-double hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog) {
+void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, Results* results) {
     Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(id_hotel),id_hotel);
-    if (hotel==NULL) return -1; //se o id não existir
+    if (hotel==NULL) setRating(results,-1.0); //se o id não existir
     int numberClassifications = getHotelNumberOfReservations(hotel);
     double result = getHotelRatingsSum(hotel);
     result /= numberClassifications;
-    return result;
+    setRating(results,result);
 }

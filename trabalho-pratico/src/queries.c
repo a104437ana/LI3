@@ -253,8 +253,8 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
 }
 
 //query 3 - calcula a avaliação média do hotel com o id passado como argumento, se existir
-double Q3 (char* id_hotel, Catalogs* catalogs) {
-  return catalogs_compute_Q3(id_hotel,catalogs);
+void Q3 (char* id_hotel, Catalogs* catalogs, Results* results) {
+  return catalogs_compute_Q3(id_hotel,catalogs,results);
 }
 /*
 double Q3(char *id, HotelsManager *hotelsCatalog) {

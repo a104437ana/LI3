@@ -133,17 +133,17 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
 }
 
 //imprime o output da query 3
-void printOutputQ3 (char format_flag, double output, int i){
-  if (output==-1) return; //se o id não existir, não escreve nada
+void printOutputQ3 (char format_flag, Results* results, int i){
+  if (getRating(results)==-1) return; //se o id não existir, não escreve nada
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
   if (format_flag=='F'){
    fprintf (file, "--- 1 ---\n");
-   fprintf (file,"rating: %.3f\n", output);
+   fprintf (file,"rating: %.3f\n", getRating(results));
   }
   else{
-   fprintf (file,"%.3f\n", output);
+   fprintf (file,"%.3f\n", getRating(results));
   }
   fclose(file);
 }

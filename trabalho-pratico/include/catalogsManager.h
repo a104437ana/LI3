@@ -6,6 +6,7 @@
 #include "hotelsManager.h"
 #include "flightsManager.h"
 #include "airportsManager.h"
+#include "results.h"
 
 #define USERS_HASHTABLE_INI_SIZE 100000
 #define RESERVATIONS_HASHTABLE_INI_SIZE 40000
@@ -45,6 +46,6 @@ AirportsManager *getAirportsCatalog(Catalogs *catalogs);
 void destroyCatalogs(Catalogs *catalogs);
 
 //queries
-double catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs);
+void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, Results* results);
 
 #endif

@@ -18,6 +18,7 @@
 #include "hashtable.h"
 #include "orderedList.h"
 #include "parser.h"
+#include "results.h"
 
 #define YEAR 2023
 #define MONTH 10
@@ -108,7 +109,7 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
 
 ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog);
 
-double Q3(char *id, Catalogs* catalogs);
+void Q3(char *id, Catalogs* catalogs, Results* results);
 
 ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog);
 
