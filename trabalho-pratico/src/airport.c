@@ -22,7 +22,8 @@ Airport *createAirport(char *name) {
 
 //adiciona voo à lista de voos de um aeroporto
 void addFlightToAirport(Airport *airport, char *id_flight) {
-    addOrdList(airport->flightsByDepartureDate, strdup(id_flight));
+    char *flight = strdup(id_flight);
+    addOrdList(airport->flightsByDepartureDate, flight);
 }
 
 int compareFlightsIds(void *id1, void *id2) {
@@ -52,6 +53,6 @@ char *getAirportId(Airport *airport) {
 
 //liberta espaço em memória do aeroporto
 void destroyAirport(void *airport) {
-    destroyOnlyOrdList(((Airport *) airport)->flightsByDepartureDate);
+    destroyOrdList(((Airport *) airport)->flightsByDepartureDate, free);
     free(((Airport *) airport)->name);
 }

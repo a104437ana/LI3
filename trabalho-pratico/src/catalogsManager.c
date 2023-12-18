@@ -138,6 +138,7 @@ void destroyCatalogs(Catalogs *catalogs) {
     destroyHotelsCatalog(catalogs->hotelsCatalog); //liberta o catálogo de hoteis
     destroyFlightsCatalog(catalogs->flightsCatalog); //liberta o catálogo de voos
     destroyAirportsCatalog(catalogs->airportsCatalog); //liberta o catálogo de aeroportos
+    free(catalogs);
 }
 
 //queries

@@ -199,6 +199,7 @@ void destroyReservation(void *reservation) {
     destroyDate(((Reservation *) reservation)->end);
     //free(((Reservation *) reservation)->userComment);
     //free(((Reservation *) reservation)->roomDetails);
+    free(((Reservation *) reservation)->id_hotel);
     free(((Reservation *) reservation)->id_user);
     free(((Reservation *) reservation)->id);
     free(reservation);

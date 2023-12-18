@@ -162,6 +162,6 @@ void destroyHotel(void *hotel) {
     //free(((Hotel *) hotel)->address);
     free(((Hotel *) hotel)->name); //liberta espaço dos diferentes campos do hotel
     free(((Hotel *) hotel)->id);
-    destroyOnlyOrdList(((Hotel *) hotel)->reservationsByDate);
+    destroyOrdList(((Hotel *) hotel)->reservationsByDate, free);
     free(hotel);
 }
