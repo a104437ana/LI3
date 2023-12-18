@@ -21,7 +21,7 @@ void updateAirportCatalog(char *id, char *id_flight, AirportsManager *airportsCa
     Airport *airport;
     if (existsAirport == 0) { //caso não exista cria um novo aeroporto
         airport = createAirport(id);
-        addHashtable(airportsCatalog->airports, key, airport, id); //adiciona o aeroporto ao catálogo dos aeroportos
+        airportsCatalog->airports = addHashtable(airportsCatalog->airports, key, airport, id); //adiciona o aeroporto ao catálogo dos aeroportos
     } else //caso já exista
         airport = (Airport*) getData(airportsCatalog->airports, key, id); //obtem apontador para o aeroporto do catálogo dos aeroporotos
     addFlightToAirport(airport, id_flight); //adiciona o apontador do voo aos voos do aeroporto

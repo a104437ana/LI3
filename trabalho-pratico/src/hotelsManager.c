@@ -19,7 +19,7 @@ void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char user
     Hotel *hotel;
     if (existsHotel == 0) { //caso não exista cria um novo hotel
         hotel = createHotel(id, name, stars, cityTax);
-        addHashtable(hotelsCatalog->hotels, key, hotel, id); //adiciona o hotel ao catálogo dos hoteis
+        hotelsCatalog->hotels = addHashtable(hotelsCatalog->hotels, key, hotel, id); //adiciona o hotel ao catálogo dos hoteis
     } else //caso já exista
         hotel = (Hotel*) getData(hotelsCatalog->hotels, key, id); //obtem apontador para o hotel do catálogo dos hoteis
     addReservationToHotel(hotel, id_reserv); //adiciona reserva às reservas do hotel

@@ -19,7 +19,7 @@ void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, ch
     //adiciona reserva ao catalogo de reservas
     unsigned int key = hashFunction(id);
     Reservation *reservation = createReservation(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification, usersCatalog, hotels);
-    addHashtable(reservationsCatalog->reservations, key, reservation, id);
+    reservationsCatalog->reservations = addHashtable(reservationsCatalog->reservations, key, reservation, id);
 }
 
 //gets

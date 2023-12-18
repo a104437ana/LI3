@@ -559,7 +559,7 @@ PassengersCounter *createPassengersCounter (int size) {
 /* A função addPassengersPerFlight_ToPassengersCounter addiciona à hashtable uma estrutura passengers_per_flight, dada essa estrutura, a
 hashtable passengers_counter, o id de voo e a chave.*/
 void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight) {
-    addHashtable(passengers_counter->passengers_per_flight, key, passengers_per_flight, id_flight);
+    passengers_counter->passengers_per_flight = addHashtable(passengers_counter->passengers_per_flight, key, passengers_per_flight, id_flight);
 }
 
 /* A função existsPassengersPerFlight verifica se para um id de voo existe uma estrutura passangers_per_flight na hashtable passengers_counter.

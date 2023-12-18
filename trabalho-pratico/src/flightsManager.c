@@ -17,7 +17,7 @@ FlightsManager *createFlightsCatalog(int size) {
 void addFlightToCatalog(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, FlightsManager *flightsCatalog) {
     int key = hashFunction(id);
     Flight *flight = createFlight(id, airline, airplane, origin, destination, scheduleDeparture, scheduleArrival, realDeparture, realArrival);
-    addHashtable(flightsCatalog->flights, key, flight, id);
+    flightsCatalog->flights = addHashtable(flightsCatalog->flights, key, flight, id);
 }
 //função que adiciona um utilizador à lista de passageiros de um certo voo no catálogo
 //e adiciona esse voo à lista de voos do utilizador

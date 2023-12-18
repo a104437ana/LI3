@@ -17,7 +17,7 @@ UsersManager *createUsersCatalog(int size) {
 void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog) {
     int key = hashFunction(id);
     User *user = createUser(id, name, gender, country, passport, birth, accountCreation, accountStatus);
-    addHashtable(usersCatalog->users, key, user, id);
+    usersCatalog->users = addHashtable(usersCatalog->users, key, user, id);
     if (accountStatus)
         addOrdList(usersCatalog->usersByName, user); //mudar para id
 }

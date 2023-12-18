@@ -20,7 +20,7 @@ HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key, char *id)
 //copia hashtable para outra hashtable
 void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable);
 //adiciona um elemnto à hashtbale
-void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id);
+Hashtable *addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id);
 void removeHashtable(Hashtable *hashtable, unsigned int key);
 //verifica se existe um elemnto na hashtable
 int existsData(Hashtable *hashtable, unsigned int key, char *id);

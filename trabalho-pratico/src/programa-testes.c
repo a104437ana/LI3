@@ -14,11 +14,11 @@
 #include <sys/resource.h>
 #include "results.h"
 
-#define USERS_HASHTABLE_INI_SIZE 100000
-#define RESERVATIONS_HASHTABLE_INI_SIZE 40000
-#define HOTELS_HASHTABLE_INI_SIZE 100
-#define FLIGHTS_HASHTABLE_INI_SIZE 1000
-#define AIRPORTS_HASHTABLE_INI_SIZE 100
+//#define USERS_HASHTABLE_INI_SIZE 100000
+//#define RESERVATIONS_HASHTABLE_INI_SIZE 40000
+//#define HOTELS_HASHTABLE_INI_SIZE 100
+//#define FLIGHTS_HASHTABLE_INI_SIZE 1000
+//#define AIRPORTS_HASHTABLE_INI_SIZE 100
 
 int compare_files (char* file_path1, char* file_path2) {
     int equal = 0;

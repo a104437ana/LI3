@@ -9,7 +9,7 @@ typedef enum typeOfData {
 } TypeOfData;
 
 struct hashtableNode {
-    int key; //chave de hash
+    unsigned int key; //chave de hash
     char *id; //id usado para hash
     void *data; //data guardada
     struct hashtableNode *next; //próximo nodo para gerir colisões
@@ -65,30 +65,43 @@ HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key, char *id)
 }
 //função que copia toda a hashtable para outra hashtable
 void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
-    HashtableNode *node;
+    HashtableNode *node, *oldNode;
     int size = hashtable->size;
+    int newSize = newHashtable->size;
     for (int i=0; i<size; i++) {
         node = hashtable->node[i];
         while (node != NULL) {
-            addHashtable(newHashtable, node->key, node->data, node->id);
+//            newHashtable = addHashtable(newHashtable, node->key, node->data, node->id);
+            HashtableNode **nodes = newHashtable->node;
+            unsigned int index = node->key % newSize;
+            HashtableNode *new = createHashtableNode();
+            new->key = node->key;
+            new->id = node->id;
+            new->data = node->data;
+            new->next = nodes[index];
+            nodes[index] = new;
+            newHashtable->nodes += 1;
+            oldNode = node;
             node = node->next;
+            free(oldNode);
         }
     }
 }
 //função que adiciona um novo elemento à hashtable
-void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
-    HashtableNode **node = hashtable->node;
+Hashtable *addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
     //falta implementar alocamento dinâmico da hashtable para um determinado nível de uso
-    //e mudar para inserir ao início da lista e fazer a procura antes de chamar a função
-//    int nodes = hashtable->nodes, size = hashtable->size;
-//    float usage = nodes / size;
-//    if (usage >= 2) {
-//        Hashtable *newHashtable = createHashtable(size * 2);
-//        copyHashtable(hashtable, newHashtable);
-//        Hashtable *oldHashtable = hashtable;
+    int nodes = hashtable->nodes, size = hashtable->size;
+    float usage = nodes / size;
+    if (usage >= 2) {
+        Hashtable *newHashtable = createHashtable(size * 2);
+        copyHashtable(hashtable, newHashtable);
+        Hashtable *oldHashtable = hashtable;
+        hashtable = newHashtable;
+        free(oldHashtable->node);
+        free(oldHashtable);
 //        destroyHashtable(oldHashtable);
-//        hashtable = newHashtable;
-//    }
+    }
+    HashtableNode **node = hashtable->node;
     int index = key % hashtable->size;
     HashtableNode *new = createHashtableNode();
     new->key = key;
@@ -97,6 +110,8 @@ void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) 
     new->next = node[index];
     node[index] = new;
     hashtable->nodes += 1;
+
+    return hashtable;
 }
 
 //falta remove elemento
