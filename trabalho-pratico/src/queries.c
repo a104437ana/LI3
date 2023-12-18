@@ -25,7 +25,7 @@ int getNumberPassengers(Flight* flight){
 int getDelay(Flight* flight){
      Date* scheduleDep = getFlightScheduleDeparture(flight);
      Date* realDep = getFlightRealDeparture(flight);
-     int res = ((realDep->hour->hours)-(scheduleDep->hour->hours))*3600 + ((realDep->hour->minutes)-(scheduleDep->hour->minutes))*60 +((realDep->hour->seconds)-(scheduleDep->hour->seconds));
+     int res = ((getHours(realDep))-(getHours(scheduleDep)))*3600 + ((getMinutes(realDep))-(getMinutes(scheduleDep)))*60 +((getSeconds(realDep))-(getSeconds(scheduleDep)));
      return res;
 }
 
@@ -70,21 +70,21 @@ int getBeginYear(void* data, Hashtable *lookupTable){
 //devolve o segundo de início de um voo
 int getBeginSeconds(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->hour->seconds);
+  if (res->resultType == FLIGHTS) return ((getSeconds(getFlightScheduleDeparture((Flight *)res->result))));
   else return (0);
 }
 
 //devolve o minuto de início de um voo
 int getBeginMinutes(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->hour->minutes);
+  if (res->resultType == FLIGHTS) return ((getMinutes(getFlightScheduleDeparture((Flight *)res->result))));
   else return (0);
 }
 
 //devolve a hora de início de um voo
 int getBeginHours(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->hour->hours);
+  if (res->resultType == FLIGHTS) return ((getHours(getFlightScheduleDeparture((Flight *)res->result))));
   else return (0);
 }
 

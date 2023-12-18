@@ -6,8 +6,9 @@ Date *createDate(char day, char month, int year) {
     date->day = day;
     date->month = month;
     date->year = year;
-    date->hasHours = 0;
-    date->hour = NULL;
+    date->hours = 0;
+    date->minutes = 0;
+    date->seconds = 0;
 
     return date;
 }
@@ -17,19 +18,11 @@ Date *createDateHours(char day, char month, int year, char hours, char minutes, 
     date->day = day;
     date->month = month;
     date->year = year;
-    date->hasHours = 1;
-    date->hour = createHour(hours, minutes, seconds); //cria uma nova hora
+    date->hours = hours;
+    date->minutes = minutes;
+    date->seconds = seconds;
 
     return date;
-}
-//função que cria uma nova hora
-Hour *createHour(char hours, char minutes, char seconds) {
-    Hour *hour = malloc(sizeof(Hour)); //aloca espaço para a estrutura hora
-    hour->hours = hours;
-    hour->minutes = minutes;
-    hour->seconds = seconds;
-
-    return hour;
 }
 
 //Transforma uma string num tipo Date
@@ -68,57 +61,29 @@ int getYear(void *date) {
 }
 
 char getSeconds(Date *date) {
-    return date->hour->seconds;
+    return date->seconds;
 }
 
 char getMinutes(Date *date) {
-    return date->hour->minutes;
+    return date->minutes;
 }
 
 char getHours(Date *date) {
-    return date->hour->hours;
-}
-
-void getDayMonthYear(Date *date, int *day, int *month, int *year) {
-    *day = date->day;
-    *month = date->month;
-    *year = date->year;
+    return date->hours;
 }
 
 //sets
-void setDay(Date *date, char day) {
-    date->day = day;
-}
 
-void setMonth(Date *date, char month) {
-    date->month = month;
-}
-
-void setYear(Date *date, int year) {
-    date->year = year;
-}
-
-void setSeconds(Date *date, char seconds) {
-    date->hour->seconds = seconds;
-}
-
-void setMinutes(Date *date, char minutes) {
-    date->hour->minutes = minutes;
-}
-
-void setHours(Date *date, char hours) {
-    date->hour->hours = hours;
-}
 
 char* dateToString(Date *date){
     char* res = 0;
-    if (date->hasHours == 0) {
+    if (date->hours == 0 && date->minutes ==0 && date->seconds==0) {
         res = malloc(11); //hhu short short unsigned output numerico tamanho 8 bits
         sprintf(res, "%04d/%02hhu/%02hhu", date->year, date->month, date->day);
     }
     else {
         res = malloc(20);
-        sprintf(res, "%04d/%02hhu/%02hhu %02hhu:%02hhu:%02hhu", date->year, date->month, date->day, date->hour->hours, date->hour->minutes, date->hour->seconds);
+        sprintf(res, "%04d/%02hhu/%02hhu %02hhu:%02hhu:%02hhu", date->year, date->month, date->day, date->hours, date->minutes, date->seconds);
     }
     return res;
 }
@@ -130,15 +95,6 @@ char* dateToStringNoHours(Date *date){
     return res;
 }
 
-int string_to_day(char* string) {
-    int day = (string[8] - '0') * 10 + (string[9] - '0');
-    return day;
-}
-
-int string_to_month(char* string) {
-    int month = (string[5] - '0') * 10 + (string[6] - '0');
-    return month;
-}
 //funçaõ que calcula o total de anos bissextos de uma data
 int totalLeapYears(int year, int month) {
   if (month <= 2) year--; //se o mês for menor que 3 não precisa de contar ano atual
@@ -183,12 +139,5 @@ int compareDates(Date *date1, Date *date2) {
 //função que liberta o espaço em memória alocado por uma data
 void destroyDate(Date *date) {
     if (date == NULL) return; //se não existir a data
-    if (date->hour != NULL) free(date->hour); //se existir horas
     free(date);
 }
-/*
-void destroyPhoneNumber(PhoneNumber *phoneNumber) {
-    if (phoneNumber == NULL) return;
-    free(phoneNumber);
-}
-*/

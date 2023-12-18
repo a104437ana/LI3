@@ -77,7 +77,7 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
 }
 //função que adiciona um novo elemento à hashtable
 void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
-    HashtableNode **node;
+    HashtableNode **node = hashtable->node;
     //falta implementar alocamento dinâmico da hashtable para um determinado nível de uso
     //e mudar para inserir ao início da lista e fazer a procura antes de chamar a função
 //    int nodes = hashtable->nodes, size = hashtable->size;
@@ -89,15 +89,13 @@ void addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) 
 //        destroyHashtable(oldHashtable);
 //        hashtable = newHashtable;
 //    }
-    node = searchNode(hashtable, key, id); //procura onde inserir o novo elemnto
-    if (*node != NULL) { //caso essa chave já existir na hashtable
-        if (!strcmp((*node)->id, id)) return; //caso o elemento já exista na hashtable
-        node = &((*node)->next); //caso naõ exista insere no próximo nodo
-    }
-    *node = createHashtableNode();
-    (*node)->key = key;
-    (*node)->id = strdup(id);
-    (*node)->data = data;
+    int index = key % hashtable->size;
+    HashtableNode *new = createHashtableNode();
+    new->key = key;
+    new->id = strdup(id);
+    new->data = data;
+    new->next = node[index];
+    node[index] = new;
     hashtable->nodes += 1;
 }
 

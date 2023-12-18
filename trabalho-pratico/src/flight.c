@@ -83,37 +83,37 @@ Date *getFlightRealArrival(Flight *flight) {
 int getFlightScheduleDepartureDay(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Flight *flight = getData(lookupTable, key, id);
-    return flight->scheduleDeparture->day;
+    return getDay(flight->scheduleDeparture);
 }
 
 int getFlightScheduleDepartureMonth(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Flight *flight = getData(lookupTable, key, id);
-    return flight->scheduleDeparture->month;
+    return getMonth(flight->scheduleDeparture);
 }
 
 int getFlightScheduleDepartureYear(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Flight *flight = getData(lookupTable, key, id);
-    return flight->scheduleDeparture->year;
+    return getYear(flight->scheduleDeparture);
 }
 
 int getFlightScheduleDepartureSeconds(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Flight *flight = getData(lookupTable, key, id);
-    return flight->scheduleDeparture->hour->seconds;
+    return getSeconds(flight->scheduleDeparture);
 }
 
 int getFlightScheduleDepartureMinutes(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Flight *flight = getData(lookupTable, key, id);
-    return flight->scheduleDeparture->hour->minutes;
+    return getMinutes(flight->scheduleDeparture);
 }
 
 int getFlightScheduleDepartureHours(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Flight *flight = getData(lookupTable, key, id);
-    return flight->scheduleDeparture->hour->hours;
+    return getHours(flight->scheduleDeparture);
 }
 /*
 char *getFlightPilot(Flight *flight) {

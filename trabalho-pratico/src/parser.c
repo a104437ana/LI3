@@ -146,11 +146,17 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
         clock_gettime(CLOCK_REALTIME, &end);
         des = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
-        // Tamanho dos dados processados
+        // Tamanho dos dados processados dataset normal
         // use = 10001
         // fli = 1000
         // pass = 81204
         // res = 40953
+
+        //Dataset large clean
+        //use = 990134
+        // fli = 179946
+        // pass = ?
+        // res = ?
 
         //imprime tempo de execução
         total = use + res + passc + fli + pass + des;
