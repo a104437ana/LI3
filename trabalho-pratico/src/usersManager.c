@@ -85,3 +85,33 @@ void destroyUsersCatalog(UsersManager *usersManager) {
     free(usersManager);
 }
 
+//queries
+void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, Results* results) {
+    User* user = getData(usersManager->users,hashFunction(id),id);
+    if (user == NULL) {
+        setQ1type(results,0);
+    }
+    else {
+        bool account_status_active = getAccountStatus(user);
+        if (account_status_active == true) {
+            setQ1type(results,1);
+            char* name = getName(user);
+            Gender gender = getGender(user);
+            int age = getAge(user);
+            char* country_code = getCountry(user);
+            char* passport = getPassport(user);
+            int number_of_flights = getNumberFlights(user);
+            int number_of_reservations = getNumberReservations(user);
+            double total_spent = getTotalSpent(user);
+            setNameQ1(results,name);
+            setGenderQ1(results,gender);
+            setAgeQ1(results,age);
+            setCountryCodeQ1(results,country_code);
+            setPassportQ1(results,passport);
+            setNflightsQ1(results,number_of_flights);
+            setNreservsQ1(results,number_of_reservations);
+            setTotalSpentQ1(results,total_spent);
+        }
+        else setQ1type(results,0);
+    }
+}

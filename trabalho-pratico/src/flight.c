@@ -136,6 +136,20 @@ OrdList * getPassengers(Flight* flight){
     return flight->passengers;
 }
 
+//retorna o número de passageiros num voo
+int getNumberPassengers(Flight* flight){
+    OrdList* passengers = getPassengers(flight);
+    return(getOrdListSize(passengers));
+}
+
+//calcula o atrado de um voo em segundos
+int getDelay(Flight* flight){
+     Date* scheduleDep = getFlightScheduleDeparture(flight);
+     Date* realDep = getFlightRealDeparture(flight);
+     int res = ((getDay(realDep)-getDay(scheduleDep))*86400+(getHours(realDep))-(getHours(scheduleDep)))*3600 + ((getMinutes(realDep))-(getMinutes(scheduleDep)))*60 +((getSeconds(realDep))-(getSeconds(scheduleDep)));
+     return res;
+}
+
 //sets
 void setFlightAirline(Flight *flight, char *airline) {
     char *oldAirline = flight->airline;

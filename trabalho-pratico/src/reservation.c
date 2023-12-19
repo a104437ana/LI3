@@ -57,13 +57,13 @@ char *getReservHotelId(Reservation *reservation) {
 int getReservUserKey(Reservation *reservation) {
     return hashFunction(reservation->id_user);
 }
-
+/*
 char *getReservHotelName(Reservation *reservation, Hashtable *hotels) {
     return getHotelName(reservation->id_hotel, hotels);
 }
-
+*/
 int getReservCityTax(Reservation *reservation, Hashtable *hotels) {
-    return getHotelCityTax(reservation->id_hotel, hotels);
+    return getHotelCityTax2(reservation->id_hotel, hotels);
 }
 
 int getReservPricePerNight(Reservation *reservation) {
@@ -73,10 +73,10 @@ int getReservPricePerNight(Reservation *reservation) {
 int getReservUserClassification(Reservation *reservation) {
     return (reservation->userClassification-'0');
 }
-
+/*
 char getReservHotelStars(Reservation *reservation, Hashtable *hotels) {
     return getHotelStars(reservation->id_hotel, hotels);
-}
+}*/
 
 Date *getReservBegin(Reservation *reservation) {
     return reservation->begin;
@@ -132,6 +132,22 @@ bool getReservIncludesBreakfast(Reservation *reservation) {
     return reservation->includesBreakfast;
 }
 
+//calcula o número de noites de uma reserva
+int getReservNights(Reservation* reservation){
+     Date* begin = getReservBegin(reservation);
+     Date* end = getReservEnd(reservation);
+     int res = (end->day) - (begin->day);
+     return res;
+}
+
+/*calcula o preço de uma reserva
+double getReservPrice(Reservation* reservation, Hashtable *hotels){
+     int ppn = getReservPricePerNight(reservation); //preço por noite
+     int nnights = getReservNights(reservation); //número de noites
+     int cityTax = getReservCityTax(reservation, hotels); //taxa turística
+     double res = (ppn*nnights)+(((float)(ppn*nnights)/100)*cityTax);
+     return res;
+}*/
 //sets dos campos da reserva
 //void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *reservId) {
 //    Reservation *data = getData(hashtable, key, reservId);

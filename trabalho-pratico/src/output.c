@@ -9,64 +9,58 @@ void createOutputFile (int nCommand){
 }
 
 //imprime o output da query 1
-void printOutputQ1 (char format_flag, ResultQ1* output, int i, HotelsManager *hotelsCatalog){
-  Hashtable *hotels = getHashtableHotelsCatalog(hotelsCatalog); //provisório
-  if (output==NULL) return; //se o id não existir ou pertencer a um utilizador inválido, não escreve nada
+void printOutputQ1 (char format_flag, Results* results, int i){
+  if (getQ1type(results) == 0) return; //se o id não existir ou pertencer a um utilizador inválido, não escreve nada
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
   if (format_flag=='F'){
    fprintf (file, "--- 1 ---\n");
-   if (output->resultType==USER){
+   if (getQ1type(results)==1){
     char sex;
-    if (getGender(output->result)==MALE) sex='M';
+    if (getGenderQ1(results)==MALE) sex='M';
     else sex='F';
-    fprintf(file, "name: %s\nsex: %c\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",getName(output->result), sex, getAge(output->result), getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
+    fprintf(file, "name: %s\nsex: %c\nage: %d\ncountry_code: %s\npassport: %s\nnumber_of_flights: %d\nnumber_of_reservations: %d\ntotal_spent: %.3f\n",getNameQ1(results), sex, getAgeQ1(results), getCountryCodeQ1(results), getPassportQ1(results), getNflightsQ1(results), getNreservsQ1(results), getTotalSpentQ1(results));
    }
-   if (output->resultType==FLIGHT){
-    char * origin = getFlightOrigin(output->result);
-    char * dest = getFlightDestination(output->result);
-    char * dep = dateToString(getFlightScheduleDeparture(output->result));
-    char * arrival = dateToString(getFlightScheduleArrival(output->result));
-    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %d\n",getFlightAirline(output->result), getFlightAirplane(output->result), origin, dest, dep, arrival, getNumberPassengers(output->result), getDelay(output->result)); 
-    free(origin); free(dest); free(dep); free (arrival);
+   if (getQ1type(results)==2){
+    char * dep = dateToString(getScheduleDepartureQ1(results));
+    char * arrival = dateToString(getScheduleArrivalQ1(results));
+    fprintf(file, "airline: %s\nplane_model: %s\norigin: %s\ndestination: %s\nschedule_departure_date: %s\nschedule_arrival_date: %s\npassengers: %d\ndelay: %g\n",getAirlineQ1(results), getPlaneModelQ1(results), getOriginlQ1(results), getDestlQ1(results), dep, arrival, getNpassengersQ1(results), getDelayQ1(results)); 
+     free(dep); free (arrival);
    }
-   if (output->resultType==RESERVATION){
+   if (getQ1type(results)==3){
     char breakfast[6];
-    if (getReservIncludesBreakfast(output->result)==true) strcpy(breakfast, "True");
+    if (getIncludesBreakfastQ1(results)==true) strcpy(breakfast, "True");
     else strcpy(breakfast, "False");
-    char * begin = dateToStringNoHours(getReservBegin(output->result));
-    char * end = dateToStringNoHours(getReservEnd(output->result));
-    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getReservHotelId(output->result), getReservHotelName(output->result, hotels), getReservHotelStars(output->result, hotels), begin, end, breakfast, getReservNights(output->result), getReservPrice(output->result, hotels));
+    char * begin = dateToStringNoHours(getBeginDateQ1(results));
+    char * end = dateToStringNoHours(getEndDateQ1(results));
+    fprintf(file, "hotel_id: %s\nhotel_name: %s\nhotel_stars: %c\nbegin_date: %s\nend_date: %s\nincludes_breakfast: %s\nnights: %d\ntotal_price: %.3f\n",getHotelIdQ1(results), getHotelNameQ1(results), getHotelStarsQ1(results), begin, end, breakfast, getNnightsQ1(results), getTotalPriceQ1(results));
     free(begin); free(end);
    }
   }
   else{
-   if (output->resultType==USER){
+   if (getQ1type(results)==1){
     char sex;
-    if (getGender(output->result)==MALE) sex='M';
+    if (getGenderQ1(results)==MALE) sex='M';
     else sex='F';
-    fprintf(file, "%s;%c;%d;%s;%s;%d;%d;%.3f\n",getName(output->result), sex, getAge(output->result), getCountry(output->result), getPassport(output->result), getNumberFlights(output->result), getNumberReservations(output->result), getTotalSpent(output->result));
+    fprintf(file, "%s;%c;%d;%s;%s;%d;%d;%.3f\n",getNameQ1(results), sex, getAgeQ1(results), getCountryCodeQ1(results), getPassportQ1(results), getNflightsQ1(results), getNreservsQ1(results), getTotalSpentQ1(results));
    }
-   if (output->resultType==FLIGHT){
-    char * origin = getFlightOrigin(output->result);
-    char * dest = getFlightDestination(output->result);
-    char * dep = dateToString(getFlightScheduleDeparture(output->result));
-    char * arrival = dateToString(getFlightScheduleArrival(output->result));
-    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%d\n",getFlightAirline(output->result), getFlightAirplane(output->result), origin, dest, dep, arrival, getNumberPassengers(output->result), getDelay(output->result));
-    free(origin); free(dest); free(dep); free (arrival);
+   if (getQ1type(results)==2){
+    char * dep = dateToString(getScheduleDepartureQ1(results));
+    char * arrival = dateToString(getScheduleArrivalQ1(results));
+    fprintf(file, "%s;%s;%s;%s;%s;%s;%d;%g\n",getAirlineQ1(results), getPlaneModelQ1(results), getOriginlQ1(results), getDestlQ1(results), dep, arrival, getNpassengersQ1(results), getDelayQ1(results));
+    free(dep); free (arrival);
    }
-   if (output->resultType==RESERVATION){
+   if (getQ1type(results)==3){
     char breakfast[6];
-    if (getReservIncludesBreakfast(output->result)==true) strcpy(breakfast, "True");
+    if (getIncludesBreakfastQ1(results)==true) strcpy(breakfast, "True");
     else strcpy(breakfast, "False");
-    char * begin = dateToStringNoHours(getReservBegin(output->result));
-    char * end = dateToStringNoHours(getReservEnd(output->result));
-    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getReservHotelId(output->result), getReservHotelName(output->result, hotels), getReservHotelStars(output->result, hotels), begin, end, breakfast, getReservNights(output->result), getReservPrice(output->result, hotels));
+    char * begin = dateToStringNoHours(getBeginDateQ1(results));
+    char * end = dateToStringNoHours(getEndDateQ1(results));
+    fprintf(file, "%s;%s;%c;%s;%s;%s;%d;%.3f\n",getHotelIdQ1(results), getHotelNameQ1(results), getHotelStarsQ1(results), begin, end, breakfast, getNnightsQ1(results), getTotalPriceQ1(results));
     free(begin); free(end);
    }
   }
-  free(output);
   fclose(file);
 }
 

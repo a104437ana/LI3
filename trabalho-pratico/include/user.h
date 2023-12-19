@@ -7,6 +7,10 @@
 
 #define USER_LIST_INI_SIZE 200
 
+#define YEAR 2023
+#define MONTH 10
+#define DAY 01
+
 //typedef enum gender {
 //    MALE,
 //    FEMALE,
@@ -30,6 +34,7 @@ char *getCountry(User *user);
 //char *getAdress(User *user);
 char *getPassport(User *user);
 Date *getBirth(User *user);
+int getAge(User* user);
 //char *getEmail(User *user);
 //PhoneNumber *getPhoneNumber(User *user);
 Date *getAccountCreation(User *user);

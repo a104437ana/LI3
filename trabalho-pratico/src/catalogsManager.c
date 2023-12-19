@@ -143,6 +143,19 @@ void destroyCatalogs(Catalogs *catalogs) {
 }
 
 //queries
+void catalogs_compute_Q1_user (char *id, Catalogs* catalogs, Results* results) {
+    user_catalog_compute_Q1(id,catalogs->usersCatalog,results);
+}
+
+void catalogs_compute_Q1_flight (char *id, Catalogs* catalogs, Results* results) {
+    flight_catalog_compute_Q1(id,catalogs->flightsCatalog,results);
+}
+
+void catalogs_compute_Q1_reservation (char *id, Catalogs* catalogs, Results* results) {
+    char* hotel_id = reservation_catalog_compute_Q1(id,catalogs->reservationsCatalog,results);
+    hotel_catalog_compute_Q1(hotel_id,catalogs->hotelsCatalog,results);
+}
+
 void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, Results* results) {
     hotel_catalog_compute_Q3(id_hotel,catalogs->hotelsCatalog,results);
 }

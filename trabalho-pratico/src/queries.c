@@ -1,6 +1,6 @@
 #include "queries.h"
 
-//calcula a idade de um utilizador em anos
+/*calcula a idade de um utilizador em anos
 int getAge(User* user){
   Date *birthdate = getBirth(user);
   bool birthday; //se o aniversário do utilizador é ou não antes da data atual
@@ -36,7 +36,7 @@ int getReservNights(Reservation* reservation){
      int res = (end->day) - (begin->day);
      return res;
 }
-
+*/
 //calcula o preço de uma reserva
 double getReservPrice(Reservation* reservation, Hashtable *hotels){
      int ppn = getReservPricePerNight(reservation); //preço por noite
@@ -162,6 +162,19 @@ int isPrefix(void *prefix, void *user) {
 }
 
 //query 1 - retorna o utilizador, reserva ou voo com o id passado como argumento (se existir e não for um utilizador inativo)
+void Q1 (char *id, Catalogs* catalogs, Results* results) {
+  if(same_prefix("Book", id) == 1){ //se o id for de uma reserva
+      catalogs_compute_Q1_reservation(id,catalogs,results);
+  }
+  else if (id[0]>='0' && id[0]<='9'){ //se o id for de um voo
+        catalogs_compute_Q1_flight(id,catalogs,results);
+  }
+  else{ //se o id for de um utilizador
+      catalogs_compute_Q1_user(id,catalogs,results);
+  }
+}
+
+/*
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
     if(same_prefix("Book", id) == 1){ //se o id for de uma reserva
       ResultQ1* result = malloc(sizeof(ResultQ1));
@@ -198,7 +211,7 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
       return result;
     }
 }
-
+*/
 //query 2 - retorna a lista de reservas, voos, ou ambos - conforme o argumento type - de um utilizador (se existir e não estiver inativo)
 ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
     User *user = getUserCatalog(usersCatalog, hashFunction(id), id);
@@ -254,7 +267,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
 
 //query 3 - calcula a avaliação média do hotel com o id passado como argumento, se existir
 void Q3 (char* id_hotel, Catalogs* catalogs, Results* results) {
-  return catalogs_compute_Q3(id_hotel,catalogs,results);
+  catalogs_compute_Q3(id_hotel,catalogs,results);
 }
 /*
 double Q3(char *id, HotelsManager *hotelsCatalog) {

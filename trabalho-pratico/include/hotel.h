@@ -25,11 +25,12 @@ char *getHotelReservation(Hotel *hotel, unsigned int key);
 //gets
 Hotel *getHotelCatalog(Hashtable *hotels, unsigned int key, char *id);
 char *getHotelId(Hotel *hotel);
-char *getHotelName(char *id, Hashtable *hotels);
-char getHotelStars(char *id, Hashtable *hotels);
+char *getHotelName(Hotel *hotel);
+char getHotelStars(Hotel *hotel);
 double getHotelRatingsSum(Hotel *hotel);
 int getHotelNumberRatings(Hotel *hotel);
-int getHotelCityTax(char *id, Hashtable *hotels);
+int getHotelCityTax2(char *id, Hashtable *hotels);
+int getHotelCityTax(Hotel *hotel);
 //sets
 void setHId(Hotel *hotel, char *id);
 void setHName(Hotel *hotel, char *name);

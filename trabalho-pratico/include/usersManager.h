@@ -4,6 +4,7 @@
 #include "user.h"
 #include "hashtable.h"
 #include "orderedList.h"
+#include "results.h"
 
 typedef struct usersManager UsersManager;
 //cria um novo catálogo de utilizadores
@@ -28,4 +29,5 @@ void printUsers(UsersManager *usersManager);
 //liberta espaço em memória do catálogo de utilizadores
 void destroyUsersCatalog(UsersManager *usersManager);
 
+void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, Results* results);
 #endif

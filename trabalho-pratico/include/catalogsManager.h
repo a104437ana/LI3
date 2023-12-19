@@ -46,6 +46,12 @@ AirportsManager *getAirportsCatalog(Catalogs *catalogs);
 void destroyCatalogs(Catalogs *catalogs);
 
 //queries
+void catalogs_compute_Q1_user (char *id, Catalogs* catalogs, Results* results);
+
+void catalogs_compute_Q1_flight (char *id, Catalogs* catalogs, Results* results);
+
+void catalogs_compute_Q1_reservation (char *id, Catalogs* catalogs, Results* results);
+
 void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, Results* results);
 
 #endif

@@ -66,3 +66,30 @@ void destroyFlightsCatalog(FlightsManager *flightsManager) {
     destroyHashtable(flightsManager->flights, destroyFlight); //liberta a hashtable
     free(flightsManager);
 }
+
+//queries
+void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, Results* results) {
+    Flight* flight = getData(flightsManager->flights,hashFunction(id),id);
+    if (flight == NULL) {
+        setQ1type(results,0);
+    }
+    else {
+        setQ1type(results,2);
+        char* airline = getFlightAirline(flight);
+        char* plane_model = getFlightAirplane(flight);
+        char* origin = getFlightOrigin(flight);
+        char* destination = getFlightDestination(flight);
+        Date* schedule_departure_date = getFlightScheduleDeparture(flight);
+        Date* schedule_arrival_date = getFlightScheduleArrival(flight);
+        int number_of_passengers = getNumberPassengers(flight);
+        double delay = getDelay(flight);
+        setAirlineQ1(results,airline);
+        setPlaneModelQ1(results,plane_model);
+        setOriginQ1(results,origin);
+        setDestQ1(results,destination);
+        setSheduleDepartureQ1(results,schedule_departure_date);
+        setSheduleArrivalQ1(results,schedule_arrival_date);
+        setNpassengersQ1(results,number_of_passengers);
+        setDelayQ1(results,delay);
+    }
+}

@@ -105,7 +105,7 @@ int getBeginHours(void* data, Hashtable *lookupTable);
 char * getIdResultQ2(ResultQ2* data);
 void destroyResultQ2(void * data);
 
-ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog);
+void Q1(char *id, Catalogs* catalogs, Results* results);
 
 ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog);
 

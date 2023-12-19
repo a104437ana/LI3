@@ -68,15 +68,11 @@ char *getHotelId(Hotel *hotel) {
     return hotel->id; //falta encapsulamento
 }
 
-char *getHotelName(char *id, Hashtable *hotels) {
-    unsigned int key = hashFunction(id);
-    Hotel *hotel = getData(hotels, key, id);
+char *getHotelName(Hotel *hotel) {
     return hotel->name; //falta encapsulamento
 }
 
-char getHotelStars(char *id, Hashtable *hotels) {
-    unsigned int key = hashFunction(id);
-    Hotel *hotel = getData(hotels, key, id);
+char getHotelStars(Hotel *hotel) {
     return hotel->stars;
 }
 
@@ -92,11 +88,16 @@ char *getHotelAddress(Hotel *hotel) {
     return hotel->address; //falta encapsulamento
 }
 */
-int getHotelCityTax(char *id, Hashtable *hotels) {
+int getHotelCityTax2(char *id, Hashtable *hotels) {
     unsigned int key = hashFunction(id);
     Hotel *hotel = getData(hotels, key, id);
     return hotel->cityTax;
 }
+
+int getHotelCityTax(Hotel *hotel) {
+    return hotel->cityTax;
+}
+
 //sets dos campos do hotel
 void setHId(Hotel *hotel, char *id) {
     char *oldHotelId = hotel->id;

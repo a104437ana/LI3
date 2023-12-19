@@ -14,8 +14,8 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
    if (command->query_id==1){
      if (command->n_args==0) return 0;
      else{
-        ResultQ1* output = Q1(command->args[0],usersCatalog,reservationsCatalog,flightsCatalog);
-        printOutputQ1(command->format_flag, output,i,hotelsCatalog);
+        Q1(command->args[0],catalogs,results);
+        printOutputQ1(command->format_flag,results,i);
         return 1;
      }
    }

@@ -32,6 +32,8 @@ int getFlightScheduleDepartureMinutes(void *id, Hashtable *lookupTable);
 int getFlightScheduleDepartureHours(void *id, Hashtable *lookupTable);
 char *getFlightId(Flight *flight);
 OrdList * getPassengers(Flight* flight);
+int getNumberPassengers(Flight* flight);
+int getDelay(Flight* flight);
 
 //sets
 void setFlightAirline(Flight *flight, char *airline);

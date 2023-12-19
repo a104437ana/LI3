@@ -45,3 +45,29 @@ void destroyreservationsCatalog(ReservationsManager *reservationsManager) {
     destroyHashtable(reservationsManager->reservations, destroyReservation);
     free(reservationsManager);
 }
+
+//queries
+char* reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservationsManager, Results* results) {
+    Reservation* reservation = getData(reservationsManager->reservations,hashFunction(id),id);
+    char* hotel_id;
+    if (reservation == NULL) {
+        setQ1type(results,0);
+        hotel_id = NULL;
+    }
+    else {
+        setQ1type(results,3);
+        hotel_id = getReservHotelId(reservation);
+        Date* begin_date = getReservBegin(reservation);
+        Date* end_date = getReservEnd(reservation);
+        int includes_breakfast = getReservIncludesBreakfast(reservation);
+        int number_of_nights = getReservNights(reservation);
+        int pricePerNight = getReservPricePerNight(reservation);
+        setHotelIdQ1(results,hotel_id);
+        setBeginDateQ1(results,begin_date);
+        setEndDateQ1(results,end_date);
+        setIncludesBreakfastQ1(results,includes_breakfast);
+        setNnightsQ1(results,number_of_nights);
+        setTotalPriceQ1(results,pricePerNight);
+    }
+    return hotel_id;
+}

@@ -52,11 +52,39 @@ void destroyHotelsCatalog(HotelsManager *hotelsManager) {
 }
 
 //queries
+void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,Results* results) {
+    if (hotel_id == NULL) {
+        setQ1type(results,0);
+    }
+    else {
+    Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(hotel_id),hotel_id);
+    if (hotel==NULL) setQ1type(results,0); //se o id não existir
+    else {
+        char* hotel_name = getHotelName(hotel);
+        int hotel_stars = getHotelStars(hotel);
+        int ppn = getTotalPriceQ1(results); //preço por noite
+        int nnights = getNnightsQ1(results); //número de noites
+        int cityTax = getHotelCityTax(hotel); //taxa turística
+        double res = (double) ((ppn*nnights)+(((double)(ppn*nnights)/100.0)*cityTax));
+        setHotelNameQ1(results,hotel_name);
+        setHotelStarsQ1(results,hotel_stars);
+        setTotalPriceQ1(results,res);
+    }
+    }
+}
+
 void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, Results* results) {
+    if (id_hotel == NULL) {
+        setRating(results,-1.0);
+    }
+    else {
     Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(id_hotel),id_hotel);
     if (hotel==NULL) setRating(results,-1.0); //se o id não existir
-    int numberClassifications = getHotelNumberOfReservations(hotel);
-    double result = getHotelRatingsSum(hotel);
-    result /= numberClassifications;
-    setRating(results,result);
+    else {
+        int numberClassifications = getHotelNumberOfReservations(hotel);
+        double result = getHotelRatingsSum(hotel);
+        result /= numberClassifications;
+        setRating(results,result);
+    }
+    }
 }

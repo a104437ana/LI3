@@ -120,6 +120,22 @@ Date *getBirth(User *user) {
 
     return birth;
 }
+
+//calcula a idade de um utilizador em anos
+int getAge(User* user){
+  Date *birthdate = getBirth(user);
+  bool birthday; //se o aniversário do utilizador é ou não antes da data atual
+  if(MONTH<birthdate->month) birthday=false;
+  else if(MONTH>birthdate->month) birthday=true;
+  else{
+    if(DAY<birthdate->day) birthday=false;
+    else birthday=true;
+  }
+
+  if(birthday==true) return (YEAR-birthdate->year);
+  else return (YEAR-birthdate->year-1);
+}
+
 /*
 char *getEmail(User *user) {
     char *email;
