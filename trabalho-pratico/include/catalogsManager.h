@@ -54,4 +54,6 @@ void catalogs_compute_Q1_reservation (char *id, Catalogs* catalogs, Results* res
 
 void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, Results* results);
 
+void catalogs_compute_Q4(char* id, Catalogs* catalogs, Results* results);
+
 #endif

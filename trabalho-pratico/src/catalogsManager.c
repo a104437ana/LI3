@@ -159,3 +159,21 @@ void catalogs_compute_Q1_reservation (char *id, Catalogs* catalogs, Results* res
 void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, Results* results) {
     hotel_catalog_compute_Q3(id_hotel,catalogs->hotelsCatalog,results);
 }
+
+void catalogs_compute_Q4(char* id, Catalogs* catalogs, Results* results){
+    clearResultQ4(results);
+    Hotel* hotel = getData(getHashtableHotelsCatalog(catalogs->hotelsCatalog),hashFunction(id),id);
+    if (hotel==NULL) return; //se o id não existir
+    else {
+       int i;
+       OrdList *reservations = getHotelOrdList(hotel);
+       if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel, getHashtableReservCatalog(catalogs->reservationsCatalog));
+       int listSize = getOrdListSize(reservations);
+       setResultQ4Size (results,listSize);
+       for(i=0;i<listSize; i++){
+         char *id = getDataOrdList(reservations, i);
+         Hashtable* lookup = getHashtableReservCatalog(catalogs->reservationsCatalog);
+         setResultQ4DataInd(results, id, getReservBeginId(id, lookup), getReservEndId(id, lookup), getReservUserIdId(id, lookup), getReservUserClassificationId(id, lookup), getReservPriceId(id, lookup,getHashtableHotelsCatalog(catalogs->hotelsCatalog)), listSize-i-1); //coloca os dados na lista resposta do mais recente para o mais antigo
+       }
+}
+}

@@ -52,7 +52,7 @@ typedef struct resultsQ2{
 } ResultsQ2;
 
 typedef struct resultsQ4{
-    Reservation** results;
+    char ** result_ids;
     int N;
 } ResultsQ4;
 
@@ -111,7 +111,7 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog);
 
 void Q3(char *id, Catalogs* catalogs, Results* results);
 
-ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog);
+void Q4(char *id, Catalogs* catalogs, Results* results);
 
 ResultsQ5* Q5(char *name, Date begin, Date end);
 

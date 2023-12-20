@@ -35,6 +35,12 @@ int getReservEndMonth(void *reservation);
 int getReservEndYear(void *reservation);
 bool getReservIncludesBreakfast(Reservation *reservation);
 int getReservNights(Reservation* reservation);
+int getReservUserClassificationId(void *id, Hashtable *lookupTable);
+char *getReservUserIdId(void *id, Hashtable *lookupTable);
+Date *getReservBeginId(void *id, Hashtable *lookupTable);
+Date *getReservEndId(void *id, Hashtable *lookupTable);
+double getReservPriceId(void *id, Hashtable *lookupTable, Hashtable *hotels);
+
 //sets
 //void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *ReservId);
 //void setHotelId(Hashtable *hashtable, unsigned int key, char *id_hotel, char *id);

@@ -142,54 +142,105 @@ void printOutputQ3 (char format_flag, Results* results, int i){
   fclose(file);
 }
 
+////imprime o output da query 4
+//void printOutputQ4 (char format_flag, ResultsQ4* output, int i, HotelsManager *hotelsCatalog){
+//  Hashtable *hotels = getHashtableHotelsCatalog(hotelsCatalog); //provisório
+//  if (output==NULL) return; //se o id não existir, não escreve nada
+//  char path[100];
+//  sprintf (path, "./Resultados/command%d_output.txt", i);
+//  FILE* file = fopen(path, "w");
+//  int j;
+//  if (format_flag=='F'){
+//     for (j=0; j<output->N; j++){
+//      int rating = getReservUserClassification(output->results[j]);
+//      if (rating<0){
+//       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+//       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
+//       fprintf (file, "--- %d ---\n", (j+1));
+//       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservPrice(output->results[j], hotels));
+//       if (j<output->N-1) fprintf (file, "\n");
+//       free(begin); free(end);
+//      }
+//      else{
+//       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+//       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
+//       fprintf (file, "--- %d ---\n", (j+1));
+//       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), rating, getReservPrice(output->results[j], hotels));
+//       if (j<output->N-1) fprintf (file, "\n");
+//       free(begin); free(end);
+//      }
+//     }
+//  }
+//  else{
+//     for (j=0; j<output->N; j++){
+//      int rating = getReservUserClassification(output->results[j]);
+//      if (rating<0){
+//       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+//       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
+//       fprintf(file, "%s;%s;%s;%s;%.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservPrice(output->results[j], hotels));
+//       free(begin); free(end);
+//      }
+//      else{
+//       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
+//       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
+//       fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), rating, getReservPrice(output->results[j], hotels));
+//       free(begin); free(end);
+//      }
+//     }
+//  }
+//  free(output->results);
+//  free(output);
+//  fclose(file);
+//}
+
 //imprime o output da query 4
-void printOutputQ4 (char format_flag, ResultsQ4* output, int i, HotelsManager *hotelsCatalog){
-  Hashtable *hotels = getHashtableHotelsCatalog(hotelsCatalog); //provisório
-  if (output==NULL) return; //se o id não existir, não escreve nada
+void printOutputQ4 (char format_flag, Results* results, int i){
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
   FILE* file = fopen(path, "w");
   int j;
   if (format_flag=='F'){
-     for (j=0; j<output->N; j++){
-      int rating = getReservUserClassification(output->results[j]);
+     for (j=0; j<getResultQ4Size(results); j++){
+      char* id = getResultQ4IdInd(results, j);
+      int rating = getResultQ4RatingInd(results,j);
+      Date * begin = getResultQ4BeginInd(results,j);
+      Date * end = getResultQ4EndInd(results,j);
+      char * beginS = dateToStringNoHours(begin);
+      char * endS= dateToStringNoHours(end);
+      char * userId = getResultQ4UserIdInd(results, j);
       if (rating<0){
-       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
-       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservPrice(output->results[j], hotels));
-       if (j<output->N-1) fprintf (file, "\n");
-       free(begin); free(end);
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\ntotal_price: %.3f\n",id, beginS, endS, userId, getResultQ4TotalPriceInd(results, j));
+       if (j<getResultQ4Size(results)-1) fprintf (file, "\n");
+       free(id); destroyDate(begin); destroyDate(end); free(beginS); free(endS); free(userId);
       }
       else{
-       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
-       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), rating, getReservPrice(output->results[j], hotels));
-       if (j<output->N-1) fprintf (file, "\n");
-       free(begin); free(end);
+       fprintf(file, "id: %s\nbegin_date: %s\nend_date: %s\nuser_id: %s\nrating: %d\ntotal_price: %.3f\n",id, beginS, endS, userId, rating, getResultQ4TotalPriceInd(results, j));
+       if (j<getResultQ4Size(results)-1) fprintf (file, "\n");
+       free(id); destroyDate(begin); destroyDate(end); free(beginS); free(endS); free(userId);
       }
      }
   }
   else{
-     for (j=0; j<output->N; j++){
-      int rating = getReservUserClassification(output->results[j]);
+     for (j=0; j<getResultQ4Size(results); j++){
+      char* id = getResultQ4IdInd(results, j);
+      int rating = getResultQ4RatingInd(results,j);
+      Date * begin = getResultQ4BeginInd(results,j);
+      Date * end = getResultQ4EndInd(results,j);
+      char * beginS = dateToStringNoHours(begin);
+      char * endS= dateToStringNoHours(end);
+      char * userId = getResultQ4UserIdInd(results, j);
       if (rating<0){
-       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
-       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
-       fprintf(file, "%s;%s;%s;%s;%.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), getReservPrice(output->results[j], hotels));
-       free(begin); free(end);
+       fprintf(file, "%s;%s;%s;%s;%.3f\n",id, beginS, endS, userId, getResultQ4TotalPriceInd(results, j));
+       free(id); destroyDate(begin); destroyDate(end); free(beginS); free(endS); free(userId);
       }
       else{
-       char * begin = dateToStringNoHours(getReservBegin(output->results[j]));
-       char * end = dateToStringNoHours(getReservEnd(output->results[j]));
-       fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",getReservId(output->results[j]), begin, end, getReservUserId(output->results[j]), rating, getReservPrice(output->results[j], hotels));
-       free(begin); free(end);
+       fprintf(file, "%s;%s;%s;%s;%d;%.3f\n",id, beginS, endS, userId, rating, getResultQ4TotalPriceInd(results, j));
+       free(id); destroyDate(begin); destroyDate(end); free(beginS); free(endS); free(userId);
       }
      }
   }
-  free(output->results);
-  free(output);
   fclose(file);
 }
 

@@ -53,8 +53,8 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==4){
      if (command->n_args==0) return 0;
      else{
-        ResultsQ4* output = Q4(command->args[0], hotelsCatalog, reservationsCatalog);
-        printOutputQ4(command->format_flag, output, i, hotelsCatalog);
+        Q4(command->args[0], catalogs,results);
+        printOutputQ4(command->format_flag, results, i);
         return 4;
      }
    }

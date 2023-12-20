@@ -279,24 +279,26 @@ double Q3(char *id, HotelsManager *hotelsCatalog) {
   return result;
 }*/
 
-//query 4 - devolve a lista de reservas do hotel com o id passado como argumento, se existir
-ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog){
-    Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
-    if (hotel==NULL) return NULL; //se o id não existir
-    int i;
-    ResultsQ4 *results = malloc(sizeof(ResultsQ4));
-    OrdList *reservations = getHotelOrdList(hotel);
-    if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel, getHashtableReservCatalog(reservationsCatalog));
-    int listSize = getOrdListSize(reservations);
-    results->N = listSize;
-    results->results = malloc(sizeof(Reservation*)*listSize);
-    for(i=0;i<listSize; i++){
-      char *id = getDataOrdList(reservations, i);
-      unsigned int key = hashFunction(id);
-      Reservation * data = (Reservation *) getData(getHashtableReservCatalog(reservationsCatalog), key, id);
-      results->results[listSize-i-1] = data; //coloca os dados na lista resposta do mais recente para o mais antigo
-    }
-    return results;
+////query 4 - devolve a lista de reservas do hotel com o id passado como argumento, se existir
+//ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog){
+//    Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
+//    if (hotel==NULL) return NULL; //se o id não existir
+//    int i;
+//    ResultsQ4 *results = malloc(sizeof(ResultsQ4));
+//    OrdList *reservations = getHotelOrdList(hotel);
+//    if (getOrdListOrd(reservations) == 0) sortHotelReservationsByDate(hotel, getHashtableReservCatalog(reservationsCatalog));
+//    int listSize = getOrdListSize(reservations);
+//    results->N = listSize;
+//    results->results = malloc(sizeof(char*)*listSize);
+//    for(i=0;i<listSize; i++){
+//      char *id = getDataOrdList(reservations, i);
+//      results->results[listSize-i-1] = id; //coloca os dados na lista resposta do mais recente para o mais antigo
+//    }
+//    return results;
+//}
+
+void Q4 (char* id_hotel, Catalogs* catalogs, Results* results) {
+  catalogs_compute_Q4(id_hotel,catalogs,results);
 }
 
 //quey 8 - devolve a receita total de um hotel entre duas datas limites dadas

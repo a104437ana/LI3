@@ -104,6 +104,40 @@ int getReservBeginYearId(void *id, Hashtable *lookupTable) {
     return reservation->begin->year;
 }
 
+int getReservUserClassificationId(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Reservation *reservation = getData(lookupTable, key, id);
+    return (reservation->userClassification-'0');
+}
+
+char *getReservUserIdId(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Reservation *reservation = getData(lookupTable, key, id);
+    return reservation->id_user;
+}
+
+Date *getReservBeginId(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Reservation *reservation = getData(lookupTable, key, id);
+    return reservation->begin;
+}
+
+Date *getReservEndId(void *id, Hashtable *lookupTable) {
+    unsigned int key = hashFunction(id);
+    Reservation *reservation = getData(lookupTable, key, id);
+    return reservation->end;
+}
+
+double getReservPriceId(void *id, Hashtable *lookupTable, Hashtable *hotels){
+    unsigned int key = hashFunction(id);
+    Reservation *reservation = getData(lookupTable, key, id);
+     int ppn = getReservPricePerNight(reservation); //preço por noite
+     int nnights = getReservNights(reservation); //número de noites
+     int cityTax = getReservCityTax(reservation, hotels); //taxa turística
+     double res = (ppn*nnights)+(((float)(ppn*nnights)/100)*cityTax);
+     return res;
+}
+
 int getReservBeginDay(void *reservation) {
     return ((Reservation*)reservation)->begin->day;
 }
@@ -140,14 +174,6 @@ int getReservNights(Reservation* reservation){
      return res;
 }
 
-/*calcula o preço de uma reserva
-double getReservPrice(Reservation* reservation, Hashtable *hotels){
-     int ppn = getReservPricePerNight(reservation); //preço por noite
-     int nnights = getReservNights(reservation); //número de noites
-     int cityTax = getReservCityTax(reservation, hotels); //taxa turística
-     double res = (ppn*nnights)+(((float)(ppn*nnights)/100)*cityTax);
-     return res;
-}*/
 //sets dos campos da reserva
 //void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *reservId) {
 //    Reservation *data = getData(hashtable, key, reservId);
