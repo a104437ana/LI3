@@ -5,12 +5,14 @@
 
 struct airportsManager {
     Hashtable *airports;
+    OrdList* airportsByMedianOfDelays;
 };
 
 //cria um novo catálogo de aeroportos
 AirportsManager *createAirportsCatalog(int size) {
     AirportsManager *airportsManager = malloc(sizeof(AirportsManager));
     airportsManager->airports = createHashtable(size);
+    airportsManager->airportsByMedianOfDelays = createOrdList(30);
     return airportsManager;
 }
 
@@ -22,6 +24,7 @@ void updateAirportCatalog(char *id, char *id_flight, AirportsManager *airportsCa
     if (existsAirport == 0) { //caso não exista cria um novo aeroporto
         airport = createAirport(id);
         airportsCatalog->airports = addHashtable(airportsCatalog->airports, key, airport, id); //adiciona o aeroporto ao catálogo dos aeroportos
+        addOrdList(airportsCatalog->airportsByMedianOfDelays,airport);
     } else //caso já exista
         airport = (Airport*) getData(airportsCatalog->airports, key, id); //obtem apontador para o aeroporto do catálogo dos aeroporotos
     addFlightToAirport(airport, id_flight); //adiciona o apontador do voo aos voos do aeroporto
@@ -41,5 +44,6 @@ Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager) {
 void destroyAirportsCatalog(AirportsManager *airportsManager) {
     if (airportsManager == NULL) return; //se o catálogo não existir
     destroyHashtable(airportsManager->airports, destroyAirport); //liberta a hashtable de aeroportos
+    destroyOnlyOrdList(airportsManager->airportsByMedianOfDelays);
     free(airportsManager);
 }

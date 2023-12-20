@@ -17,7 +17,7 @@ void sortAirportFlightsByDepartureDate(void *airport, Hashtable *lookupTable);
 
 //obtem a lista de voos do aeroporto
 OrdList *getAirportOrdList(Airport *airport);
-
+OrdList *getAirportFlightsByDelay (Airport* airport);
 //gets
 char *getAirportId(Airport *airport);
 

@@ -65,7 +65,10 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                else add_invalid_line_to_error_file(error_file_path,line);
                                break;
                     //flights                   id       airline  airplane t_seats  origin   dest     s_depart s_arriv  r_depart r_arriv  pilot     copilot
-                    case 'f' : if (valid_flight(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[11],passengers_counter)) {   
+                    case 'f' : if (valid_flight(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[11],passengers_counter)) {
+                                    for(int w = 0; w<3; w++) {
+                                        if (token[4][w] >= 97 && token[4][w] <= 122) token[4][w] -= 32;
+                                    }
                                     addFlight(token[0],token[1],token[2],token[4],token[5],token[6],token[7],token[8],token[9],catalogs);
                                     addAirport(token[4],token[0],catalogs);
                                }

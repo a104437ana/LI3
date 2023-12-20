@@ -9,6 +9,7 @@
 struct airport {
     char name[4];
     OrdList *flightsByDepartureDate;
+    OrdList *flightsByDelay;
 };
 
 //cria um novo aeroporto
@@ -16,7 +17,7 @@ Airport *createAirport(char *name) {
     Airport *airport = malloc(sizeof(Airport));
     memcpy(airport->name, name, 4);
     airport->flightsByDepartureDate = createOrdList(AIRPORT_FLIGHTS_INI_SIZE);
-
+    airport->flightsByDelay = createOrdList(AIRPORT_FLIGHTS_INI_SIZE);
     return airport;
 }
 
@@ -24,6 +25,8 @@ Airport *createAirport(char *name) {
 void addFlightToAirport(Airport *airport, char *id_flight) {
     char *flight = strdup(id_flight);
     addOrdList(airport->flightsByDepartureDate, flight);
+    char *flight2 = strdup(id_flight);
+    addOrdList(airport->flightsByDelay,flight2);
 }
 
 int compareFlightsIds(void *id1, void *id2) {
@@ -44,6 +47,10 @@ OrdList *getAirportOrdList(Airport *airport) {
     return airport->flightsByDepartureDate;
 }
 
+OrdList *getAirportFlightsByDelay (Airport* airport) {
+    return airport->flightsByDelay;
+}
+
 //gets
 char *getAirportId(Airport *airport) {
     return airport->name;
@@ -54,5 +61,6 @@ char *getAirportId(Airport *airport) {
 //liberta espaço em memória do aeroporto
 void destroyAirport(void *airport) {
     destroyOrdList(((Airport *) airport)->flightsByDepartureDate, free);
+    destroyOrdList(((Airport *)airport)->flightsByDelay, free);
     free(((Airport *) airport)->name);
 }
