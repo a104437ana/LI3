@@ -91,5 +91,7 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, Result
         setSheduleArrivalQ1(results,schedule_arrival_date);
         setNpassengersQ1(results,number_of_passengers);
         setDelayQ1(results,delay);
+        free(origin);
+        free(destination);
     }
 }

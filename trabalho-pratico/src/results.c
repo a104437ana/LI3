@@ -95,8 +95,17 @@ void clearResultQ4 (Results* results){
 }
 
 void destroyResults (Results* results) {
+  free(results->resultQ1_user->name);
+  free(results->resultQ1_user->country_code);
+  free(results->resultQ1_user->passport);
   free(results->resultQ1_user);
+  free(results->resultQ1_flight->airline);
+  free(results->resultQ1_flight->plane_model);
+  free(results->resultQ1_flight->origin);
+  free(results->resultQ1_flight->destination);
   free(results->resultQ1_flight);
+  free(results->resultQ1_reservation->hotel_id);
+  free(results->resultQ1_reservation->hotel_name);
   free(results->resultQ1_reservation);
   free(results->resultQ3);
   clearResultQ4(results);
