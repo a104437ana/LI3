@@ -69,8 +69,8 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                     for(int w = 0; w<3; w++) {
                                         if (token[4][w] >= 97 && token[4][w] <= 122) token[4][w] -= 32;
                                     }
-                                    addFlight(token[0],token[1],token[2],token[4],token[5],token[6],token[7],token[8],token[9],catalogs);
-                                    addAirport(token[4],token[0],catalogs);
+                                    int delay = addFlight(token[0],token[1],token[2],token[4],token[5],token[6],token[7],token[8],token[9],catalogs);
+                                    addAirport(delay,token[4],token[0],catalogs);
                                }
                                else add_invalid_line_to_error_file(error_file_path,line);
                                break;

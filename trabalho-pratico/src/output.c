@@ -302,7 +302,7 @@ void printOutputQ4 (char format_flag, Results* results, int i){
 //  fclose(file);
 //}
 
-/*
+
 void printOutputQ7 (char format_flag, Results* results, int i){
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
@@ -312,18 +312,24 @@ void printOutputQ7 (char format_flag, Results* results, int i){
   if (format_flag=='F'){
      for (j=1; j<N; j++){
       if (j != 1) fprintf(file,"\n");
+       char* name = getNameQ7(results,j-1);
+       double median = getMedianQ7(results,j-1);
        fprintf (file, "--- %d ---\n", j);
-       fprintf (file,"name: %s\nmedian: %g\n", output->results[j]); //incompleto
+       fprintf (file,"name: %s\nmedian: %g\n",name,median);
+       free(name);
      }
     }
   else{
      for (j=1; j<N; j++){
-       fprintf (file,"%s;%g\n", output->results[j]); //incompleto
+       char* name = getNameQ7(results,j-1);
+       double median = getMedianQ7(results,j-1);
+       fprintf (file,"%s;%g\n",name,median);
+       free(name);
      }
   }
   fclose(file);
 }
-*/
+
 
 //imprime o output da query 8
 void printOutputQ8 (char format_flag, int output, int i){

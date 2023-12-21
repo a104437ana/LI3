@@ -18,11 +18,13 @@ typedef struct resultQ3 ResultQ3;
 typedef struct resultQ4 ResultQ4;
 
 typedef struct resultQ4_reservation ResultQ4_reservation;
-
+typedef struct resultQ7_airport ResultQ7_airport;
+typedef struct resultQ7 ResultQ7;
 Results *createResults();
 
-void destroyResults (Results* results);
 void clearResultQ4 (Results* results);
+void clearResultQ7 (Results* results);
+void destroyResults (Results* results);
 
 int getQ1type (Results* results);
 void setQ1type (Results* results, int type);
@@ -88,5 +90,11 @@ Date * getResultQ4EndInd (Results* results, int ind);
 char * getResultQ4UserIdInd (Results* results, int ind);
 int getResultQ4RatingInd (Results* results, int ind);
 double getResultQ4TotalPriceInd (Results* results, int ind);
+
+char* getNameQ7 (Results* results, int i);
+double getMedianQ7 (Results* results, int i);
+int getSizeQ7 (Results* results);
+void setResultQ7 (Results* results,int size);
+void setNameMedianQ7 (Results* results, int i, char* name, double median);
 
 #endif

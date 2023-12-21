@@ -117,7 +117,7 @@ ResultsQ5* Q5(char *name, Date begin, Date end);
 
 ResultsQ6* Q6(int year, int N);
 
-ResultsQ7* Q7(int N);
+void Q7 (int n, Catalogs* catalogs, Results* results);
 
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog);
 

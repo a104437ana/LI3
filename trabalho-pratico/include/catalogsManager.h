@@ -29,9 +29,9 @@ void sortAirportCatalog(Catalogs *catalogs);
 //adiciona um utilizador ao catálogo
 void addUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, Catalogs *catalogs);
 void addReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs);
-void addFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs);
+int addFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs);
 void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, char *id_reserv, Catalogs *catalogs);
-void addAirport(char *id, char *id_flight, Catalogs *catalogs);
+void addAirport(int delay, char *id, char *id_flight, Catalogs *catalogs);
 void addPassenger(char *flightId, char *userId, Catalogs *catalogs);
 int userExists(char *id, Catalogs *catalogs);
 int flightExists(char *id, Catalogs *catalogs);
@@ -56,4 +56,5 @@ void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, Results* results);
 
 void catalogs_compute_Q4(char* id, Catalogs* catalogs, Results* results);
 
+void catalogs_compute_Q7(int n, Catalogs* catalogs, Results* results);
 #endif

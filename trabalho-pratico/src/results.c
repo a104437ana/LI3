@@ -6,6 +6,7 @@ struct results {
     ResultQ1_reservation* resultQ1_reservation;
     ResultQ3* resultQ3;
     ResultQ4* resultQ4;
+    ResultQ7* resultQ7;
 };
 
 struct resultQ1_user {
@@ -59,6 +60,16 @@ struct resultQ4_reservation {
     double total_price;
 };
 
+struct resultQ7_airport {
+    char*                                                                                                                                                                                                                                                                                                             name;
+    double median;
+};
+
+struct resultQ7 {
+    int size;
+    ResultQ7_airport** list;
+};
+
 Results * createResults() {
     Results *results = malloc(sizeof(Results));
     results->resultQ1_user = malloc(sizeof(ResultQ1_user));
@@ -77,6 +88,9 @@ Results * createResults() {
     results->resultQ4 = malloc(sizeof(ResultQ4));
     results->resultQ4->size = 0;
     results->resultQ4->list = NULL;
+    results->resultQ7 = malloc(sizeof(ResultQ7));
+    results->resultQ7->size = 0;
+    results->resultQ7->list = NULL;
 
     return results;
 }
@@ -92,6 +106,16 @@ void clearResultQ4 (Results* results){
     }
     free(results->resultQ4->list);
     results->resultQ4->size = 0;
+}
+
+void clearResultQ7 (Results* results){
+    int i;
+    for (i=0; i<results->resultQ7->size; i++){
+     free(results->resultQ7->list[i]->name);
+     free(results->resultQ7->list[i]);
+    }
+    free(results->resultQ7->list);
+    results->resultQ7->size = 0;
 }
 
 void destroyResults (Results* results) {
@@ -110,6 +134,8 @@ void destroyResults (Results* results) {
   free(results->resultQ3);
   clearResultQ4(results);
   free(results->resultQ4);
+  clearResultQ7(results);
+  free(results->resultQ7);
   free(results);
 }
 
@@ -389,4 +415,29 @@ int getResultQ4RatingInd (Results* results, int ind){
 }
 double getResultQ4TotalPriceInd (Results* results, int ind){
     return (results->resultQ4->list[ind]->total_price);
+}
+
+//Q7
+
+char* getNameQ7 (Results* results, int i) {
+    return (strdup(results->resultQ7->list[i]->name));
+}
+
+double getMedianQ7 (Results* results, int i) {
+    return (results->resultQ7->list[i]->median);
+}
+
+int getSizeQ7 (Results* results) {
+    return results->resultQ7->size;
+}
+
+void setResultQ7 (Results* results,int size) {
+    results->resultQ7->list = malloc(sizeof(ResultQ7_airport*)*size);
+}
+
+void setNameMedianQ7 (Results* results, int i, char* name, double median) {
+    results->resultQ7->list[i]= malloc(sizeof(ResultQ7_airport));
+    results->resultQ7->list[i]->name = strdup(name);
+    results->resultQ7->list[i]->median = median;
+    results->resultQ7->size++;
 }

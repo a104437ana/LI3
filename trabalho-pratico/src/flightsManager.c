@@ -14,10 +14,11 @@ FlightsManager *createFlightsCatalog(int size) {
     return flightsManager;
 }
 //função que adiciona um voo ao catálogo de voos
-void addFlightToCatalog(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, FlightsManager *flightsCatalog) {
+int addFlightToCatalog(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, FlightsManager *flightsCatalog) {
     int key = hashFunction(id);
     Flight *flight = createFlight(id, airline, airplane, origin, destination, scheduleDeparture, scheduleArrival, realDeparture, realArrival);
     flightsCatalog->flights = addHashtable(flightsCatalog->flights, key, flight, id);
+    return getDelay(flight);
 }
 //função que adiciona um utilizador à lista de passageiros de um certo voo no catálogo
 //e adiciona esse voo à lista de voos do utilizador

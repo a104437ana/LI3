@@ -85,16 +85,17 @@ void addReservation(char *id, char *id_user, char *id_hotel, char *begin, char *
     addReservToCatalog(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification, catalogs->reservationsCatalog, catalogs->usersCatalog, getHashtableHotelsCatalog(catalogs->hotelsCatalog));
 }
 //adiciona um voo ao catálogo
-void addFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs) {
-    addFlightToCatalog(id, airline, airplane, origin, destination, scheduleDeparture, scheduleArrival, realDeparture, realArrival, catalogs->flightsCatalog);
+int addFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs) {
+    int delay = addFlightToCatalog(id, airline, airplane, origin, destination, scheduleDeparture, scheduleArrival, realDeparture, realArrival, catalogs->flightsCatalog);
+    return delay;
 }
 //adiciona uma reserva ao catálogo
 void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, char *id_reserv, Catalogs *catalogs) {
     updateHotelCatalog(id, name, stars, cityTax, userClassification, id_reserv, catalogs->hotelsCatalog);
 }
 //adiciona uma reserva ao catálogo
-void addAirport(char *id, char *id_flight, Catalogs *catalogs) {
-    updateAirportCatalog(id, id_flight, catalogs->airportsCatalog);
+void addAirport(int delay, char *id, char *id_flight, Catalogs *catalogs) {
+    updateAirportCatalog(delay, id, id_flight, catalogs->airportsCatalog);
 }
 //adiciona um passageiro ao catálogo
 void addPassenger(char *flightId, char *userId, Catalogs *catalogs) {
@@ -176,4 +177,8 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, Results* results){
          setResultQ4DataInd(results, id, getReservBeginId(id, lookup), getReservEndId(id, lookup), getReservUserIdId(id, lookup), getReservUserClassificationId(id, lookup), getReservPriceId(id, lookup,getHashtableHotelsCatalog(catalogs->hotelsCatalog)), listSize-i-1); //coloca os dados na lista resposta do mais recente para o mais antigo
        }
 }
+}
+
+void catalogs_compute_Q7(int n, Catalogs* catalogs, Results* results){
+    airport_calalog_compute_Q7(n,catalogs->airportsCatalog,results);
 }

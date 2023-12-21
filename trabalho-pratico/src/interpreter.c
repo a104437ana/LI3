@@ -77,8 +77,8 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==7){
      if (command->n_args==0) return 0;
      else{
-        //ResultsQ7* output = Q7(atoi(command->args[0]));
-        //printOutputQ7(command->format_flag, output, i);
+        Q7(atoi(command->args[0]),catalogs,results);
+        printOutputQ7(command->format_flag, results, i);
         return 0;
      }
    }

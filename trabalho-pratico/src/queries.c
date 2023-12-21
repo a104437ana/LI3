@@ -301,6 +301,10 @@ void Q4 (char* id_hotel, Catalogs* catalogs, Results* results) {
   catalogs_compute_Q4(id_hotel,catalogs,results);
 }
 
+void Q7 (int n, Catalogs* catalogs, Results* results) {
+  catalogs_compute_Q7(n,catalogs,results);
+}
+
 //quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog) {
   Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);

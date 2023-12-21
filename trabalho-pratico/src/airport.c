@@ -8,8 +8,11 @@
 
 struct airport {
     char name[4];
+    double median;
     OrdList *flightsByDepartureDate;
-    OrdList *flightsByDelay;
+    int *listOfDelays;
+    int maxSize_list;
+    int size_list;
 };
 
 //cria um novo aeroporto
@@ -17,7 +20,11 @@ Airport *createAirport(char *name) {
     Airport *airport = malloc(sizeof(Airport));
     memcpy(airport->name, name, 4);
     airport->flightsByDepartureDate = createOrdList(AIRPORT_FLIGHTS_INI_SIZE);
-    airport->flightsByDelay = createOrdList(AIRPORT_FLIGHTS_INI_SIZE);
+    airport->median = 0.0;
+    airport->size_list = 0;
+    airport->listOfDelays = malloc(sizeof(int)*500);
+    airport->maxSize_list = 500;
+
     return airport;
 }
 
@@ -25,8 +32,15 @@ Airport *createAirport(char *name) {
 void addFlightToAirport(Airport *airport, char *id_flight) {
     char *flight = strdup(id_flight);
     addOrdList(airport->flightsByDepartureDate, flight);
-    char *flight2 = strdup(id_flight);
-    addOrdList(airport->flightsByDelay,flight2);
+}
+
+void addDelayToAirport(Airport* airport, int delay) {
+    if (airport->maxSize_list == airport->size_list) {
+        airport->maxSize_list *= 2;
+        airport->listOfDelays = (int*)realloc(airport->listOfDelays, airport->maxSize_list * sizeof(int));
+    }
+    airport->listOfDelays[airport->size_list] = delay;
+    airport->size_list++;
 }
 
 int compareFlightsIds(void *id1, void *id2) {
@@ -47,20 +61,61 @@ OrdList *getAirportOrdList(Airport *airport) {
     return airport->flightsByDepartureDate;
 }
 
-OrdList *getAirportFlightsByDelay (Airport* airport) {
-    return airport->flightsByDelay;
-}
-
 //gets
 char *getAirportId(Airport *airport) {
-    return airport->name;
+    return strdup(airport->name);
 }
 
+double getAirportMedian(Airport *airport) {
+    return airport->median;
+}
+
+void swapL(int a[], int i, int j) {
+    int temp = a[i];
+    a[i] = a[j];
+    a[j] = temp;
+}
+
+int partitionL(int a[], int high, int pivot) {
+    int i = -1;
+    for (int j = 0; j < high; j++) {
+        if (a[j] > pivot) {
+            i++;
+            swapL(a, i, j);
+        }
+    }
+    return i + 1;
+}
+
+void qsortL (int a[], int n) {
+    if (n < 2) return;
+    int p = partitionL(a, n-1, a[n-1]);
+    swapL(a, p, n-1);
+    qsortL(a, p);
+    qsortL(a+p+1, n-p-1);
+}
+
+void sortAirportDelays (Airport* airport) {
+    int size = airport->size_list;
+    qsortL(airport->listOfDelays,size);
+    if (size % 2 == 0) {
+        int indice1 = size / 2;
+        int indice2 = indice1 - 1;
+        int mediana1 = airport->listOfDelays[indice1];
+        int mediana2 = airport->listOfDelays[indice2];
+        double mediana = ((double) mediana1) + ((double) mediana2);
+        airport->median = (double) (mediana/2.0);
+    }
+    else {
+        int indice = size / 2;
+        airport->median = airport->listOfDelays[indice];
+    }
+}
 //sets
 
 //liberta espaço em memória do aeroporto
 void destroyAirport(void *airport) {
     destroyOrdList(((Airport *) airport)->flightsByDepartureDate, free);
-    destroyOrdList(((Airport *)airport)->flightsByDelay, free);
+    free(((Airport*)airport)->listOfDelays);
     free(((Airport *) airport)->name);
 }
