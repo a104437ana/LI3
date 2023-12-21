@@ -54,12 +54,12 @@ int compareDelays (void *pointer1, void *pointer2) {
     Airport* airport2 = (Airport*) pointer2;
     double median1 = getAirportMedian(airport1);
     double median2 = getAirportMedian(airport2);
-    if (median1 > median2) result = -1;
-    if (median1 < median2) result = 1;
+    if (median1 > median2) result = 1;
+    if (median1 < median2) result = -1;
     if (median1 == median2) {
         char* name1 = getAirportId(airport1);
         char* name2 = getAirportId(airport2);
-        result = strcoll(name1,name2);
+        result = strcoll(name2,name1);
         free(name1);
         free(name2);
     }
@@ -71,7 +71,8 @@ void airport_calalog_compute_Q7 (int n, AirportsManager *airports, Results* resu
     setResultQ7 (results,n);
     sortAirports(airports);
     int w = getOrdListSize(airports->airportsByMedianOfDelays);
-    quickSort(airports->airportsByMedianOfDelays,0,w-1,compareDelays,0.1);
+    quickSort(airports->airportsByMedianOfDelays,0,w-1,compareDelays,0);
+    reverseOrdList(airports->airportsByMedianOfDelays);
     for(int i = 0; i<n && i<w; i++) {
         Airport* airport = getDataOrdList(airports->airportsByMedianOfDelays,i);
         char* name = getAirportId(airport);
