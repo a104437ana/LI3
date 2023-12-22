@@ -8,6 +8,9 @@
 #include "interpreter.h"
 #include <locale.h>
 #include <sys/resource.h>
+#include <ncursesw/ncurses.h>
+#include <wchar.h>
+#include "interactive.h"
 
 int main (int argc, char** argv) {
 
@@ -34,6 +37,29 @@ int main (int argc, char** argv) {
     parseCommandFile(argv[2],catalogs,results);
         clock_gettime(CLOCK_REALTIME, &end);
         com = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+    }
+    else if (argc == 1) {
+    printf("Please maximize the terminal window and press Enter to continue...");
+    getchar();
+    setlocale(LC_ALL,""); //permite a utilização de caracteres especiais da nossa localidade
+    initscr(); //inicia ncurses
+
+    noecho(); //para não escrever as teclas que são pressionadas no teclado
+
+    keypad(stdscr, TRUE); //permite a interpretação de caracteres especiais
+
+    int max_row, max_col;
+    getmaxyx(stdscr, max_row, max_col);
+
+    mvprintw(0, 0, "Enter the path of the dataset: ");
+
+    refresh();
+    int row, col;
+    getyx(stdscr,row,col);
+
+    interactive_mode(max_row,max_col,row,col,catalogs);
+
+    endwin(); //termina ncurses
     }
 
     //liberta o espaço em memória dos catalogos

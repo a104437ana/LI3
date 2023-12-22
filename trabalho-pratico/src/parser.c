@@ -163,6 +163,7 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
 
         //imprime tempo de execução
         total = use + res + passc + fli + pass + des;
+        /*
         printf(" Parser:\n");
         printf("  user:\t\t %.6f seconds (%5.2f%%)\n", use, (use/total)*100);
         printf("  reservation:\t %.6f seconds (%5.2f%%)\n", res, (res/total)*100);
@@ -171,4 +172,5 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
         printf("  passenger:\t %.6f seconds (%5.2f%%)\n", pass, (pass/total)*100);
         printf("  destroy:\t %.6f seconds (%5.2f%%)\n", des, (des/total)*100);
         printf("  total:\t %.6f seconds\n", total);
+        */
  }
