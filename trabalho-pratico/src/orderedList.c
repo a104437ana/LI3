@@ -1,4 +1,5 @@
 #include "orderedList.h"
+#include "user.h"
 
 struct ordList {
     int maxSize;
@@ -37,23 +38,38 @@ void addOrdList(OrdList *ordList, void *data) {
     ordList->size = size + 1; //incrementa numero de elementos na lista
     ordList->maxSize = maxSize;
 }
+void printFullList(OrdList *list) {
+    int size = list->size;
+    int i;
+    void **data = list->data;
+    FILE *file;
+    file = fopen("./users_list.txt", "w");
+    for (i=0; i<size; i++) {
+        User *user = (User *) data[i];
+        fprintf(file, "%30s\t%s\n", getUserId(user), getName(user));
+    }
+    fclose(file);
+}
 //função que devolve o indice da primeira ocorrência de um elemento numa lista
 int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int searchBack) {
     int lower = 0, higher = list->size - 1; //limites para procura
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
     void *compareData = list->data[i]; //elemento a comparar
     //enquanto os elementos não forem iguais e os limites não se cruzarem
+    printf("Prefix: %s\n", (char*) data);
     while ((compare = compareFunction(data, compareData)) != equal && (higher - lower) > 1) {
         if (compare < equal) higher = i; //se o elemento for menor o limite superior passa a ser o indice do elemento
         else lower = i; //caso contrário o limite inferior passa a ser o indice do elemento
         i = (higher + lower) / 2; //novo indice central entre os dois limites
         compareData = list->data[i]; //novo elemento a comparar
+        printf("\t%s\n", getName(compareData));
     }
     if (higher - lower == 1 && compare != equal) return -1; //se o elemento nao existir na lista
     if (searchBack) { //caso se pretenda a primeira ocorrência desse elemento na lista
-        while (i > 0 && compare == equal) { //compara com o anterior até encontrar um elemento diferente
+        while (i > 0 && compare <= equal) { //compara com o anterior até encontrar um elemento diferente
             compareData = list->data[i-1];
             compare = compareFunction(data, compareData);
+            printf("\t%s\n", getName(compareData));
             i--;
         }
         if (compare != equal) i++; //quando a comparação não dá igual incrementa indice para apontar para o último elemento que deu igual
@@ -130,7 +146,7 @@ void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void
         //todos os elementos da sublista à esquerda do indice são menores que o pivô e à direita maiores
         int partition = partitionOrdList(list, lower, higher-1, pivotData, compareFunction, equal);
         swapOrdList(list, partition, higher); //move pivô para a posição da partição
-        quickSort(list, lower, partition-1, compareFunction, equal); //chamada recursiva para a metade esquerda da sublista
+        quickSort(list, lower, partition, compareFunction, equal); //chamada recursiva para a metade esquerda da sublista
         quickSort(list, partition, higher, compareFunction, equal); //chamada recursiva para a metade direita da sublista
     }
 }

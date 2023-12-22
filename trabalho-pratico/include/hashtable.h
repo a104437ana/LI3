@@ -28,6 +28,7 @@ int existsData(Hashtable *hashtable, unsigned int key, char *id);
 //gest e sets
 //obtem elemnto da hahtable
 void *getData(Hashtable *hashtable, unsigned int key, char *id);
+int getHashtableNodes(Hashtable *hashtable);
 //modifica elemento da hashtable
 void setData(Hashtable *hashtable, unsigned int key, void *data, char *id);
 //ordena um parametro de todos os elementos da hashtable

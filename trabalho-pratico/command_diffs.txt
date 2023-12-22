@@ -1,4 +1,0 @@
-dataset normal
-for i in {1..100}; do awk "NR==$i" ./datasets/input.txt > ./diffs/diff"$i"_output.txt; diff -u ./Resultados/command"$i"_output.txt ../../dataset/outputs/command"$i"_output.txt >> ./diffs/diff"$i"_output.txt; awk "NR==$i" ./datasets/input.txt >> ./diffs.txt; if cmp -s ./Resultados/command"$i"_output.txt ../../dataset/outputs/command"$i"_output.txt; then :; else echo "Errors" >> ./diffs.txt; fi; done
-dataset large
-for i in {1..500}; do awk "NR==$i" ./datasets/input_large.txt > ./diffs/diff"$i"_output.txt; diff -u ./Resultados/command"$i"_output.txt ../../data_large/outputs/command"$i"_output.txt >> ./diffs/diff"$i"_output.txt; awk "NR==$i" ./datasets/input_large.txt >> ./diffs.txt; if cmp -s ./Resultados/command"$i"_output.txt ../../data_large/outputs/command"$i"_output.txt; then :; else echo "Errors" >> ./diffs.txt; fi; done

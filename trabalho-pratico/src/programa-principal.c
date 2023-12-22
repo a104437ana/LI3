@@ -19,6 +19,7 @@ int main (int argc, char** argv) {
     double elapsed, cat, par, sor, com, des;
     clock_gettime(CLOCK_REALTIME, &start);
     setlocale(LC_COLLATE, "en_US.UTF-8");
+    setlocale(LC_CTYPE, "en_US.UTF-8");
     //inicialização dos catalogos
     Catalogs *catalogs = createCatalogs();
     Results *results = createResults();
@@ -61,6 +62,8 @@ int main (int argc, char** argv) {
 
     endwin(); //termina ncurses
     }
+
+//    printFullList(getUsersByName(getUsersCatalog(catalogs)));
 
     //liberta o espaço em memória dos catalogos
     destroyCatalogs(catalogs);

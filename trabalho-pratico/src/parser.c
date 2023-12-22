@@ -155,8 +155,8 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
         // pass = 81204
         // res = 40953
 
-        //Dataset large clean
-        //use = 990134
+        // Dataset large clean
+        // use = 990134 / 940529
         // fli = 179946
         // pass = ?
         // res = ?

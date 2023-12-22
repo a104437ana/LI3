@@ -24,8 +24,6 @@ void addReservationToUser(User *user, void *reservation, Hashtable *hotels);
 void addFlightToUser(User *user, void *flight);
 //ordena a lista de voos e reservas de um utilizador
 void sortUserList(void *data, Hashtable *lookupTable);
-//compara o nome de dois utilizadores
-int compareUsersNames(void *user1, void *user2);
 
 //gets
 char *getName(User *user);

@@ -71,7 +71,6 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
     for (int i=0; i<size; i++) {
         node = hashtable->node[i];
         while (node != NULL) {
-//            newHashtable = addHashtable(newHashtable, node->key, node->data, node->id);
             HashtableNode **nodes = newHashtable->node;
             unsigned int index = node->key % newSize;
             HashtableNode *new = createHashtableNode();
@@ -89,7 +88,6 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
 }
 //função que adiciona um novo elemento à hashtable
 Hashtable *addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id) {
-    //falta implementar alocamento dinâmico da hashtable para um determinado nível de uso
     int nodes = hashtable->nodes, size = hashtable->size;
     float usage = nodes / size;
     if (usage >= 2) {
@@ -99,7 +97,6 @@ Hashtable *addHashtable(Hashtable *hashtable, unsigned int key, void *data, char
         hashtable = newHashtable;
         free(oldHashtable->node);
         free(oldHashtable);
-//        destroyHashtable(oldHashtable);
     }
     HashtableNode **node = hashtable->node;
     int index = key % hashtable->size;
@@ -134,6 +131,9 @@ void *getData(Hashtable *hashtable, unsigned int key, char *id) {
     if (node == NULL) return node;
 
     return node->data;
+}
+int getHashtableNodes(Hashtable *hashtable) {
+    return hashtable->nodes;
 }
 //função que altera um elemento da hashtable
 void setData(Hashtable *hashtable, unsigned int key, void *data, char *id) {

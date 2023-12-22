@@ -136,6 +136,32 @@ int compareDates(Date *date1, Date *date2) {
 
   return result;
 }
+int strcoll_names(char *name1, char *name2) {
+    char c1 = name1[0], c2 = name2[0];
+    char *n1 = malloc(sizeof(char) * 2), *n2 = malloc(sizeof(char) * 2);
+    memcpy(n1, name1, 2); n1[1] = '\0';
+    memcpy(n2, name2, 2); n2[1] = '\0';
+    int compare = strcoll(n1, n2);
+    char *f1 = malloc(sizeof(char) * strlen(name1)), *f2 = malloc(sizeof(char) * strlen(name2));
+    sscanf(name1, " %s", f1);
+    sscanf(name2, " %s", f2);
+    int len = strlen(f1) - strlen(f2);
+    if (len != 0 && compare == 0)
+        compare = strcoll(f1, f2);
+    else if (compare == 1 && (c1 == 'A' || c1 == 'E' || c1 == 'I' || c1 == 'O' || c1 == 'U'))
+        compare = 1;
+    else if (compare == -1 && (c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U'))
+        compare = -1;
+    else
+        compare = strcoll(name1, name2);
+    free(n1);
+    free(n2);
+    free(f1);
+    free(f2);
+
+    return compare;
+}
+
 //função que liberta o espaço em memória alocado por uma data
 void destroyDate(Date *date) {
     if (date == NULL) return; //se não existir a data

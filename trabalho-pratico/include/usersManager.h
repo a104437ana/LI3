@@ -13,6 +13,8 @@ UsersManager *createUsersCatalog(int size);
 void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog);
 //adiciona um utilizador à lista de utilizadores ordenada por nome do catálogo de utilizadores
 void addUserToCatalogList(UsersManager *usersManager, User *user);
+//compara o nome de dois utilizadores
+int compareUsersNames(void *user1, void *user2);
 
 //gets
 User *getUserCatalog(UsersManager *usersManager, unsigned int key, char *id);

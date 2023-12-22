@@ -150,11 +150,17 @@ int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end,
 
 //verifica se uma string é um prefixo do nome de um utilizador
 int isPrefix(void *prefix, void *user) {
-  int compare, prefixSize = strlen((char *) prefix);
+  int compare, prefixSize = strlen((char *) prefix), nameSize;
   char *namePrefix = malloc(sizeof(char) * (prefixSize + 1));
   char *name = getName((User *) user); //nome do utilizador
-  namePrefix = strncpy(namePrefix, (char *) name, prefixSize); //prefixo do utilizador com o mesmo tamanho do prefixo a comparar
-  namePrefix[prefixSize] = '\0';
+  nameSize = strlen(name);
+  if (nameSize >= prefixSize) {
+    namePrefix = strncpy(namePrefix, (char *) name, prefixSize); //prefixo do utilizador com o mesmo tamanho do prefixo a comparar
+    namePrefix[prefixSize] = '\0';
+  }
+  else
+    namePrefix = strdup(name);
+  printf("  %s - %s\n", (char *) prefix, namePrefix);
   compare = strcoll((char *) prefix, (char *) namePrefix); //compara os dois prefixos
   free(namePrefix); //liberta o prefixo do utilizador
 
@@ -329,6 +335,18 @@ int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, Reservati
 
   return total;
 }
+////quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
+//int Q8(char *id, Date *begin, Date *end, Catalogs *catalogs) {
+//  int size = getHotelReservationsSize(id, catalogs);
+//  int total = 0, price = 0, valid = 0;
+//
+//  for (int i=0; i<size && valid = getHotelReservPriceBetweenDates(id, i, &price, begin, end); i++) { //enquanto dia limite maior ou igual a dia atual
+//    total += price;
+//    price = 0;
+//  }
+//
+//  return total;
+//}
 
 //query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
 OrdList *Q9(char *prefix, UsersManager *usersCatalog) {

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 
 #define BEGIN_YEAR 1900
@@ -39,6 +40,8 @@ char* dateToString(Date *date); //cria memory leaks no output (passada como para
 char* dateToStringNoHours(Date *date); //cria memory leaks no output (passada como parametro de funções)
 int daysBetweenDates(Date *begin, Date *end);
 int compareDates(Date *date1, Date *date2);
+int strcollNames(char *name1, char *name2);
+int strcoll_names(char *name1, char *name2);
 
 void destroyDate(Date *date);
 

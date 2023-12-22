@@ -145,17 +145,31 @@ int main (int argc, char** argv) {
     char* our_output_file = malloc(33);
     int equal_files = 0;
     int i = 1;
+    int j, k;
+    char queries[10][3];
+    for (j=0; j<10; j++) {
+        for (k=0; k<3; k++)
+            queries[j][k] = 0;
+    }
+    FILE *commands_file;
+    commands_file = fopen(argv[2], "r");
+    char *command = NULL;
+    size_t command_len;
+    ssize_t command_read;
     strcpy(correct_output_file,argv[3]);
     sprintf(output_file, "/command%d_output.txt", i);
     strcat(correct_output_file,output_file);
     while (exist_file(correct_output_file)) {
         sprintf(our_output_file, "Resultados/command%d_output.txt", i);
         equal_files = compare_files(correct_output_file,our_output_file);
+        if ((command_read = getline(&command, &command_len, commands_file)) != -1) sscanf(command, " %d", &j);
+        queries[j-1][2] += 1;
         if (equal_files == 0) {
             printf("command%d_output.txt passou o teste",i);
             if (i<10) printf("   ✅\n");
             if (i>=10 && i<100) printf("  ✅\n");
             if (i>=100) printf(" ✅\n");
+            queries[j-1][1] += 1;
         }
         else {
             printf("command%d_output.txt falhou o teste",i);
@@ -163,15 +177,25 @@ int main (int argc, char** argv) {
             if (i>=10 && i<100) printf("  ❌\n");
             if (i>=100) printf(" ❌\n");
             printf("O primeiro erro está na linha %d...\n",equal_files);
+            if (queries[j-1][0] == 0)
+                queries[j-1][0] = i;
         }
         i++;
         strcpy(correct_output_file,argv[3]);
         sprintf(output_file, "/command%d_output.txt", i);
         strcat(correct_output_file,output_file);
     }
+    for (j=0; j<10; j++) {
+        if (queries[j][0] == 0)
+            printf("Querie %2d passou os testes ........... (%3d/%3d %3d%%)\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
+        else
+            printf("Querie %2d primeiro erro no comando %3d (%3d/%3d %3d%%)\n", j+1, queries[j][0], queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
+    }
     free(correct_output_file);
     free(output_file);
     free(our_output_file);
+    free(command);
+    fclose(commands_file);
     }
     else printf("Erro: O programa requer exatamente 4 argumentos.\n");
     return 0;
