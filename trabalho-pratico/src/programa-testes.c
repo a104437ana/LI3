@@ -146,7 +146,7 @@ int main (int argc, char** argv) {
     int equal_files = 0;
     int i = 1;
     int j, k;
-    char queries[10][3];
+    float queries[10][3];
     for (j=0; j<10; j++) {
         for (k=0; k<3; k++)
             queries[j][k] = 0;
@@ -187,9 +187,9 @@ int main (int argc, char** argv) {
     }
     for (j=0; j<10; j++) {
         if (queries[j][0] == 0)
-            printf("Querie %2d passou os testes ........... (%3d/%3d %3d%%)\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
+            printf("Querie %2d passou os testes ........... (%3.0f/%3.0f %3.0f%%)\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
         else
-            printf("Querie %2d primeiro erro no comando %3d (%3d/%3d %3d%%)\n", j+1, queries[j][0], queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
+            printf("Querie %2d primeiro erro no comando %3.0f (%3.0f/%3.0f %3.0f%%)\n", j+1, queries[j][0], queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
     }
     free(correct_output_file);
     free(output_file);

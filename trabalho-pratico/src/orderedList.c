@@ -56,20 +56,20 @@ int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,vo
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
     void *compareData = list->data[i]; //elemento a comparar
     //enquanto os elementos não forem iguais e os limites não se cruzarem
-    printf("Prefix: %s\n", (char*) data);
+//    printf("Prefix: %s\n", (char*) data);
     while ((compare = compareFunction(data, compareData)) != equal && (higher - lower) > 1) {
         if (compare < equal) higher = i; //se o elemento for menor o limite superior passa a ser o indice do elemento
         else lower = i; //caso contrário o limite inferior passa a ser o indice do elemento
         i = (higher + lower) / 2; //novo indice central entre os dois limites
         compareData = list->data[i]; //novo elemento a comparar
-        printf("\t%s\n", getName(compareData));
+//        printf("\t%s\n", getName(compareData));
     }
     if (higher - lower == 1 && compare != equal) return -1; //se o elemento nao existir na lista
     if (searchBack) { //caso se pretenda a primeira ocorrência desse elemento na lista
         while (i > 0 && compare <= equal) { //compara com o anterior até encontrar um elemento diferente
             compareData = list->data[i-1];
             compare = compareFunction(data, compareData);
-            printf("\t%s\n", getName(compareData));
+//            printf("\t%s\n", getName(compareData));
             i--;
         }
         if (compare != equal) i++; //quando a comparação não dá igual incrementa indice para apontar para o último elemento que deu igual

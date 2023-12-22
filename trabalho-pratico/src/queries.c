@@ -160,7 +160,7 @@ int isPrefix(void *prefix, void *user) {
   }
   else
     namePrefix = strdup(name);
-  printf("  %s - %s\n", (char *) prefix, namePrefix);
+//  printf("  %s - %s\n", (char *) prefix, namePrefix);
   compare = strcoll((char *) prefix, (char *) namePrefix); //compara os dois prefixos
   free(namePrefix); //liberta o prefixo do utilizador
 
