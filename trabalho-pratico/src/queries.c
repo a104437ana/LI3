@@ -160,17 +160,19 @@ int sameFirstLetter(char *prefix, User *user) {
 }
 char *sameLenPrefix(char *prefix, char *name) {
   unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
-  int i = 0, j = 0, p = 0, n = 0;
+  int i = 0, j = 0, p = 0, n = 0, e = 0;
   while (up[i] != '\0' && un[j] != '\0') {
-    if (up[i] > 128) {p++; i++;}
-    if (un[j] > 128) {n++; j++;}
-    if (up[i] != '\0') i++;
-    if (un[j] != '\0') j++;
+    if (up[i] == un[j]) e++;
+    if (up[i] > 128) {p++; i+=2;}
+    else if (up[i] != '\0') i++;
+    if (un[j] > 128) {n++; j+=2;}
+    else if (un[j] != '\0') j++;
   }
 
   char *namePrefix;
-  if (i < j) {
-//    if (n > p) i += n;
+  if (i == e + 1) return NULL;
+  else if (i < j) {
+    if (n > p) {i += n;}
     namePrefix = malloc(sizeof(char) * (i + 1));
     namePrefix = strncpy(namePrefix, name, i);
     namePrefix[i] = '\0';
@@ -191,6 +193,7 @@ int prefixSearch(void *prefixVoid, void *user) {
   char *prefix = (char *) prefixVoid;
   char *name = getName((User *) user); //nome do utilizador
   char *namePrefix = sameLenPrefix(prefix, name);
+  if (namePrefix == NULL) return 0;
   compare = strcoll(prefix, namePrefix); //compara os dois prefixos
   free(namePrefix); //liberta o prefixo do utilizador
 

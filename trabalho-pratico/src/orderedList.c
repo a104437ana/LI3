@@ -71,7 +71,7 @@ int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,vo
 //        printf("\t%s\n", getName(compareData));
         i--;
     }
-    if (compare != equal) i++; //quando a comparação não dá igual incrementa indice para apontar para o último elemento que deu igual
+    if (compare != equal && i != 0) i++; //quando a comparação não dá igual incrementa indice para apontar para o último elemento que deu igual
 
     return i; //retorna indice do elemento que se procurou na lista
 }

@@ -20,35 +20,6 @@
 //#define FLIGHTS_HASHTABLE_INI_SIZE 1000
 //#define AIRPORTS_HASHTABLE_INI_SIZE 100
 
-char *sameLenPrefix1(char *prefix, char *name) {
-  unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
-  int i = 0, j = 0, p = 0, n = 0;
-  while (up[i] != '\0' && un[j] != '\0') {
-    if (up[i] > 128) {p++; i++;}
-    if (un[j] > 128) {n++; j++;}
-    if (up[i] != '\0') i++;
-    if (un[j] != '\0') j++;
-  }
-
-  char *namePrefix;
-  if (i < j) {
-    if (n > p) i += n;
-    namePrefix = malloc(sizeof(char) * (i + 1));
-    namePrefix = strncpy(namePrefix, name, i);
-    namePrefix[i] = '\0';
-  }
-  else {
-    int len;
-    if (n > p) len = i + (n - p);
-    else len = i;
-    namePrefix = malloc(sizeof(char) * len);
-    namePrefix = strncpy(namePrefix, name, len);
-    namePrefix[len] = '\0';
-  }
-
-  return namePrefix;
-}
-
 int compare_files (char* file_path1, char* file_path2) {
     int equal = 0;
     int current_line = 1;
@@ -228,12 +199,6 @@ int main (int argc, char** argv) {
     free(our_output_file);
     free(command);
     fclose(commands_file);
-
-//    char *prefix = "Julia", *name = "Juliana-Íris Oliveira", *namePrefix;
-//    namePrefix = sameLenPrefix1(prefix, name);
-//    int compare = strcoll(prefix, namePrefix);
-//    printf("prefix: %s\tname: %s\tnamePrefix: %s\tcompare: %d\n", prefix, name, namePrefix, compare);
-
     }
     else printf("Erro: O programa requer exatamente 4 argumentos.\n");
     return 0;
