@@ -13,7 +13,7 @@ OrdList *createOrdList(int size);
 //adiciona um novo elemento à lista
 void addOrdList(OrdList *ordList, void *data);
 //procura um elemento na lista
-int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int searchBack);
+int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int (*searchBackFunction)(void*,void*));
 void removeOrdList(OrdList *ordList, unsigned int key);
 void printFullList(OrdList *list);
 

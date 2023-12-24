@@ -119,7 +119,7 @@ int daysInsideDates(Date *begin, Date *end, Date *reservBegin, Date *reservEnd) 
   int reservBegin_begin, reservEnd_end, reservBegin_end, reservEnd_begin;
   Date *lower, *higher;
   reservEnd_begin = compareDates(reservEnd, begin); //compara a data de fim da reserva e inicio do limite
-  if (reservEnd_begin > 0) return -1; //se a data de fim da reserva for maior que a de inicio do limite
+  if (reservEnd_begin >= 0) return -1; //se a data de fim da reserva for maior que a de inicio do limite
   reservBegin_begin = compareDates(reservBegin, begin); //compara a data de inicio da reserva e inicio do limite
   reservEnd_end = compareDates(reservEnd, end); //compara a data de fim da reserva e fim do limite
   reservBegin_end  = compareDates(reservBegin, end); //compara a data de inicio da reserva e fim do limite
@@ -133,7 +133,7 @@ int daysInsideDates(Date *begin, Date *end, Date *reservBegin, Date *reservEnd) 
   else higher = reservEnd; //caso contrário é a data de fim da reserva
   //o número de dias é a diferença entre as datas de contagem
   nDays = daysBetweenDates(lower, higher) + 1; //caso ambas as datas da reserva não estiverem dentro do intervalo de contagem temos que adicionar mais um dia
-  if (reservBegin_begin <= 0 && reservEnd_end >= 0) //caso contrário retiramos o dia adicionado
+  if (reservEnd_end >= 0) //caso contrário retiramos o dia adicionado
     nDays --;
 
   return nDays;
@@ -148,6 +148,62 @@ int getReservPriceBetweenDates(Reservation *reservation, Date *begin, Date *end,
   return total;
 }
 
+int sameFirstLetter(char *prefix, User *user) {
+  int compare = 1;
+  char *name = getName(user);
+  char c1 = prefix[0], c2 = name[0];
+  if (c1 == c2) compare = 0;
+  else if (c1 == 'A' || c1 == 'E' || c1 == 'I' || c1 == 'O' || c1 == 'U' ||
+           c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U') compare = 0;
+
+  return compare;
+}
+char *sameLenPrefix(char *prefix, char *name) {
+  unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
+  int i = 0, j = 0, p = 0, n = 0;
+  while (up[i] != '\0' && un[j] != '\0') {
+    if (up[i] > 128) {p++; i++;}
+    if (un[j] > 128) {n++; j++;}
+    if (up[i] != '\0') i++;
+    if (un[j] != '\0') j++;
+  }
+
+  char *namePrefix;
+  if (i < j) {
+//    if (n > p) i += n;
+    namePrefix = malloc(sizeof(char) * (i + 1));
+    namePrefix = strncpy(namePrefix, name, i);
+    namePrefix[i] = '\0';
+  }
+  else {
+    int len;
+    if (n > p) len = i + (n - p);
+    else len = i;
+    namePrefix = malloc(sizeof(char) * len);
+    namePrefix = strncpy(namePrefix, name, len);
+    namePrefix[len] = '\0';
+  }
+
+  return namePrefix;
+}
+int prefixSearch(void *prefixVoid, void *user) {
+  int compare;
+  char *prefix = (char *) prefixVoid;
+  char *name = getName((User *) user); //nome do utilizador
+  char *namePrefix = sameLenPrefix(prefix, name);
+  compare = strcoll(prefix, namePrefix); //compara os dois prefixos
+  free(namePrefix); //liberta o prefixo do utilizador
+
+  return compare;
+}
+int prefixSearchBack(void *prefixVoid, void *user) {
+  int compare;
+  char *prefix = (char *) prefixVoid;
+  char *name = getName((User *) user); //nome do utilizador
+  compare = strcoll(prefix, name); //compara os dois prefixos
+
+  return compare;
+}
 //verifica se uma string é um prefixo do nome de um utilizador
 int isPrefix(void *prefix, void *user) {
   int compare, prefixSize = strlen((char *) prefix), nameSize;
@@ -353,13 +409,17 @@ OrdList *Q9(char *prefix, UsersManager *usersCatalog) {
   OrdList *result = createOrdList(100);
   OrdList *usersByName = getUsersByName(usersCatalog); //obtem lista ordenada por nome dos utilizadores
   int size = getOrdListSize(usersByName);
-  int i = searchDataOrdList(usersByName, prefix, isPrefix, 0, 1); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
+  int i = searchDataOrdList(usersByName, prefix, prefixSearch, 0, prefixSearchBack); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
   if (i == -1) return result; //se não existir nomes começados pelo prefixo dado
   User *user = getDataOrdList(usersByName, i);
-  while (i < size && isPrefix(prefix, user) == 0) { //enquanto um nome começar pelo prefixo dado
-    addOrdList(result, user); //adiciona à lista resultado
-    i++;
+  int validPrefix = isPrefix(prefix, user), firstLetterCheck = sameFirstLetter(prefix, user);
+  while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado
     user = getDataOrdList(usersByName, i);
+    validPrefix = isPrefix(prefix, user);
+    firstLetterCheck = sameFirstLetter(prefix, user);
+    if (validPrefix == 0)
+      addOrdList(result, user); //adiciona à lista resultado
+    i++;
   }
 
   return result;
