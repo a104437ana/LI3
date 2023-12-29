@@ -8,10 +8,10 @@ struct ordList {
     void **data;
 };
 //função que cria uma nova lista vazia com um certo tamanho
-OrdList *createOrdList(int size) {
+OrdList *createOrdList() {
     OrdList *ordList = malloc(sizeof(OrdList));
-    void **data = malloc(sizeof(void *) * size);
-    ordList->maxSize = size;
+    void **data = malloc(sizeof(void *));
+    ordList->maxSize = 1;
     ordList->size = 0;
     ordList->data = data;
     ordList->ord = 0;

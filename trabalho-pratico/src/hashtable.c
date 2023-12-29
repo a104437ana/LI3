@@ -9,7 +9,7 @@ typedef enum typeOfData {
 } TypeOfData;
 
 struct hashtableNode {
-    unsigned int key; //chave de hash
+//    unsigned int key; //chave de hash
     char *id; //id usado para hash
     void *data; //data guardada
     struct hashtableNode *next; //próximo nodo para gerir colisões
@@ -32,7 +32,7 @@ unsigned int hashFunction(char *id) {
 //função que cria um novo nodo vazio
 HashtableNode *createHashtableNode() {
     HashtableNode *node = malloc(sizeof(HashtableNode));
-    node->key = 0;
+//    node->key = 0;
     node->id = NULL;
     node->data = NULL;
     node->next = NULL;
@@ -72,9 +72,10 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
         node = hashtable->node[i];
         while (node != NULL) {
             HashtableNode **nodes = newHashtable->node;
-            unsigned int index = node->key % newSize;
+//            unsigned int index = node->key % newSize;
+            unsigned int index = hashFunction(node->id) % newSize;
             HashtableNode *new = createHashtableNode();
-            new->key = node->key;
+//            new->key = node->key;
             new->id = node->id;
             new->data = node->data;
             new->next = nodes[index];
@@ -101,7 +102,7 @@ Hashtable *addHashtable(Hashtable *hashtable, unsigned int key, void *data, char
     HashtableNode **node = hashtable->node;
     int index = key % hashtable->size;
     HashtableNode *new = createHashtableNode();
-    new->key = key;
+//    new->key = key;
     new->id = strdup(id);
     new->data = data;
     new->next = node[index];
@@ -165,7 +166,7 @@ void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {
         if (node == NULL) printf(" ->    X\n");
         else {
             while (node != NULL) { //aplica a função de imprimir um elemento a todos os elementos nos nodos nesse indice
-                printf(" -> (%4d,", node->key);
+//                printf(" -> (%4d,", node->key);
                 (*printFunction)(node->data);
                 node = node->next;
             }
@@ -183,7 +184,7 @@ void printHotelTableReservs(Hashtable *hashtable, void (*printFunction)(void*)) 
         if (node == NULL) printf(" ->    X\n");
         else {
             while (node != NULL) {
-                printf(" -> (%4d", node->key);
+//                printf(" -> (%4d", node->key);
                 printOrdList(getHotelOrdList(node->data), printFunction);
                 node = node->next;
             }

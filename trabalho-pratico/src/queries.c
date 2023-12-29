@@ -409,7 +409,7 @@ int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, Reservati
 
 //query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
 OrdList *Q9(char *prefix, UsersManager *usersCatalog) {
-  OrdList *result = createOrdList(100);
+  OrdList *result = createOrdList();
   OrdList *usersByName = getUsersByName(usersCatalog); //obtem lista ordenada por nome dos utilizadores
   int size = getOrdListSize(usersByName);
   int i = searchDataOrdList(usersByName, prefix, prefixSearch, 0, prefixSearchBack); //obtem primeiro indice da lista onde o nome começa com o prefixo dado

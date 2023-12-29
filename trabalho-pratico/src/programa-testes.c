@@ -199,6 +199,8 @@ int main (int argc, char** argv) {
     free(our_output_file);
     free(command);
     fclose(commands_file);
+    printf("Elapsed time: %4.2f seconds\n", elapsed);
+    printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
     }
     else printf("Erro: O programa requer exatamente 4 argumentos.\n");
     return 0;

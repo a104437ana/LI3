@@ -40,7 +40,7 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
     user->accountCreation = accountCreationDate;
     user->accounStatus = accountStatus;
     user->totalSpent = 0;
-    user->flightsReservationsByDate = createOrdList(USER_LIST_INI_SIZE); //cria a lista de voos e reservas do utilizador
+    user->flightsReservationsByDate = createOrdList(); //cria a lista de voos e reservas do utilizador
     user->nFlights=0;
     user->nReservations=0;
 

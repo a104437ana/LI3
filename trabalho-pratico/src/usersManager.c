@@ -10,7 +10,7 @@ struct usersManager {
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager)); //aloca espaço em memória para a estrutura do catálogo
     usersManager->users = createHashtable(size); //cria uma hastable para os utilizadores
-    usersManager->usersByName = createOrdList(size); //cria uma lista para os utilizadores
+    usersManager->usersByName = createOrdList(); //cria uma lista para os utilizadores
     return usersManager;
 }
 //função que adiciona um utilizador ao catálogo de utilizadores

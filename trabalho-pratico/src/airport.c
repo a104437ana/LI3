@@ -19,7 +19,7 @@ struct airport {
 Airport *createAirport(char *name) {
     Airport *airport = malloc(sizeof(Airport));
     memcpy(airport->name, name, 4);
-    airport->flightsByDepartureDate = createOrdList(AIRPORT_FLIGHTS_INI_SIZE);
+    airport->flightsByDepartureDate = createOrdList();
     airport->median = 0.0;
     airport->size_list = 0;
     airport->listOfDelays = malloc(sizeof(int)*500);

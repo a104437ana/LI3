@@ -12,7 +12,7 @@ struct airportsManager {
 AirportsManager *createAirportsCatalog(int size) {
     AirportsManager *airportsManager = malloc(sizeof(AirportsManager));
     airportsManager->airports = createHashtable(size);
-    airportsManager->airportsByMedianOfDelays = createOrdList(30);
+    airportsManager->airportsByMedianOfDelays = createOrdList();
     return airportsManager;
 }
 

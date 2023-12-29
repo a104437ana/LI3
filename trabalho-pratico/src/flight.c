@@ -34,7 +34,7 @@ Flight *createFlight(char *id, char *airline, char *airplane, char *origin, char
     flight->scheduleArrival = scheduleArrivalDate;
     flight->realDeparture = realDepartureDate;
     flight->realArrival = realArrivalDate;
-    flight->passengers = createOrdList(PASSENGER_LIST_INI_SIZE); //cria uma lista de passageiros desse voo
+    flight->passengers = createOrdList(); //cria uma lista de passageiros desse voo
 
     return flight;
 }

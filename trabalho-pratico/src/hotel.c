@@ -21,7 +21,7 @@ Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     hotel->cityTax = cityTax;
     hotel->ratingsSum = 0;
     hotel->numberRatings = 0;
-    hotel->reservationsByDate = createOrdList(HOTEL_RESERVATIONS_INI_SIZE); //cria uma lista vazia de reservas do hotel
+    hotel->reservationsByDate = createOrdList(); //cria uma lista vazia de reservas do hotel
 
     return hotel;
 }

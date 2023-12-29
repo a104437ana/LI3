@@ -44,4 +44,6 @@ void printHashtableUsage(Hashtable *hashtable);
 //liberta espaço em memória da hashtable
 void destroyHashtable(Hashtable *hashtable, void (*destroyDataFunction)(void*));
 
+void ht_applyToAll(Hashtable *table, void function(void*), void *getFunction(void*));
+
 #endif

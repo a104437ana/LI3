@@ -9,7 +9,7 @@
 
 typedef struct ordList OrdList;
 //cria uma nova lista
-OrdList *createOrdList(int size);
+OrdList *createOrdList();
 //adiciona um novo elemento à lista
 void addOrdList(OrdList *ordList, void *data);
 //procura um elemento na lista
