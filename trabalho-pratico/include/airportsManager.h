@@ -3,6 +3,7 @@
 
 #include "airport.h"
 #include "hashtable.h"
+#include "flight.h"
 #include "orderedList.h"
 #include "results.h"
 
@@ -17,6 +18,7 @@ Airport *getAirportCatalog(AirportsManager *airportsManager, unsigned int key, c
 Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager);
 void sortAirports (AirportsManager* airportsManager);
 int compareDelays (void *pointer1, void *pointer2);
+void airport_catalog_compute_Q5(char* airport,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,Hashtable* lookup);
 void airport_calalog_compute_Q7 (int n, AirportsManager *airports, QueryResult* result);
 //liberta espaço em memória do catálogo de aeroportos
 void destroyAirportsCatalog(AirportsManager *airportsManager);

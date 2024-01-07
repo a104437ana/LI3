@@ -90,7 +90,7 @@ void Q3(char *id, Catalogs* catalogs, QueryResult* result);
 
 void Q4(char *id, Catalogs* catalogs, QueryResult* result);
 
-ResultsQ5* Q5(char *name, Date begin, Date end);
+void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult* result);
 
 ResultsQ6* Q6(int year, int N);
 

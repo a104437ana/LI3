@@ -56,5 +56,7 @@ void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, QueryResult* result
 
 void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result);
 
+void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,QueryResult* result);
+
 void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result);
 #endif

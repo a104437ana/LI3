@@ -240,6 +240,11 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
     }
 }
 
+void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,QueryResult* result) {
+    Hashtable *lookup = getHashtableFlightsCatalog(catalogs->flightsCatalog);
+    airport_catalog_compute_Q5(airport,begin,end,catalogs->airportsCatalog,result,lookup);
+}
+
 void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result){
     airport_calalog_compute_Q7(n,catalogs->airportsCatalog,result);
 }

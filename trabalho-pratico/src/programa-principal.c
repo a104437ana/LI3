@@ -40,7 +40,7 @@ int main (int argc, char** argv) {
         com = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
     }
     else if (argc == 1) {
-    printf("Please maximize the terminal window and press Enter to continue...");
+    printf("Please maximize the terminal window for an optimal experience.\nPress Enter to continue...");
     getchar();
     setlocale(LC_ALL,""); //permite a utilização de caracteres especiais da nossa localidade
     initscr(); //inicia ncurses
@@ -52,7 +52,7 @@ int main (int argc, char** argv) {
     int max_row, max_col;
     getmaxyx(stdscr, max_row, max_col);
 
-    mvprintw(0, 0, "Enter the path of the dataset: ");
+    mvprintw(0, 0, "Welcome to Interactive Mode!\nIf you ever want to exit the program at any time, just press Esc.\n\nEnter the path of the dataset: ");
 
     refresh();
     int row, col;

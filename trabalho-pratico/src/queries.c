@@ -366,6 +366,10 @@ void Q4 (char* id_hotel, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q4(id_hotel,catalogs,result);
 }
 
+void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult* result) {
+  catalogs_compute_Q5(airport,begin,end,catalogs,result);
+}
+
 void Q7 (int n, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q7(n,catalogs,result);
 }
