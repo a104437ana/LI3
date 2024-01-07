@@ -86,32 +86,46 @@ void destroyUsersCatalog(UsersManager *usersManager) {
 }
 
 //queries
-void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, Results* results) {
+void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, QueryResult* result) {
     User* user = getData(usersManager->users,hashFunction(id),id);
     if (user == NULL) {
-        setQ1type(results,0);
+        return;
     }
     else {
         bool account_status_active = getAccountStatus(user);
         if (account_status_active == true) {
-            setQ1type(results,1);
-            char* name = getName(user);
-            Gender gender = getGender(user);
+
+            setNumberResults(result,1);
+            setNumberFieldsQ(result, 0, 8);
+            char* name = getName(user); char * field0 = strdup("name");
+            Gender gender = getGender(user); char * sex; if (gender==MALE) sex = strdup("M"); else sex = strdup("F"); char * field1 = strdup("sex");
             int age = getAge(user);
-            char* country_code = getCountry(user);
-            char* passport = getPassport(user);
+            char * ageS = malloc(sizeof(char)*4);
+            sprintf(ageS, "%d", age); char * field2 = strdup("age");
+            char* country_code = getCountry(user); char * field3 = strdup("country_code");
+            char* passport = getPassport(user); char * field4 = strdup("passport");
             int number_of_flights = getNumberFlights(user);
+            char * nFlights = malloc(sizeof(char)*4);
+            sprintf(nFlights, "%d", number_of_flights); char * field5 = strdup("number_of_flights");
             int number_of_reservations = getNumberReservations(user);
+            char * nReserv = malloc(sizeof(char)*4);
+            sprintf(nReserv, "%d", number_of_reservations); char * field6 = strdup("number_of_reservations");
             double total_spent = getTotalSpent(user);
-            setNameQ1(results,name);
-            setGenderQ1(results,gender);
-            setAgeQ1(results,age);
-            setCountryCodeQ1(results,country_code);
-            setPassportQ1(results,passport);
-            setNflightsQ1(results,number_of_flights);
-            setNreservsQ1(results,number_of_reservations);
-            setTotalSpentQ1(results,total_spent);
+            char * totalS = malloc(sizeof(char)*10);
+            sprintf(totalS, "%.3f", total_spent); char * field7 = strdup("total_spent");
+
+            setFieldQ(result, 0, 0, field0, name);
+            setFieldQ(result, 0, 1, field1, sex); 
+            setFieldQ(result, 0, 2, field2, ageS); 
+            setFieldQ(result, 0, 3, field3, country_code);
+            setFieldQ(result, 0, 4, field4, passport); 
+            setFieldQ(result, 0, 5, field5, nFlights); 
+            setFieldQ(result, 0, 6, field6, nReserv); 
+            setFieldQ(result, 0, 7, field7, totalS); 
+        
+            free(name); free(sex); free(country_code); free(passport); free(ageS); free(nFlights); free(nReserv); free(totalS);
+            free(field0); free(field1); free(field2); free(field3); free(field4); free(field5); free(field6); free(field7);
         }
-        else setQ1type(results,0);
+        else return;
     }
 }

@@ -21,5 +21,5 @@ void printReservations(ReservationsManager *reservationsManager);
 //liberta o espaço em memória do catálogo de reservas
 void destroyreservationsCatalog(ReservationsManager *reservationsManager);
 
-char* reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservationsManager, Results* results);
+char* reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservationsManager, QueryResult* result);
 #endif

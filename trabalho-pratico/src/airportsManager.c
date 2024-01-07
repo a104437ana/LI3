@@ -66,18 +66,24 @@ int compareDelays (void *pointer1, void *pointer2) {
     return result;
 }
 
-void airport_calalog_compute_Q7 (int n, AirportsManager *airports, Results* results) {
-    clearResultQ7(results);
-    setResultQ7 (results,n);
+void airport_calalog_compute_Q7 (int n, AirportsManager *airports, QueryResult* result) {
     sortAirports(airports);
     int w = getOrdListSize(airports->airportsByMedianOfDelays);
+    if (w<n) setNumberResults (result,w); else setNumberResults (result, n);
     quickSort(airports->airportsByMedianOfDelays,0,w-1,compareDelays,0);
     for(int i = 0; i<n && i<w; i++) {
         Airport* airport = getDataOrdList(airports->airportsByMedianOfDelays,i);
-        char* name = getAirportId(airport);
+        setNumberFieldsQ(result,i, 2);
+        char* name = getAirportId(airport); char * field0 = strdup("name");
         double median = getAirportMedian(airport);
-        setNameMedianQ7(results,i,name,median);
-        free(name);
+        char * medianS = malloc(sizeof(char)*15);
+        sprintf(medianS, "%.3f", median); char * field1 = strdup("median");
+
+        setFieldQ(result, i, 0, field0, name); 
+        setFieldQ(result, i, 1, field1, medianS); 
+        
+        free(name); free(medianS);
+        free(field0); free(field1);
     }
 }
 

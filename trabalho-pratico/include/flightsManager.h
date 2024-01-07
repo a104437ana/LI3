@@ -25,5 +25,5 @@ void printFlights(FlightsManager *flightsManager);
 //liberta espaço em memória do catalogo de voos
 void destroyFlightsCatalog(FlightsManager *flightsManager);
 
-void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, Results* results);
+void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryResult* result);
 #endif

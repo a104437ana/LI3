@@ -69,30 +69,39 @@ void destroyFlightsCatalog(FlightsManager *flightsManager) {
 }
 
 //queries
-void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, Results* results) {
+void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryResult* result) {
     Flight* flight = getData(flightsManager->flights,hashFunction(id),id);
     if (flight == NULL) {
-        setQ1type(results,0);
+        return;
     }
     else {
-        setQ1type(results,2);
-        char* airline = getFlightAirline(flight);
-        char* plane_model = getFlightAirplane(flight);
-        char* origin = getFlightOrigin(flight);
-        char* destination = getFlightDestination(flight);
+        setNumberResults(result,1);
+        setNumberFieldsQ(result, 0, 8);
+        char* airline = getFlightAirline(flight); char * field0 = strdup("airline");
+        char* plane_model = getFlightAirplane(flight); char * field1 = strdup("plane_model");
+        char* origin = getFlightOrigin(flight); char * field2 = strdup("origin");
+        char* destination = getFlightDestination(flight); char * field3 = strdup("destination");
         Date* schedule_departure_date = getFlightScheduleDeparture(flight);
         Date* schedule_arrival_date = getFlightScheduleArrival(flight);
+        char * dep = dateToStringNoHours(schedule_departure_date); char * field4 = strdup("schedule_departure_date");
+        char * arr = dateToStringNoHours(schedule_arrival_date); char * field5 = strdup("schedule_arrival_date");
         int number_of_passengers = getNumberPassengers(flight);
+        char * nPassengersS= malloc(sizeof(char)*5);;
+        sprintf(nPassengersS, "%d", number_of_passengers); char * field6 = strdup("passengers");
         double delay = getDelay(flight);
-        setAirlineQ1(results,airline);
-        setPlaneModelQ1(results,plane_model);
-        setOriginQ1(results,origin);
-        setDestQ1(results,destination);
-        setSheduleDepartureQ1(results,schedule_departure_date);
-        setSheduleArrivalQ1(results,schedule_arrival_date);
-        setNpassengersQ1(results,number_of_passengers);
-        setDelayQ1(results,delay);
-        free(origin);
-        free(destination);
+        char * delayS = malloc(sizeof(char)*15);
+        sprintf(delayS, "%.3f", delay); char * field7 = strdup("delay");
+
+        setFieldQ(result, 0, 0, field0, airline);
+        setFieldQ(result, 0, 1, field1, plane_model); 
+        setFieldQ(result, 0, 2, field2, origin); 
+        setFieldQ(result, 0, 3, field3, destination);
+        setFieldQ(result, 0, 4, field4, dep); 
+        setFieldQ(result, 0, 5, field5, arr); 
+        setFieldQ(result, 0, 6, field6, nPassengersS); 
+        setFieldQ(result, 0, 7, field7, delayS); 
+        
+        free(airline); free(plane_model); free(origin); free(destination); destroyDate(schedule_departure_date); destroyDate(schedule_arrival_date); free(dep); free(arr); free(nPassengersS); free(delayS);
+        free(field0); free(field1); free(field2); free(field3); free(field4); free(field5); free(field6); free(field7);
     }
 }

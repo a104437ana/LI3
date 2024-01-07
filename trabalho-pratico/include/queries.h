@@ -24,16 +24,7 @@
 #define MONTH 10
 #define DAY 01
 
-typedef enum{
-   USER,
-   FLIGHT,
-   RESERVATION
-} Q1Type;
 
-typedef struct resultQ1{
-    void* result;
-    Q1Type resultType;
-} ResultQ1;
 
 typedef enum{
    FLIGHTS,
@@ -51,10 +42,6 @@ typedef struct resultsQ2{
     int N;
 } ResultsQ2;
 
-typedef struct resultsQ4{
-    char ** result_ids;
-    int N;
-} ResultsQ4;
 
 typedef struct resultsQ5{
     Flight** results;
@@ -70,16 +57,6 @@ typedef struct resultsQ6{
     ResultQ6** results;
     int N;
 } ResultsQ6;
-
-typedef struct resultQ7{
-    char* name;
-    double median;
-} ResultQ7;
-
-typedef struct resultsQ7{
-    ResultQ7** results;
-    int N;
-} ResultsQ7;
 
 typedef struct resultQ9{
     char* id;
@@ -105,19 +82,19 @@ int getBeginHours(void* data, Hashtable *lookupTable);
 char * getIdResultQ2(ResultQ2* data);
 void destroyResultQ2(void * data);
 
-void Q1(char *id, Catalogs* catalogs, Results* results);
+void Q1(char *id, Catalogs* catalogs, QueryResult* result);
 
 ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog);
 
-void Q3(char *id, Catalogs* catalogs, Results* results);
+void Q3(char *id, Catalogs* catalogs, QueryResult* result);
 
-void Q4(char *id, Catalogs* catalogs, Results* results);
+void Q4(char *id, Catalogs* catalogs, QueryResult* result);
 
 ResultsQ5* Q5(char *name, Date begin, Date end);
 
 ResultsQ6* Q6(int year, int N);
 
-void Q7 (int n, Catalogs* catalogs, Results* results);
+void Q7 (int n, Catalogs* catalogs, QueryResult* result);
 
 int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog);
 

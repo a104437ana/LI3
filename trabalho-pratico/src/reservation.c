@@ -43,15 +43,15 @@ Reservation *getReservCatalog(Hashtable *reservations, unsigned int key, char *i
 }
 
 char *getReservId(Reservation *reservation) {
-    return reservation->id; //falta encapsulamento
+    return strdup(reservation->id); //falta encapsulamento
 }
 
 char *getReservUserId(Reservation *reservation) {
-    return reservation->id_user; //encapsulamento
+    return strdup(reservation->id_user); //encapsulamento
 }
 
 char *getReservHotelId(Reservation *reservation) {
-    return reservation->id_hotel;
+    return strdup(reservation->id_hotel);
 }
 
 int getReservUserKey(Reservation *reservation) {
@@ -79,11 +79,19 @@ char getReservHotelStars(Reservation *reservation, Hashtable *hotels) {
 }*/
 
 Date *getReservBegin(Reservation *reservation) {
-    return reservation->begin;
+    Date * res = malloc(sizeof(Date));
+    res->day = reservation->begin->day;
+    res->month = reservation->begin->month;
+    res->year = reservation->begin->year;
+    return res;
 }
 
 Date *getReservEnd(Reservation *reservation) {
-    return reservation->end;
+    Date * res = malloc(sizeof(Date));
+    res->day = reservation->end->day;
+    res->month = reservation->end->month;
+    res->year = reservation->end->year;
+    return res;
 }
 
 int getReservBeginDayId(void *id, Hashtable *lookupTable) {
@@ -113,19 +121,28 @@ int getReservUserClassificationId(void *id, Hashtable *lookupTable) {
 char *getReservUserIdId(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Reservation *reservation = getData(lookupTable, key, id);
-    return reservation->id_user;
+    char * res = strdup(reservation->id_user);
+    return res;
 }
 
 Date *getReservBeginId(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Reservation *reservation = getData(lookupTable, key, id);
-    return reservation->begin;
+    Date * res = malloc(sizeof(Date));
+    res->day = reservation->begin->day;
+    res->month = reservation->begin->month;
+    res->year = reservation->begin->year;
+    return res;
 }
 
 Date *getReservEndId(void *id, Hashtable *lookupTable) {
     unsigned int key = hashFunction(id);
     Reservation *reservation = getData(lookupTable, key, id);
-    return reservation->end;
+    Date * res = malloc(sizeof(Date));
+    res->day = reservation->end->day;
+    res->month = reservation->end->month;
+    res->year = reservation->end->year;
+    return res;
 }
 
 double getReservPriceId(void *id, Hashtable *lookupTable, Hashtable *hotels){

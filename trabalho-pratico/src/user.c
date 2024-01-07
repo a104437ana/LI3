@@ -81,7 +81,7 @@ void sortUserList(void *data, Hashtable *lookupTable) {
 //gets
 char *getName(User *user) {
     char *name;
-    name = user->name; //falta encapsulamento
+    name = strdup(user->name);
 
     return name;
 }
@@ -94,8 +94,8 @@ Gender getGender(User *user) {
 }
 
 char *getCountry(User *user) {
-    char *country; //falta encapsulamento
-    country = user->country;
+    char *country;
+    country = strdup(user->country);
 
     return country;
 }
@@ -109,14 +109,16 @@ char *getAdress(User *user) {
 */
 char *getPassport(User *user) {
     char *passport;
-    passport = user->passport; //falta encapsulamento
+    passport = strdup(user->passport);
 
     return passport;
 }
 
 Date *getBirth(User *user) {
-    Date *birth;
-    birth = user->birth;
+    Date *birth = malloc(sizeof(Date));
+    birth->day = user->birth->day;
+    birth->month = user->birth->month;
+    birth->year = user->birth->year;
 
     return birth;
 }
@@ -152,14 +154,15 @@ PhoneNumber *getPhoneNumber(User *user) {
 }
 */
 Date *getAccountCreation(User *user) {
-    Date *accountCreation;
-    accountCreation = user->accountCreation;
-
+    Date *accountCreation = malloc(sizeof(Date));
+    accountCreation->day = user->accountCreation->day;
+    accountCreation->month = user->accountCreation->month;
+    accountCreation->year = user->accountCreation->year;
     return accountCreation;
 }
 
 char *getUserId(User *user) {
-    return user->id; //falta encapsulamento
+    return strdup(user->id); //falta encapsulamento
 }
 
 double getTotalSpent(User* user) {

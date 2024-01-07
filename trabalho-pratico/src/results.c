@@ -1,443 +1,140 @@
 #include "results.h"
-struct results {
-    int Q1type;
-    ResultQ1_user* resultQ1_user;
-    ResultQ1_flight* resultQ1_flight;
-    ResultQ1_reservation* resultQ1_reservation;
-    ResultQ3* resultQ3;
-    ResultQ4* resultQ4;
-    ResultQ7* resultQ7;
+
+struct queryResult{
+    int number_of_results;
+    Result ** results;
 };
 
-struct resultQ1_user {
-    char* name;
-    Gender gender;
-    int age;
-    char* country_code;
-    char* passport;
-    int number_of_flights;
-    int number_of_reservations;
-    double total_spent;
+struct result{
+     int number_of_fields;
+     Result_Field ** fields;
 };
 
-struct resultQ1_flight {
-    char* airline;
-    char* plane_model;
-    char* origin;
-    char* destination;
-    Date* schedule_departure_date;
-    Date* schedule_arrival_date;
-    int number_of_passengers;
-    double delay;
+struct result_field{
+    char * field_name;
+    char * data;
 };
 
-struct resultQ1_reservation {
-    char* hotel_id;
-    char* hotel_name;
-    int hotel_stars;
-    Date* begin_date;
-    Date* end_date;
-    bool includes_breakfast;
-    int number_of_nights;
-    double total_price;
-};
-
-struct resultQ3 {
-    double rating;
-};
-
-struct resultQ4 {
-    int size;
-    ResultQ4_reservation ** list;
-};
-
-struct resultQ4_reservation {
-    char* id;
-    Date* begin_date;
-    Date* end_date;
-    char* user_id;
-    int rating;
-    double total_price;
-};
-
-struct resultQ7_airport {
-    char*                                                                                                                                                                                                                                                                                                             name;
-    double median;
-};
-
-struct resultQ7 {
-    int size;
-    ResultQ7_airport** list;
-};
-
-Results * createResults() {
-    Results *results = malloc(sizeof(Results));
-    results->resultQ1_user = malloc(sizeof(ResultQ1_user));
-    results->resultQ1_user->name = strdup("a");
-    results->resultQ1_user->country_code = strdup("a");
-    results->resultQ1_user->passport = strdup("a");
-    results->resultQ1_flight = malloc(sizeof(ResultQ1_flight));
-    results->resultQ1_flight->airline = strdup("a");
-    results->resultQ1_flight->plane_model = strdup("a");
-    results->resultQ1_flight->origin = strdup("a");
-    results->resultQ1_flight->destination = strdup("a");
-    results->resultQ1_reservation = malloc(sizeof(ResultQ1_reservation));
-    results->resultQ1_reservation->hotel_id = strdup("a");
-    results->resultQ1_reservation->hotel_name = strdup("a");
-    results->resultQ3 = malloc(sizeof(ResultQ3));
-    results->resultQ4 = malloc(sizeof(ResultQ4));
-    results->resultQ4->size = 0;
-    results->resultQ4->list = NULL;
-    results->resultQ7 = malloc(sizeof(ResultQ7));
-    results->resultQ7->size = 0;
-    results->resultQ7->list = NULL;
-
-    return results;
+Result_Field * createField() {
+    Result_Field * field = malloc(sizeof(Result_Field));
+    field->field_name = NULL;
+    field->data = NULL;
+    return field;
 }
 
-void clearResultQ4 (Results* results){
+Result * createResult() {
+    Result * result = malloc(sizeof(Result));
+    result->number_of_fields = 0;
+    result->fields = NULL;
+    return result;
+}
+
+QueryResult * createQResult() {
+    QueryResult * qresult = malloc(sizeof(QueryResult));
+    qresult->number_of_results = 0;
+    qresult->results = NULL;
+    return qresult;
+}
+
+void destroyField (Result_Field * field){
+    free(field->field_name);
+    free(field->data);
+}
+
+void destroyResult (Result* result) {
     int i;
-    for (i=0; i<results->resultQ4->size; i++){
-     free(results->resultQ4->list[i]->id);
-     destroyDate(results->resultQ4->list[i]->begin_date);
-     destroyDate(results->resultQ4->list[i]->end_date);
-     free(results->resultQ4->list[i]->user_id);
-     free(results->resultQ4->list[i]);
+    for (i=0; i<result->number_of_fields; i++){
+        destroyField(result->fields[i]);
     }
-    free(results->resultQ4->list);
-    results->resultQ4->size = 0;
+    free(result->fields);
 }
 
-void clearResultQ7 (Results* results){
+void destroyQResult (QueryResult* qresult) {
     int i;
-    for (i=0; i<results->resultQ7->size; i++){
-     free(results->resultQ7->list[i]->name);
-     free(results->resultQ7->list[i]);
+    for (i=0; i<qresult->number_of_results; i++){
+        destroyResult(qresult->results[i]);
     }
-    free(results->resultQ7->list);
-    results->resultQ7->size = 0;
+    free(qresult->results);
+    free(qresult);
 }
 
-void destroyResults (Results* results) {
-  free(results->resultQ1_user->name);
-  free(results->resultQ1_user->country_code);
-  free(results->resultQ1_user->passport);
-  free(results->resultQ1_user);
-  free(results->resultQ1_flight->airline);
-  free(results->resultQ1_flight->plane_model);
-  free(results->resultQ1_flight->origin);
-  free(results->resultQ1_flight->destination);
-  free(results->resultQ1_flight);
-  free(results->resultQ1_reservation->hotel_id);
-  free(results->resultQ1_reservation->hotel_name);
-  free(results->resultQ1_reservation);
-  free(results->resultQ3);
-  clearResultQ4(results);
-  free(results->resultQ4);
-  clearResultQ7(results);
-  free(results->resultQ7);
-  free(results);
+void clearQResult (QueryResult* qresult){
+    int i;
+    for (i=0; i<qresult->number_of_results; i++){
+        destroyResult(qresult->results[i]);
+    }
+    free(qresult->results); qresult->results = NULL;
+    qresult->number_of_results = 0;
 }
 
-//Q1
-
-int getQ1type (Results* results) {
-    return results->Q1type;
+void clearResult (Result* result){
+    int i;
+    for (i=0; i<result->number_of_fields; i++){
+        destroyField(result->fields[i]);
+    }
+    free(result->fields); result->fields = NULL;
+    result->number_of_fields = 0;
 }
 
-void setQ1type (Results* results, int type) {
-    results->Q1type = type;
+
+void setNumberResults (QueryResult* qresult, int n){
+    clearQResult(qresult);
+    qresult->number_of_results = n;
+    qresult->results = malloc(sizeof(Result *)*n);
+    int i;
+    for (i=0; i<n; i++){
+        qresult->results[i] = createResult();
+    }
 }
 
-char* getNameQ1 (Results* results) {
-    return strdup(results->resultQ1_user->name);
+void setNumberFieldsQ (QueryResult* result, int i, int n){
+   setNumberFields(result->results[i], n);
 }
 
-void setNameQ1 (Results* results, char* name) {
-    free(results->resultQ1_user->name);
-    results->resultQ1_user->name = strdup(name);
+void setNumberFields (Result* result, int n){
+    clearResult(result);
+    result->number_of_fields = n;
+    result->fields = malloc(sizeof(Result_Field *)*n);
+    int i;
+    for (i=0; i<n; i++){
+        result->fields[i] = createField();
+    }
 }
 
-Gender getGenderQ1 (Results* results) {
-    return results->resultQ1_user->gender;
+void setResult (QueryResult * qresult, Result* result, int i){
+    int j;
+    for (j=0; j< result->number_of_fields; j++){
+        setField(qresult->results[i], j, result->fields[j]->field_name, result->fields[j]->data);
+    }
 }
 
-void setGenderQ1 (Results* results, Gender gender) {
-    results->resultQ1_user->gender = gender;
+void setField (Result * result, int i, char * name, char * data){
+    result->fields[i]->field_name = strdup(name);
+    result->fields[i]->data = strdup(data);
 }
 
-int getAgeQ1 (Results* results) {
-    return results->resultQ1_user->age;
+void setFieldQ (QueryResult * result, int r, int i, char * name, char * data){
+    setField(result->results[r], i, name, data);
 }
 
-void setAgeQ1 (Results* results, int age) {
-    results->resultQ1_user->age = age;
+int getNumberResults (QueryResult* qresult){
+    return (qresult->number_of_results);
 }
 
-char* getCountryCodeQ1 (Results* results) {
-    return strdup(results->resultQ1_user->country_code);
+int getNumberFieldsQ (QueryResult* result, int i){
+   return (getNumberFields(result->results[i]));
 }
 
-void setCountryCodeQ1 (Results* results, char* country_code) {
-    free(results->resultQ1_user->country_code);
-    results->resultQ1_user->country_code = strdup(country_code);
+int getNumberFields (Result* result){
+    return (result->number_of_fields);
 }
 
-char* getPassportQ1 (Results* results) {
-    return strdup(results->resultQ1_user->passport);
-}
-
-void setPassportQ1 (Results* results, char* passport) {
-    free(results->resultQ1_user->passport);
-    results->resultQ1_user->passport = strdup(passport);
-}
-
-int getNflightsQ1 (Results* results) {
-    return results->resultQ1_user->number_of_flights;
-}
-
-void setNflightsQ1 (Results* results, int n) {
-    results->resultQ1_user->number_of_flights = n;
-}
-
-int getNreservsQ1 (Results* results) {
-    return results->resultQ1_user->number_of_reservations;
-}
-
-void setNreservsQ1 (Results* results, int n) {
-    results->resultQ1_user->number_of_reservations = n;
-}
-
-double getTotalSpentQ1 (Results* results) {
-    return results->resultQ1_user->total_spent;
-}
-
-void setTotalSpentQ1 (Results* results, double n) {
-    results->resultQ1_user->total_spent = n;
-}
-
-char* getAirlineQ1 (Results* results) {
-    return strdup(results->resultQ1_flight->airline);
-}
-
-void setAirlineQ1 (Results* results, char* name) {
-    free(results->resultQ1_flight->airline);
-    results->resultQ1_flight->airline = strdup(name);
-}
-
-char* getPlaneModelQ1 (Results* results) {
-    return strdup(results->resultQ1_flight->plane_model);
-}
-
-void setPlaneModelQ1 (Results* results, char* name) {
-    free(results->resultQ1_flight->plane_model);
-    results->resultQ1_flight->plane_model = strdup(name);
-}
-
-char* getOriginlQ1 (Results* results) {
-    return strdup(results->resultQ1_flight->origin);
-}
-
-void setOriginQ1 (Results* results, char* name) {
-    free(results->resultQ1_flight->origin);
-    results->resultQ1_flight->origin = strdup(name);
-}
-
-char* getDestlQ1 (Results* results) {
-    return strdup(results->resultQ1_flight->destination);
-}
-
-void setDestQ1 (Results* results, char* name) {
-    free(results->resultQ1_flight->destination);
-    results->resultQ1_flight->destination = strdup(name);
-}
-
-Date* getScheduleDepartureQ1 (Results* results) {
-    return results->resultQ1_flight->schedule_departure_date;
-}
-
-void setSheduleDepartureQ1 (Results* results, Date* date) {
-    results->resultQ1_flight->schedule_departure_date = date;
-}
-
-Date* getScheduleArrivalQ1 (Results* results) {
-    return results->resultQ1_flight->schedule_arrival_date;
-}
-
-void setSheduleArrivalQ1 (Results* results, Date* date) {
-    results->resultQ1_flight->schedule_arrival_date = date;
-}
-
-int getNpassengersQ1 (Results* results) {
-    return results->resultQ1_flight->number_of_passengers;
-}
-
-void setNpassengersQ1 (Results* results, int n) {
-    results->resultQ1_flight->number_of_passengers = n;
-}
-
-double getDelayQ1 (Results* results) {
-    return results->resultQ1_flight->delay;
-}
-
-void setDelayQ1 (Results* results, double n) {
-    results->resultQ1_flight->delay = n;
-}
-
-char* getHotelIdQ1 (Results* results) {
-    return strdup(results->resultQ1_reservation->hotel_id);
-}
-
-void setHotelIdQ1 (Results* results, char* name) {
-    free(results->resultQ1_reservation->hotel_id);
-    results->resultQ1_reservation->hotel_id = strdup(name);
-}
-
-char* getHotelNameQ1 (Results* results) {
-    return strdup(results->resultQ1_reservation->hotel_name);
-}
-
-void setHotelNameQ1 (Results* results, char* name) {
-    free(results->resultQ1_reservation->hotel_name);
-    results->resultQ1_reservation->hotel_name = strdup(name);
-}
-
-int getHotelStarsQ1 (Results* results) {
-    return results->resultQ1_reservation->hotel_stars;
-}
-
-void setHotelStarsQ1 (Results* results, int n) {
-    results->resultQ1_reservation->hotel_stars = n;
-}
-
-//
-Date* getBeginDateQ1 (Results* results) {
-    return results->resultQ1_reservation->begin_date;
-}
-
-void setBeginDateQ1 (Results* results, Date* date) {
-    results->resultQ1_reservation->begin_date = date;
-}
-
-Date* getEndDateQ1 (Results* results) {
-    return results->resultQ1_reservation->end_date;
-}
-
-void setEndDateQ1 (Results* results, Date* date) {
-    results->resultQ1_reservation->end_date = date;
-}
-
-bool getIncludesBreakfastQ1 (Results* results) {
-    return results->resultQ1_reservation->includes_breakfast;
-}
-
-void setIncludesBreakfastQ1 (Results* results, bool n) {
-    results->resultQ1_reservation->includes_breakfast = n;
-}
-
-int getNnightsQ1 (Results* results) {
-    return results->resultQ1_reservation->number_of_nights;
-}
-
-void setNnightsQ1 (Results* results, int n) {
-    results->resultQ1_reservation->number_of_nights = n;
-}
-
-double getTotalPriceQ1 (Results* results) {
-    return results->resultQ1_reservation->total_price;
-}
-
-void setTotalPriceQ1 (Results* results, double n) {
-    results->resultQ1_reservation->total_price = n;
-}
-
-//Q3
-double getRating (Results* results) {
-  return results->resultQ3->rating;
-}
-
-void setRating (Results* results, double newRating) {
-  results->resultQ3->rating = newRating;
-}
-
-//Q4
-void setResultQ4Size (Results* results, int size){
-    results->resultQ4->size = size;
-    results->resultQ4->list = malloc(sizeof(ResultQ4_reservation*)*size);
-}
-
-void setResultQ4DataInd (Results* results, char* id, Date* begin_date, Date* end_date, char* user_id, int rating, double total_price , int ind){
-    results->resultQ4->list[ind] = malloc(sizeof(ResultQ4_reservation));
-    results->resultQ4->list[ind]->id = strdup(id);
-    results->resultQ4->list[ind]->begin_date = malloc(sizeof(Date));
-    results->resultQ4->list[ind]->begin_date->day = begin_date->day;
-    results->resultQ4->list[ind]->begin_date->month = begin_date->month;
-    results->resultQ4->list[ind]->begin_date->year = begin_date->year;
-    results->resultQ4->list[ind]->end_date = malloc(sizeof(Date));
-    results->resultQ4->list[ind]->end_date->day = end_date->day;
-    results->resultQ4->list[ind]->end_date->month = end_date->month;
-    results->resultQ4->list[ind]->end_date->year = end_date->year;
-    results->resultQ4->list[ind]->user_id = strdup(user_id);
-    results->resultQ4->list[ind]->rating = rating;
-    results->resultQ4->list[ind]->total_price = total_price;
-}
-
-int getResultQ4Size (Results* results){
-    return results->resultQ4->size;
-}
-
-char * getResultQ4IdInd (Results* results, int ind){
-    char* res = strdup(results->resultQ4->list[ind]->id);
+char * getFieldName (QueryResult * result, int r, int i){
+    char * res = strdup(result->results[r]->fields[i]->field_name);
     return res;
 }
 
-Date * getResultQ4BeginInd (Results* results, int ind){
-    Date* res = malloc(sizeof(Date));
-    res->day = results->resultQ4->list[ind]->begin_date->day;
-    res->month = results->resultQ4->list[ind]->begin_date->month;
-    res->year = results->resultQ4->list[ind]->begin_date->year;
+char * getFieldData (QueryResult * result, int r, int i){
+    char * res = strdup(result->results[r]->fields[i]->data);
     return res;
-}
-
-Date * getResultQ4EndInd (Results* results, int ind){
-    Date* res = malloc(sizeof(Date));
-    res->day = results->resultQ4->list[ind]->end_date->day;
-    res->month = results->resultQ4->list[ind]->end_date->month;
-    res->year = results->resultQ4->list[ind]->end_date->year;
-    return res;
-}
-char * getResultQ4UserIdInd (Results* results, int ind){
-    char* res = strdup(results->resultQ4->list[ind]->user_id);
-    return res;
-}
-int getResultQ4RatingInd (Results* results, int ind){
-    return (results->resultQ4->list[ind]->rating);
-}
-double getResultQ4TotalPriceInd (Results* results, int ind){
-    return (results->resultQ4->list[ind]->total_price);
-}
-
-//Q7
-
-char* getNameQ7 (Results* results, int i) {
-    return (strdup(results->resultQ7->list[i]->name));
-}
-
-double getMedianQ7 (Results* results, int i) {
-    return (results->resultQ7->list[i]->median);
-}
-
-int getSizeQ7 (Results* results) {
-    return results->resultQ7->size;
-}
-
-void setResultQ7 (Results* results,int size) {
-    results->resultQ7->list = malloc(sizeof(ResultQ7_airport*)*size);
-}
-
-void setNameMedianQ7 (Results* results, int i, char* name, double median) {
-    results->resultQ7->list[i]= malloc(sizeof(ResultQ7_airport));
-    results->resultQ7->list[i]->name = strdup(name);
-    results->resultQ7->list[i]->median = median;
-    results->resultQ7->size++;
 }

@@ -65,11 +65,11 @@ Hotel *getHotelCatalog(Hashtable *hotels, unsigned int key, char *id) {
     return hotel;
 }
 char *getHotelId(Hotel *hotel) {
-    return hotel->id; //falta encapsulamento
+    return strdup(hotel->id);
 }
 
 char *getHotelName(Hotel *hotel) {
-    return hotel->name; //falta encapsulamento
+    return strdup(hotel->name); 
 }
 
 char getHotelStars(Hotel *hotel) {

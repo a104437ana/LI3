@@ -227,15 +227,15 @@ int isPrefix(void *prefix, void *user) {
 }
 
 //query 1 - retorna o utilizador, reserva ou voo com o id passado como argumento (se existir e não for um utilizador inativo)
-void Q1 (char *id, Catalogs* catalogs, Results* results) {
+void Q1 (char *id, Catalogs* catalogs, QueryResult* result) {
   if(same_prefix("Book", id) == 1){ //se o id for de uma reserva
-      catalogs_compute_Q1_reservation(id,catalogs,results);
+      catalogs_compute_Q1_reservation(id,catalogs,result);
   }
   else if (id[0]>='0' && id[0]<='9'){ //se o id for de um voo
-        catalogs_compute_Q1_flight(id,catalogs,results);
+        catalogs_compute_Q1_flight(id,catalogs,result);
   }
   else{ //se o id for de um utilizador
-      catalogs_compute_Q1_user(id,catalogs,results);
+      catalogs_compute_Q1_user(id,catalogs,result);
   }
 }
 
@@ -331,8 +331,8 @@ ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog){
 }
 
 //query 3 - calcula a avaliação média do hotel com o id passado como argumento, se existir
-void Q3 (char* id_hotel, Catalogs* catalogs, Results* results) {
-  catalogs_compute_Q3(id_hotel,catalogs,results);
+void Q3 (char* id_hotel, Catalogs* catalogs, QueryResult* result) {
+  catalogs_compute_Q3(id_hotel,catalogs,result);
 }
 /*
 double Q3(char *id, HotelsManager *hotelsCatalog) {
@@ -362,12 +362,12 @@ double Q3(char *id, HotelsManager *hotelsCatalog) {
 //    return results;
 //}
 
-void Q4 (char* id_hotel, Catalogs* catalogs, Results* results) {
-  catalogs_compute_Q4(id_hotel,catalogs,results);
+void Q4 (char* id_hotel, Catalogs* catalogs, QueryResult* result) {
+  catalogs_compute_Q4(id_hotel,catalogs,result);
 }
 
-void Q7 (int n, Catalogs* catalogs, Results* results) {
-  catalogs_compute_Q7(n,catalogs,results);
+void Q7 (int n, Catalogs* catalogs, QueryResult* result) {
+  catalogs_compute_Q7(n,catalogs,result);
 }
 
 //quey 8 - devolve a receita total de um hotel entre duas datas limites dadas

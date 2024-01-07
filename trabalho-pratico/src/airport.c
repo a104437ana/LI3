@@ -63,7 +63,8 @@ OrdList *getAirportOrdList(Airport *airport) {
 
 //gets
 char *getAirportId(Airport *airport) {
-    return strdup(airport->name);
+    char * res = strdup(airport->name);
+    return res;
 }
 
 double getAirportMedian(Airport *airport) {

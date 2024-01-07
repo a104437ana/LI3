@@ -17,7 +17,7 @@ Airport *getAirportCatalog(AirportsManager *airportsManager, unsigned int key, c
 Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager);
 void sortAirports (AirportsManager* airportsManager);
 int compareDelays (void *pointer1, void *pointer2);
-void airport_calalog_compute_Q7 (int n, AirportsManager *airports, Results* results);
+void airport_calalog_compute_Q7 (int n, AirportsManager *airports, QueryResult* result);
 //liberta espaço em memória do catálogo de aeroportos
 void destroyAirportsCatalog(AirportsManager *airportsManager);
 

@@ -52,39 +52,45 @@ void destroyHotelsCatalog(HotelsManager *hotelsManager) {
 }
 
 //queries
-void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,Results* results) {
+void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryResult* result) {
     if (hotel_id == NULL) {
-        setQ1type(results,0);
+        return;
     }
     else {
-    Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(hotel_id),hotel_id);
-    if (hotel==NULL) setQ1type(results,0); //se o id não existir
-    else {
-        char* hotel_name = getHotelName(hotel);
+        Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(hotel_id),hotel_id);
+        if (hotel==NULL) return;
+        char* hotel_name = getHotelName(hotel); char * field1 = strdup("hotel_name");
         int hotel_stars = getHotelStars(hotel);
-        int ppn = getTotalPriceQ1(results); //preço por noite
-        int nnights = getNnightsQ1(results); //número de noites
-        int cityTax = getHotelCityTax(hotel); //taxa turística
-        double res = (double) ((ppn*nnights)+(((double)(ppn*nnights)/100.0)*cityTax));
-        setHotelNameQ1(results,hotel_name);
-        setHotelStarsQ1(results,hotel_stars);
-        setTotalPriceQ1(results,res);
-    }
+        char * stars = malloc(sizeof(char)*2);
+        sprintf(stars, "%d", hotel_stars); char * field2 = strdup("hotel_stars");
+
+        setFieldQ(result, 0, 1, field1, hotel_name);
+        setFieldQ(result, 0, 2, field2, stars); 
+        //os outros campos são preenchidos pela reservation_catalog_compute_Q1 e catalogs_compute_Q1_reservation
+
+        free(hotel_name); free(stars);
+        free(field1); free(field2);
     }
 }
 
-void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, Results* results) {
-    if (id_hotel == NULL) {
-        setRating(results,-1.0);
-    }
-    else {
+void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, QueryResult* result) {
+    if (id_hotel==NULL) return;
     Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(id_hotel),id_hotel);
-    if (hotel==NULL) setRating(results,-1.0); //se o id não existir
-    else {
-        int numberClassifications = getHotelNumberOfReservations(hotel);
-        double result = getHotelRatingsSum(hotel);
-        result /= numberClassifications;
-        setRating(results,result);
+    if (hotel == NULL) {
+        return;
     }
+    else {
+        setNumberResults(result,1);
+        setNumberFieldsQ(result, 0, 1);
+        int numberClassifications = getHotelNumberOfReservations(hotel);
+        double rating = getHotelRatingsSum(hotel);
+        rating /= numberClassifications;
+        char * ratingS = malloc(sizeof(char)*5);
+        sprintf(ratingS, "%.3f", rating); char * field0 = strdup("rating");
+        
+        setFieldQ(result, 0, 0, field0, ratingS); 
+
+        free(ratingS);
+        free(field0);
     }
 }

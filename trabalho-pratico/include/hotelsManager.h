@@ -23,7 +23,7 @@ void printHotels(HotelsManager *hotelsManager);
 void destroyHotelsCatalog(HotelsManager *hotelsManager);
 
 // queries
-void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,Results* results);
-void hotel_catalog_compute_Q3(char* id_hotel,HotelsManager* hotel_catalog, Results* results);
+void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryResult* result);
+void hotel_catalog_compute_Q3(char* id_hotel,HotelsManager* hotel_catalog, QueryResult* result);
 
 #endif

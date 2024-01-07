@@ -31,5 +31,5 @@ void printUsers(UsersManager *usersManager);
 //liberta espaço em memória do catálogo de utilizadores
 void destroyUsersCatalog(UsersManager *usersManager);
 
-void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, Results* results);
+void user_catalog_compute_Q1 (char *id, UsersManager* usersManager,QueryResult* result);
 #endif

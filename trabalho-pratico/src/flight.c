@@ -45,11 +45,13 @@ void addUserToFlight(Flight *flight, void *user) {
 
 //gets
 char *getFlightAirline(Flight *flight) {
-    return flight->airline; //falta encapsulamento
+    char * res = strdup(flight->airline);
+    return res;
 }
 
 char *getFlightAirplane(Flight *flight) {
-    return flight->airplane; //falta encapsulamento
+    char * res = strdup(flight->airplane);
+    return res;
 }
 
 char *getFlightOrigin(Flight *flight) {
@@ -65,19 +67,47 @@ char *getFlightDestination(Flight *flight) {
 }
 
 Date *getFlightScheduleDeparture(Flight *flight) {
-    return flight->scheduleDeparture;
+    Date * res = malloc(sizeof(Date));
+    res->day = flight->scheduleDeparture->day;
+    res->month = flight->scheduleDeparture->month;
+    res->year = flight->scheduleDeparture->year;
+    res->seconds = flight->scheduleDeparture->seconds;
+    res->minutes = flight->scheduleDeparture->minutes;
+    res->hours = flight->scheduleDeparture->hours;
+    return res;
 }
 
 Date *getFlightScheduleArrival(Flight *flight) {
-    return flight->scheduleArrival;
+    Date * res = malloc(sizeof(Date));
+    res->day = flight->scheduleArrival->day;
+    res->month = flight->scheduleArrival->month;
+    res->year = flight->scheduleArrival->year;
+    res->seconds = flight->scheduleArrival->seconds;
+    res->minutes = flight->scheduleArrival->minutes;
+    res->hours = flight->scheduleArrival->hours;
+    return res;
 }
 
 Date *getFlightRealDeparture(Flight *flight) {
-    return flight->realDeparture;
+    Date * res = malloc(sizeof(Date));
+    res->day = flight->realDeparture->day;
+    res->month = flight->realDeparture->month;
+    res->year = flight->realDeparture->year;
+    res->seconds = flight->realDeparture->seconds;
+    res->minutes = flight->realDeparture->minutes;
+    res->hours = flight->realDeparture->hours;
+    return res;
 }
 
 Date *getFlightRealArrival(Flight *flight) {
-    return flight->realArrival;
+    Date * res = malloc(sizeof(Date));
+    res->day = flight->realArrival->day;
+    res->month = flight->realArrival->month;
+    res->year = flight->realArrival->year;
+    res->seconds = flight->realArrival->seconds;
+    res->minutes = flight->realArrival->minutes;
+    res->hours = flight->realArrival->hours;
+    return res;
 }
 
 int getFlightScheduleDepartureDay(void *id, Hashtable *lookupTable) {
@@ -129,7 +159,7 @@ char *getFlightNotes(Flight *flight) {
 }
 */
 char *getFlightId(Flight *flight) {
-    return flight->id;
+    return strdup(flight->id);
 }
 
 OrdList * getPassengers(Flight* flight){
