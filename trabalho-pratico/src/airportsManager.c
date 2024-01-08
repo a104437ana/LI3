@@ -136,9 +136,9 @@ void airport_calalog_compute_Q7 (int n, AirportsManager *airports, QueryResult* 
         Airport* airport = getDataOrdList(airports->airportsByMedianOfDelays,i);
         setNumberFieldsQ(result,i, 2);
         char* name = getAirportId(airport); char * field0 = strdup("name");
-        double median = getAirportMedian(airport);
-        char * medianS = malloc(sizeof(char)*15);
-        sprintf(medianS, "%.3f", median); char * field1 = strdup("median");
+        int median = getAirportMedian(airport);
+        char * medianS = malloc(sizeof(char)*10);
+        sprintf(medianS, "%d", median); char * field1 = strdup("median");
 
         setFieldQ(result, i, 0, field0, name); 
         setFieldQ(result, i, 1, field1, medianS); 
