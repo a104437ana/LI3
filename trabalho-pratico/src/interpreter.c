@@ -9,13 +9,15 @@ struct command {
 };
 
 //função que processa um comando, chamando a respetiva query e a função que imprime o resultado
-int processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs, QueryResult* result){
+int processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs){
    createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
      if (command->n_args==0) return 0;
      else{
+        QueryResult * result = createQResult();
         Q1(command->args[0],catalogs,result);
         printQueryOutput(i,command->format_flag,result);
+        destroyQResult(result);
         return 1;
      }
    }
@@ -45,16 +47,20 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==3){
      if (command->n_args==0) return 0;
      else{
+        QueryResult * result = createQResult();
         Q3(command->args[0], catalogs, result);
         printQueryOutput(i,command->format_flag,result);
+        destroyQResult(result);
         return 3;
      }
    }
     else if (command->query_id==4){
      if (command->n_args==0) return 0;
      else{
+        QueryResult * result = createQResult();
         Q4(command->args[0], catalogs,result);
         printQueryOutput(i,command->format_flag,result);
+        destroyQResult(result);
         return 4;
      }
    }
@@ -63,10 +69,11 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
      else{
         Date *begin = string_to_date(command->args[1]);
         Date *end = string_to_date(command->args[2]);
+        QueryResult * result = createQResult();
         Q5(command->args[0], begin, end, catalogs, result);
-        free(begin); free(end);
         printQueryOutput(i,command->format_flag, result);
-        return 0;
+        destroyQResult(result); destroyDate(begin); destroyDate(end);
+        return 5;
      }
    }
     else if (command->query_id==6){
@@ -80,9 +87,11 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==7){
      if (command->n_args==0) return 0;
      else{
+        QueryResult * result = createQResult();
         Q7(atoi(command->args[0]),catalogs,result);
         printQueryOutput(i,command->format_flag,result);
-        return 0;
+        destroyQResult(result);
+        return 7;
      }
    }
     else if (command->query_id==8){
@@ -154,7 +163,7 @@ Command* parseCommandLine (char* line){
 }
 
 //processa o ficheiro de comandos
-void parseCommandFile (char* name,Catalogs *catalogs, QueryResult* result){
+void parseCommandFile (char* name,Catalogs *catalogs){
    //inicialização de variáveis para medição de tempo
    struct timespec start, end;
    double qTime[11]; // indice 0 - tempo total, 1 - query 1, etc..
@@ -176,7 +185,7 @@ void parseCommandFile (char* name,Catalogs *catalogs, QueryResult* result){
     clock_gettime(CLOCK_REALTIME, &start);
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
-    int q = processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,catalogs,result);
+    int q = processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,catalogs);
     i++;
     free(command);
     clock_gettime(CLOCK_REALTIME, &end);

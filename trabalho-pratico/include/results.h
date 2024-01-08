@@ -17,15 +17,17 @@ void destroyField (Result_Field * field);
 void destroyResult (Result* result) ;
 void destroyQResult (QueryResult* qresult) ;
 
-void clearQResult (QueryResult* qresult);
 void clearResult (Result* result);
 
 void setNumberResults (QueryResult* qresult, int n);
 void setNumberFieldsQ (QueryResult* result, int i, int n);
 void setNumberFields (Result* result, int n);
-void setResult (QueryResult * qresult, Result* result, int i);
+void addResult (QueryResult * qresult, int i);
 void setField (Result * result, int i, char * name, char * data);
 void setFieldQ (QueryResult * result, int r, int i, char * name, char * data);
+
+void swapResults(QueryResult *qresult, int i, int j);
+void reverseResults (QueryResult * qresult);
 
 int getNumberResults (QueryResult* qresult);
 int getNumberFieldsQ (QueryResult* result, int i);

@@ -2,6 +2,7 @@
 
 struct queryResult{
     int number_of_results;
+    int max_results;
     Result ** results;
 };
 
@@ -25,31 +26,39 @@ Result_Field * createField() {
 Result * createResult() {
     Result * result = malloc(sizeof(Result));
     result->number_of_fields = 0;
-    result->fields = NULL;
+    result->fields = malloc(sizeof(Result_Field*));
     return result;
 }
 
 QueryResult * createQResult() {
     QueryResult * qresult = malloc(sizeof(QueryResult));
     qresult->number_of_results = 0;
-    qresult->results = NULL;
+    qresult->max_results = 2;
+    qresult->results = malloc(sizeof(Result*)*2);
+    qresult->results[0] = createResult();
+    qresult->results[1] = createResult();
     return qresult;
 }
 
 void destroyField (Result_Field * field){
+    if (field==NULL) return;
     free(field->field_name);
     free(field->data);
+    free(field);
 }
 
 void destroyResult (Result* result) {
+    if (result==NULL) return;
     int i;
     for (i=0; i<result->number_of_fields; i++){
         destroyField(result->fields[i]);
     }
     free(result->fields);
+    free(result);
 }
 
 void destroyQResult (QueryResult* qresult) {
+    if(qresult==NULL) return;
     int i;
     for (i=0; i<qresult->number_of_results; i++){
         destroyResult(qresult->results[i]);
@@ -58,18 +67,10 @@ void destroyQResult (QueryResult* qresult) {
     free(qresult);
 }
 
-void clearQResult (QueryResult* qresult){
-    int i;
-    for (i=0; i<qresult->number_of_results; i++){
-        destroyResult(qresult->results[i]);
-    }
-    free(qresult->results); qresult->results = NULL;
-    qresult->number_of_results = 0;
-}
-
 void clearResult (Result* result){
+    if (result==NULL) return;
     int i;
-    for (i=0; i<result->number_of_fields; i++){
+    for (i=0; i<(result->number_of_fields); i++){
         destroyField(result->fields[i]);
     }
     free(result->fields); result->fields = NULL;
@@ -78,10 +79,14 @@ void clearResult (Result* result){
 
 
 void setNumberResults (QueryResult* qresult, int n){
-    clearQResult(qresult);
-    qresult->number_of_results = n;
-    qresult->results = malloc(sizeof(Result *)*n);
     int i;
+    for (i=0; i<qresult->number_of_results;i++){
+        destroyResult(qresult->results[i]);
+    }
+    free(qresult->results);
+    qresult->number_of_results = n;
+    qresult->max_results = n;
+    qresult->results = malloc(sizeof(Result *)*n);
     for (i=0; i<n; i++){
         qresult->results[i] = createResult();
     }
@@ -92,7 +97,6 @@ void setNumberFieldsQ (QueryResult* result, int i, int n){
 }
 
 void setNumberFields (Result* result, int n){
-    clearResult(result);
     result->number_of_fields = n;
     result->fields = malloc(sizeof(Result_Field *)*n);
     int i;
@@ -101,12 +105,35 @@ void setNumberFields (Result* result, int n){
     }
 }
 
-void setResult (QueryResult * qresult, Result* result, int i){
-    int j;
-    for (j=0; j< result->number_of_fields; j++){
-        setField(qresult->results[i], j, result->fields[j]->field_name, result->fields[j]->data);
+void addResult (QueryResult * qresult, int i){
+    if (i>=qresult->max_results){
+        qresult->results = realloc(qresult->results, (sizeof(Result*)*(qresult->max_results)*2));
+        qresult->max_results*=2;
+        qresult->results[i] = createResult();
+        qresult->number_of_results = i+1;
+    }
+    else{
+        qresult->results[i] = createResult();
+        qresult->number_of_results = i+1;
     }
 }
+
+void swapResults(QueryResult *qresult, int i, int j) {
+    Result *aux = qresult->results[i];
+    qresult->results[i] = qresult->results[j];
+    qresult->results[j] = aux;
+}
+
+void reverseResults (QueryResult * qresult){
+    int size = qresult->number_of_results;
+    int i = 0;
+    int j = size-1;
+    while(i<j){
+        swapResults(qresult, i, j);
+        i++; j--;
+    }
+}
+
 
 void setField (Result * result, int i, char * name, char * data){
     result->fields[i]->field_name = strdup(name);

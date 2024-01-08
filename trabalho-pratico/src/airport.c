@@ -52,9 +52,8 @@ int compareFlightsIds(void *id1, void *id2) {
 void sortAirportFlightsByDepartureDate(void *airport, Hashtable *lookupTable) {
     OrdList *flightsByDepartureDate = ((Airport *) airport)->flightsByDepartureDate;
     quickSort(flightsByDepartureDate, 0, getOrdListSize(flightsByDepartureDate)-1, compareFlightsIds, 0); //ordena por ids
-    radixSortFlightDate(flightsByDepartureDate, lookupTable); //ordena por datas
-    setOrdListOrd(flightsByDepartureDate, 1);
     reverseOrdList(flightsByDepartureDate);
+    radixSortFlightDate(flightsByDepartureDate, lookupTable); //ordena por datas
 }
 
 //obtem a lista de voos do aeroporto

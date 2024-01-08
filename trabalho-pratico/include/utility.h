@@ -42,6 +42,7 @@ int daysBetweenDates(Date *begin, Date *end);
 int compareDates(Date *date1, Date *date2);
 int strcollNames(char *name1, char *name2);
 int strcoll_names(char *name1, char *name2);
+void toUpperS (char *word);
 
 void destroyDate(Date *date);
 

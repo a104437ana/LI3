@@ -65,7 +65,6 @@ int main (int argc, char** argv) {
     setlocale(LC_COLLATE, "en_US.UTF-8");
     //inicialização dos catalogos
     Catalogs *catalogs = createCatalogs();
-    QueryResult *result = createQResult();
         clock_gettime(CLOCK_REALTIME, &interm);
         cat = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
 
@@ -77,7 +76,7 @@ int main (int argc, char** argv) {
         clock_gettime(CLOCK_REALTIME, &interm);
         sor = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
-    parseCommandFile(argv[2],catalogs,result);
+    parseCommandFile(argv[2],catalogs);
         clock_gettime(CLOCK_REALTIME, &end);
         com = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
@@ -85,7 +84,6 @@ int main (int argc, char** argv) {
 
     //liberta o espaço em memória dos catalogos
     destroyCatalogs(catalogs);
-    destroyQResult(result);
         clock_gettime(CLOCK_REALTIME, &interm);
         des = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 

@@ -162,6 +162,16 @@ int strcoll_names(char *name1, char *name2) {
     return compare;
 }
 
+void toUpperS (char *word){
+    int s = strlen(word);
+    int i;
+    for(i=0; i<s; i++){
+        if (word[i]>='a' && word[i]<='z'){
+            word[i]-=32;
+        }
+    }
+}
+
 //função que liberta o espaço em memória alocado por uma data
 void destroyDate(Date *date) {
     if (date == NULL) return; //se não existir a data

@@ -51,7 +51,7 @@ int getBeginDay(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
   Date* date = getFlightScheduleDeparture((Flight *)res->result);
   int i = date->day;
-  free(date);
+  destroyDate(date);
   if (res->resultType == FLIGHTS) return (i);
   else return (getReservBeginDay((Reservation *)res->result));
 }
@@ -61,7 +61,7 @@ int getBeginMonth(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
   Date* date = getFlightScheduleDeparture((Flight *)res->result);
   int i = date->month;
-  free(date);
+  destroyDate(date);
   if (res->resultType == FLIGHTS) return (i);
   else return (getReservBeginMonth((Reservation *)res->result));
 }
@@ -71,7 +71,7 @@ int getBeginYear(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
   Date* date = getFlightScheduleDeparture((Flight *)res->result);
   int i = date->year;
-  free(date);
+  destroyDate(date);
   if (res->resultType == FLIGHTS) return i;
   else return (getReservBeginYear((Reservation *)res->result));
 }
@@ -81,7 +81,7 @@ int getBeginSeconds(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
   Date* date = getFlightScheduleDeparture((Flight *)res->result);
   int i = getSeconds(date);
-  free(date);
+  destroyDate(date);
   if (res->resultType == FLIGHTS) return i;
   else return (0);
 }
@@ -91,7 +91,7 @@ int getBeginMinutes(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
   Date* date = getFlightScheduleDeparture((Flight *)res->result);
   int i = getMinutes(date);
-  free(date);
+  destroyDate(date);
   if (res->resultType == FLIGHTS) return (i);
   else return (0);
 }
@@ -101,7 +101,7 @@ int getBeginHours(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
   Date* date = getFlightScheduleDeparture((Flight *)res->result);
   int i = getHours(date);
-  free(date);
+  destroyDate(date);
   if (res->resultType == FLIGHTS) return (i);
   else return (0);
 }
