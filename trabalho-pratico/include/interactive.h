@@ -10,7 +10,8 @@
 #include "catalogsManager.h"
 #include "parser.h"
 
-void get_path_dataset (int max_row, int max_col,int min_row,int min_col,Catalogs* catalogs);
+char* get_string (int max_row, int max_col,int min_row,int min_col);
+void get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catalogs);
 void interactive_mode(int max_row, int max_col,int row,int col, Catalogs* catalogs);
 
 #endif
