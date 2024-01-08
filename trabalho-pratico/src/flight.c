@@ -177,6 +177,8 @@ int getDelay(Flight* flight){
      Date* scheduleDep = getFlightScheduleDeparture(flight);
      Date* realDep = getFlightRealDeparture(flight);
      int res = ((getDay(realDep)-getDay(scheduleDep))*86400+(getHours(realDep))-(getHours(scheduleDep)))*3600 + ((getMinutes(realDep))-(getMinutes(scheduleDep)))*60 +((getSeconds(realDep))-(getSeconds(scheduleDep)));
+     free(scheduleDep);
+     free(realDep);
      return res;
 }
 

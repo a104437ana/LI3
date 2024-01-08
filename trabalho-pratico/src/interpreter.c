@@ -64,6 +64,7 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
         Date *begin = string_to_date(command->args[1]);
         Date *end = string_to_date(command->args[2]);
         Q5(command->args[0], begin, end, catalogs, result);
+        free(begin); free(end);
         printQueryOutput(i,command->format_flag, result);
         return 0;
      }

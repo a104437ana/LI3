@@ -8,8 +8,8 @@
 #include "catalogsManager.h"
 #include "parser.h"
 
-char* get_string (int max_row, int max_col,int min_row,int min_col) {
-    char* path = malloc(500);
+char* get_string (int max_row, int max_col,int min_row,int min_col, int n) {
+    char* path = malloc(n);
     int row;
     int col;
     int i = 0;
@@ -44,7 +44,7 @@ char* get_string (int max_row, int max_col,int min_row,int min_col) {
         }
         else {
             if (key != KEY_UP && key != KEY_DOWN && key != KEY_LEFT && key != KEY_RIGHT) {
-                if ((col != max_col || row != max_row) && i<500) {
+                if ((col != max_col || row != max_row) && i<n) {
                     printw("%c",key);
                     char key_char = key;
                     path[i] = key_char;
@@ -108,11 +108,12 @@ void get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* cata
     switch(query) {
         case 1: mvprintw(0, 0, "Query 1 - List the summary of a user, flight, or reservation.");
                 mvprintw(2, 0, "Enter the ID: ");
-                string1 = get_string(max_row,max_col,2,14);
+                string1 = get_string(max_row,max_col,2,14,60);
+                free(string1);
                 break;
         case 2: mvprintw(0, 0, "Query 2 - List the flights and/or reservations of a user.");
                 mvprintw(2, 0, "Enter the ID of the user: ");
-                string1 = get_string(max_row,max_col,2,26);
+                string1 = get_string(max_row,max_col,2,26,60);
                 mvprintw(4,0, "Choose one of the options below:");
                 mvprintw(6,0, "   Only flights.");
                 mvprintw(8,0, "   Only reservations.");
@@ -146,44 +147,58 @@ void get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* cata
                         }
                 }
                 //string2 = 
+                free(string1);
+                //free(string2);
                 break;
         case 3: mvprintw(0, 0, "Query 3 - Present the average rating of a hotel.");
                 mvprintw(2, 0, "Enter the ID of the hotel: ");
-                string1 = get_string(max_row,max_col,2,27);
+                string1 = get_string(max_row,max_col,2,27,60);
+                free(string1);
                 break;
         case 4: mvprintw(0, 0, "Query 4 - List the hotel reservations, sorted by start date (from the most recent to the oldest).");
                 mvprintw(2, 0, "Enter the ID of the hotel: ");
-                string1 = get_string(max_row,max_col,2,27);
+                string1 = get_string(max_row,max_col,2,27,60);
+                free(string1);
                 break;
         case 5: mvprintw(0, 0, "Query 5 - List the flights with origin at a given airport, between two dates, sorted by estimated departure date (from the most recent to the oldest).");
                 mvprintw(2, 0, "Enter the name of the airport: ");
-                string1 = get_string(max_row,max_col,2,31);
+                string1 = get_string(max_row,max_col,2,31,3);
                 mvprintw(4,0, "Enter the begin date (in this format 2023/01/31): ");
-                string2 = get_string(max_row,max_col,4,50);
+                string2 = get_string(max_row,max_col,4,50,10);
                 mvprintw(6,0, "Enter the end date (int this format 2023/01/31): ");
-                string3 = get_string(max_row,max_col,6,49);
+                string3 = get_string(max_row,max_col,6,49,10);
+                free(string1);
+                free(string2);
+                free(string3);
                 break;
         case 6: mvprintw(0, 0, "Query 6 - List the top N airports with the most passengers for a given year.");
                 mvprintw(2, 0, "Enter the year: ");
-                string1 = get_string(max_row,max_col,2,16);
+                string1 = get_string(max_row,max_col,2,16,6);
                 mvprintw(4,0, "Enter the number N: ");
-                string3 = get_string(max_row,max_col,4,20);
+                string2 = get_string(max_row,max_col,4,20,10);
+                free(string1);
+                free(string2);
                 break;
         case 7: mvprintw(0, 0, "Query 7 - List the top N airports with the highest median of delays.");
                 mvprintw(2,0, "Enter the number N: ");
-                string1 = get_string(max_row,max_col,2,20);
+                string1 = get_string(max_row,max_col,2,20,10);
+                free(string1);
                 break;
         case 8: mvprintw(0, 0, "Query 8 - Present the total revenue of a hotel between two dates (inclusive).");
                 mvprintw(2, 0, "Enter the ID of the hotel: ");
-                string1 = get_string(max_row,max_col,2,27);
+                string1 = get_string(max_row,max_col,2,27,60);
                 mvprintw(4,0, "Enter the begin date (in this format 2023/01/31): ");
-                string2 = get_string(max_row,max_col,4,50);
+                string2 = get_string(max_row,max_col,4,50,10);
                 mvprintw(6,0, "Enter the end date (int this format 2023/01/31): ");
-                string3 = get_string(max_row,max_col,6,49);
+                string3 = get_string(max_row,max_col,6,49,10);
+                free(string1);
+                free(string2);
+                free(string3);
                 break;
         case 9: mvprintw(0, 0, "Query 9 - List all users whose names start with the prefix provided as an argument, sorted by name in ascending order.");
                 mvprintw(2, 0, "Enter the prefix: ");
-                string1 = get_string(max_row,max_col,2,18);
+                string1 = get_string(max_row,max_col,2,18,60);
+                free(string1);
                 break;
         case 10: mvprintw(0, 0, "Query 10 - Present various overall metrics of the application.");
                 mvprintw(2,0, "Choose one of the options below:");
@@ -221,19 +236,22 @@ void get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* cata
                 //string1
                 if (query != 2) {
                     mvprintw(10,0, "Enter the year: ");
-                    string2 = get_string(max_row,max_col,10,16);
+                    string2 = get_string(max_row,max_col,10,16,4);
                     if (query == 4) {
                         mvprintw(11,0, "Enter the month: ");
-                        string3 = get_string(max_row,max_col,11,17);
+                        string3 = get_string(max_row,max_col,11,17,2);
+                        free(string3);
                     }
+                    free(string2);
                 }
+                //free(string1);
                 break;
         default: break;
     }
 }
 
 void interactive_mode(int max_row, int max_col,int row,int col, Catalogs* catalogs) {
-    char* path = get_string(max_row,max_col,row,col);
+    char* path = get_string(max_row,max_col,row,col,500);
     if (path[0] != '\0') {
         parse_all_files(path,catalogs);
         free(path);
@@ -250,4 +268,5 @@ void interactive_mode(int max_row, int max_col,int row,int col, Catalogs* catalo
             key = getch();
         }
     }
+    else free(path);
 }

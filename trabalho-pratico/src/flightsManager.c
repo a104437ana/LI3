@@ -84,7 +84,9 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
         Date* schedule_departure_date = getFlightScheduleDeparture(flight);
         Date* schedule_arrival_date = getFlightScheduleArrival(flight);
         char * dep = dateToStringNoHours(schedule_departure_date); char * field4 = strdup("schedule_departure_date");
+        free(schedule_departure_date);
         char * arr = dateToStringNoHours(schedule_arrival_date); char * field5 = strdup("schedule_arrival_date");
+        free(schedule_arrival_date);
         int number_of_passengers = getNumberPassengers(flight);
         char * nPassengersS= malloc(sizeof(char)*5);;
         sprintf(nPassengersS, "%d", number_of_passengers); char * field6 = strdup("passengers");
@@ -101,7 +103,8 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
         setFieldQ(result, 0, 6, field6, nPassengersS); 
         setFieldQ(result, 0, 7, field7, delayS); 
         
-        free(airline); free(plane_model); free(origin); free(destination); destroyDate(schedule_departure_date); destroyDate(schedule_arrival_date); free(dep); free(arr); free(nPassengersS); free(delayS);
+        free(airline); free(plane_model); free(origin); free(destination); 
+        free(dep); free(arr); free(nPassengersS); free(delayS);
         free(field0); free(field1); free(field2); free(field3); free(field4); free(field5); free(field6); free(field7);
     }
 }

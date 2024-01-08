@@ -60,9 +60,9 @@ void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryR
         Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(hotel_id),hotel_id);
         if (hotel==NULL) return;
         char* hotel_name = getHotelName(hotel); char * field1 = strdup("hotel_name");
-        int hotel_stars = getHotelStars(hotel);
+        char hotel_stars = getHotelStars(hotel);
         char * stars = malloc(sizeof(char)*2);
-        sprintf(stars, "%d", hotel_stars); char * field2 = strdup("hotel_stars");
+        sprintf(stars, "%c", hotel_stars); char * field2 = strdup("hotel_stars");
 
         setFieldQ(result, 0, 1, field1, hotel_name);
         setFieldQ(result, 0, 2, field2, stars); 
@@ -85,7 +85,7 @@ void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, Quer
         int numberClassifications = getHotelNumberOfReservations(hotel);
         double rating = getHotelRatingsSum(hotel);
         rating /= numberClassifications;
-        char * ratingS = malloc(sizeof(char)*5);
+        char * ratingS = malloc(sizeof(char)*6);
         sprintf(ratingS, "%.3f", rating); char * field0 = strdup("rating");
         
         setFieldQ(result, 0, 0, field0, ratingS); 

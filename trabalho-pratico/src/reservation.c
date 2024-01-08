@@ -188,6 +188,8 @@ int getReservNights(Reservation* reservation){
      Date* begin = getReservBegin(reservation);
      Date* end = getReservEnd(reservation);
      int res = (end->day) - (begin->day);
+     free(end);
+     free(begin);
      return res;
 }
 

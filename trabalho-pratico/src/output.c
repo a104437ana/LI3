@@ -153,8 +153,8 @@ void printOutputQ9 (char format_flag, OrdList* list, int i) {
      for (j=0; j<N; j++){
        fprintf (file, "--- %d ---\n", (j+1));
        User* user = getDataOrdList(list,j);
-       char* id = strdup(getUserId(user));
-       char* name = strdup(getName(user));
+       char* id = getUserId(user);
+       char* name = getName(user);
        fprintf (file,"id: %s\nname: %s\n", id, name);
        if (j<N-1) fprintf (file,"\n");
        free(id);
@@ -164,8 +164,8 @@ void printOutputQ9 (char format_flag, OrdList* list, int i) {
   else{
      for (j=0; j<N; j++){
        User* user = getDataOrdList(list,j);
-       char* id = strdup(getUserId(user));
-       char* name = strdup(getName(user));
+       char* id = getUserId(user);
+       char* name = getName(user);
        fprintf (file,"%s;%s\n", id, name);
        free(id);
        free(name);

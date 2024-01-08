@@ -76,19 +76,24 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
         int i = 0;
         char* id_flight;
         Flight* flight;
-        Date* date;
         while (i < size) {
             id_flight = getDataOrdList(airportsByDate,i);
             flight = getData(lookup,hashFunction(id_flight),id_flight);
-            date = getFlightScheduleDeparture(flight);
-            if (compareDates(begin,date) <= 0) break;
-            else i++;
+            Date* date = getFlightScheduleDeparture(flight);
+            if (compareDates(begin,date) <= 0) {
+                free(date);
+                break;
+            }
+            else {
+                i++;
+                free(date);
+            }
         }
         int j = 0;
         while (i < size) {
             id_flight = getDataOrdList(airportsByDate,i);
             flight = getData(lookup,hashFunction(id_flight),id_flight);
-            date = getFlightScheduleDeparture(flight);
+            Date* date = getFlightScheduleDeparture(flight);
             if (compareDates(end,date) <= 0) {
                 //setNumberFieldsQ(result,j, 5);
                 char* string_date = dateToString(date);
@@ -116,8 +121,10 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
                 free(airline);
                 free(plane_model);
                 j++;
+                free(date);
             }
             else {
+                free(date);
                 break;
             }
         }

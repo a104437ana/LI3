@@ -27,13 +27,17 @@ void addUserToCatalogList(UsersManager *usersManager, User *user) {
 }
 //função que compara o nome de dois utilizadores
 int compareUsersNames(void *user1, void *user2) {
-    char *name1 = getName((User *) user1), *name2 = getName((User *) user2);
+    char *name1 = getName((User *) user1);
+    char *name2 = getName((User *) user2);
     int compare = strcoll(name1, name2); //compara os dois nomes
     if (compare == 0) { //caso sejam iguais compara os seus ids
         char *id1 = getUserId((User *) user1), *id2 = getUserId((User *) user2);
         compare = strcoll(id1, id2);
+        free(id1);
+        free(id2);
     }
-
+    free(name1);
+    free(name2);
     return compare;
 }
 

@@ -49,42 +49,60 @@ double getReservPrice(Reservation* reservation, Hashtable *hotels){
 //devolve o dia de início de uma reserva ou de um voo
 int getBeginDay(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->day);
+  Date* date = getFlightScheduleDeparture((Flight *)res->result);
+  int i = date->day;
+  free(date);
+  if (res->resultType == FLIGHTS) return (i);
   else return (getReservBeginDay((Reservation *)res->result));
 }
 
 //devolve o mês de início de uma reserva ou de um voo
 int getBeginMonth(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->month);
+  Date* date = getFlightScheduleDeparture((Flight *)res->result);
+  int i = date->month;
+  free(date);
+  if (res->resultType == FLIGHTS) return (i);
   else return (getReservBeginMonth((Reservation *)res->result));
 }
 
 //devolve o ano de início de uma reserva ou de um voo
 int getBeginYear(void* data, Hashtable *lookupTable){
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getFlightScheduleDeparture((Flight *)res->result))->year);
+  Date* date = getFlightScheduleDeparture((Flight *)res->result);
+  int i = date->year;
+  free(date);
+  if (res->resultType == FLIGHTS) return i;
   else return (getReservBeginYear((Reservation *)res->result));
 }
 
 //devolve o segundo de início de um voo
 int getBeginSeconds(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getSeconds(getFlightScheduleDeparture((Flight *)res->result))));
+  Date* date = getFlightScheduleDeparture((Flight *)res->result);
+  int i = getSeconds(date);
+  free(date);
+  if (res->resultType == FLIGHTS) return i;
   else return (0);
 }
 
 //devolve o minuto de início de um voo
 int getBeginMinutes(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getMinutes(getFlightScheduleDeparture((Flight *)res->result))));
+  Date* date = getFlightScheduleDeparture((Flight *)res->result);
+  int i = getMinutes(date);
+  free(date);
+  if (res->resultType == FLIGHTS) return (i);
   else return (0);
 }
 
 //devolve a hora de início de um voo
 int getBeginHours(void* data, Hashtable *lookupTable) {
   ResultQ2* res = (ResultQ2*) data;
-  if (res->resultType == FLIGHTS) return ((getHours(getFlightScheduleDeparture((Flight *)res->result))));
+  Date* date = getFlightScheduleDeparture((Flight *)res->result);
+  int i = getHours(date);
+  free(date);
+  if (res->resultType == FLIGHTS) return (i);
   else return (0);
 }
 
@@ -155,7 +173,7 @@ int sameFirstLetter(char *prefix, User *user) {
   if (c1 == c2) compare = 0;
   else if (c1 == 'A' || c1 == 'E' || c1 == 'I' || c1 == 'O' || c1 == 'U' ||
            c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U') compare = 0;
-
+  free(name);
   return compare;
 }
 char *sameLenPrefix(char *prefix, char *name) {
@@ -174,15 +192,17 @@ char *sameLenPrefix(char *prefix, char *name) {
   else if (i < j) {
     if (n > p) {i += n;}
     namePrefix = malloc(sizeof(char) * (i + 1));
-    namePrefix = strncpy(namePrefix, name, i);
+    //namePrefix = 
+    strncpy(namePrefix, name, i);
     namePrefix[i] = '\0';
   }
   else {
     int len;
     if (n > p) len = i + (n - p);
     else len = i;
-    namePrefix = malloc(sizeof(char) * len);
-    namePrefix = strncpy(namePrefix, name, len);
+    namePrefix = malloc(sizeof(char) * (len + 1));
+    //namePrefix = 
+    strncpy(namePrefix, name, len);
     namePrefix[len] = '\0';
   }
 
@@ -196,7 +216,7 @@ int prefixSearch(void *prefixVoid, void *user) {
   if (namePrefix == NULL) return 0;
   compare = strcoll(prefix, namePrefix); //compara os dois prefixos
   free(namePrefix); //liberta o prefixo do utilizador
-
+  free(name);
   return compare;
 }
 int prefixSearchBack(void *prefixVoid, void *user) {
@@ -204,7 +224,7 @@ int prefixSearchBack(void *prefixVoid, void *user) {
   char *prefix = (char *) prefixVoid;
   char *name = getName((User *) user); //nome do utilizador
   compare = strcoll(prefix, name); //compara os dois prefixos
-
+  free(name);
   return compare;
 }
 //verifica se uma string é um prefixo do nome de um utilizador
@@ -222,6 +242,7 @@ int isPrefix(void *prefix, void *user) {
 //  printf("  %s - %s\n", (char *) prefix, namePrefix);
   compare = strcoll((char *) prefix, (char *) namePrefix); //compara os dois prefixos
   free(namePrefix); //liberta o prefixo do utilizador
+  free(name);
 
   return compare;
 }
@@ -392,10 +413,13 @@ int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, Reservati
     id_reserv = getDataOrdList(reservations, i+1);
     key = hashFunction(id_reserv);
     reservation = (Reservation *) getData(getHashtableReservCatalog(reservationsCatalog), key, id_reserv); //proxima reserva
+    free(reservBegin);
+    free(reservEnd);
     reservBegin = getReservBegin(reservation); //dia inicio da reserva
     reservEnd = getReservEnd(reservation); //dia fim da reserva
   }
-
+  free(reservBegin);
+  free(reservEnd);
   return total;
 }
 ////quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
