@@ -83,16 +83,16 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
         char* destination = getFlightDestination(flight); char * field3 = strdup("destination");
         Date* schedule_departure_date = getFlightScheduleDeparture(flight);
         Date* schedule_arrival_date = getFlightScheduleArrival(flight);
-        char * dep = dateToStringNoHours(schedule_departure_date); char * field4 = strdup("schedule_departure_date");
+        char * dep = dateToString(schedule_departure_date); char * field4 = strdup("schedule_departure_date");
         free(schedule_departure_date);
-        char * arr = dateToStringNoHours(schedule_arrival_date); char * field5 = strdup("schedule_arrival_date");
+        char * arr = dateToString(schedule_arrival_date); char * field5 = strdup("schedule_arrival_date");
         free(schedule_arrival_date);
         int number_of_passengers = getNumberPassengers(flight);
         char * nPassengersS= malloc(sizeof(char)*5);;
         sprintf(nPassengersS, "%d", number_of_passengers); char * field6 = strdup("passengers");
-        double delay = getDelay(flight);
+        int delay = (int) getDelay(flight);
         char * delayS = malloc(sizeof(char)*15);
-        sprintf(delayS, "%.3f", delay); char * field7 = strdup("delay");
+        sprintf(delayS, "%d", delay); char * field7 = strdup("delay");
 
         setFieldQ(result, 0, 0, field0, airline);
         setFieldQ(result, 0, 1, field1, plane_model); 

@@ -65,7 +65,7 @@ char * reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservatio
         char * end = dateToStringNoHours(end_date); char * field4 = strdup("end_date");
         int includes_breakfast = getReservIncludesBreakfast(reservation);
         char * breakfast;
-        if (includes_breakfast==0) breakfast = strdup("false"); else breakfast = strdup("true"); char * field5 = strdup("includes_breakfast");
+        if (includes_breakfast==0) breakfast = strdup("False"); else breakfast = strdup("True"); char * field5 = strdup("includes_breakfast");
         int number_of_nights = getReservNights(reservation);
         char * nNightsS = malloc(sizeof(char)*4);
         sprintf(nNightsS, "%d", number_of_nights); char * field6 = strdup("nights");

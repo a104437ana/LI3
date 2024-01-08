@@ -51,7 +51,7 @@ int main (int argc, char** argv) {
     int max_row, max_col;
     getmaxyx(stdscr, max_row, max_col);
 
-    mvprintw(0, 0, "Welcome to Interactive Mode!\nIf you ever want to exit the program at any time, just press Esc.\n\nEnter the path of the dataset: ");
+    mvprintw(0, 0, "Welcome to Interactive Mode!\n\nEnter the path of the dataset: ");
 
     refresh();
     int row, col;
