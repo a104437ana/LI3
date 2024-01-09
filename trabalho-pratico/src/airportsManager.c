@@ -86,6 +86,7 @@ void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
     OrdList *list = getAirportOrdList(airport);
     if (!isOrdered(list)) {
         quickSort(list, 0, getOrdListSize(list)-1, compareFlightsIds, 0); //ordena por ids
+        reverseOrdList(list);
         radixSortFlightDate(list, airports); //ordena por datas
         setOrdListOrd(list, 1);
     }
