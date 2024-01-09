@@ -39,7 +39,7 @@ int main (int argc, char** argv) {
         com = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
     }
     else if (argc == 1) {
-    printf("Please maximize the terminal window for an optimal experience.\nPress Enter to continue...");
+    printf("Attention: This program requires a maximized window at all times for optimal performance. Please ensure that the window is maximized before proceeding. Press Enter to continue...");
     getchar();
     setlocale(LC_ALL,""); //permite a utilização de caracteres especiais da nossa localidade
     initscr(); //inicia ncurses
