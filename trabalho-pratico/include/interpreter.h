@@ -21,6 +21,6 @@ typedef struct command Command;
 
 int processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs);
 Command* parseCommandLine (char* line);
-void parseCommandFile (char* name,Catalogs *catalogs);
+void parseCommandFile (char* name,Catalogs *catalogs, bool test);
 
 #endif

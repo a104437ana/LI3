@@ -163,7 +163,7 @@ Command* parseCommandLine (char* line){
 }
 
 //processa o ficheiro de comandos
-void parseCommandFile (char* name,Catalogs *catalogs){
+void parseCommandFile (char* name,Catalogs *catalogs, bool test){
    //inicialização de variáveis para medição de tempo
    struct timespec start, end;
    double qTime[11]; // indice 0 - tempo total, 1 - query 1, etc..
@@ -191,6 +191,7 @@ void parseCommandFile (char* name,Catalogs *catalogs){
     clock_gettime(CLOCK_REALTIME, &end);
     double dif = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     qTime[0]+=dif; if (q!=0) qTime[q]+=dif;
+    if (test==1) printf("Command %d :\t\t %.6f seconds\n", i-1, dif);
  }
     }
  free(line);
