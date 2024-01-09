@@ -24,24 +24,16 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==2){
      if (command->n_args==0) return 0;
      else{
-        if (command->n_args==1){ //se só tiver o id como argumento,
-           ResultsQ2* output = Q2(command->args[0], BOTH, usersCatalog);
-           printOutputQ2(command->format_flag, BOTH, output, i);
-           return 2;
-        }
-        else{
-          if ((strcmp(command->args[1], "flights")==0)){
-            ResultsQ2* output = Q2(command->args[0], FLIGHTS, usersCatalog);
-            printOutputQ2(command->format_flag, FLIGHTS, output, i);
-            return 2;
-          }
-          else if ((strcmp(command->args[1], "reservations")==0)){
-           ResultsQ2* output = Q2(command->args[0], RESERVATIONS, usersCatalog);
-           printOutputQ2(command->format_flag, RESERVATIONS, output, i);
-           return 2;
-          }
-          else return 0;
-        }
+        Q2Type type;
+        QueryResult * result = createQResult();
+        if (command->n_args==1) type = BOTH; //se só tiver o id como argumento,
+        else if ((strcmp(command->args[1], "flights")==0)) type = FLIGHTS;
+        else if ((strcmp(command->args[1], "reservations")==0)) type = RESERVATIONS;
+        else return 0;
+        Q2(command->args[0], type, catalogs, result);
+        printQueryOutput(i,command->format_flag,result);
+        destroyQResult(result);
+        return 2;
      }
    }
     else if (command->query_id==3){
@@ -97,12 +89,8 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==8){
      if (command->n_args<3) return 0;
      else{
-        Date *begin = string_to_date(command->args[1]);
-        Date *end = string_to_date(command->args[2]);
-        int output = Q8(command->args[0], begin, end, hotelsCatalog, reservationsCatalog);
+        int output = Q8(command->args[0], command->args[1], command->args[2], catalogs);
         printOutputQ8(command->format_flag, output, i);
-        destroyDate(begin);
-        destroyDate(end);
         return 8;
      }
    }

@@ -10,10 +10,7 @@ typedef struct reservationsManager ReservationsManager;
 //cria um novo catálogo de reservas
 ReservationsManager *createReservsCatalog(int size);
 //adiciona uma reserva ao catálogo de reservas
-void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog, UsersManager *usersCatalog, Hashtable *hotels);
-
-//gets
-Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
+void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog);
 
 //imprime o catálogo de reservas
 void printReservations(ReservationsManager *reservationsManager);
@@ -22,4 +19,14 @@ void printReservations(ReservationsManager *reservationsManager);
 void destroyreservationsCatalog(ReservationsManager *reservationsManager);
 
 char* reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservationsManager, QueryResult* result);
+
+//gets
+Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
+int getReservPriceNoTax(char *id, ReservationsManager *reservationsCatalog);
+int getReservPriceLimits(char *id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd);
+int getBReserv(int time, char *id, ReservationsManager *reservationsCatalog);
+char *getSReservDate(char *id, ReservationsManager *reservationsCatalog);
+int getBeginDayReservation(char *id, ReservationsManager *reservationsCatalog);
+int getBeginMonthReservation(char *id, ReservationsManager *reservationsCatalog);
+int getBeginYearReservation(char *id, ReservationsManager *reservationsCatalog);
 #endif

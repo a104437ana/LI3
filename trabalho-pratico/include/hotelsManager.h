@@ -13,9 +13,6 @@ HotelsManager *createHotelsCatalog(int size);
 //atualiza catálogo de hoteis
 void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, char *id_reserv, HotelsManager *hotelsCatalog);
 
-//gets
-Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager);
-
 //imprime o catálogo de hoteis, para efeitos de teste
 void printHotels(HotelsManager *hotelsManager);
 
@@ -25,5 +22,13 @@ void destroyHotelsCatalog(HotelsManager *hotelsManager);
 // queries
 void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryResult* result);
 void hotel_catalog_compute_Q3(char* id_hotel,HotelsManager* hotel_catalog, QueryResult* result);
+
+//gets
+Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager);
+int getCityTax(char *id, HotelsManager *hotelsCatalog);
+Hotel *getHotelCatalog(HotelsManager *hotelsCatalog, char *id);
+int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog);
+int hotelExists(char *id, HotelsManager *hotelsCatalog);
+char *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog);
 
 #endif

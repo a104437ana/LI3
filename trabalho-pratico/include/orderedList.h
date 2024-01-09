@@ -19,10 +19,7 @@ void printFullList(OrdList *list);
 
 //ordenação
 //radixsorts
-void radixSort(OrdList *list, int (*getParameterFunction)(void*,Hashtable*), Hashtable *lookupTable, int interval, int offset);
-void radixSortReservDate(OrdList *list, Hashtable *lookupTable);
-void radixSortFlightDate(OrdList *list, Hashtable *lookupTable);
-void radixSortUserList(OrdList *list, Hashtable *lookupTable);
+void radixSort(OrdList *list, int (*getParameterFunction)(void*,void*), void *lookupTable, int interval, int offset);
 //quicksorts
 void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*), int equal);
 //inverte uma lista
@@ -33,7 +30,7 @@ void *getDataOrdList(OrdList *ordList, int index);
 //obtem numero de elementos da lista
 int getOrdListSize(OrdList *ordList);
 //verifica de uma lista está ordenada
-bool getOrdListOrd(OrdList *ordList);
+bool isOrdered(OrdList *ordList);
 //modifica elemento da lista
 void setDataOrdList (OrdList *ordList, int index, void* data);
 //função que altera o campo de uma lista que diz se ela está ou não ordenada

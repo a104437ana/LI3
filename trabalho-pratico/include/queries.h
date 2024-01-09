@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include "utility.h"
+#include "catalogsManager.h"
 #include "flight.h"
 #include "flightsManager.h"
 #include "hotel.h"
@@ -33,7 +34,7 @@ typedef enum{
 } Q2Type;
 
 typedef struct resultQ2{
-    void* result; //flight ou reservation
+    char* id; //flight ou reservation
     Q2Type resultType;
 } ResultQ2;
 
@@ -71,20 +72,19 @@ typedef struct resultsQ9{
 int getAge(User* user);
 int getNumberPassengers(Flight* flight);
 int getDelay(Flight* flight);
-int getReservNights(Reservation* reservation);
 double getReservPrice(Reservation* reservation, Hashtable *hotels);
-int getBeginDay(void* data, Hashtable *lookupTable);
-int getBeginMonth(void* data, Hashtable *lookupTable);
-int getBeginYear(void* data, Hashtable *lookupTable);
-int getBeginSeconds(void* data, Hashtable *lookupTable);
-int getBeginMinutes(void* data, Hashtable *lookupTable);
-int getBeginHours(void* data, Hashtable *lookupTable);
+int getBeginDay(void* data, void *catalog);
+int getBeginMonth(void* data, void *catalog);
+int getBeginYear(void* data, void *catalog);
+int getBeginSeconds(void* data, void *catalog);
+int getBeginMinutes(void* data, void *catalog);
+int getBeginHours(void* data, void *catalog);
 char * getIdResultQ2(ResultQ2* data);
 void destroyResultQ2(void * data);
 
 void Q1(char *id, Catalogs* catalogs, QueryResult* result);
 
-ResultsQ2* Q2(char *id, Q2Type type, UsersManager *usersCatalog);
+void Q2(char *id, Q2Type type, Catalogs *catalogs, QueryResult* result);
 
 void Q3(char *id, Catalogs* catalogs, QueryResult* result);
 
@@ -96,7 +96,7 @@ ResultsQ6* Q6(int year, int N);
 
 void Q7 (int n, Catalogs* catalogs, QueryResult* result);
 
-int Q8(char *id, Date *begin, Date *end, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog);
+int Q8(char *id, char *begin, char *end, Catalogs *catalogs);
 
 int same_prefix (char* prefix, char* name);
 //int bigger_user (char* id1, char* id2, char* name1, char* name2);

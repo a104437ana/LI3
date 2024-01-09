@@ -19,12 +19,31 @@ void addUserToCatalog(char *id, char *name, int gender, char *country, char *pas
     User *user = createUser(id, name, gender, country, passport, birth, accountCreation, accountStatus);
     usersCatalog->users = addHashtable(usersCatalog->users, key, user, id);
     if (accountStatus)
-        addOrdList(usersCatalog->usersByName, user); //mudar para id
+        addOrdList(usersCatalog->usersByName, user);
 }
 //função que adiciona um utilizador à lista de utilizadores ordenada por nome do catálogo de utilizadores
 void addUserToCatalogList(UsersManager *usersManager, User *user) {
     addOrdList(usersManager->usersByName, user);
 }
+//adiciona uma reserva à lista de reservas de um utilizador
+void addReservToUser(char *id_user, char *id_reserv, double totalSpent, UsersManager *usersCatalog) {
+    int key = hashFunction(id_user);
+    User *user = getData(usersCatalog->users, key, id_user);
+    addToUserList(user, id_reserv, 'R', totalSpent);
+}
+//adiciona o utilizador à lista de passageiros do voo
+void addFlightToUser(char *id_user, char *id_flight, UsersManager *usersCatalog) {
+    int key = hashFunction(id_user);
+    User *user = getData(usersCatalog->users, key, id_user);
+    addToUserList(user, id_flight, 'F', 0);
+}
+
+//função que ordena o catálogo de utilizadores
+void sortUsersByName(UsersManager *usersCatalog) {
+    OrdList *usersByName = usersCatalog->usersByName;
+    quickSort(usersByName, 0, getOrdListSize(usersByName)-1, compareUsersNames, 0); //ordena os utilizadores por nome na lista de utilizadores
+}
+
 //função que compara o nome de dois utilizadores
 int compareUsersNames(void *user1, void *user2) {
     char *name1 = getName((User *) user1);
@@ -42,7 +61,8 @@ int compareUsersNames(void *user1, void *user2) {
 }
 
 //gets
-User *getUserCatalog(UsersManager *usersManager, unsigned int key, char *id) {
+User *getUserCatalog(UsersManager *usersManager, char *id) {
+    int key = hashFunction(id);
     User *user = (User*) getData(usersManager->users, key, id);
     return user;
 }
@@ -53,6 +73,13 @@ int existsUser(UsersManager *usersManager, char *id) {
     HashtableNode *user = searchHashtable(usersManager->users, key, id);
     if (user == NULL) return 0;
     return 1;
+}
+
+int getAccountStatusUser(char *id, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = getData(usersCatalog->users, key, id);
+    if (user == NULL) return -1;
+    return getUserAccountStatus(user);
 }
 
 Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
@@ -68,16 +95,22 @@ OrdList *getOrdListUser (UsersManager *usersManager) {
     return usersManager->usersId;
 }
 */
-//função que imprime um utilizador
-void printFunctionUser(void *data) {
-    char *userId = getUserId((User *) data);
-    printf(" %8s, %d)", userId, getOrdListSize(getUserList((User *) data)));
-    free(userId);
+int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = getData(usersCatalog->users, key, id);
+    int res = 0;
+    if (type == 0)
+        res = getUListSize(user);
+    else if(type == 1)
+        res = getNumberFlights(user);
+    else if (type == 2)
+        res = getNumberReservations(user);
+    return res;
 }
-//função que imprime todo o catálogo de utilizadores, para efeitos de teste
-void printUsers(UsersManager *usersManager) {
-    printTable(usersManager->users, printFunctionUser);
-    printHashtableUsage(usersManager->users);
+char *getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
+    int key = hashFunction(id_user);
+    User *user = getData(usersCatalog->users, key, id_user);
+    return getUListId(type, user, index);
 }
 
 //função que liberta o espaço em memória alocado pelo catálogo de utilizadores
@@ -96,7 +129,7 @@ void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, QueryResult*
         return;
     }
     else {
-        bool account_status_active = getAccountStatus(user);
+        bool account_status_active = getUserAccountStatus(user);
         if (account_status_active == true) {
 
             setNumberResults(result,1);

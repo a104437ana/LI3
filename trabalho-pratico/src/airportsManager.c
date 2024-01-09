@@ -28,12 +28,13 @@ void updateAirportCatalog(int delay, char *id, char *id_flight, AirportsManager 
         addOrdList(airportsCatalog->airportsByMedianOfDelays,airport);
     } else //caso já exista
         airport = (Airport*) getData(airportsCatalog->airports, key, id); //obtem apontador para o aeroporto do catálogo dos aeroporotos
-    addFlightToAirport(airport, id_flight); //adiciona o apontador do voo aos voos do aeroporto
+    addFlightToAirport(airport, id_flight); //adiciona o voo aos voos do aeroporto
     addDelayToAirport(airport,delay);
 }
 
 //gets
-Airport *getAirportCatalog(AirportsManager *airportsManager, unsigned int key, char *id) {
+Airport *getAirportCatalog(AirportsManager *airportsManager, char *id) {
+    int key = hashFunction(id);
     Airport *airport = (Airport *) getData(airportsManager->airports, key, id);
     return airport;
 }
@@ -65,6 +66,29 @@ int compareDelays (void *pointer1, void *pointer2) {
         free(name2);
     }
     return result;
+}
+
+//ordena voos por data
+void radixSortFlightDate(OrdList *list, void *lookupTable) {
+    radixSort(list, getFlightScheduleDepartureSeconds, lookupTable, 60, 0);
+    radixSort(list, getFlightScheduleDepartureMinutes, lookupTable, 60, 0);
+    radixSort(list, getFlightScheduleDepartureHours, lookupTable, 24, 0);
+    radixSort(list, getFlightScheduleDepartureDay, lookupTable, 31, 0);
+    radixSort(list, getFlightScheduleDepartureMonth, lookupTable, 12, 0);
+    radixSort(list, getFlightScheduleDepartureYear, lookupTable, N_YEARS, BEGIN_YEAR);
+}
+//função que compara os ids de dois voos
+int compareFlightsIds(void *id1, void *id2) {
+    return strcoll(id1, id2);
+}
+//ordena os voos do aeroporto
+void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
+    OrdList *list = getAirportOrdList(airport);
+    if (!isOrdered(list)) {
+        quickSort(list, 0, getOrdListSize(list)-1, compareFlightsIds, 0); //ordena por ids
+        radixSortFlightDate(list, airports); //ordena por datas
+        setOrdListOrd(list, 1);
+    }
 }
 
 void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,Hashtable* lookup) {

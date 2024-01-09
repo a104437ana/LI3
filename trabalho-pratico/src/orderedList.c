@@ -1,5 +1,4 @@
 #include "orderedList.h"
-#include "user.h"
 
 struct ordList {
     int maxSize;
@@ -38,18 +37,6 @@ void addOrdList(OrdList *ordList, void *data) {
     ordList->size = size + 1; //incrementa numero de elementos na lista
     ordList->maxSize = maxSize;
 }
-void printFullList(OrdList *list) {
-    int size = list->size;
-    int i;
-    void **data = list->data;
-    FILE *file;
-    file = fopen("./users_list.txt", "w");
-    for (i=0; i<size; i++) {
-        User *user = (User *) data[i];
-        fprintf(file, "%30s\t%s\n", getUserId(user), getName(user));
-    }
-    fclose(file);
-}
 //função que devolve o indice da primeira ocorrência de um elemento numa lista
 int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int (*searchBackFunction)(void*,void*)) {
     int lower = 0, higher = list->size - 1; //limites para procura
@@ -80,7 +67,7 @@ void removeOrdList(OrdList *ordList, unsigned int key) {
 }
 //radixsort ordena uma lista por valores que estejam num intervalo conhecido
 //recebe uma função que devolve o valor do parametro para o qual queremos ordenar os elementos
-void radixSort(OrdList *list, int (*getParameterFunction)(void*,Hashtable*), Hashtable *lookupTable, int interval, int offset) {
+void radixSort(OrdList *list, int (*getParameterFunction)(void*,void*), void *lookupTable, int interval, int offset) {
     int size = list->size;
     void **newData = malloc(sizeof(void *) * size); //cria nova lista que irá ficar ordenada
     void *data;
@@ -171,7 +158,7 @@ int getOrdListSize(OrdList *ordList) {
     return ordList->size;
 }
 //função que verifica se uma lista está ordenada
-bool getOrdListOrd(OrdList *ordList) {
+bool isOrdered(OrdList *ordList) {
     return ordList->ord;
 }
 //função que altera um elemento da lista dado um indice

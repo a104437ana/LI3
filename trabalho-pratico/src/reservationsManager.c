@@ -15,28 +15,11 @@ ReservationsManager *createReservsCatalog(int size) {
     return reservationsManager;
 }
 //função que adiciona uma reserva ao catálogo de reservas
-void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog, UsersManager *usersCatalog, Hashtable *hotels) {
+void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog) {
     //adiciona reserva ao catalogo de reservas
     unsigned int key = hashFunction(id);
-    Reservation *reservation = createReservation(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification, usersCatalog, hotels);
+    Reservation *reservation = createReservation(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification);
     reservationsCatalog->reservations = addHashtable(reservationsCatalog->reservations, key, reservation, id);
-}
-
-//gets
-Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
-    return reservationsManager->reservations;
-}
-
-//função que imprime o id de uma reserva, para efeitos de teste
-void printFunctionReservation(void *data) {
-    char *reservId = getReservId((Reservation *) data);
-    printf(" %8s)", reservId);
-    free(reservId);
-}
-//função que imprime o catálogo de reservas, para efeitos de teste
-void printReservations(ReservationsManager *reservationsManager) {
-    printTable(reservationsManager->reservations, printFunctionReservation);
-    printHashtableUsage(reservationsManager->reservations);
 }
 
 //função que liberta o espaço em memória alocado pelo catálogo de reservas
@@ -82,4 +65,50 @@ char * reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservatio
         }
     }
     return hotel_id;
+}
+
+//gets
+Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
+    return reservationsManager->reservations;
+}
+
+int getReservPriceNoTax(char *id, ReservationsManager *reservationsCatalog) {
+    int key = hashFunction(id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    int ppn = getReservPricePerNight(reservation);
+    int nights = getReservNights(reservation);
+    return ppn * nights;
+}
+int getReservPriceLimits(char *id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd) {
+    int key = hashFunction(id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    int ppn = getReservPricePerNight(reservation);
+    int nights = getReservNightsWithLimits(reservation, limitBegin, limitEnd);
+    if (nights < 0) return nights;
+    return ppn * nights;
+}
+int getBReserv(int time, char *id, ReservationsManager *reservationsCatalog) {
+    int key = hashFunction(id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    return getReservationB(time, reservation);
+}
+char *getSReservDate(char *id, ReservationsManager *reservationsCatalog) {
+    int key = hashFunction(id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    return getStringReservDate(reservation);
+}
+int getBeginDayReservation(char *id, ReservationsManager *reservationsCatalog) {
+    int key = hashFunction(id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    return getReservBeginDay(reservation);
+}
+int getBeginMonthReservation(char *id, ReservationsManager *reservationsCatalog) {
+    int key = hashFunction(id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    return getReservBeginMonth(reservation);
+}
+int getBeginYearReservation(char *id, ReservationsManager *reservationsCatalog) {
+    int key = hashFunction(id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    return getReservBeginYear(reservation);
 }

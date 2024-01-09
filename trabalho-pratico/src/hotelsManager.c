@@ -22,26 +22,7 @@ void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char user
         hotelsCatalog->hotels = addHashtable(hotelsCatalog->hotels, key, hotel, id); //adiciona o hotel ao catálogo dos hoteis
     } else //caso já exista
         hotel = (Hotel*) getData(hotelsCatalog->hotels, key, id); //obtem apontador para o hotel do catálogo dos hoteis
-    addReservationToHotel(hotel, id_reserv); //adiciona reserva às reservas do hotel
-    addToHotelRatingsSum(hotel, userClassification); //incremanta a soma das classificações do hotel caso tenha sido dada uma
-    addToHotelNumberRatings(hotel, userClassification); //incrementa o numero de classificações do hotel
-}
-
-//gets
-Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager) {
-    return hotelsManager->hotels;
-}
-
-//função que imprime o id de um hotel, para efeitos de teste
-void printFunctionHotel(void *data) {
-    char *hotelId = getHotelId((Hotel *) data);
-    printf(" %8s)", hotelId);
-    free(hotelId);
-}
-//função que imprime o catálogo de hoteis, para efeitos de teste
-void printHotels(HotelsManager *hotelsManager) {
-    printTable(hotelsManager->hotels, printFunctionHotel);
-    printHashtableUsage(hotelsManager->hotels);
+    addReservationToHotel(hotel, id_reserv, userClassification); //adiciona reserva às reservas do hotel e atualiza classificação do hotel
 }
 
 //função que liberta a memória alocada do catálogo de hoteis
@@ -93,4 +74,36 @@ void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, Quer
         free(ratingS);
         free(field0);
     }
+}
+
+//gets
+Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager) {
+    return hotelsManager->hotels;
+}
+
+int getCityTax(char *id, HotelsManager *hotelsCatalog) {
+    int key = hashFunction(id);
+    Hotel *hotel = getData(hotelsCatalog->hotels, key, id);
+    int cityTax = getHotelCityTax(hotel);
+    return cityTax;
+}
+Hotel *getHotelCatalog(HotelsManager *hotelsCatalog, char *id) {
+    int key = hashFunction(id);
+    Hotel *hotel = (Hotel *) getData(hotelsCatalog->hotels, key, id);
+    return hotel;
+}
+int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog) {
+    int key = hashFunction(id);
+    Hotel *hotel = getData(hotelsCatalog->hotels, key, id);
+    return getHotelNumberOfReservations(hotel);
+}
+
+int hotelExists(char *id, HotelsManager *hotelsCatalog) {
+    int key = hashFunction(id);
+    return existsData(hotelsCatalog->hotels, key, id);
+}
+char *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
+    int key = hashFunction(id);
+    Hotel *hotel = getData(hotelsCatalog->hotels, key, id);
+    return getHotelReservId(hotel, index);
 }

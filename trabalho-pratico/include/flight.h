@@ -11,8 +11,8 @@
 typedef struct flight Flight;
 //cria um novo voo
 Flight *createFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival);
-//adiciona um utilizador a um voo
-void addUserToFlight(Flight *flight, void *user);
+//função que adiciona um utilizador à lista de passageiros de um voo
+void addPassengerToFlight(Flight *flight, char *id_user);
 
 //gets
 char *getFlightAirline(Flight *flight);
@@ -24,12 +24,14 @@ Date *getFlightScheduleDeparture(Flight *flight);
 Date *getFlightScheduleArrival(Flight *flight);
 Date *getFlightRealDeparture(Flight *flight);
 Date *getFlightRealArrival(Flight *flight);
-int getFlightScheduleDepartureDay(void *id, Hashtable *lookupTable);
-int getFlightScheduleDepartureMonth(void *id, Hashtable *lookupTable);
-int getFlightScheduleDepartureYear(void *id, Hashtable *lookupTable);
-int getFlightScheduleDepartureSeconds(void *id, Hashtable *lookupTable);
-int getFlightScheduleDepartureMinutes(void *id, Hashtable *lookupTable);
-int getFlightScheduleDepartureHours(void *id, Hashtable *lookupTable);
+int getFlightScheduleDepartureDay(void *id, void *lookupTable);
+int getFlightScheduleDepartureMonth(void *id, void *lookupTable);
+int getFlightScheduleDepartureYear(void *id, void *lookupTable);
+int getFlightScheduleDepartureSeconds(void *id, void *lookupTable);
+int getFlightScheduleDepartureMinutes(void *id, void *lookupTable);
+int getFlightScheduleDepartureHours(void *id, void *lookupTable);
+int getFlightSD(int time, Flight *flight);
+char *getStringFlightDateNoHours(Flight *flight);
 char *getFlightId(Flight *flight);
 OrdList * getPassengers(Flight* flight);
 int getNumberPassengers(Flight* flight);

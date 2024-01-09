@@ -2,7 +2,6 @@
 #define _HOTEL_
 
 #include "utility.h"
-#include "reservation.h"
 #include "hashtable.h"
 #include "orderedList.h"
 
@@ -12,18 +11,14 @@ typedef struct hotel Hotel;
 //cria um novo hotel
 Hotel *createHotel(char *id, char *name, char stars, int cityTax);
 //adiciona reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, char *id_reserv);
-//ordena as reservas do hotel
-void sortHotelReservationsByDate(void *hotel, Hashtable *lookupTable);
+void addReservationToHotel(Hotel *hotel, char *id_reserv, char rating);
 
 int getHotelNumberOfReservations(Hotel* hotel);
 //obtem a lista de reservas do hotel
 OrdList *getHotelOrdList(Hotel *hotel);
-//obtem o id da reserva de um hotel
-char *getHotelReservation(Hotel *hotel, unsigned int key);
+char *getHotelReservId(Hotel *hotel, int index);
 
 //gets
-Hotel *getHotelCatalog(Hashtable *hotels, unsigned int key, char *id);
 char *getHotelId(Hotel *hotel);
 char *getHotelName(Hotel *hotel);
 char getHotelStars(Hotel *hotel);

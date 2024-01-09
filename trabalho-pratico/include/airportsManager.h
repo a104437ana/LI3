@@ -14,7 +14,7 @@ AirportsManager *createAirportsCatalog(int size);
 void updateAirportCatalog(int delay, char *id, char *id_flight, AirportsManager *airportsCatalog);
 
 //gets
-Airport *getAirportCatalog(AirportsManager *airportsManager, unsigned int key, char *id);
+Airport *getAirportCatalog(AirportsManager *airportsManager, char *id);
 Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager);
 void sortAirports (AirportsManager* airportsManager);
 int compareDelays (void *pointer1, void *pointer2);

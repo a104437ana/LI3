@@ -127,21 +127,49 @@ int compareDates(Date *date1, Date *date2) {
   int second2 = getSeconds(date2), minute2 = getMinutes(date2), hour2 = getHours(date2), day2 = getDay(date2), month2 = getMonth(date2), year2 = getYear(date2);
   int result = 0;
 
-  if (year1 > year2) result--;
-  else if (year2 > year1) result++;
-  else if (month1 > month2) result--;
-  else if (month2 > month1) result++;
-  else if (day1 > day2) result--;
-  else if (day2 > day1) result++;
-  else if (hour1 > hour2) result--;
-  else if (hour2 > hour1) result++;
-  else if (minute1 > minute2) result--;
-  else if (minute2 > minute1) result++;
-  else if (second1 > second2) result--;
-  else if (second2 > second1) result++;
+  if (date1 && date2) {
+    if (year1 > year2) result--;
+    else if (year2 > year1) result++;
+    else if (month1 > month2) result--;
+    else if (month2 > month1) result++;
+    else if (day1 > day2) result--;
+    else if (day2 > day1) result++;
+    else if (hour1 > hour2) result--;
+    else if (hour2 > hour1) result++;
+    else if (minute1 > minute2) result--;
+    else if (minute2 > minute1) result++;
+    else if (second1 > second2) result--;
+    else if (second2 > second1) result++;
+  }
 
   return result;
 }
+//calcula o numero de dias (noites) que estão dentro de duas datas limites
+int daysInsideDates(Date *limitBegin, Date *limitEnd, Date *begin, Date *end) {
+  int nDays = 0;
+  int begin_limitBegin, end_limitEnd, begin_limitEnd, end_limitBegin;
+  Date *lower, *higher;
+  end_limitBegin = compareDates(end, limitBegin); //compara a data de fim e a de inicio do limite
+  if (end_limitBegin > 0) return -1; //se a data de fim for menor que a de inicio do limite                 == >=
+  begin_limitEnd  = compareDates(begin, limitEnd); //compara a data de inicio e a de fim do limite
+  if (begin_limitEnd < 0) return -2; //se a data de inicio for maior que a de fim do limite
+  begin_limitBegin = compareDates(begin, limitBegin); //compara a data de inicio e a de inicio do limite
+  end_limitEnd = compareDates(end, limitEnd); //compara a data de fim e a de fim do limite
+
+  //se a data de inicio for maior que a de inicio do limite
+  if (begin_limitBegin > 0) lower = limitBegin; //a primeira data de contagem é a data de inicio do limite                  >=
+  else lower = begin; //caso contrário é a data de inicio
+  //se a data de fim for maior que a de fim do limite
+  if (end_limitEnd < 0) higher = limitEnd; //a última data de contagem é a data de fim do limite                <=
+  else higher = end; //caso contrário é a data de fim
+  //o número de dias é a diferença entre as datas de contagem
+  nDays = daysBetweenDates(lower, higher) + 1; //caso ambas as datas de inicio e fim não estiverem dentro do intervalo de contagem temos que adicionar mais um dia
+  if (end_limitEnd >= 0) //caso contrário retiramos o dia adicionado
+    nDays --;
+
+  return nDays;
+}
+
 int strcoll_names(char *name1, char *name2) {
     char c1 = name1[0], c2 = name2[0];
     char *n1 = malloc(sizeof(char) * 2), *n2 = malloc(sizeof(char) * 2);

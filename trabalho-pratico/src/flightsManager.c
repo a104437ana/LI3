@@ -20,13 +20,12 @@ int addFlightToCatalog(char *id, char *airline, char *airplane, char *origin, ch
     flightsCatalog->flights = addHashtable(flightsCatalog->flights, key, flight, id);
     return getDelay(flight);
 }
-//função que adiciona um utilizador à lista de passageiros de um certo voo no catálogo
-//e adiciona esse voo à lista de voos do utilizador
-void addPassengerToCatalog(FlightsManager *flightsManager, int flightKey, UsersManager *usersManager, int userKey, char *flightId, char *userId) {
-    Flight *flight = getFlightCatalog(flightsManager, flightKey, flightId);
-    User *user = getUserCatalog(usersManager, userKey, userId);
-    addUserToFlight(flight, user); //adiciona o utilizador à lista de passageiros do voo
-    addFlightToUser(user, flight); //adiciona o voo à lista de voos do utilizador
+
+//adiciona o utilizador à lista de passageiros do voo
+void addUserToFlight(char *id_flight, char *id_user, FlightsManager *flightsCatalog) {
+    int key = hashFunction(id_flight);
+    Flight *flight = getData(flightsCatalog->flights, key, id_flight);
+    addPassengerToFlight(flight, id_user);
 }
 
 //gets
@@ -44,21 +43,6 @@ int existsFlight (FlightsManager* flightsManager,char* id) {
 
 Hashtable *getHashtableFlightsCatalog(FlightsManager *flightsManager) {
     return flightsManager->flights;
-}
-
-//função que imprime um voo, para efeitos de teste
-void printFunctionFlight(void *data) {
-//    int passengers = getOrdListSize(getPassengers((Flight *) data));
-    char *date = dateToString(getFlightScheduleDeparture((Flight *) data));
-//    char *flightId = getFlightId((Flight *) data);
-    printf(" %20s)", date);
-    free(date);
-//    free(flightId);
-}
-//função que imprime todos os voos do catálogo, para efeitos de teste
-void printFlights(FlightsManager *flightsManager) {
-    printTable(flightsManager->flights, printFunctionFlight);
-    printHashtableUsage(flightsManager->flights);
 }
 
 //função que liberta o espaço em memória alocado pelo catálogo de voos
@@ -107,4 +91,16 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
         free(dep); free(arr); free(nPassengersS); free(delayS);
         free(field0); free(field1); free(field2); free(field3); free(field4); free(field5); free(field6); free(field7);
     }
+}
+
+//gets
+int getSDFlight(int time, char *id, FlightsManager *flightsCatalog) {
+    int key = hashFunction(id);
+    Flight *flight = getData(flightsCatalog->flights, key, id);
+    return getFlightSD(time, flight);
+}
+char *getSFlightDate(char *id, FlightsManager *flightsCatalog) {
+    int key = hashFunction(id);
+    Flight *flight = getData(flightsCatalog->flights, key, id);
+    return getStringFlightDateNoHours(flight);
 }

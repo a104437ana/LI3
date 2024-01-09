@@ -43,19 +43,6 @@ void addDelayToAirport(Airport* airport, int delay) {
     airport->size_list++;
 }
 
-int compareFlightsIds(void *id1, void *id2) {
-//    char *id1 = getFlightId((Flight *) flight1), *id2 = getFlightId((Flight *) flight2);
-    return strcoll(id1, id2);
-}
-
-//ordena os voos do aeroporto
-void sortAirportFlightsByDepartureDate(void *airport, Hashtable *lookupTable) {
-    OrdList *flightsByDepartureDate = ((Airport *) airport)->flightsByDepartureDate;
-    quickSort(flightsByDepartureDate, 0, getOrdListSize(flightsByDepartureDate)-1, compareFlightsIds, 0); //ordena por ids
-    reverseOrdList(flightsByDepartureDate);
-    radixSortFlightDate(flightsByDepartureDate, lookupTable); //ordena por datas
-}
-
 //obtem a lista de voos do aeroporto
 OrdList *getAirportOrdList(Airport *airport) {
     return airport->flightsByDepartureDate;

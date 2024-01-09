@@ -21,9 +21,15 @@ Catalogs *createCatalogs();
 
 //ordena todos os catálogos
 void sortCatalogs(Catalogs *catalogs);
-void sortUserCatalog(Catalogs *catalogs);
+void sortUserCatalog(char *id, Catalogs *catalogs);
 void sortHotelCatalog(Catalogs *catalogs);
 void sortAirportCatalog(Catalogs *catalogs);
+//ordena a lista de voos e reservas de um utilizador
+void sortUserList(char *id, Catalogs *catalogs);
+//ordena as reservas do hotel
+void sortHotelReservationsByDate(char *id, Catalogs *catalogs);
+//ordena os voos do aeroporto
+void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs);
 
 //funções sobre diferêntes catálogos
 //adiciona um utilizador ao catálogo
@@ -59,4 +65,25 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result);
 void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,QueryResult* result);
 
 void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result);
+
+//gets
+//user
+int getAccountStatus(char *id, Catalogs *catalogs);
+int getUserListSize(int type, char *id, Catalogs *catalogs);
+char *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs);
+//flights
+int getFlightScheduleDepartureTime(int time, char *id, Catalogs *catalogs);
+char *getStringFlightDate(char *id, Catalogs *catalogs);
+//reservations
+double getReservationPrice(char *id_reserv, char *id_hotel, Catalogs *catalogs);
+int getReservationBegin(int time, char *id, Catalogs *catalog);
+char *getStringReservationDate(char *id, Catalogs *catalogs);
+//hotels
+int getHotelReservationsSize(char *id, Catalogs *catalogs);
+int doesHotelExist(char *id, Catalogs *catalogs);
+int getHotelReservPriceBetweenDates(char *id, int index, int *price, Date *begin, Date *end, Catalogs *catalogs);
+int getReservationBeginDay(void *id, void *catalogs);
+int getReservationBeginMonth(void *id, void *catalogs);
+int getReservationBeginYear(void *id, void *catalogs);
+
 #endif

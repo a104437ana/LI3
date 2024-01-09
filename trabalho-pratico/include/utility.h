@@ -40,6 +40,7 @@ char* dateToString(Date *date); //cria memory leaks no output (passada como para
 char* dateToStringNoHours(Date *date); //cria memory leaks no output (passada como parametro de funções)
 int daysBetweenDates(Date *begin, Date *end);
 int compareDates(Date *date1, Date *date2);
+int daysInsideDates(Date *limitBegin, Date *limitEnd, Date *begin, Date *end);
 int strcollNames(char *name1, char *name2);
 int strcoll_names(char *name1, char *name2);
 void toUpperS (char *word);

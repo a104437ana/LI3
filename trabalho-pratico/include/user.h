@@ -18,12 +18,8 @@
 typedef struct user User;
 //cria um novo utilizador
 User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus);
-//adiciona uma reserva ao utilizador
-void addReservationToUser(User *user, void *reservation, Hashtable *hotels);
-//adiciona um voo ao utilizador
-void addFlightToUser(User *user, void *flight);
-//ordena a lista de voos e reservas de um utilizador
-void sortUserList(void *data, Hashtable *lookupTable);
+//adiciona um voo ou reserva à lista de voos e ereservas de um utilizador
+void addToUserList(User *user, char *id, char type, double totalSpent);
 
 //gets
 char *getName(User *user);
@@ -39,9 +35,11 @@ Date *getAccountCreation(User *user);
 char *getUserId(User *user);
 double getTotalSpent(User* user);
 OrdList * getUserList(User* user);
-bool getAccountStatus(User* user);
+bool getUserAccountStatus(User* user);
+int getUListSize(User * user);
 int getNumberFlights(User* user);
 int getNumberReservations(User* user);
+char *getUListId(int *type, User *user, int index);
 
 //sets
 void setName(Hashtable *hashtable, unsigned int key, char *name, char *id);

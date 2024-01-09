@@ -26,23 +26,12 @@ Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     return hotel;
 }
 //função que adiciona uma reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, char *id_reserv) {
+void addReservationToHotel(Hotel *hotel, char *id_reserv, char rating) {
     addOrdList(hotel->reservationsByDate, strdup(id_reserv));
-}
-
-//função que compara os ids de duas reservas
-int compareReservsIds(void *id1, void *id2) {
-//    char *id1 = getReservId((Reservation *) reserv1), *id2 = getReservId((Reservation *) reserv2);
-    return strcoll(id1, id2);
-}
-//função que ordena a lista de reservas de um hotel
-void sortHotelReservationsByDate(void *hotel, Hashtable *lookupTable) {
-    OrdList *reservationsByDate = ((Hotel *) hotel)->reservationsByDate; //obtem lista de reservas
-    //ordena as reservas por ids
-    quickSort(reservationsByDate, 0, getOrdListSize(reservationsByDate)-1, compareReservsIds, 0);
-    reverseOrdList(reservationsByDate); //inverte a lista
-    radixSortReservDate(reservationsByDate, lookupTable); //ordena as reservas por data
-    setOrdListOrd(reservationsByDate, 1);
+    if (rating != '\0') {
+        hotel->ratingsSum += (double) (rating - '0');
+        hotel->numberRatings += 1;
+    }
 }
 
 int getHotelNumberOfReservations(Hotel* hotel) {
@@ -53,17 +42,12 @@ int getHotelNumberOfReservations(Hotel* hotel) {
 OrdList *getHotelOrdList(Hotel *hotel) {
     return hotel->reservationsByDate;
 }
-//função que retorna o id de uma reserva do hotel
-char *getHotelReservation(Hotel *hotel, unsigned int key) {
-    void *data = getDataOrdList(hotel->reservationsByDate, 0);
-    return getReservId((Reservation*) data);
+char *getHotelReservId(Hotel *hotel, int index) {
+    char *id = (char *) getDataOrdList(hotel->reservationsByDate, index);
+    return strdup(id);
 }
 
 //gets dos campos do hotel
-Hotel *getHotelCatalog(Hashtable *hotels, unsigned int key, char *id) {
-    Hotel *hotel = (Hotel *) getData(hotels, key, id);
-    return hotel;
-}
 char *getHotelId(Hotel *hotel) {
     return strdup(hotel->id);
 }
@@ -124,6 +108,7 @@ void setHAddress(Hotel *hotel, char *address) {
 void setHCityTax(Hotel *hotel, int cityTax) {
     hotel->cityTax = cityTax;
 }
+/*
 //função que incrementa a soma de classificações de um hotel
 void addToHotelRatingsSum(Hotel *hotel, char rating) {
     if (rating != '\0') {
@@ -136,6 +121,7 @@ void addToHotelNumberRatings(Hotel *hotel, char rating) {
         hotel->numberRatings += 1;
     }
 }
+*/
 
 void removeHId(Hotel *hotel) {
 //    char *oldHotelId = hotel->id;

@@ -3,13 +3,11 @@
 
 #include "utility.h"
 #include "hotel.h"
-#include "hotelsManager.h"
-#include "usersManager.h"
 #include "hashtable.h"
 
 typedef struct reservation Reservation;
 //cria uma nova reserva
-Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, UsersManager *usersCatalog, Hashtable *hotels);
+Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification);
 
 //gets
 Reservation *getReservCatalog(Hashtable *reservations, unsigned int key, char *id);
@@ -27,19 +25,21 @@ Date *getReservEnd(Reservation *reservation);
 int getReservBeginDay(void *reservation);
 int getReservBeginMonth(void *reservation);
 int getReservBeginYear(void *reservation);
-int getReservBeginDayId(void *id, Hashtable *lookupTable);
-int getReservBeginMonthId(void *id, Hashtable *lookupTable);
-int getReservBeginYearId(void *id, Hashtable *lookupTable);
+int getReservBeginDayId(void *id, void *lookupTable);
+int getReservBeginMonthId(void *id, void *lookupTable);
+int getReservBeginYearId(void *id, void *lookupTable);
+int getReservationB(int time, Reservation *reservation);
 int getReservEndDay(void *reservation);
 int getReservEndMonth(void *reservation);
 int getReservEndYear(void *reservation);
 bool getReservIncludesBreakfast(Reservation *reservation);
 int getReservNights(Reservation* reservation);
-int getReservUserClassificationId(void *id, Hashtable *lookupTable);
-char *getReservUserIdId(void *id, Hashtable *lookupTable);
-Date *getReservBeginId(void *id, Hashtable *lookupTable);
-Date *getReservEndId(void *id, Hashtable *lookupTable);
-double getReservPriceId(void *id, Hashtable *lookupTable, Hashtable *hotels);
+int getReservNightsWithLimits(Reservation* reservation, Date *limitBegin, Date *limitEnd);
+int getReservUserClassificationId(void *id, void *lookupTable);
+char *getReservUserIdId(void *id, void *lookupTable);
+Date *getReservBeginId(void *id, void *lookupTable);
+Date *getReservEndId(void *id, void *lookupTable);
+char *getStringReservDate(Reservation *reservation);
 
 //sets
 //void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *ReservId);

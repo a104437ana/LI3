@@ -21,7 +21,7 @@ struct user {
     Date *birth;
     Date *accountCreation;
     bool accounStatus;          
-    OrdList *flightsReservationsByDate;      
+    OrdList *flightsReservationsByDate;
     double totalSpent;
     int nFlights;
     int nReservations;
@@ -46,36 +46,20 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
 
     return user;
 }
-//função que adiciona uma reserva à lista de reservas de um utilizador
-void addReservationToUser(User *user, void *reservation, Hashtable *hotels) {
-    ResultQ2* res = malloc(sizeof(ResultQ2));
-    res->resultType=RESERVATIONS;
-    res->result = reservation;
+//adiciona um voo ou reserva à lista de voos e ereservas de um utilizador
+void addToUserList(User *user, char *id, char type, double totalSpent) {
+    ResultQ2 *res = malloc(sizeof(ResultQ2));
+    if (type == 'R') {
+        res->resultType = RESERVATIONS;
+        user->nReservations++;
+        user->totalSpent += totalSpent;
+    }
+    else if (type == 'F'){
+        res->resultType = FLIGHTS;
+        user->nFlights++;
+    }
+    res->id = strdup(id);
     addOrdList(user->flightsReservationsByDate, res);
-    user->nReservations++;
-    user->totalSpent+=getReservPrice((Reservation*)reservation, hotels);
-}
-//função que adiciona um voo à lista de voos de um utilizador
-void addFlightToUser(User *user, void *flight) {
-    ResultQ2* res = malloc(sizeof(ResultQ2));
-    res->resultType=FLIGHTS;
-    res->result = flight;
-    addOrdList(user->flightsReservationsByDate, res);
-    user->nFlights++;
-}
-//função que compara os ids de dois voos ou reservas
-int compareFlightReservsIds(void *data1, void *data2) {
-    char *id1 = getIdResultQ2((ResultQ2 *)data1), *id2 = getIdResultQ2((ResultQ2 *)data2);
-    return strcoll(id1, id2);
-}
-//função que ordena a lista de voos e reservas de um utilizador
-void sortUserList(void *data, Hashtable *lookupTable) {
-    User *user = (User *) data;
-    OrdList *list = user->flightsReservationsByDate;
-    quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, 0);
-    reverseOrdList(list);
-    radixSortUserList(list, lookupTable);
-    setOrdListOrd(list, 1);
 }
 
 //gets
@@ -174,8 +158,12 @@ OrdList * getUserList(User* user){
      return(list);
 }
 
-bool getAccountStatus(User* user){
+bool getUserAccountStatus(User* user){
     return(user->accounStatus);
+}
+
+int getUListSize(User * user) {
+    return getOrdListSize(user->flightsReservationsByDate);
 }
 
 int getNumberFlights(User* user){
@@ -184,6 +172,13 @@ int getNumberFlights(User* user){
 
 int getNumberReservations(User* user){
     return (user->nReservations);
+}
+
+char *getUListId(int *type, User *user, int index) {
+    OrdList *list = user->flightsReservationsByDate;
+    ResultQ2 *res = (ResultQ2 *) getDataOrdList(list, index);
+    *type = res->resultType;
+    return strdup(res->id);
 }
 
 //sets

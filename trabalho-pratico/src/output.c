@@ -65,7 +65,7 @@ void printQueryOutput (int commandN, char format_flag, QueryResult * output){
 //provisório
 
 //imprime o output da query 2
-void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
+void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Catalogs *catalogs){
   if (output==NULL) return; //se o id não existir ou pertencer a um utilizador inativo, não escreve nada
   char path[100];
   sprintf (path, "./Resultados/command%d_output.txt", i);
@@ -78,7 +78,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
        if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
        else resultT = strdup("reservation");
        fprintf (file, "--- %d ---\n", (j+1));
-       fprintf (file,"id: %s\ndate: %04d/%02d/%02d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], NULL),getBeginMonth(output->results[j], NULL),getBeginDay(output->results[j], NULL), resultT);
+       fprintf (file,"id: %s\ndate: %04d/%02d/%02d\ntype: %s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs), resultT);
        if (j<output->N-1) fprintf (file, "\n"); //se não for o último resultado, escreve um newline
        free(resultT);
      }
@@ -87,14 +87,14 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
      if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
         fprintf (file, "--- %d ---\n", (j+1));
-        fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], NULL),getBeginMonth(output->results[j], NULL),getBeginDay(output->results[j], NULL));
+        fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
         if (j<output->N-1) fprintf (file, "\n");
       }
      }
      else{
       for (j=0; j<output->N; j++){
         fprintf (file, "--- %d ---\n", (j+1));
-        fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], NULL),getBeginMonth(output->results[j], NULL),getBeginDay(output->results[j], NULL));
+        fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
         if (j<output->N-1) fprintf (file, "\n");
       }
      }
@@ -106,18 +106,18 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i){
        char* resultT;
        if (output->results[j]->resultType==FLIGHTS) resultT=strdup("flight");
        else resultT = strdup("reservation");
-       fprintf (file,"%s;%04d/%02d/%02d;%s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], NULL),getBeginMonth(output->results[j], NULL),getBeginDay(output->results[j], NULL), resultT);
+       fprintf (file,"%s;%04d/%02d/%02d;%s\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs), resultT);
        free(resultT);
       }
      }
      else if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], NULL),getBeginMonth(output->results[j], NULL),getBeginDay(output->results[j], NULL));
+        fprintf (file,"%s;%04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
       }
      }
      else{
       for (j=0; j<output->N; j++){
-        fprintf (file,"%s;%04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], NULL),getBeginMonth(output->results[j], NULL),getBeginDay(output->results[j], NULL));
+        fprintf (file,"%s;%04d/%02d/%02d\n", getIdResultQ2(output->results[j]),getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
       }
      }
   } 
