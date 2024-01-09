@@ -123,8 +123,8 @@ int daysBetweenDates(Date *begin, Date *end) {
 }
 //função que compara duas datas
 int compareDates(Date *date1, Date *date2) {
-  int day1 = getDay(date1), month1 = getMonth(date1), year1 = getYear(date1);
-  int day2 = getDay(date2), month2 = getMonth(date2), year2 = getYear(date2);
+  int second1 = getSeconds(date1), minute1 = getMinutes(date1), hour1 = getHours(date1), day1 = getDay(date1), month1 = getMonth(date1), year1 = getYear(date1);
+  int second2 = getSeconds(date2), minute2 = getMinutes(date2), hour2 = getHours(date2), day2 = getDay(date2), month2 = getMonth(date2), year2 = getYear(date2);
   int result = 0;
 
   if (year1 > year2) result--;
@@ -133,6 +133,12 @@ int compareDates(Date *date1, Date *date2) {
   else if (month2 > month1) result++;
   else if (day1 > day2) result--;
   else if (day2 > day1) result++;
+  else if (hour1 > hour2) result--;
+  else if (hour2 > hour1) result++;
+  else if (minute1 > minute2) result--;
+  else if (minute2 > minute1) result++;
+  else if (second1 > second2) result--;
+  else if (second2 > second1) result++;
 
   return result;
 }

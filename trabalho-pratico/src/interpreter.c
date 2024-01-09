@@ -67,8 +67,8 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==5){
      if (command->n_args<3) return 0;
      else{
-        Date *begin = string_to_date(command->args[1]);
-        Date *end = string_to_date(command->args[2]);
+        Date *begin = string_to_date_hours(command->args[1]);
+        Date *end = string_to_date_hours(command->args[2]);
         QueryResult * result = createQResult();
         Q5(command->args[0], begin, end, catalogs, result);
         printQueryOutput(i,command->format_flag, result);
