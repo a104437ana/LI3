@@ -1,56 +1,5 @@
 #include "dataset_validator.h"
-
-/* A função exist_file verifica se um ficheiro existe ou não, dado um caminho relativo ou absoluto para o ficheiro.
-Se o ficheiro existir, a função retorna 1. Se não, a função restorna 0. */
-int exist_file (char* file_path) {
-    int exist = 0;
-	FILE *file;
-	file = fopen(file_path,"r"); //abertura do ficheiro em modo de leitura. O ficheiro deve existir senão file será NULL.
-	if (file != NULL) {
-		exist = 1;
-        fclose(file);
-	}
-    return exist;
-}
-
-/* A função base_e_expoente calcula uma potência, dado a base e o expoente, considerando apenas
-expoentes positivos ou nulos (pré-condição). A função retorna o valor calculado. */
-int base_e_expoente (int base, int expoente) {
-    int r = 1;
-    while (expoente > 0) {
-        r *= base;
-        expoente--;
-    }
-    return r;
-}
-
-/* A função string_to_int recebe uma string e retorna o número inteiro que essa string representa.
-Usar apenas esta função quando sabemos que a string representa um número inteiro (pré-condição).*/
-int string_to_int (char* string) {
-    int number = 0;
-    int i = 0;
-    while (string[i] != '\0' && string[i] != '.') {
-        i++;
-    }
-    i--;
-    int j = 0;
-    while (i>=0) {
-        number += (string[i]-'0')*base_e_expoente(10,j);
-        j++;
-        i--;
-    }
-    return number;
-}
-
-/* A função remove_new_line recebe uma string e substitui o primeiro new line que aparecer na string ('\n')
-por um null ('\0'). Esta função altera a string, removendo a new line e tudo o que vier após ela. */
-void remove_new_line (char* string) {
-    int i = 0;
-    while (string[i] != '\n' && string[i] != '\0') {
-        i++;
-    }
-    string[i] = '\0';
-}
+#include "utility.h"
 
 /* A função length_bigger_than_zero verifica se uma string tem comprimento maior que 0. Se tiver
 comprimento maior que 0, a função retorna 1. Se não, retorna 0. Esta função será usada para verificar
@@ -719,5 +668,11 @@ void add_invalid_line_to_error_file (char* file_path, char* string_line) {
     FILE *file;
     file = fopen(file_path,"a"); //abertura do ﬁcheiro em modo de escrita para acrescentar dados aos já existentes. O ﬁcheiro é criado se não existir.
     fprintf(file,"%s",string_line);
+    fclose(file);
+}
+
+void create_error_file (char *file_path) {
+    FILE *file;
+    file = fopen(file_path,"w");
     fclose(file);
 }

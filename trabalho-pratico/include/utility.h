@@ -24,6 +24,11 @@ typedef enum gender {
     FEMALE,
 } Gender;
 //data com horas
+int exist_file (char* file_path);
+int base_e_expoente (int base, int expoente);
+int string_to_int (char* string);
+void remove_new_line (char* string);
+
 Date *createDate(char day, char month, int year);
 Date *createDateHours(char day, char month, int year, char hours, char minutes, char seconds);
 Date* string_to_date (char* string);

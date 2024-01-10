@@ -29,6 +29,7 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
         size_t n;
         ssize_t read;
         if ((read = getline(&line,&n,file)) != -1) {
+            create_error_file(error_file_path);
             add_invalid_line_to_error_file(error_file_path,line);
             while((read = getline(&line,&n,file)) != -1) {
                 int size_line = strlen(line) + 1;

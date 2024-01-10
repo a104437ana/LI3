@@ -8,11 +8,6 @@
 
 #define PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE 10000
 
-int exist_file (char* file_path);
-int base_e_expoente (int base, int expoente);
-int string_to_int (char* string);
-void remove_new_line (char* string);
-
 int length_bigger_than_zero (char* string);
 int valid_email (char* email);
 int valid_country_code (char* country_code);
@@ -53,5 +48,6 @@ int valid_flight (char* id_flight, char* airline, char* plane_model, char* total
 int valid_passenger (char* id_flight, char* id_user, Catalogs *catalogs);
 
 void add_invalid_line_to_error_file (char* file_path, char* string_line);
+void create_error_file (char *file_path);
 
 #endif
