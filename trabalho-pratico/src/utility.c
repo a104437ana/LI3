@@ -144,17 +144,34 @@ int compareDates(Date *date1, Date *date2) {
 
   return result;
 }
+
+//função que compara duas datas
+int compareDatesNoHours(Date *date1, Date *date2) {
+  int day1 = getDay(date1), month1 = getMonth(date1), year1 = getYear(date1);
+  int day2 = getDay(date2), month2 = getMonth(date2), year2 = getYear(date2);
+  int result = 0;
+
+  if (year1 > year2) result--;
+  else if (year2 > year1) result++;
+  else if (month1 > month2) result--;
+  else if (month2 > month1) result++;
+  else if (day1 > day2) result--;
+  else if (day2 > day1) result++;
+
+  return result;
+}
+
 //calcula o numero de dias (noites) que estão dentro de duas datas limites
 int daysInsideDates(Date *limitBegin, Date *limitEnd, Date *begin, Date *end) {
   int nDays = 0;
   int begin_limitBegin, end_limitEnd, begin_limitEnd, end_limitBegin;
   Date *lower, *higher;
-  end_limitBegin = compareDates(end, limitBegin); //compara a data de fim e a de inicio do limite
+  end_limitBegin = compareDatesNoHours(end, limitBegin); //compara a data de fim e a de inicio do limite
   if (end_limitBegin > 0) return -1; //se a data de fim for menor que a de inicio do limite                 == >=
-  begin_limitEnd  = compareDates(begin, limitEnd); //compara a data de inicio e a de fim do limite
+  begin_limitEnd  = compareDatesNoHours(begin, limitEnd); //compara a data de inicio e a de fim do limite
   if (begin_limitEnd < 0) return -2; //se a data de inicio for maior que a de fim do limite
-  begin_limitBegin = compareDates(begin, limitBegin); //compara a data de inicio e a de inicio do limite
-  end_limitEnd = compareDates(end, limitEnd); //compara a data de fim e a de fim do limite
+  begin_limitBegin = compareDatesNoHours(begin, limitBegin); //compara a data de inicio e a de inicio do limite
+  end_limitEnd = compareDatesNoHours(end, limitEnd); //compara a data de fim e a de fim do limite
 
   //se a data de inicio for maior que a de inicio do limite
   if (begin_limitBegin > 0) lower = limitBegin; //a primeira data de contagem é a data de inicio do limite                  >=
