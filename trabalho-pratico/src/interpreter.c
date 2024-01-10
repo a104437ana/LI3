@@ -10,7 +10,7 @@ struct command {
 
 //função que processa um comando, chamando a respetiva query e a função que imprime o resultado
 int processCommand(Command* command, int i, QueryResult* result2, Catalogs* catalogs){
-   createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
+   if (i!= 0) createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
      if (command->n_args==0) return 0;
      else{
@@ -108,18 +108,22 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
     else if (command->query_id==8){
      if (command->n_args<3) return 0;
      else{
-        int output = Q8(command->args[0], command->args[1], command->args[2], catalogs);
-        printOutputQ8(command->format_flag, output, i);
+      if (i != 0) {
+         int output = Q8(command->args[0], command->args[1], command->args[2], catalogs);
+         printOutputQ8(command->format_flag, output, i);
+      }
         return 8;
      }
    }
     else if (command->query_id==9){
      if (command->n_args==0) return 0;
      else{
-        UsersManager *usersCatalog = getUsersCatalog(catalogs);
+      if (i != 0) {
+         UsersManager *usersCatalog = getUsersCatalog(catalogs);
         OrdList* list = Q9(command->args[0],usersCatalog);
         printOutputQ9(command->format_flag, list, i);
         destroyOnlyOrdList(list);
+      }
         return 9;
      }
    }
