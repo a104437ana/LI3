@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include "catalogsManager.h"
 #include "parser.h"
+#include "interpreter.h"
+#include "results.h"
 
 char* get_string (int max_row, int max_col,int min_row,int min_col, int n) {
     char* path = malloc(n);
@@ -54,7 +56,7 @@ char* get_string (int max_row, int max_col,int min_row,int min_col, int n) {
     return path;
 }
 
-int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catalogs) {
+int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catalogs,QueryResult* result) {
     int exit = 0;
     clear();
 
@@ -104,14 +106,15 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
     char* string3 = NULL;
     char* command = NULL;
     int query2;
+    query--;
     switch(query) {
-        case 2: mvprintw(0, 0, "Query 1 - Lists the summary of a user, flight, or reservation.");
+        case 1: mvprintw(0, 0, "Query 1 - Lists the summary of a user, flight, or reservation.");
                 mvprintw(2, 0, "Enter the ID: ");
                 string1 = get_string(max_row,max_col,2,14,60);
                 command = malloc(4+strlen(string1));
                 sprintf(command,"%d %s",query,string1);
                 break;
-        case 3: mvprintw(0, 0, "Query 2 - Lists the flights and/or reservations of a user.");
+        case 2: mvprintw(0, 0, "Query 2 - Lists the flights and/or reservations of a user.");
                 mvprintw(2, 0, "Enter the ID of the user: ");
                 string1 = get_string(max_row,max_col,2,26,60);
                 mvprintw(4,0, "Navigate options using the arrow keys (up and down). Press Enter to select your choice.");
@@ -158,19 +161,19 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
                             break;
                 }
                 break;
-        case 4: mvprintw(0, 0, "Query 3 - Presents the average rating of a hotel.");
+        case 3: mvprintw(0, 0, "Query 3 - Presents the average rating of a hotel.");
                 mvprintw(2, 0, "Enter the ID of the hotel: ");
                 string1 = get_string(max_row,max_col,2,27,60);
                 command = malloc(4+strlen(string1));
                 sprintf(command,"%d %s",query,string1);
                 break;
-        case 5: mvprintw(0, 0, "Query 4 - Lists the hotel reservations, sorted by start date (from the most recent to the oldest).");
+        case 4: mvprintw(0, 0, "Query 4 - Lists the hotel reservations, sorted by start date (from the most recent to the oldest).");
                 mvprintw(2, 0, "Enter the ID of the hotel: ");
                 string1 = get_string(max_row,max_col,2,27,60);
                 command = malloc(4+strlen(string1));
                 sprintf(command,"%d %s",query,string1);
                 break;
-        case 6: mvprintw(0, 0, "Query 5 - Lists the flights with origin at a given airport, between two dates, sorted by estimated departure date (from the most recent to the oldest).");
+        case 5: mvprintw(0, 0, "Query 5 - Lists the flights with origin at a given airport, between two dates, sorted by estimated departure date (from the most recent to the oldest).");
                 mvprintw(2, 0, "Enter the name of the airport: ");
                 string1 = get_string(max_row,max_col,2,31,3);
                 mvprintw(4,0, "Enter the begin date (in this format 2023/01/31): ");
@@ -180,7 +183,7 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
                 command = malloc(6+strlen(string1)+strlen(string2)+strlen(string3));
                 sprintf(command,"%d %s %s %s",query,string1,string2,string3);
                 break;
-        case 7: mvprintw(0, 0, "Query 6 - Lists the top N airports with the most passengers for a given year.");
+        case 6: mvprintw(0, 0, "Query 6 - Lists the top N airports with the most passengers for a given year.");
                 mvprintw(2, 0, "Enter the year: ");
                 string1 = get_string(max_row,max_col,2,16,6);
                 mvprintw(4,0, "Enter the number N: ");
@@ -188,13 +191,13 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
                 command = malloc(5+strlen(string1)+strlen(string2));
                 sprintf(command,"%d %s %s",query,string1,string2);
                 break;
-        case 8: mvprintw(0, 0, "Query 7 - Lists the top N airports with the highest median of delays.");
+        case 7: mvprintw(0, 0, "Query 7 - Lists the top N airports with the highest median of delays.");
                 mvprintw(2,0, "Enter the number N: ");
                 string1 = get_string(max_row,max_col,2,20,10);
                 command = malloc(4+strlen(string1));
                 sprintf(command,"%d %s",query,string1);
                 break;
-        case 9: mvprintw(0, 0, "Query 8 - Presents the total revenue of a hotel between two dates (inclusive).");
+        case 8: mvprintw(0, 0, "Query 8 - Presents the total revenue of a hotel between two dates (inclusive).");
                 mvprintw(2, 0, "Enter the ID of the hotel: ");
                 string1 = get_string(max_row,max_col,2,27,60);
                 mvprintw(4,0, "Enter the begin date (in this format 2023/01/31): ");
@@ -204,13 +207,13 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
                 command = malloc(6+strlen(string1)+strlen(string2)+strlen(string3));
                 sprintf(command,"%d %s %s %s",query,string1,string2,string3);
                 break;
-        case 10: mvprintw(0, 0, "Query 9 - Lists all users whose names start with the prefix provided as an argument, sorted by name in ascending order.");
+        case 9: mvprintw(0, 0, "Query 9 - Lists all users whose names start with the prefix provided as an argument, sorted by name in ascending order.");
                 mvprintw(2, 0, "Enter the prefix: ");
                 string1 = get_string(max_row,max_col,2,18,60);
                 command = malloc(4+strlen(string1));
                 sprintf(command,"%d %s",query,string1);
                 break;
-        case 11: mvprintw(0, 0, "Query 10 - Presents various overall metrics of the application.");
+        case 10: mvprintw(0, 0, "Query 10 - Presents various overall metrics of the application.");
                 mvprintw(2,0, "Navigate options using the arrow keys (up and down). Press Enter to select your choice.");
                 mvprintw(4,0, "   All years.");
                 mvprintw(6,0, "   One specific year.");
@@ -265,8 +268,10 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
         default: break;
     }
     //processCommand(parseCommandLine(command),1,1,2,3,4,catalogs,result);
-    if (query != 12) {
+    if (query != 11) {
         exit = 0;
+        Command* c = parseCommandLine(command);
+        processCommand(c,0,result,catalogs);
     }
     else exit = 1;
     free(command);
@@ -276,35 +281,106 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
     return exit;
 }
 
+void printResultP (int line,int x,QueryResult* result) {
+    for (int i = 1; i<=x; i++) {
+        char * name = getFieldName(result,x,i-1);
+        char * data = getFieldData(result,x,i-1);
+        mvprintw(line+i,0,"%s: %s",name,data);
+        refresh();
+        free(name); free(data);
+    }
+}
+
+int printResultPage (int page, int max_row, int x,int j, int nResults, QueryResult* result) {
+    for (int i = 2; i+(x+2) <= max_row && j<= nResults; i+=x+2) {
+        mvprintw(i,0,"--- %d ---\n",j);
+        refresh();
+        printResultP(i,x,result);
+        j++;
+    }
+    return j;
+}
+
+void firstByPage (int nFields, int nResults, int max_row, int firstResult[]) {
+    int page = 0;
+    int i = 1;
+    while (i<=nResults) {
+        firstResult[page] = i;
+        page++;
+        for (int j = 2; j+(nFields+2) <= max_row && i<=nResults; j += (nFields+2)) {
+            i++;
+        }
+    }
+}
+
+int pagesNumber (int nFields, int nResults, int max_row) {
+    int page = 0;
+    int i = 1;
+    while (i<=nResults) {
+        page++;
+        for (int j = 2; j+(nFields+2) <= max_row && i<=nResults; j += (nFields+2)) {
+            i++;
+        }
+    }
+    return page;
+}
+
 void interactive_mode(int max_row, int max_col,int row,int col, Catalogs* catalogs) {
     char* path = get_string(max_row,max_col,row,col,500);
     mvprintw(4,0, "Parsing files. Please wait...");
     refresh();
     parse_all_files(path,catalogs);
     free(path);
-    int exit = get_querie(max_row,max_col,row,col,catalogs);;
+    QueryResult * result = createQResult();
+    int exit = get_querie(max_row,max_col,row,col,catalogs,result);
     while (!exit) {
         clear();
         mvprintw(0,0, " <  Previous page (Press Left)");
         mvprintw(0,max_col/2, "Page 1");
         mvprintw(0,max_col/4, "(Press Enter to access the menu)");
         mvprintw(0,max_col-27, "(Press Right) Next page  > ");
-        move(0,1);
+        int nFields = 0;
+        int nResults = getNumberResults(result);
+        int pages = 1;
+        if (nResults != 0) {
+            nFields = getNumberFieldsQ(result,0);
+            pages = pagesNumber(nFields,nResults,max_row);
+        }
+        int firstResult[pages];
+        firstByPage(nFields,nResults,max_row,firstResult);
         int page = 1;
+        if (nResults != 0) printResultPage(page,max_row,nFields,firstResult[page-1],nResults,result);
+        move(0,1);     
         int key = getch();
         while (key != '\n') {
             if (key == KEY_LEFT) {
-                if (page != 1) page--;
-                mvprintw(0,max_col/2, "Page %d     ",page);
+                if (page != 1) {
+                    page--;
+                    mvprintw(0,0, " <  Previous page (Press Left)");
+                    mvprintw(0,max_col/2, "Page %d     ",page);
+                    mvprintw(0,max_col/4, "(Press Enter to access the menu)");
+                    mvprintw(0,max_col-27, "(Press Right) Next page  > ");
+                    if (nResults != 0) printResultPage(page,max_row,nFields,firstResult[page-1],nResults,result);
+                }
                 move(0,1);
             }
             if (key == KEY_RIGHT) {
-                page++;
-                mvprintw(0,max_col/2, "Page %d     ",page);
+                if (page != pages) {
+                    page++;
+                    clear();
+                    mvprintw(0,0, " <  Previous page (Press Left)");
+                    mvprintw(0,max_col/2, "Page %d     ",page);
+                    mvprintw(0,max_col/4, "(Press Enter to access the menu)");
+                    mvprintw(0,max_col-27, "(Press Right) Next page  > ");
+                    if (nResults != 0) printResultPage(page,max_row,nFields,firstResult[page-1],nResults,result);
+                }
                 move(0,max_col-2);
             }
             key = getch();
         }
-        exit = get_querie(max_row,max_col,row,col,catalogs);
+        destroyQResult(result);
+        result = createQResult();
+        exit = get_querie(max_row,max_col,row,col,catalogs,result);
     }
+    destroyQResult(result);
 }

@@ -19,7 +19,7 @@
 
 typedef struct command Command;
 
-int processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs);
+int processCommand(Command* command, int i, QueryResult* result2, Catalogs* catalogs);
 Command* parseCommandLine (char* line);
 void parseCommandFile (char* name,Catalogs *catalogs, bool test);
 

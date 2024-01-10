@@ -80,6 +80,9 @@ Date *getReservBegin(Reservation *reservation) {
     res->day = reservation->begin->day;
     res->month = reservation->begin->month;
     res->year = reservation->begin->year;
+    res->hours = 0;
+    res->minutes = 0;
+    res->seconds = 0;
     return res;
 }
 
@@ -88,6 +91,9 @@ Date *getReservEnd(Reservation *reservation) {
     res->day = reservation->end->day;
     res->month = reservation->end->month;
     res->year = reservation->end->year;
+    res->hours = 0;
+    res->minutes = 0;
+    res->seconds = 0;
     return res;
 }
 
@@ -202,6 +208,8 @@ int getReservNightsWithLimits(Reservation* reservation, Date *limitBegin, Date *
      Date* begin = getReservBegin(reservation);
      Date* end = getReservEnd(reservation);
      int res = daysInsideDates(limitBegin, limitEnd, begin, end);
+     destroyDate(begin);
+     destroyDate(end);
      return res;
 }
 

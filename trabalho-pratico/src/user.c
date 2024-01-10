@@ -103,7 +103,9 @@ Date *getBirth(User *user) {
     birth->day = user->birth->day;
     birth->month = user->birth->month;
     birth->year = user->birth->year;
-
+    birth->hours = 0;
+    birth->minutes = 0;
+    birth->seconds = 0;
     return birth;
 }
 
@@ -117,9 +119,11 @@ int getAge(User* user){
     if(DAY<birthdate->day) birthday=false;
     else birthday=true;
   }
-
-  if(birthday==true) return (YEAR-birthdate->year);
-  else return (YEAR-birthdate->year-1);
+  int r = 0;
+  if(birthday==true) r = YEAR-birthdate->year;
+  else r = YEAR-birthdate->year-1;
+  destroyDate(birthdate);
+  return r;
 }
 
 /*

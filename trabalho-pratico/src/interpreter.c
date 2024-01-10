@@ -9,15 +9,18 @@ struct command {
 };
 
 //função que processa um comando, chamando a respetiva query e a função que imprime o resultado
-int processCommand(Command* command, int i,UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,HotelsManager *hotelsCatalog,FlightsManager *flightsCatalog, Catalogs* catalogs){
+int processCommand(Command* command, int i, QueryResult* result2, Catalogs* catalogs){
    createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
    if (command->query_id==1){
      if (command->n_args==0) return 0;
      else{
-        QueryResult * result = createQResult();
-        Q1(command->args[0],catalogs,result);
-        printQueryOutput(i,command->format_flag,result);
-        destroyQResult(result);
+        if (i != 0) {
+         QueryResult * result = createQResult();
+         Q1(command->args[0],catalogs,result);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
+        }
+        else Q1(command->args[0],catalogs,result2);
         return 1;
      }
    }
@@ -25,34 +28,43 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
      if (command->n_args==0) return 0;
      else{
         Q2Type type;
-        QueryResult * result = createQResult();
         if (command->n_args==1) type = BOTH; //se só tiver o id como argumento,
         else if ((strcmp(command->args[1], "flights")==0)) type = FLIGHTS;
         else if ((strcmp(command->args[1], "reservations")==0)) type = RESERVATIONS;
         else return 0;
-        Q2(command->args[0], type, catalogs, result);
-        printQueryOutput(i,command->format_flag,result);
-        destroyQResult(result);
+        if (i != 0) {
+         QueryResult * result = createQResult();
+         Q2(command->args[0], type, catalogs, result);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
+        }
+        else  Q2(command->args[0], type, catalogs, result2);
         return 2;
      }
    }
     else if (command->query_id==3){
      if (command->n_args==0) return 0;
      else{
-        QueryResult * result = createQResult();
-        Q3(command->args[0], catalogs, result);
-        printQueryOutput(i,command->format_flag,result);
-        destroyQResult(result);
+        if (i != 0) {
+         QueryResult * result = createQResult();
+         Q3(command->args[0], catalogs, result);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
+        }
+        else Q3(command->args[0], catalogs, result2);
         return 3;
      }
    }
     else if (command->query_id==4){
      if (command->n_args==0) return 0;
      else{
-        QueryResult * result = createQResult();
-        Q4(command->args[0], catalogs,result);
-        printQueryOutput(i,command->format_flag,result);
-        destroyQResult(result);
+        if (i != 0) {
+         QueryResult * result = createQResult();
+         Q4(command->args[0], catalogs,result);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
+        }
+        else Q4(command->args[0], catalogs,result2);
         return 4;
      }
    }
@@ -61,10 +73,14 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
      else{
         Date *begin = string_to_date_hours(command->args[1]);
         Date *end = string_to_date_hours(command->args[2]);
-        QueryResult * result = createQResult();
-        Q5(command->args[0], begin, end, catalogs, result);
-        printQueryOutput(i,command->format_flag, result);
-        destroyQResult(result); destroyDate(begin); destroyDate(end);
+        if (i != 0) {
+         QueryResult * result = createQResult();
+         Q5(command->args[0], begin, end, catalogs, result);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
+        }
+        else Q5(command->args[0], begin, end, catalogs, result2);
+        destroyDate(begin); destroyDate(end);
         return 5;
      }
    }
@@ -79,10 +95,13 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==7){
      if (command->n_args==0) return 0;
      else{
-        QueryResult * result = createQResult();
-        Q7(atoi(command->args[0]),catalogs,result);
-        printQueryOutput(i,command->format_flag,result);
-        destroyQResult(result);
+        if (i != 0) {
+         QueryResult * result = createQResult();
+         Q7(atoi(command->args[0]),catalogs,result);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
+        }
+        else Q7(atoi(command->args[0]),catalogs,result2);
         return 7;
      }
    }
@@ -97,6 +116,7 @@ int processCommand(Command* command, int i,UsersManager *usersCatalog,Reservatio
     else if (command->query_id==9){
      if (command->n_args==0) return 0;
      else{
+        UsersManager *usersCatalog = getUsersCatalog(catalogs);
         OrdList* list = Q9(command->args[0],usersCatalog);
         printOutputQ9(command->format_flag, list, i);
         destroyOnlyOrdList(list);
@@ -161,11 +181,6 @@ void parseCommandFile (char* name,Catalogs *catalogs, bool test){
  ssize_t read;
  size_t len;
  int i = 1;
- UsersManager *usersCatalog = getUsersCatalog(catalogs);
- FlightsManager *flightsCatalog = getFlightsCatalog(catalogs);
- ReservationsManager *reservationsCatalog = getReservationsCatalog(catalogs);
- HotelsManager *hotelsCatalog = getHotelsCatalog(catalogs);
-// AirportsManager *airportsCatalog = getAirportsCatalog(catalogs);
 
  FILE* file = fopen(name, "r");
     if (file != NULL) {
@@ -173,7 +188,8 @@ void parseCommandFile (char* name,Catalogs *catalogs, bool test){
     clock_gettime(CLOCK_REALTIME, &start);
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
-    int q = processCommand(command, i,usersCatalog,reservationsCatalog,hotelsCatalog,flightsCatalog,catalogs);
+    QueryResult * result = NULL;
+    int q = processCommand(command, i,result,catalogs);
     i++;
     free(command);
     clock_gettime(CLOCK_REALTIME, &end);

@@ -40,7 +40,8 @@ Flight *createFlight(char *id, char *airline, char *airplane, char *origin, char
 }
 //função que adiciona um utilizador à lista de passageiros de um voo
 void addPassengerToFlight(Flight *flight, char *id_user) {
-    addOrdList(flight->passengers, strdup(id_user));
+    char* user = strdup(id_user);
+    addOrdList(flight->passengers, user);
 }
 
 //gets
@@ -292,6 +293,6 @@ void destroyFlight(void *flight) {
     free(((Flight *) flight)->airplane); //liberta as strings
     free(((Flight *) flight)->airline);
     free(((Flight *) flight)->id);
-    destroyOnlyOrdList(((Flight *) flight)->passengers); //liberta a lista de passageiros
+    destroyOrdList(((Flight *) flight)->passengers,free); //liberta a lista de passageiros
     free(flight);
 }
