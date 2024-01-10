@@ -35,8 +35,6 @@ QueryResult * createQResult() {
     qresult->number_of_results = 0;
     qresult->max_results = 2;
     qresult->results = malloc(sizeof(Result*)*2);
-    qresult->results[0] = createResult();
-    qresult->results[1] = createResult();
     return qresult;
 }
 

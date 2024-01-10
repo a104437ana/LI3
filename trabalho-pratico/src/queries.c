@@ -161,7 +161,10 @@ int prefixSearch(void *prefixVoid, void *user) {
   char *prefix = (char *) prefixVoid;
   char *name = getName((User *) user); //nome do utilizador
   char *namePrefix = sameLenPrefix(prefix, name);
-  if (namePrefix == NULL) return 0;
+  if (namePrefix == NULL){
+    free(namePrefix); free(name);
+    return 0;
+  }
   compare = strcoll(prefix, namePrefix); //compara os dois prefixos
   free(namePrefix); //liberta o prefixo do utilizador
   free(name);
