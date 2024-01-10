@@ -356,7 +356,7 @@ int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date 
     int p = getReservPriceLimits(id_reserv, catalogs->reservationsCatalog, begin, end);
     free(id_reserv);
     if (p == -2) return 0;
-    if (p != -1) *price = 0;
+    if (p == -1) *price = 0;
     else *price = p;
     return 1;
 }
