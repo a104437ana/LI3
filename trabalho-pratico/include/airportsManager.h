@@ -13,14 +13,20 @@ AirportsManager *createAirportsCatalog(int size);
 //atualiza o catálogo de aeroportos
 void updateAirportCatalog(int delay, char *id, char *id_flight, AirportsManager *airportsCatalog);
 
-//gets
-Airport *getAirportCatalog(AirportsManager *airportsManager, char *id);
-Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager);
 void sortAirports (AirportsManager* airportsManager);
+void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, Hashtable *lookup);
 int compareDelays (void *pointer1, void *pointer2);
 void airport_catalog_compute_Q5(char* airport,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,Hashtable* lookup);
 void airport_calalog_compute_Q7 (int n, AirportsManager *airports, QueryResult* result);
 //liberta espaço em memória do catálogo de aeroportos
 void destroyAirportsCatalog(AirportsManager *airportsManager);
+
+//gets
+Airport *getAirportCatalog(AirportsManager *airportsManager, char *id);
+Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager);
+int getAirportListSize_airportsCatalog(char *id, AirportsManager *airportsCatalog);
+int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*), AirportsManager *airportsCatalog);
+char *getNextAirportId(char *id, AirportsManager *airportsCatalog);
+int getNumberAirports_airportsCatalog(AirportsManager *airportsCatalog);
 
 #endif

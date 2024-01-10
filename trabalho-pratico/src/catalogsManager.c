@@ -110,6 +110,10 @@ void sortUserList(char *id, Catalogs *catalogs) {
         setOrdListOrd(list, 1);
     }
 }
+void sortAirportFlightsByDepartureDate_catalog(char *id, Catalogs* catalogs) {
+    Hashtable *lookup = getHashtableFlightsCatalog(catalogs->flightsCatalog);
+    sortAirportFlightsByDepartureDate_airportsCatalog(id, catalogs->airportsCatalog, lookup);
+}
 /*
 //ordena os voos do aeroporto
 void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs) {
@@ -355,4 +359,14 @@ int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date 
     if (p != -1) *price = 0;
     else *price = p;
     return 1;
+}
+//airports
+int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs) {
+    return getAirportPassengersYear_airportsCatalog(year, id, compareFlightYear_flightsCatalog, 0, (void *) catalogs->flightsCatalog, getNumberPassengers_filghtsCatalog, catalogs->airportsCatalog);
+}
+char *getNextAirportId_catalog(char *id, Catalogs *catalogs) {
+    return getNextAirportId(id, catalogs->airportsCatalog);
+}
+int getNumberAirports_catalog(Catalogs *catalogs) {
+    return getNumberAirports_airportsCatalog(catalogs->airportsCatalog);
 }

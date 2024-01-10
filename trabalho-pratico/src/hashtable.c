@@ -24,6 +24,7 @@ struct hashtable {
 //funcao de hash
 unsigned int hashFunction(char *id) {
     unsigned long int hash = 1;
+    if (id == NULL) return 0;
     for (int i=0; id[i] != '\0'; i++) //para cada caracter
         hash = hash * 33 ^ id[i]; // hash[i] = (hash[i-1] * 33) XOR id[i]
 
@@ -50,6 +51,12 @@ Hashtable *createHashtable(int size) {
 
     return newHashtable;
 }
+
+//devolve número de nodos usados
+int getHashtableUsed(Hashtable *hashtable) {
+    return hashtable->nodes;
+}
+
 //função que procura um nodo onde se encontra o elemento com o id dado
 HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id) {
     int index = key % hashtable->size; //indice para onde aponta a chave
@@ -155,6 +162,17 @@ void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*,Hasht
             iNode = iNode->next;
         }
     }
+}
+void *getNextData(Hashtable *hashtable, unsigned int key, char *id) {
+    int size = hashtable->size;
+    int index = key % size;
+    HashtableNode *node = hashtable->node[index];
+    if (node && node->next != NULL) node = node->next;
+    else {
+        index = (index + 1) % size;
+        while ((node = hashtable->node[index]) == NULL) index = (index + 1) % size;
+    }
+    return node->data;
 }
 //função que imprime todos os elementos da hashtable, para efeitos de teste
 void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {

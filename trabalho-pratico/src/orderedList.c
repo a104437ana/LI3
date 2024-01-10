@@ -38,13 +38,13 @@ void addOrdList(OrdList *ordList, void *data) {
     ordList->maxSize = maxSize;
 }
 //função que devolve o indice da primeira ocorrência de um elemento numa lista
-int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*), int equal, int (*searchBackFunction)(void*,void*)) {
+int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*,void*), void *lookup, int equal, int (*searchBackFunction)(void*,void*,void*)) {
     int lower = 0, higher = list->size - 1; //limites para procura
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
     void *compareData = list->data[i]; //elemento a comparar
     //enquanto os elementos não forem iguais e os limites não se cruzarem
 //    printf("Prefix: %s\n", (char*) data);
-    while ((compare = compareFunction(data, compareData)) != equal && (higher - lower) > 1) {
+    while ((compare = compareFunction(data, compareData, lookup)) != equal && (higher - lower) > 1) {
         if (compare < equal) higher = i; //se o elemento for menor o limite superior passa a ser o indice do elemento
         else lower = i; //caso contrário o limite inferior passa a ser o indice do elemento
         i = (higher + lower) / 2; //novo indice central entre os dois limites
@@ -54,7 +54,7 @@ int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,vo
     if (higher - lower == 1 && compare != equal) return -1; //se o elemento nao existir na lista
     while (i > 0 && compare <= equal) { //compara com o anterior até encontrar um elemento diferente
         compareData = list->data[i-1];
-        compare = searchBackFunction(data, compareData);
+        compare = searchBackFunction(data, compareData, lookup);
 //        printf("\t%s\n", getName(compareData));
         i--;
     }

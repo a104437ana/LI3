@@ -25,4 +25,7 @@ int existsFlight (FlightsManager* flightsManager,char* id);
 Hashtable *getHashtableFlightsCatalog(FlightsManager *flightsManager);
 int getSDFlight(int time, char *id, FlightsManager *flightsCatalog);
 char *getSFlightDate(char *id, FlightsManager *flightsCatalog);
+int compareFlightYear_flightsCatalog(void *year, void *id, void *flightsCatalog);
+int getNumberPassengers_filghtsCatalog(void *id, void *flightsCatalog);
+
 #endif

@@ -14,6 +14,8 @@ unsigned int hashFunction(char *id);
 HashtableNode *createHashtableNode();
 //cria uma nova hashtable
 Hashtable *createHashtable(int size);
+//devolve número de nodos usados
+int getHashtableUsed(Hashtable *hashtable);
 //procura nodo na hashtable
 HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id);
 HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key, char *id);
@@ -33,6 +35,8 @@ int getHashtableNodes(Hashtable *hashtable);
 void setData(Hashtable *hashtable, unsigned int key, void *data, char *id);
 //ordena um parametro de todos os elementos da hashtable
 void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*,Hashtable*), Hashtable *lookupTable);
+//obtem o próximo elemento da hashtable
+void *getNextData(Hashtable *hashtable, unsigned int key, char *id);
 
 //para efeitos de teste
 //imprime todos os elemntos da hashtable

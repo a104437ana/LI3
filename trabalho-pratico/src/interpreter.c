@@ -87,9 +87,11 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
     else if (command->query_id==6){
      if (command->n_args<2) return 0;
      else{
-        //ResultsQ6* output = Q6(atoi(command->args[0]), atoi(command->args[1]));
-        //printOutputQ6(command->format_flag, output, i);
-        return 0;
+        QueryResult * result = createQResult();
+        Q6(atoi(command->args[0]), atoi(command->args[1]), catalogs, result);
+        printQueryOutput(i,command->format_flag, result);
+        destroyQResult(result);
+        return 6;
      }
    }
     else if (command->query_id==7){

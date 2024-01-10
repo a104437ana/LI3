@@ -162,7 +162,7 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
         // res = ?
 
         //imprime tempo de execução
-        total = use + res + passc + fli + pass + des;
+        total = use + res + passc + fli + pass + des; total++;
         /*
         printf(" Parser:\n");
         printf("  user:\t\t %.6f seconds (%5.2f%%)\n", use, (use/total)*100);

@@ -19,6 +19,8 @@ OrdList *getAirportOrdList(Airport *airport);
 //gets
 char *getAirportId(Airport *airport);
 double getAirportMedian(Airport *airport);
+int getAirportListSize(Airport *airport);
+int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*));
 
 //sets
 void swapL(int a[], int i, int j);

@@ -104,3 +104,19 @@ char *getSFlightDate(char *id, FlightsManager *flightsCatalog) {
     Flight *flight = getData(flightsCatalog->flights, key, id);
     return getStringFlightDateNoHours(flight);
 }
+int compareFlightYear_flightsCatalog(void *year, void *id, void *flightsCatalog) {
+    int *y = (int *) year;
+    Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
+    int yearFlight = getFlightScheduleDepartureYear(id, (void *) flights);
+    int res = 0;
+    if (*y > yearFlight) res++;
+    else if (*y < yearFlight) res--;
+    return res;
+}
+int getNumberPassengers_filghtsCatalog(void *id, void *flightsCatalog) {
+    char *id_flight = (char *) id;
+    Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
+    int key = hashFunction(id_flight);
+    Flight *flight = getData(flights, key, id_flight);
+    return getNumberPassengers(flight);
+}

@@ -92,7 +92,7 @@ void Q4(char *id, Catalogs* catalogs, QueryResult* result);
 
 void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult* result);
 
-ResultsQ6* Q6(int year, int N);
+void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result);
 
 void Q7 (int n, Catalogs* catalogs, QueryResult* result);
 

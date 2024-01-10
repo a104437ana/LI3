@@ -91,6 +91,11 @@ void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
         setOrdListOrd(list, 1);
     }
 }
+void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, Hashtable *lookup) {
+    int key = hashFunction(id);
+    Airport *airport = getData(airportsCatalog->airports, key, id);
+    sortAirportFlightsByDepartureDate(airport, lookup);
+}
 
 void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,Hashtable* lookup) {
     Airport* airport = getData(airports->airports,hashFunction(id),id);
@@ -179,5 +184,26 @@ void destroyAirportsCatalog(AirportsManager *airportsManager) {
     destroyHashtable(airportsManager->airports, destroyAirport); //liberta a hashtable de aeroportos
     destroyOnlyOrdList(airportsManager->airportsByMedianOfDelays);
     free(airportsManager);
+}
+
+//gets
+int getAirportListSize_airportsCatalog(char *id, AirportsManager *airportsCatalog) {
+    int key = hashFunction(id);
+    Airport *airport = getData(airportsCatalog->airports, key, id);
+    return getAirportListSize(airport);
+}
+
+int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*), AirportsManager *airportsCatalog) {
+    int key = hashFunction(id);
+    Airport *airport = getData(airportsCatalog->airports, key, id);
+    return getAirportPassengersYear(year, airport, compareFunction, equal, lookup, getFunction);
+}
+char *getNextAirportId(char *id, AirportsManager *airportsCatalog) {
+    int key = hashFunction(id);
+    char *nextId = (char *) getNextData(airportsCatalog->airports, key, id);
+    return strdup(nextId);
+}
+int getNumberAirports_airportsCatalog(AirportsManager *airportsCatalog) {
+    return getHashtableUsed(airportsCatalog->airports);
 }
 

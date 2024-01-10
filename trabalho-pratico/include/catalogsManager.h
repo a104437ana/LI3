@@ -29,7 +29,8 @@ void sortUserList(char *id, Catalogs *catalogs);
 //ordena as reservas do hotel
 void sortHotelReservationsByDate(char *id, Catalogs *catalogs);
 //ordena os voos do aeroporto
-void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs);
+//void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs);
+void sortAirportFlightsByDepartureDate_catalog(char *id, Catalogs* catalogs);
 
 //funções sobre diferêntes catálogos
 //adiciona um utilizador ao catálogo
@@ -85,5 +86,10 @@ int getHotelReservPriceBetweenDates(char *id, int index, int *price, Date *begin
 int getReservationBeginDay(void *id, void *catalogs);
 int getReservationBeginMonth(void *id, void *catalogs);
 int getReservationBeginYear(void *id, void *catalogs);
+//airports
+int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs);
+char *getNextAirportId_catalog(char *id, Catalogs *catalogs);
+int getNumberAirports_catalog(Catalogs *catalogs);
+
 
 #endif

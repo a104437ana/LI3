@@ -58,6 +58,30 @@ double getAirportMedian(Airport *airport) {
     return airport->median;
 }
 
+int getAirportListSize(Airport *airport) {
+    return getOrdListSize(airport->flightsByDepartureDate);
+}
+
+int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*)) {
+    OrdList *list = airport->flightsByDepartureDate;
+    void *data = (void *) &year;
+    int i = searchDataOrdList(list, data, compareFunction, lookup, equal, compareFunction);
+    int passengers;
+    if (i == -1) return 0;
+    else passengers = 0;
+    int size = getOrdListSize(list);
+    int exit = 0;
+    while (i < size && !exit) {
+        char *id = (char *) getDataOrdList(list, i);
+        if (compareFunction(data, id, lookup) != equal) exit = 1;
+        else {
+            i++;
+            passengers+=getFunction(id, lookup);
+        }
+    }
+    return passengers;
+}
+
 void swapL(int a[], int i, int j) {
     int temp = a[i];
     a[i] = a[j];

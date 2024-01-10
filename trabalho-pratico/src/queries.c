@@ -1,4 +1,5 @@
 #include "queries.h"
+#include "heap.h"
 
 /*calcula a idade de um utilizador em anos
 int getAge(User* user){
@@ -157,7 +158,7 @@ char *sameLenPrefix(char *prefix, char *name) {
 
   return namePrefix;
 }
-int prefixSearch(void *prefixVoid, void *user) {
+int prefixSearch(void *prefixVoid, void *user, void *lookup) {
   int compare;
   char *prefix = (char *) prefixVoid;
   char *name = getName((User *) user); //nome do utilizador
@@ -171,7 +172,7 @@ int prefixSearch(void *prefixVoid, void *user) {
   free(name);
   return compare;
 }
-int prefixSearchBack(void *prefixVoid, void *user) {
+int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
   int compare;
   char *prefix = (char *) prefixVoid;
   char *name = getName((User *) user); //nome do utilizador
@@ -347,6 +348,69 @@ void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult*
   catalogs_compute_Q5(airport,begin,end,catalogs,result);
 }
 
+struct pairIntString {int value; char *string;};
+
+void destroyPair(void *pair) {
+  free(((struct pairIntString *) pair)->string);
+  free((struct pairIntString *) pair);
+}
+
+int comparePair(void *pair1, void *pair2, void *lookup) {
+  struct pairIntString *p1 = (struct pairIntString *) pair1;
+  struct pairIntString *p2 = (struct pairIntString *) pair2;
+  int res = 0;
+  if (p1->value > p2->value) res++;
+  else if (p1->value < p2->value) res--;
+  else res = strcoll(p1->string,p2->string);
+  return res;
+}
+
+int comparePairAdd(void *pair1, void *pair2, void *lookup) {
+  struct pairIntString *p1 = (struct pairIntString *) pair1;
+  struct pairIntString *p2 = (struct pairIntString *) pair2;
+  int res = 0;
+  if (p1->value > p2->value) res++;
+  else if (p1->value < p2->value) res--;
+  else res = strcoll(p1->string,p2->string);
+  return res;
+}
+
+void addPair(int value, char *string, struct pairIntString *pair) {
+  pair->value = value;
+  pair->string = string;
+}
+
+void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
+  int passengers, numberAirports = getNumberAirports_catalog(catalogs);
+  char *id = getNextAirportId_catalog(0, catalogs);
+  Heap h = createHeap(N, comparePair, comparePairAdd, NULL, destroyPair);
+  while (numberAirports > 0) {
+    sortAirportFlightsByDepartureDate_catalog(id, catalogs);
+    passengers = getAirportPassengersYear_catalog(year, id, catalogs);
+    struct pairIntString *airport = malloc(sizeof(struct pairIntString));
+    addPair(passengers, id, airport);
+    id = getNextAirportId_catalog(id, catalogs);
+    if (addHeap(airport, h) == -1) destroyPair(airport);
+    numberAirports--;
+  }
+  int i = getHeapUsed(h)-1;
+  setNumberResults(result, i+1);
+  char *field0 = strdup("name"), *field1 = strdup("passengers");
+  while (i >= 0) {
+    struct pairIntString *res = removeHeap(h);
+    char *p = malloc(sizeof(char)*10);
+    sprintf(p, "%d", res->value);
+    setNumberFieldsQ(result, i, 2);
+    setFieldQ(result, i, 0, field0, res->string);
+    setFieldQ(result, i, 1, field1, p);
+    destroyPair(res);
+    free(p);
+    i--;
+  }
+  destroyHeap(h);
+  free(field0); free(field1);
+}
+
 void Q7 (int n, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q7(n,catalogs,result);
 }
@@ -387,7 +451,7 @@ OrdList *Q9(char *prefix, UsersManager *usersCatalog) {
   OrdList *result = createOrdList();
   OrdList *usersByName = getUsersByName(usersCatalog); //obtem lista ordenada por nome dos utilizadores
   int size = getOrdListSize(usersByName);
-  int i = searchDataOrdList(usersByName, prefix, prefixSearch, 0, prefixSearchBack); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
+  int i = searchDataOrdList(usersByName, prefix, prefixSearch, NULL, 0, prefixSearchBack); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
   if (i == -1) return result; //se não existir nomes começados pelo prefixo dado
   User *user = getDataOrdList(usersByName, i);
   int validPrefix = isPrefix(prefix, user), firstLetterCheck = sameFirstLetter(prefix, user);
