@@ -97,6 +97,7 @@ char * getIdResultQ2(ResultQ2* data){
 
 //liberta dados do tipo ResultQ2
 void destroyResultQ2(void * data){
+  free(((ResultQ2*)data)->id);
   free((ResultQ2*)data);
 }
 
