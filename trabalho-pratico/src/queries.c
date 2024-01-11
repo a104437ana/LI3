@@ -416,8 +416,8 @@ void Q7 (int n, Catalogs* catalogs, QueryResult* result) {
 }
 
 //quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
-int Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs) {
-  if (doesHotelExist(id, catalogs) == 0) return -1; //se o hotel não existir
+void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResult* result) {
+  if (doesHotelExist(id, catalogs) == 0) return; //se o hotel não existir
   Date *begin = string_to_date(beginDate);
   Date *end = string_to_date(endDate);
   sortHotelReservationsByDate(id, catalogs);
@@ -428,10 +428,16 @@ int Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs) {
     total += price;
     price = 0;
   }
-
+  setNumberResults(result,1);
+  setNumberFieldsQ(result, 0, 1);
+  char* totalS =  malloc(sizeof(char)*20);
+  sprintf(totalS, "%d", total); 
+  char * field0 = strdup("revenue");
+  setFieldQ(result, 0, 0, field0, totalS);
+  free(totalS);
+  free(field0);
   destroyDate(begin);
   destroyDate(end);
-  return total;
 }
 ////quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
 //int Q8(char *id, Date *begin, Date *end, Catalogs *catalogs) {
@@ -447,22 +453,34 @@ int Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs) {
 //}
 
 //query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
-OrdList *Q9(char *prefix, UsersManager *usersCatalog) {
-  OrdList *result = createOrdList();
+void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
+  //OrdList *result = createOrdList();
+  UsersManager *usersCatalog = getUsersCatalog(catalogs);
   OrdList *usersByName = getUsersByName(usersCatalog); //obtem lista ordenada por nome dos utilizadores
   int size = getOrdListSize(usersByName);
   int i = searchDataOrdList(usersByName, prefix, prefixSearch, NULL, 0, prefixSearchBack); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
-  if (i == -1) return result; //se não existir nomes começados pelo prefixo dado
+  if (i == -1) return; //se não existir nomes começados pelo prefixo dado
   User *user = getDataOrdList(usersByName, i);
   int validPrefix = isPrefix(prefix, user), firstLetterCheck = sameFirstLetter(prefix, user);
+  int j = 0;
   while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado
     user = getDataOrdList(usersByName, i);
     validPrefix = isPrefix(prefix, user);
     firstLetterCheck = sameFirstLetter(prefix, user);
-    if (validPrefix == 0)
-      addOrdList(result, user); //adiciona à lista resultado
+    if (validPrefix == 0) {
+      //addOrdList(result, user); adiciona à lista resultado
+      addResult(result, j);
+      setNumberFieldsQ(result,j, 2);
+      char* id = getUserId(user);
+      char* name = getName(user);
+      char* field0 = strdup("id");
+      char* field1 = strdup("name");
+      setFieldQ(result,j,0,field0,id);
+      setFieldQ(result,j,1,field1,name);
+      free(field0); free(field1); 
+      free(id); free(name);
+      j++;
+    }
     i++;
   }
-
-  return result;
 }

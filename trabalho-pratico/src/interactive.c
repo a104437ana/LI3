@@ -210,8 +210,8 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
         case 9: mvprintw(0, 0, "Query 9 - Lists all users whose names start with the prefix provided as an argument, sorted by name in ascending order.");
                 mvprintw(2, 0, "Enter the prefix: ");
                 string1 = get_string(max_row,max_col,2,18,60);
-                command = malloc(4+strlen(string1));
-                sprintf(command,"%d %s",query,string1);
+                command = malloc(6+strlen(string1));
+                sprintf(command,"%d \"%s\"",query,string1);
                 break;
         case 10: mvprintw(0, 0, "Query 10 - Presents various overall metrics of the application.");
                 mvprintw(2,0, "Navigate options using the arrow keys (up and down). Press Enter to select your choice.");
@@ -343,10 +343,11 @@ int pagesNumber (QueryResult* result, int max_row) {
 
 void interactive_mode(int max_row, int max_col,int row,int col, Catalogs* catalogs) {
     char* path = get_string(max_row,max_col,row,col,500);
-    mvprintw(4,0, "Parsing files. Please wait...");
+    mvprintw(4,0, "Parsing files and sorting data. Please wait...");
     refresh();
     parse_all_files(path,catalogs);
     free(path);
+    sortCatalogs(catalogs);
     QueryResult * result = createQResult();
     int exit = get_querie(max_row,max_col,row,col,catalogs,result);
     while (!exit) {

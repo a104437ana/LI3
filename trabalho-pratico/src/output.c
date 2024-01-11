@@ -126,7 +126,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Cat
   fclose(file);
 }
 
-//imprime o output da query 8
+/*imprime o output da query 8
 void printOutputQ8 (char format_flag, int output, int i){
   if (output==-1) return; //se o id não existir, não escreve nada
   char path[100];
@@ -140,9 +140,9 @@ void printOutputQ8 (char format_flag, int output, int i){
    fprintf (file,"%d\n", output);
   }
   fclose(file);
-}
+}*/
 
-//imprime o output da query 9
+/*imprime o output da query 9
 void printOutputQ9 (char format_flag, OrdList* list, int i) {
   int N = getOrdListSize(list);
   char path[100];
@@ -172,4 +172,4 @@ void printOutputQ9 (char format_flag, OrdList* list, int i) {
      }
   }
   fclose(file);
-}
+}*/

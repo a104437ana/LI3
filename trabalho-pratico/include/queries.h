@@ -96,12 +96,12 @@ void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result);
 
 void Q7 (int n, Catalogs* catalogs, QueryResult* result);
 
-int Q8(char *id, char *begin, char *end, Catalogs *catalogs);
+void Q8(char *id, char *begin, char *end, Catalogs *catalogs, QueryResult* result);
 
 int same_prefix (char* prefix, char* name);
 //int bigger_user (char* id1, char* id2, char* name1, char* name2);
 //void ord_list_by_name (OrdList* list, int begin, int end,UsersManager *usersCatalog);
-OrdList* Q9 (char* prefix,UsersManager *usersCatalog);
+void Q9(char *prefix, Catalogs* catalogs, QueryResult* result);
 
 void Q10(int year, char month);
 

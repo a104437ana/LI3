@@ -87,10 +87,12 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
     else if (command->query_id==6){
      if (command->n_args<2) return 0;
      else{
+      /*
         QueryResult * result = createQResult();
         Q6(atoi(command->args[0]), atoi(command->args[1]), catalogs, result);
         printQueryOutput(i,command->format_flag, result);
         destroyQResult(result);
+      */
         return 6;
      }
    }
@@ -111,9 +113,14 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
      if (command->n_args<3) return 0;
      else{
       if (i != 0) {
-         int output = Q8(command->args[0], command->args[1], command->args[2], catalogs);
-         printOutputQ8(command->format_flag, output, i);
+         QueryResult * result = createQResult();
+         //int output = 
+         Q8(command->args[0], command->args[1], command->args[2], catalogs, result);
+         //printOutputQ8(command->format_flag, output, i);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
       }
+      else Q8(command->args[0], command->args[1], command->args[2], catalogs, result2);
         return 8;
      }
    }
@@ -121,11 +128,16 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
      if (command->n_args==0) return 0;
      else{
       if (i != 0) {
-         UsersManager *usersCatalog = getUsersCatalog(catalogs);
-        OrdList* list = Q9(command->args[0],usersCatalog);
-        printOutputQ9(command->format_flag, list, i);
-        destroyOnlyOrdList(list);
+         QueryResult * result = createQResult();
+         //UsersManager *usersCatalog = getUsersCatalog(catalogs);
+        //OrdList* list = 
+         Q9(command->args[0],catalogs,result);
+         printQueryOutput(i,command->format_flag,result);
+         destroyQResult(result);
+        //printOutputQ9(command->format_flag, list, i);
+        //destroyOnlyOrdList(list);
       }
+      else Q9(command->args[0],catalogs,result2);
         return 9;
      }
    }
