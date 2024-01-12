@@ -118,7 +118,7 @@ void sortAirportFlightsByDepartureDate_catalog(char *id, Catalogs* catalogs) {
 //ordena os voos do aeroporto
 void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs) {
     Airport *airport = getAirportCatalog(catalogs->airportsCatalog, key, id);
-    OrdList *list = getAirportOrdList(airport);
+    OrdList *list = getAirportOriginOrdList(airport);
     if (!isOrdered(list)) {
         quickSort(list, 0, getOrdListSize(list)-1, compareFlightsIds, 0); //ordena por ids
         radixSortFlightDate(list, catalogs); //ordena por datas
@@ -148,8 +148,8 @@ void addHotel(char *id, char *name, char stars, int cityTax, char userClassifica
     updateHotelCatalog(id, name, stars, cityTax, userClassification, id_reserv, catalogs->hotelsCatalog);
 }
 //adiciona uma reserva ao catálogo
-void addAirport(int delay, char *id, char *id_flight, Catalogs *catalogs) {
-    updateAirportCatalog(delay, id, id_flight, catalogs->airportsCatalog);
+void addAirport(int delay, char *id_origin, char *id_destination, char *id_flight, Catalogs *catalogs) {
+    updateAirportCatalog(delay, id_origin, id_destination, id_flight, catalogs->airportsCatalog);
 }
 //adiciona um passageiro ao catálogo
 //função que adiciona um utilizador à lista de passageiros de um certo voo no catálogo
@@ -364,8 +364,8 @@ int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date 
 int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs) {
     return getAirportPassengersYear_airportsCatalog(year, id, compareFlightYear_flightsCatalog, 0, (void *) catalogs->flightsCatalog, getNumberPassengers_filghtsCatalog, catalogs->airportsCatalog);
 }
-char *getNextAirportId_catalog(char *id, Catalogs *catalogs) {
-    return getNextAirportId(id, catalogs->airportsCatalog);
+char *getNextAirportId_catalog(int index, Catalogs *catalogs) {
+    return getNextAirportId(index, catalogs->airportsCatalog);
 }
 int getNumberAirports_catalog(Catalogs *catalogs) {
     return getNumberAirports_airportsCatalog(catalogs->airportsCatalog);

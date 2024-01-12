@@ -7,6 +7,7 @@
 struct airportsManager {
     Hashtable *airports;
     OrdList* airportsByMedianOfDelays;
+    int size_delays;
 };
 
 //cria um novo catálogo de aeroportos
@@ -14,22 +15,33 @@ AirportsManager *createAirportsCatalog(int size) {
     AirportsManager *airportsManager = malloc(sizeof(AirportsManager));
     airportsManager->airports = createHashtable(size);
     airportsManager->airportsByMedianOfDelays = createOrdList();
+    airportsManager->size_delays = 0;
     return airportsManager;
 }
 
 //atualiza o catálogo de aeroportos
-void updateAirportCatalog(int delay, char *id, char *id_flight, AirportsManager *airportsCatalog) {
-    unsigned int key = hashFunction(id);
-    int existsAirport = existsData(airportsCatalog->airports, key, id); //verifica se o aeroporto já existe no catálogo de aeroportos
-    Airport *airport;
-    if (existsAirport == 0) { //caso não exista cria um novo aeroporto
-        airport = createAirport(id);
-        airportsCatalog->airports = addHashtable(airportsCatalog->airports, key, airport, id); //adiciona o aeroporto ao catálogo dos aeroportos
-        addOrdList(airportsCatalog->airportsByMedianOfDelays,airport);
+void updateAirportCatalog(int delay, char *id_origin, char *id_destination, char *id_flight, AirportsManager *airportsCatalog) {
+    unsigned int key_origin = hashFunction(id_origin);
+    unsigned int key_destination = hashFunction(id_destination);
+    int existsAirportOrigin = existsData(airportsCatalog->airports, key_origin, id_origin); //verifica se o aeroporto já existe no catálogo de aeroportos
+    int existsAirportDestination = existsData(airportsCatalog->airports, key_destination, id_destination); //verifica se o aeroporto já existe no catálogo de aeroportos
+    Airport *airport_origin;
+    Airport *airport_destination;
+    if (existsAirportOrigin == 0) { //caso não exista cria um novo aeroporto
+        airport_origin = createAirport(id_origin);
+        airportsCatalog->airports = addHashtable(airportsCatalog->airports, key_origin, airport_origin, id_origin); //adiciona o aeroporto ao catálogo dos aeroportos
+        addOrdList(airportsCatalog->airportsByMedianOfDelays,airport_origin);
     } else //caso já exista
-        airport = (Airport*) getData(airportsCatalog->airports, key, id); //obtem apontador para o aeroporto do catálogo dos aeroporotos
-    addFlightToAirport(airport, id_flight); //adiciona o voo aos voos do aeroporto
-    addDelayToAirport(airport,delay);
+        airport_origin = (Airport*) getData(airportsCatalog->airports, key_origin, id_origin); //obtem apontador para o aeroporto do catálogo dos aeroporotos
+    if (existsAirportDestination == 0) { //caso não exista cria um novo aeroporto
+        airport_destination = createAirport(id_destination);
+        airportsCatalog->airports = addHashtable(airportsCatalog->airports, key_destination, airport_destination, id_destination); //adiciona o aeroporto ao catálogo dos aeroportos
+        addOrdList(airportsCatalog->airportsByMedianOfDelays,airport_destination);
+    } else //caso já exista
+        airport_destination = (Airport*) getData(airportsCatalog->airports, key_destination, id_destination); //obtem apontador para o aeroporto do catálogo dos aeroporotos
+    addFlightToAirport(airport_origin, id_flight, 1); //adiciona o voo ao aeroporto de origem
+    addFlightToAirport(airport_destination, id_flight, 0); //adiciona o voo ao aeroporto de destino
+    addDelayToAirport(airport_origin,delay);
 }
 
 //gets
@@ -42,12 +54,16 @@ Airport *getAirportCatalog(AirportsManager *airportsManager, char *id) {
 Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager) {
     return airportsManager->airports;
 }
-void sortAirports (AirportsManager* airportsManager) {
-    int n = getOrdListSize(airportsManager->airportsByMedianOfDelays);
+void sortAirports (AirportsManager* airportsCatalog) {
+    OrdList *list = airportsCatalog->airportsByMedianOfDelays;
+    int n = getOrdListSize(list);
+    int delay;
     for (int i = 0; i < n; i++) {
-        Airport* airport = getDataOrdList(airportsManager->airportsByMedianOfDelays,i);
-        sortAirportDelays (airport);
+        Airport* airport = getDataOrdList(list,i);
+        delay = sortAirportDelays (airport);
+        if (delay >= 0) airportsCatalog->size_delays++;
     }
+    setOrdListOrd(list, 1);
 }
 
 int compareDelays (void *pointer1, void *pointer2) {
@@ -83,12 +99,19 @@ int compareFlightsIds(void *id1, void *id2) {
 }
 //ordena os voos do aeroporto
 void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
-    OrdList *list = getAirportOrdList(airport);
-    if (!isOrdered(list)) {
-        quickSort(list, 0, getOrdListSize(list)-1, compareFlightsIds, 0); //ordena por ids
-        reverseOrdList(list);
-        radixSortFlightDate(list, airports); //ordena por datas
-        setOrdListOrd(list, 1);
+    OrdList *origin = getAirportOriginOrdList(airport);
+    OrdList *destination = getAirportDestinationOrdList(airport);
+    if (!isOrdered(origin)) {
+        quickSort(origin, 0, getOrdListSize(origin)-1, compareFlightsIds, 0); //ordena por ids
+        reverseOrdList(origin);
+        radixSortFlightDate(origin, airports); //ordena por datas
+        setOrdListOrd(origin, 1);
+    }
+    if (!isOrdered(destination)) {
+        quickSort(destination, 0, getOrdListSize(destination)-1, compareFlightsIds, 0); //ordena por ids
+        reverseOrdList(destination);
+        radixSortFlightDate(destination, airports); //ordena por datas
+        setOrdListOrd(destination, 1);
     }
 }
 void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, Hashtable *lookup) {
@@ -98,10 +121,11 @@ void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager
 }
 
 void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,Hashtable* lookup) {
+    toUpperS(id);
     Airport* airport = getData(airports->airports,hashFunction(id),id);
     if (airport != NULL) {   
         sortAirportFlightsByDepartureDate(airport,lookup);
-        OrdList* airportsByDate = getAirportOrdList(airport);
+        OrdList* airportsByDate = getAirportOriginOrdList(airport);
         int size = getOrdListSize(airportsByDate);
         int i = 0;
         char* id_flight;
@@ -129,7 +153,7 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
                 setNumberFieldsQ(result,j, 5);
                 char* string_date = dateToString(date);
                 char* destination = getFlightDestination(flight);
-                toUpperS(destination);
+//                toUpperS(destination);
                 char* airline = getFlightAirline(flight);
                 char* plane_model = getFlightAirplane(flight);
                 char* field0 = strdup("id");
@@ -158,24 +182,28 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
 }
 
 void airport_calalog_compute_Q7 (int n, AirportsManager *airports, QueryResult* result) {
+    if (!isOrdered(airports->airportsByMedianOfDelays))
     sortAirports(airports);
     int w = getOrdListSize(airports->airportsByMedianOfDelays);
-    if (w<n) setNumberResults (result,w); else setNumberResults (result, n);
     quickSort(airports->airportsByMedianOfDelays,0,w-1,compareDelays,0);
+    w = getNumberMedianAirports(airports);
+    if (w<n) setNumberResults (result,w); else setNumberResults (result, n);
+    char *field0 = strdup("name");
+    char *field1 = strdup("median");
     for(int i = 0; i<n && i<w; i++) {
         Airport* airport = getDataOrdList(airports->airportsByMedianOfDelays,i);
         setNumberFieldsQ(result,i, 2);
-        char* name = getAirportId(airport); char * field0 = strdup("name");
+        char* name = getAirportId(airport);
         int median = getAirportMedian(airport);
         char * medianS = malloc(sizeof(char)*10);
-        sprintf(medianS, "%d", median); char * field1 = strdup("median");
+        sprintf(medianS, "%d", median);
 
         setFieldQ(result, i, 0, field0, name); 
         setFieldQ(result, i, 1, field1, medianS); 
         
         free(name); free(medianS);
-        free(field0); free(field1);
     }
+    free(field0); free(field1);
 }
 
 //liberta espaço em memória do catálogo de aeroportos
@@ -198,12 +226,14 @@ int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFu
     Airport *airport = getData(airportsCatalog->airports, key, id);
     return getAirportPassengersYear(year, airport, compareFunction, equal, lookup, getFunction);
 }
-char *getNextAirportId(char *id, AirportsManager *airportsCatalog) {
-    int key = hashFunction(id);
-    char *nextId = (char *) getNextData(airportsCatalog->airports, key, id);
+char *getNextAirportId(int index, AirportsManager *airportsCatalog) {
+    char *nextId = (char *) getDataOrdList(airportsCatalog->airportsByMedianOfDelays, index);
     return strdup(nextId);
 }
 int getNumberAirports_airportsCatalog(AirportsManager *airportsCatalog) {
-    return getHashtableUsed(airportsCatalog->airports);
+    return getOrdListSize(airportsCatalog->airportsByMedianOfDelays);
+//    return getHashtableUsed(airportsCatalog->airports);
 }
-
+int getNumberMedianAirports(AirportsManager *airportsCatalog) {
+    return airportsCatalog->size_delays;
+}

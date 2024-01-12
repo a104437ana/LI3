@@ -40,6 +40,7 @@ void addOrdList(OrdList *ordList, void *data) {
 //função que devolve o indice da primeira ocorrência de um elemento numa lista
 int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*,void*), void *lookup, int equal, int (*searchBackFunction)(void*,void*,void*)) {
     int lower = 0, higher = list->size - 1; //limites para procura
+    if (higher == -1) return -2;
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
     void *compareData = list->data[i]; //elemento a comparar
     //enquanto os elementos não forem iguais e os limites não se cruzarem

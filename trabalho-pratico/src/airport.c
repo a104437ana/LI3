@@ -9,7 +9,8 @@
 struct airport {
     char name[4];
     double median;
-    OrdList *flightsByDepartureDate;
+    OrdList *originFlights;
+    OrdList *destinationFlights;
     int *listOfDelays;
     int maxSize_list;
     int size_list;
@@ -19,8 +20,9 @@ struct airport {
 Airport *createAirport(char *name) {
     Airport *airport = malloc(sizeof(Airport));
     memcpy(airport->name, name, 4);
-    airport->flightsByDepartureDate = createOrdList();
-    airport->median = 0.0;
+    airport->originFlights = createOrdList();
+    airport->destinationFlights = createOrdList();
+    airport->median = -1.0;
     airport->size_list = 0;
     airport->listOfDelays = malloc(sizeof(int)*500);
     airport->maxSize_list = 500;
@@ -29,9 +31,12 @@ Airport *createAirport(char *name) {
 }
 
 //adiciona voo à lista de voos de um aeroporto
-void addFlightToAirport(Airport *airport, char *id_flight) {
+void addFlightToAirport(Airport *airport, char *id_flight, int origin) {
     char *flight = strdup(id_flight);
-    addOrdList(airport->flightsByDepartureDate, flight);
+    if (origin)
+    addOrdList(airport->originFlights, flight);
+    else
+    addOrdList(airport->destinationFlights, flight);
 }
 
 void addDelayToAirport(Airport* airport, int delay) {
@@ -44,8 +49,12 @@ void addDelayToAirport(Airport* airport, int delay) {
 }
 
 //obtem a lista de voos do aeroporto
-OrdList *getAirportOrdList(Airport *airport) {
-    return airport->flightsByDepartureDate;
+OrdList *getAirportOriginOrdList(Airport *airport) {
+    return airport->originFlights;
+}
+
+OrdList *getAirportDestinationOrdList(Airport *airport) {
+    return airport->destinationFlights;
 }
 
 //gets
@@ -59,24 +68,38 @@ double getAirportMedian(Airport *airport) {
 }
 
 int getAirportListSize(Airport *airport) {
-    return getOrdListSize(airport->flightsByDepartureDate);
+    return getOrdListSize(airport->originFlights);
 }
 
 int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*)) {
-    OrdList *list = airport->flightsByDepartureDate;
+    OrdList *origin = airport->originFlights; //voos de origem do aeroporto
+    OrdList *destination = airport->destinationFlights; //voos de destino do aeroporto
     void *data = (void *) &year;
-    int i = searchDataOrdList(list, data, compareFunction, lookup, equal, compareFunction);
-    int passengers;
-    if (i == -1) return 0;
-    else passengers = 0;
-    int size = getOrdListSize(list);
-    int exit = 0;
-    while (i < size && !exit) {
-        char *id = (char *) getDataOrdList(list, i);
-        if (compareFunction(data, id, lookup) != equal) exit = 1;
-        else {
-            i++;
-            passengers+=getFunction(id, lookup);
+    int i = searchDataOrdList(origin, data, compareFunction, lookup, equal, compareFunction);
+    int passengers = 0, size, exit;
+    if (i >= 0) { //se não houver voos nesse ano
+        size = getOrdListSize(origin);
+        exit = 0;
+        while (i < size && !exit) {
+            char *id = (char *) getDataOrdList(origin, i);
+            if (compareFunction(data, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
+            else {
+                i++;
+                passengers+=getFunction(id, lookup); //adiona número de passageiros do voo
+            }
+        }
+    }
+    i = searchDataOrdList(destination, data, compareFunction, lookup, equal, compareFunction);
+    if (i >= 0) { //se houver voos nesse ano
+        exit = 0;
+        size = getOrdListSize(destination);
+        while (i < size && !exit) {
+            char *id = (char *) getDataOrdList(destination, i);
+            if (compareFunction(data, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
+            else {
+                i++;
+                passengers+=getFunction(id, lookup); //adiciona número de passageiros do voo
+            }
         }
     }
     return passengers;
@@ -107,8 +130,9 @@ void qsortL (int a[], int n) {
     qsortL(a+p+1, n-p-1);
 }
 
-void sortAirportDelays (Airport* airport) {
+int sortAirportDelays (Airport* airport) {
     int size = airport->size_list;
+    if (size == 0) return -1;
     qsortL(airport->listOfDelays,size);
     if (size % 2 == 0) {
         int indice1 = size / 2;
@@ -122,12 +146,14 @@ void sortAirportDelays (Airport* airport) {
         int indice = size / 2;
         airport->median = airport->listOfDelays[indice];
     }
+    return airport->median;
 }
 //sets
 
 //liberta espaço em memória do aeroporto
 void destroyAirport(void *airport) {
-    destroyOrdList(((Airport *) airport)->flightsByDepartureDate, free);
+    destroyOrdList(((Airport *) airport)->originFlights, free);
+    destroyOrdList(((Airport *) airport)->destinationFlights, free);
     free(((Airport*)airport)->listOfDelays);
     free(((Airport *) airport)->name);
 }

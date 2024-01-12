@@ -38,7 +38,7 @@ void addUser(char *id, char *name, int gender, char *country, char *passport, ch
 void addReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs);
 int addFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs);
 void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, char *id_reserv, Catalogs *catalogs);
-void addAirport(int delay, char *id, char *id_flight, Catalogs *catalogs);
+void addAirport(int delay, char *id_origin, char *id_destination, char *id_flight, Catalogs *catalogs);
 void addPassenger(char *flightId, char *userId, Catalogs *catalogs);
 int userExists(char *id, Catalogs *catalogs);
 int flightExists(char *id, Catalogs *catalogs);
@@ -88,7 +88,7 @@ int getReservationBeginMonth(void *id, void *catalogs);
 int getReservationBeginYear(void *id, void *catalogs);
 //airports
 int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs);
-char *getNextAirportId_catalog(char *id, Catalogs *catalogs);
+char *getNextAirportId_catalog(int index, Catalogs *catalogs);
 int getNumberAirports_catalog(Catalogs *catalogs);
 
 

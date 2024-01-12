@@ -11,7 +11,7 @@ typedef struct airportsManager AirportsManager;
 //cria um novo catálogo de aeroportos
 AirportsManager *createAirportsCatalog(int size);
 //atualiza o catálogo de aeroportos
-void updateAirportCatalog(int delay, char *id, char *id_flight, AirportsManager *airportsCatalog);
+void updateAirportCatalog(int delay, char *id_origin, char *id_destination, char *id_flight, AirportsManager *airportsCatalog);
 
 void sortAirports (AirportsManager* airportsManager);
 void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, Hashtable *lookup);
@@ -26,7 +26,8 @@ Airport *getAirportCatalog(AirportsManager *airportsManager, char *id);
 Hashtable *getHashtableAirportsCatalog(AirportsManager *airportsManager);
 int getAirportListSize_airportsCatalog(char *id, AirportsManager *airportsCatalog);
 int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*), AirportsManager *airportsCatalog);
-char *getNextAirportId(char *id, AirportsManager *airportsCatalog);
+char *getNextAirportId(int index, AirportsManager *airportsCatalog);
 int getNumberAirports_airportsCatalog(AirportsManager *airportsCatalog);
+int getNumberMedianAirports(AirportsManager *airportsCatalog);
 
 #endif

@@ -351,7 +351,7 @@ void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult*
 struct pairIntString {int value; char *string;};
 
 void destroyPair(void *pair) {
-  free(((struct pairIntString *) pair)->string);
+//  free(((struct pairIntString *) pair)->string);
   free((struct pairIntString *) pair);
 }
 
@@ -361,7 +361,7 @@ int comparePair(void *pair1, void *pair2, void *lookup) {
   int res = 0;
   if (p1->value > p2->value) res++;
   else if (p1->value < p2->value) res--;
-  else res = strcoll(p1->string,p2->string);
+  else res = strcoll(p1->string,p2->string) * (-1);
   return res;
 }
 
@@ -381,19 +381,20 @@ void addPair(int value, char *string, struct pairIntString *pair) {
 }
 
 void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
+  if (N == 0) return;
   int passengers, numberAirports = getNumberAirports_catalog(catalogs);
-  char *id = getNextAirportId_catalog(0, catalogs);
   Heap h = createHeap(N, comparePair, comparePairAdd, NULL, destroyPair);
-  while (numberAirports > 0) {
+  int i = 0;
+  while (i < numberAirports) {
+    char *id = getNextAirportId_catalog(i, catalogs);
     sortAirportFlightsByDepartureDate_catalog(id, catalogs);
     passengers = getAirportPassengersYear_catalog(year, id, catalogs);
     struct pairIntString *airport = malloc(sizeof(struct pairIntString));
     addPair(passengers, id, airport);
-    id = getNextAirportId_catalog(id, catalogs);
     if (addHeap(airport, h) == -1) destroyPair(airport);
-    numberAirports--;
+    i++;
   }
-  int i = getHeapUsed(h)-1;
+  i = getHeapUsed(h)-1;
   setNumberResults(result, i+1);
   char *field0 = strdup("name"), *field1 = strdup("passengers");
   while (i >= 0) {
@@ -416,7 +417,7 @@ void Q7 (int n, Catalogs* catalogs, QueryResult* result) {
 }
 
 //quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
-void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResult* result) {
+void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResult *result) {
   if (doesHotelExist(id, catalogs) == 0) return; //se o hotel não existir
   Date *begin = string_to_date(beginDate);
   Date *end = string_to_date(endDate);
@@ -428,16 +429,17 @@ void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResul
     total += price;
     price = 0;
   }
-  setNumberResults(result,1);
+
+  char *field0 = strdup("revenue");
+  char *revenue = malloc(sizeof(char)*10);
+  sprintf(revenue, "%d", total);
+  setNumberResults(result, 1);
   setNumberFieldsQ(result, 0, 1);
-  char* totalS =  malloc(sizeof(char)*20);
-  sprintf(totalS, "%d", total); 
-  char * field0 = strdup("revenue");
-  setFieldQ(result, 0, 0, field0, totalS);
-  free(totalS);
-  free(field0);
+  setFieldQ(result, 0, 0, field0, revenue);
+
   destroyDate(begin);
   destroyDate(end);
+  free(field0); free(revenue);
 }
 ////quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
 //int Q8(char *id, Date *begin, Date *end, Catalogs *catalogs) {
@@ -459,7 +461,7 @@ void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
   OrdList *usersByName = getUsersByName(usersCatalog); //obtem lista ordenada por nome dos utilizadores
   int size = getOrdListSize(usersByName);
   int i = searchDataOrdList(usersByName, prefix, prefixSearch, NULL, 0, prefixSearchBack); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
-  if (i == -1) return; //se não existir nomes começados pelo prefixo dado
+  if (i < 0) return; //se não existir nomes começados pelo prefixo dado
   User *user = getDataOrdList(usersByName, i);
   int validPrefix = isPrefix(prefix, user), firstLetterCheck = sameFirstLetter(prefix, user);
   int j = 0;
