@@ -56,7 +56,41 @@ char* get_string (int max_row, int max_col,int min_row,int min_col, int n) {
     return path;
 }
 
-int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catalogs,QueryResult* result) {
+int get_option (int first_x, int last_option) {
+    int x = first_x;
+    int y = 1;
+    int option = 1;
+    mvaddch(x, y, 'x' | A_BOLD);
+    move(x,y);
+    int exit = 0;
+    int key;
+    while (exit == 0) {
+        key = getch();
+        switch (key) {
+            case KEY_UP: mvaddch(x, y, ' ');
+                         if (x != first_x) {
+                            option--;
+                            x-=2;
+                         }
+                         mvaddch(x, y, 'x' | A_BOLD);
+                         move(x,y);
+                         break;
+            case KEY_DOWN: mvaddch(x, y, ' ');
+                           if (option != last_option) {
+                            option++;
+                            x+=2;
+                           }
+                           mvaddch(x, y, 'x' | A_BOLD);
+                           move(x,y);
+                           break;
+            case '\n': exit=1;
+                       break;
+        }
+    }
+    return option;
+}
+
+int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result) {
     int exit = 0;
     clear();
 
@@ -73,40 +107,13 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
     mvprintw(22, 0, "   Query 10 - Presents various overall metrics of the application.");
     mvprintw(24, 0, "   Exit the program.");
 
-
-    mvaddch(4, 1, 'x' | A_BOLD);
-    move (4,1);
-    int key;
-    int x = 4;
-    int y = 1;
-    int query = x;
-    while (exit == 0) {
-        key = getch();
-        switch (key) {
-            case KEY_UP: mvaddch(x, y, ' ');
-                         move(x,y);
-                         if (x != 4) x-=2;
-                         mvaddch(x, y, 'x' | A_BOLD);
-                         move(x,y);
-                         query = x;
-                         break;
-            case KEY_DOWN: mvaddch(x, y, ' ');
-                           move(x,y);
-                           if (x != 24) x+=2; 
-                           mvaddch(x, y, 'x' | A_BOLD);
-                           move(x,y);
-                           query = x;
-                           break;
-            case '\n': query /= 2; exit=1; break;
-        }
-    }
+    int query = get_option(4,11);
     clear();
     char* string1 = NULL;
     char* string2 = NULL;
     char* string3 = NULL;
     char* command = NULL;
-    int query2;
-    query--;
+    int option;
     switch(query) {
         case 1: mvprintw(0, 0, "Query 1 - Lists the summary of a user, flight, or reservation.");
                 mvprintw(2, 0, "Enter the ID: ");
@@ -121,42 +128,15 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
                 mvprintw(6,0, "   Only flights.");
                 mvprintw(8,0, "   Only reservations.");
                 mvprintw(10,0, "   Both.");
-                mvaddch(6, 1, 'x' | A_BOLD);
-                move (6,1);
-                x = 6;
-                y = 1;
-                query2 = x;
-                exit = 0;   
-                while (exit == 0) {
-                    key = getch();
-                    switch (key) {
-                        case KEY_UP: mvaddch(x, y, ' ');
-                                     move(x,y);
-                                     if (x != 6) x-=2;
-                                     mvaddch(x, y, 'x' | A_BOLD);
-                                     move(x,y);
-                                     query2 = x;
-                                     break;
-                        case KEY_DOWN: mvaddch(x, y, ' ');
-                                       move(x,y);
-                                       if (x != 10) x+=2; 
-                                       mvaddch(x, y, 'x' | A_BOLD);
-                                       move(x,y);
-                                       query2 = x;
-                                       break;
-                        case '\n': query2 /= 2; exit=1; break;
-                        case 27: query2 = 0; exit = 1;
-                                    break;
-                        }
-                }
-                switch(query2) {
-                    case 3: command = malloc(12+strlen(string1));
+                option = get_option(6,3);
+                switch(option) {
+                    case 1: command = malloc(12+strlen(string1));
                             sprintf(command,"%d %s flights",query,string1);
                             break;
-                    case 4: command = malloc(17+strlen(string1));
+                    case 2: command = malloc(17+strlen(string1));
                             sprintf(command,"%d %s reservations",query,string1);
                             break;
-                    case 5: command = malloc(4+strlen(string1));
+                    case 3: command = malloc(4+strlen(string1));
                             sprintf(command,"%d %s",query,string1);
                             break;
                 }
@@ -218,38 +198,11 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
                 mvprintw(4,0, "   All years.");
                 mvprintw(6,0, "   One specific year.");
                 mvprintw(8,0, "   One specific month.");
-                mvaddch(4, 1, 'x' | A_BOLD);
-                move (4,1);
-                x = 4;
-                y = 1;
-                query2 = x;
-                exit = 0;   
-                while (exit == 0) {
-                    key = getch();
-                    switch (key) {
-                        case KEY_UP: mvaddch(x, y, ' ');
-                                     move(x,y);
-                                     if (x != 4) x-=2;
-                                     mvaddch(x, y, 'x' | A_BOLD);
-                                     move(x,y);
-                                     query2 = x;
-                                     break;
-                        case KEY_DOWN: mvaddch(x, y, ' ');
-                                       move(x,y);
-                                       if (x != 8) x+=2; 
-                                       mvaddch(x, y, 'x' | A_BOLD);
-                                       move(x,y);
-                                       query2 = x;
-                                       break;
-                        case '\n': query2 /= 2; exit=1; break;
-                        case 27: query2 = 0; exit = 1;
-                                    break;
-                        }
-                }
-                if (query2 != 2) {
+                option = get_option(4,3);
+                if (option != 1) {
                     mvprintw(10,0, "Enter the year: ");
                     string1 = get_string(max_row,max_col,10,16,4);
-                    if (query2 == 4) {
+                    if (option == 3) {
                         mvprintw(11,0, "Enter the month: ");
                         string2 = get_string(max_row,max_col,11,17,2);
                         command = malloc(5+strlen(string1)+strlen(string2));
@@ -265,11 +218,9 @@ int get_querie (int max_row, int max_col,int min_row,int min_col,Catalogs* catal
                     sprintf(command,"%d",query);
                 }
                 break;
-        default: break;
+        case 11: break;
     }
-    //processCommand(parseCommandLine(command),1,1,2,3,4,catalogs,result);
     if (query != 11) {
-        exit = 0;
         printw("\n\nExecuting query. Please wait...");
         refresh();
         Command* c = parseCommandLine(command);
@@ -341,15 +292,17 @@ int pagesNumber (QueryResult* result, int max_row) {
     return page;
 }
 
-void interactive_mode(int max_row, int max_col,int row,int col, Catalogs* catalogs) {
-    char* path = get_string(max_row,max_col,row,col,500);
+void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
+    mvprintw(0, 0, "Welcome to Interactive Mode!\n\nEnter the path of the dataset: ");
+    refresh();
+    char* path = get_string(max_row,max_col,2,31,500);
     mvprintw(4,0, "Parsing files and sorting data. Please wait...");
     refresh();
     parse_all_files(path,catalogs);
     free(path);
     sortCatalogs(catalogs);
     QueryResult * result = createQResult();
-    int exit = get_querie(max_row,max_col,row,col,catalogs,result);
+    int exit = get_querie(max_row,max_col,catalogs,result);
     while (!exit) {
         clear();
         mvprintw(0,0, " <  Previous page (Press Left)");
@@ -391,7 +344,7 @@ void interactive_mode(int max_row, int max_col,int row,int col, Catalogs* catalo
         }
         destroyQResult(result);
         result = createQResult();
-        exit = get_querie(max_row,max_col,row,col,catalogs,result);
+        exit = get_querie(max_row,max_col,catalogs,result);
     }
     destroyQResult(result);
 }

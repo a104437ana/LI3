@@ -50,14 +50,8 @@ int main (int argc, char** argv) {
 
     int max_row, max_col;
     getmaxyx(stdscr, max_row, max_col);
-
-    mvprintw(0, 0, "Welcome to Interactive Mode!\n\nEnter the path of the dataset: ");
-
-    refresh();
-    int row, col;
-    getyx(stdscr,row,col);
-
-    interactive_mode(max_row,max_col,row,col,catalogs);
+    
+    interactive_mode(max_row,max_col,catalogs);
 
     endwin(); //termina ncurses
     }
