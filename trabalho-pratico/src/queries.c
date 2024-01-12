@@ -353,7 +353,7 @@ void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult*
 struct pairIntString {int value; char *string;};
 
 void destroyPair(void *pair) {
-//  free(((struct pairIntString *) pair)->string);
+  free(((struct pairIntString *) pair)->string);
   free((struct pairIntString *) pair);
 }
 
