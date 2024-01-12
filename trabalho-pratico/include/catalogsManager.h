@@ -28,6 +28,13 @@ void sortAirportCatalog(Catalogs *catalogs);
 void sortUserList(char *id, Catalogs *catalogs);
 //ordena as reservas do hotel
 void sortHotelReservationsByDate(char *id, Catalogs *catalogs);
+
+void sortReservationsByBeginDate(Catalogs *catalogs);
+void sortFlightsByDepartureDate(Catalogs * catalogs);
+void radixSortDeparture(OrdList *list, void *lookupTable);
+void sortUsersByAccountCreation(Catalogs *catalogs);
+void radixSortAccountCreation(OrdList *list, void *lookupTable);
+
 //ordena os voos do aeroporto
 //void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs);
 void sortAirportFlightsByDepartureDate_catalog(char *id, Catalogs* catalogs);
@@ -67,6 +74,8 @@ void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,
 
 void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result);
 
+Result * catalogs_compute_Q10(int year, int month, int day, Catalogs* catalogs);
+
 //gets
 //user
 int getAccountStatus(char *id, Catalogs *catalogs);
@@ -92,10 +101,19 @@ int getHotelReservPriceBetweenDates(char *id, int index, int *price, Date *begin
 int getReservationBeginDay(void *id, void *catalogs);
 int getReservationBeginMonth(void *id, void *catalogs);
 int getReservationBeginYear(void *id, void *catalogs);
+<<<<<<< HEAD
 //airports
 int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs);
 char *getNextAirportId_catalog(int index, Catalogs *catalogs);
 int getNumberAirports_catalog(Catalogs *catalogs);
 
+=======
+int getFlightDepartureDay(void *id, void *catalogs);
+int getFlightDepartureMonth(void *id, void *catalogs);
+int getFlightDepartureYear(void *id, void *catalogs);
+int getUserAccountCreationDay(void *id, void *catalogs);
+int getUserAccountCreationMonth(void *id, void *catalogs);
+int getUserAccountCreationYear(void *id, void *catalogs);
+>>>>>>> 117138a (Query 10 - incompleta)
 
 #endif

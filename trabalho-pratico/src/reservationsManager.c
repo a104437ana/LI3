@@ -7,11 +7,13 @@
 
 struct reservationsManager {
     Hashtable *reservations;
+    OrdList * reservationsByBeginDate;
 };
 //função que cria um novo catálogo de reservas
 ReservationsManager *createReservsCatalog(int size) {
     ReservationsManager *reservationsManager = malloc(sizeof(ReservationsManager));
     reservationsManager->reservations = createHashtable(size);
+    reservationsManager->reservationsByBeginDate = createOrdList();
     return reservationsManager;
 }
 //função que adiciona uma reserva ao catálogo de reservas
@@ -20,12 +22,18 @@ void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, ch
     unsigned int key = hashFunction(id);
     Reservation *reservation = createReservation(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification);
     reservationsCatalog->reservations = addHashtable(reservationsCatalog->reservations, key, reservation, id);
+    addOrdList(reservationsCatalog->reservationsByBeginDate, strdup(id));
+}
+
+OrdList * getReservByBeginDate (ReservationsManager *reservations){
+    return (reservations->reservationsByBeginDate);
 }
 
 //função que liberta o espaço em memória alocado pelo catálogo de reservas
 void destroyreservationsCatalog(ReservationsManager *reservationsManager) {
     if (reservationsManager == NULL) return;
     destroyHashtable(reservationsManager->reservations, destroyReservation);
+    destroyOnlyOrdList(reservationsManager->reservationsByBeginDate);
     free(reservationsManager);
 }
 
@@ -65,6 +73,47 @@ char * reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservatio
         }
     }
     return hotel_id;
+}
+
+int getReservationsQ10(int year, int month, int day, ReservationsManager * reservations){
+    int i; int res = 0; char * id;
+    int size = getOrdListSize(reservations->reservationsByBeginDate);
+    OrdList * list = reservations->reservationsByBeginDate;
+    if (day!=-1){
+        for (i=0; i<size; i++){
+            id = strdup(getDataOrdList(list, i));
+            Reservation* reservation = getData(getHashtableReservCatalog(reservations),hashFunction(id),id);
+            if (getReservBeginYear(reservation)==year){
+                if (getReservBeginMonth(reservation)==month){
+                    if (getReservBeginDay(reservation)==day) res++;
+                    else if (getReservBeginDay(reservation)>day) break;
+                }
+                else if (getReservBeginMonth(reservation)>month) break;
+            }
+            else if (getReservBeginYear(reservation)>year) break;
+        }
+    }
+    else if (month!=-1){
+        for (i=0; i<size; i++){
+            id = strdup(getDataOrdList(list, i));
+            Reservation* reservation = getData(getHashtableReservCatalog(reservations),hashFunction(id),id);
+            if (getReservBeginYear(reservation)==year){
+                if (getReservBeginMonth(reservation)==month) res++;
+                else if (getReservBeginMonth(reservation)>month) break;
+            }
+            else if (getReservBeginYear(reservation)>year) break;
+        }
+    }
+    else{
+        for (i=0; i<size; i++){
+            id = strdup(getDataOrdList(list, i));
+            Reservation* reservation = getData(getHashtableReservCatalog(reservations),hashFunction(id),id);
+            if (getReservBeginYear(reservation)==year) res++;
+            else if (getReservBeginYear(reservation)>year) break;
+        }
+    }
+    free(id);
+    return res;
 }
 
 //gets

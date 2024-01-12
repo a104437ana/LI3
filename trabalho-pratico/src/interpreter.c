@@ -140,30 +140,72 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
         return 9;
      }
    }
-    /*else if (command->query_id==10){
-      // Q10(atoi(command->args[0]), command->args[1]); //confirmar o que recebe
-      return;
-   }*/
+  // else if (command->query_id==10){
+  //    if (command->n_args==0){
+  //          if (i != 0) {
+  //             QueryResult * result = createQResult();
+  //             Q10(-1,-1,catalogs,result);
+  //             printQueryOutput(i,command->format_flag,result);
+  //             destroyQResult(result);
+  //          }
+  //          else Q10(-1,-1,catalogs,result2);
+  //          return 10;
+  //    }
+  //    else if (command->n_args==1){
+  //          if (i != 0) {
+  //             QueryResult * result = createQResult();
+  //             Q10(atoi(command->args[0]), -1,catalogs,result);
+  //             printQueryOutput(i,command->format_flag,result);
+  //             destroyQResult(result);
+  //          }
+  //          else Q10(atoi(command->args[0]), -1,catalogs,result2);
+  //          return 10;
+  //    }
+  //    else{
+  //          if (i != 0) {
+  //             QueryResult * result = createQResult();
+  //             Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result);
+  //             printQueryOutput(i,command->format_flag,result);
+  //             destroyQResult(result);
+  //          }
+  //          else Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result2);
+  //          return 10;
+  //    }
+  // }
     else return 0;
 }
 
 //lê uma linha do ficheiro de comandos e devolve um comando
 Command* parseCommandLine (char* line){
     Command* command = malloc(sizeof(Command));
-    command->query_id= line[0]-'0';
-    command->format_flag = '\0';
-    command->n_args=0;
-    int j;
+    command->n_args=0; int j; int i;
+    if (line[1] == ' '){ //id da query só tem um dígito e não tem format flags
+      command->query_id= line[0]-'0';
+      command->format_flag = '\0';
+      i=1; //início dos argumentos
+    }
+    else if (line[1]=='0'){ //id da query é 10
+      command->query_id = 10;
+      if (line[2]!=' '){ //tem format flags
+         command->format_flag = line[2];
+         i=3;
+      }
+      else{ //não tem format flags
+         command->format_flag = '\0';
+         i = 2;
+      }
+    }
+    else{ //id da query só tem um dígito e tem format flags
+       command->query_id= line[0]-'0';
+       command->format_flag = line[1];
+       i=2; //início dos argumentos
+    }
+
     //inicializa os argumentos
     for (j=0; j<100; j++) command->args[0][j]='\0';
     for (j=0; j<100; j++) command->args[1][j]='\0';
     for (j=0; j<100; j++) command->args[2][j]='\0';
-    int i;
-    if (line[1]!=' '){
-       command->format_flag = line[1];
-       i=2; //início dos argumentos
-    }
-    else i=1;
+
     while(i<strlen(line)){
      while(line[i]==' ') i++;
      if (line[i]=='\"'){ //lê um argumento delimitado por aspas

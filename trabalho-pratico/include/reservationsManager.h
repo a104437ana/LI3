@@ -19,9 +19,11 @@ void printReservations(ReservationsManager *reservationsManager);
 void destroyreservationsCatalog(ReservationsManager *reservationsManager);
 
 char* reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservationsManager, QueryResult* result);
+int getReservationsQ10(int year, int month, int day, ReservationsManager * reservations);
 
 //gets
 Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
+OrdList * getReservByBeginDate (ReservationsManager *reservations);
 int getReservPriceNoTax(char *id, ReservationsManager *reservationsCatalog);
 int getReservPriceLimits(char *id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd);
 int getBReserv(int time, char *id, ReservationsManager *reservationsCatalog);

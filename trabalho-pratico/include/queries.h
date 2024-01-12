@@ -103,6 +103,6 @@ int same_prefix (char* prefix, char* name);
 //void ord_list_by_name (OrdList* list, int begin, int end,UsersManager *usersCatalog);
 void Q9(char *prefix, Catalogs* catalogs, QueryResult* result);
 
-void Q10(int year, char month);
+void Q10 (int year, int month, Catalogs* catalogs, QueryResult* qresult);
 
 #endif

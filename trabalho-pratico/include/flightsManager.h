@@ -14,10 +14,16 @@ int addFlightToCatalog(char *id, char *airline, char *airplane, char *origin, ch
 //adiciona o utilizador à lista de passageiros do voo
 void addUserToFlight(char *id_flight, char *id_user, FlightsManager *flightsCatalog);
 
+OrdList * getFlightsByDeparture(FlightsManager * flights);
+int getDepartureDayFlight(char *id, FlightsManager *flightsCatalog);
+int getDepartureMonthFlight(char *id, FlightsManager *flightsCatalog);
+int getDepartureYearFlight(char *id, FlightsManager *flightsCatalog);
+
 //liberta espaço em memória do catalogo de voos
 void destroyFlightsCatalog(FlightsManager *flightsManager);
 
 void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryResult* result);
+void getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers);
 
 //gets
 Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key, char *id);

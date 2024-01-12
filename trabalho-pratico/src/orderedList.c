@@ -98,6 +98,7 @@ void swapOrdList(OrdList *list, int i, int j) {
     list->data[i] = list->data[j];
     list->data[j] = aux;
 }
+
 //função de partição recebe uma lista os indices inferiores e superiores onde se pretende fazer uma partição
 //um elemento pivô uma função que compara dois elementos da lista e o valor de retorno dessa função caso sejam iguais
 int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int (*compareFunction)(void*,void*), int equal) {

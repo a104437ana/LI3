@@ -149,6 +149,19 @@ Date *getAccountCreation(User *user) {
     return accountCreation;
 }
 
+int getAccountCreationDay(void *user) {
+    return ((User*)user)->accountCreation->day;
+}
+
+int getAccountCreationMonth(void *user) {
+    return ((User*)user)->accountCreation->month;
+}
+
+int getAccountCreationYear(void *user) {
+    return ((User*)user)->accountCreation->year;
+}
+
+
 char *getUserId(User *user) {
     return strdup(user->id); //falta encapsulamento
 }

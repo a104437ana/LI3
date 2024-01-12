@@ -49,6 +49,7 @@ void printUsers(UsersManager *usersManager);
 void destroyUsersCatalog(UsersManager *usersManager);
 
 void user_catalog_compute_Q1 (char *id, UsersManager* usersManager,QueryResult* result);
+int getNewUsers(int year, int month, int day, UsersManager * users);
 
 //gets
 User *getUserCatalog(UsersManager *usersManager, char *id);
@@ -56,6 +57,10 @@ Hashtable *getHashtableUserCatalog(UsersManager *usersManager);
 int getNumberFlightsUser(char *id, UsersManager *usersCatalog);
 int getNumberReservationsUser(char *id, UsersManager *usersCatalog);
 OrdList *getUsersByName (UsersManager *usersManager);
+OrdList *getUsersByAccountCreation (UsersManager *usersManager);
+int getCreationDayUser(char *id, UsersManager *usersCatalog);
+int getCreationMonthUser(char *id, UsersManager *usersCatalog);
+int getCreationYearUser(char *id, UsersManager *usersCatalog);
 int getSizeUserList(int type, char *id, UsersManager *usersCatalog);
 char *getIdUserList(int *type, char* id_user, int index, UsersManager *usersCatalog);
 int getUsersByNameSize(UsersManager *usersCatalog);

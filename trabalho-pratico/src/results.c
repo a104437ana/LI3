@@ -116,6 +116,19 @@ void addResult (QueryResult * qresult, int i){
     }
 }
 
+void addSetResult (QueryResult * qresult, int i, Result * result){
+    if (i>=qresult->max_results){
+        qresult->results = realloc(qresult->results, (sizeof(Result*)*(qresult->max_results)*2));
+        qresult->max_results*=2;
+        qresult->results[i] = result;
+        qresult->number_of_results = i+1;
+    }
+    else{
+        qresult->results[i] = result;
+        qresult->number_of_results = i+1;
+    }
+}
+
 void swapResults(QueryResult *qresult, int i, int j) {
     Result *aux = qresult->results[i];
     qresult->results[i] = qresult->results[j];

@@ -30,6 +30,10 @@ int getFlightScheduleDepartureYear(void *id, void *lookupTable);
 int getFlightScheduleDepartureSeconds(void *id, void *lookupTable);
 int getFlightScheduleDepartureMinutes(void *id, void *lookupTable);
 int getFlightScheduleDepartureHours(void *id, void *lookupTable);
+int getDepartureDay(void *flight);
+int getDepartureMonth(void *flight);
+int getDepartureYear(void *flight);
+
 int getFlightSD(int time, Flight *flight);
 char *getStringFlightDateNoHours(Flight *flight);
 char *getFlightId(Flight *flight);

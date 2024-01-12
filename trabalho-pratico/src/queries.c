@@ -468,4 +468,39 @@ void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
     i++;
   }
   free(field0); free(field1); 
+
+  return result;
+}
+
+void Q10 (int year, int month, Catalogs* catalogs, QueryResult* qresult) {
+  if(year==-1){ //se a query for executada sem argumentos
+     int y = BEGIN_YEAR;
+     for ( ;y<=END_YEAR; y++){
+        Result * result = catalogs_compute_Q10(y, -1, -1, catalogs);
+        if (result!=NULL){
+            addSetResult(qresult, getNumberResults(qresult), result);
+        }
+     }
+  }
+  else if (year>=BEGIN_YEAR && year<=END_YEAR && month==-1){ //se a query for executada com um argumento e esse for um ano válido
+     int m = 1;
+     for ( ;m<=12; m++){
+        Result * result = catalogs_compute_Q10(year, m, -1, catalogs);
+        if (result!=NULL){
+            addSetResult(qresult, getNumberResults(qresult), result);
+        }
+     }
+  }
+  else if (year>=BEGIN_YEAR && year<=END_YEAR && month>=1 && month<=12){ //se a query for executada com dois argumentos e forem um ano e um mês válidos
+     int d = 1;
+     for ( ;d<=31; d++){
+        Result * result = catalogs_compute_Q10(year, month, d, catalogs);
+        if (result!=NULL){
+            addSetResult(qresult, getNumberResults(qresult), result);
+        }
+     }
+  }
+  else{
+    return;
+  }
 }

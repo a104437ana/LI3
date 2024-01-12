@@ -5,12 +5,14 @@
 struct usersManager {
     Hashtable *users;
     OrdList *usersByName;
+    OrdList *usersByAccountCreation;
 };
 //função que cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager)); //aloca espaço em memória para a estrutura do catálogo
     usersManager->users = createHashtable(size); //cria uma hastable para os utilizadores
     usersManager->usersByName = createOrdList(); //cria uma lista para os utilizadores
+    usersManager->usersByAccountCreation = createOrdList();
     return usersManager;
 }
 //função que adiciona um utilizador ao catálogo de utilizadores
@@ -18,12 +20,15 @@ void addUserToCatalog(char *id, char *name, int gender, char *country, char *pas
     int key = hashFunction(id);
     User *user = createUser(id, name, gender, country, passport, birth, accountCreation, accountStatus);
     usersCatalog->users = addHashtable(usersCatalog->users, key, user, id);
-    if (accountStatus)
+    if (accountStatus){
         addOrdList(usersCatalog->usersByName, user);
+    }
+    addOrdList(usersCatalog->usersByAccountCreation, strdup(id));
 }
 //função que adiciona um utilizador à lista de utilizadores ordenada por nome do catálogo de utilizadores
 void addUserToCatalogList(UsersManager *usersManager, User *user) {
     addOrdList(usersManager->usersByName, user);
+    addOrdList(usersManager->usersByAccountCreation, strdup(getUserId(user)));
 }
 //adiciona uma reserva à lista de reservas de um utilizador
 void addReservToUser(char *id_user, char *id_reserv, double totalSpent, UsersManager *usersCatalog) {
@@ -68,12 +73,73 @@ int existsUser(UsersManager *usersManager, char *id) {
     return 1;
 }
 
+<<<<<<< HEAD
+=======
+int getAccountStatusUser(char *id, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = getData(usersCatalog->users, key, id);
+    if (user == NULL) return -1;
+    return getUserAccountStatus(user);
+}
+
+Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
+    return usersManager->users;
+}
+
+OrdList *getUsersByName (UsersManager *usersManager) {
+    return usersManager->usersByName;
+}
+
+OrdList *getUsersByAccountCreation (UsersManager *usersManager) {
+    return usersManager->usersByAccountCreation;
+}
+int getCreationDayUser(char *id, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = getData(usersCatalog->users, key, id);
+    return getAccountCreationDay(user);
+}
+int getCreationMonthUser(char *id, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = getData(usersCatalog->users, key, id);
+    return getAccountCreationMonth(user);
+}
+int getCreationYearUser(char *id, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = getData(usersCatalog->users, key, id);
+    return getAccountCreationYear(user);
+}
+
+/*
+OrdList *getOrdListUser (UsersManager *usersManager) {
+    return usersManager->usersId;
+}
+*/
+int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
+    int key = hashFunction(id);
+    User *user = getData(usersCatalog->users, key, id);
+    int res = 0;
+    if (type == 0)
+        res = getUListSize(user);
+    else if(type == 1)
+        res = getNumberFlights(user);
+    else if (type == 2)
+        res = getNumberReservations(user);
+    return res;
+}
+char *getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
+    int key = hashFunction(id_user);
+    User *user = getData(usersCatalog->users, key, id_user);
+    return getUListId(type, user, index);
+}
+
+>>>>>>> 117138a (Query 10 - incompleta)
 //função que liberta o espaço em memória alocado pelo catálogo de utilizadores
 void destroyUsersCatalog(UsersManager *usersManager) {
     if (usersManager == NULL) return; //se o catálogo não existir
     destroyHashtable(usersManager->users, destroyUser); //liberta a hashtable de utilizadores
     //destroyOrdList(usersManager->usersId,destroyUserId);
     destroyOnlyOrdList(usersManager->usersByName); //liberta a lista de utilizadores
+    destroyOnlyOrdList(usersManager->usersByAccountCreation);
     free(usersManager);
 }
 
@@ -202,4 +268,48 @@ char *getIdUsersByName(int index, UsersManager *usersCatalog) {
 char *getNameUsersByName(int index, UsersManager *usersCatalog) {
     User *user = getDataOrdList(usersCatalog->usersByName, index);
     return getName(user);
+}
+int getNewUsers(int year, int month, int day, UsersManager * users){
+    int i; int res = 0; char * id;
+    int size = getOrdListSize(users->usersByAccountCreation);
+    OrdList * list = users->usersByAccountCreation;
+    Date * accCre;
+    if (day!=-1){
+        for (i=0; i<size; i++){
+            id = strdup(getDataOrdList(list, i));
+            User* user = getData(getHashtableUserCatalog(users),hashFunction(id),id);
+            accCre = getAccountCreation(user);
+            if (getYear(accCre)==year){
+                if (getMonth(accCre)==month){
+                    if (getDay(accCre)==day) res++;
+                    else if (getDay(accCre)>day) break;
+                }
+                else if (getMonth(accCre)>month) break;
+            }
+            else if (getYear(accCre)>year) break;
+        }
+    }
+    else if (month!=-1){
+        for (i=0; i<size; i++){
+            id = strdup(getDataOrdList(list, i));
+            User* user = getData(getHashtableUserCatalog(users),hashFunction(id),id);
+            accCre = getAccountCreation(user);
+            if (getYear(accCre)==year){
+                if (getMonth(accCre)==month) res++;
+                else if (getMonth(accCre)>month) break;
+            }
+            else if (getYear(accCre)>year) break;
+        }
+    }
+    else{
+        for (i=0; i<size; i++){
+            id = strdup(getDataOrdList(list, i));
+            User* user = getData(getHashtableUserCatalog(users),hashFunction(id),id);
+            accCre = getAccountCreation(user);
+            if (getYear(accCre)==year) res++;
+            else if (getYear(accCre)>year) break;
+        }
+    }
+    free(id); destroyDate(accCre);
+    return res;
 }

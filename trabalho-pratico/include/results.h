@@ -23,6 +23,7 @@ void setNumberResults (QueryResult* qresult, int n);
 void setNumberFieldsQ (QueryResult* result, int i, int n);
 void setNumberFields (Result* result, int n);
 void addResult (QueryResult * qresult, int i);
+void addSetResult (QueryResult * qresult, int i, Result * result);
 void setField (Result * result, int i, char * name, char * data);
 void setFieldQ (QueryResult * result, int r, int i, char * name, char * data);
 
