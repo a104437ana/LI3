@@ -315,6 +315,22 @@ int getUserListSize(int type, char *id, Catalogs *catalogs) {
 char *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
     return getIdUserList(type, id_user, index, catalogs->usersCatalog);
 }
+int getUsersByNameSize_catalog(Catalogs *catalogs) {
+    return getUsersByNameSize(catalogs->usersCatalog);
+}
+int searchPrefix_catalog(char *prefix, int (*compareFunction)(void*,void*,void*), int (*compareFunctiobBack)(void*,void*,void*), Catalogs *catalogs) {
+    return searchPrefix(prefix, compareFunction, compareFunctiobBack, catalogs->usersCatalog);
+}
+int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs) {
+    return (isPrefixUser(firstLetterCheck, prefix, index, catalogs->usersCatalog));
+}
+char *getIdUsersByName_catalog(int index, Catalogs *catalogs) {
+    return getIdUsersByName(index, catalogs->usersCatalog);
+}
+char *getNameUsersByName_catalog(int index, Catalogs *catalogs) {
+    return getNameUsersByName(index, catalogs->usersCatalog);
+}
+
 //flights
 int getFlightScheduleDepartureTime(int time, char *id, Catalogs *catalogs) {
     return getSDFlight(time, id, catalogs->flightsCatalog);

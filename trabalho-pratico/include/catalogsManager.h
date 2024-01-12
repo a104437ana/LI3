@@ -72,6 +72,12 @@ void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result);
 int getAccountStatus(char *id, Catalogs *catalogs);
 int getUserListSize(int type, char *id, Catalogs *catalogs);
 char *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs);
+int getFlightScheduleDepartureTime(int time, char *id, Catalogs *catalogs);
+int getUsersByNameSize_catalog(Catalogs *catalogs);
+int searchPrefix_catalog(char *prefix, int (*compareFunction)(void*,void*,void*), int (*compareFunctiobBack)(void*,void*,void*), Catalogs *catalogs);
+int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs);
+char *getIdUsersByName_catalog(int index, Catalogs *catalogs);
+char *getNameUsersByName_catalog(int index, Catalogs *catalogs);
 //flights
 int getFlightScheduleDepartureTime(int time, char *id, Catalogs *catalogs);
 char *getStringFlightDate(char *id, Catalogs *catalogs);

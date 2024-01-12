@@ -115,7 +115,7 @@ int same_prefix (char* prefix, char* name) {
   }
   return same_prefix;
 }
-
+/*
 int sameFirstLetter(char *prefix, User *user) {
   int compare = 1;
   char *name = getName(user);
@@ -126,6 +126,7 @@ int sameFirstLetter(char *prefix, User *user) {
   free(name);
   return compare;
 }
+*/
 char *sameLenPrefix(char *prefix, char *name) {
   unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
   int i = 0, j = 0, p = 0, n = 0, e = 0;
@@ -180,6 +181,7 @@ int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
   free(name);
   return compare;
 }
+/*
 //verifica se uma string é um prefixo do nome de um utilizador
 int isPrefix(void *prefix, void *user) {
   int compare, prefixSize = strlen((char *) prefix), nameSize;
@@ -199,7 +201,7 @@ int isPrefix(void *prefix, void *user) {
 
   return compare;
 }
-
+*/
 //query 1 - retorna o utilizador, reserva ou voo com o id passado como argumento (se existir e não for um utilizador inativo)
 void Q1 (char *id, Catalogs* catalogs, QueryResult* result) {
   if(same_prefix("Book", id) == 1){ //se o id for de uma reserva
@@ -441,48 +443,29 @@ void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResul
   destroyDate(end);
   free(field0); free(revenue);
 }
-////quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
-//int Q8(char *id, Date *begin, Date *end, Catalogs *catalogs) {
-//  int size = getHotelReservationsSize(id, catalogs);
-//  int total = 0, price = 0, valid = 0;
-//
-//  for (int i=0; i<size && valid = getHotelReservPriceBetweenDates(id, i, &price, begin, end); i++) { //enquanto dia limite maior ou igual a dia atual
-//    total += price;
-//    price = 0;
-//  }
-//
-//  return total;
-//}
 
 //query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
 void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
-  //OrdList *result = createOrdList();
-  UsersManager *usersCatalog = getUsersCatalog(catalogs);
-  OrdList *usersByName = getUsersByName(usersCatalog); //obtem lista ordenada por nome dos utilizadores
-  int size = getOrdListSize(usersByName);
-  int i = searchDataOrdList(usersByName, prefix, prefixSearch, NULL, 0, prefixSearchBack); //obtem primeiro indice da lista onde o nome começa com o prefixo dado
+  int size = getUsersByNameSize_catalog(catalogs);
+  int i = searchPrefix_catalog(prefix, prefixSearch, prefixSearchBack, catalogs);
   if (i < 0) return; //se não existir nomes começados pelo prefixo dado
-  User *user = getDataOrdList(usersByName, i);
-  int validPrefix = isPrefix(prefix, user), firstLetterCheck = sameFirstLetter(prefix, user);
+  int firstLetterCheck, validPrefix = isPrefix_catalog(&firstLetterCheck, prefix, i, catalogs);
   int j = 0;
+  char* field0 = strdup("id");
+  char* field1 = strdup("name");
   while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado
-    user = getDataOrdList(usersByName, i);
-    validPrefix = isPrefix(prefix, user);
-    firstLetterCheck = sameFirstLetter(prefix, user);
+    validPrefix = isPrefix_catalog(&firstLetterCheck, prefix, i, catalogs);
     if (validPrefix == 0) {
-      //addOrdList(result, user); adiciona à lista resultado
       addResult(result, j);
       setNumberFieldsQ(result,j, 2);
-      char* id = getUserId(user);
-      char* name = getName(user);
-      char* field0 = strdup("id");
-      char* field1 = strdup("name");
+      char* id = getIdUsersByName_catalog(i, catalogs);
+      char* name = getNameUsersByName_catalog(i, catalogs);
       setFieldQ(result,j,0,field0,id);
       setFieldQ(result,j,1,field1,name);
-      free(field0); free(field1); 
       free(id); free(name);
       j++;
     }
     i++;
   }
+  free(field0); free(field1); 
 }

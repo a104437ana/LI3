@@ -55,8 +55,13 @@ User *getUserCatalog(UsersManager *usersManager, char *id);
 Hashtable *getHashtableUserCatalog(UsersManager *usersManager);
 int getNumberFlightsUser(char *id, UsersManager *usersCatalog);
 int getNumberReservationsUser(char *id, UsersManager *usersCatalog);
-//OrdList *getOrdListUser (UsersManager *usersManager);
 OrdList *getUsersByName (UsersManager *usersManager);
 int getSizeUserList(int type, char *id, UsersManager *usersCatalog);
 char *getIdUserList(int *type, char* id_user, int index, UsersManager *usersCatalog);
+int getUsersByNameSize(UsersManager *usersCatalog);
+int searchPrefix(char *prefix, int (*compareFunction)(void*,void*,void*), int (*compareFunctiobBack)(void*,void*,void*), UsersManager *usersCatalog);
+int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *usersCatalog);
+char *getIdUsersByName(int index, UsersManager *usersCatalog);
+char *getNameUsersByName(int index, UsersManager *usersCatalog);
+
 #endif
