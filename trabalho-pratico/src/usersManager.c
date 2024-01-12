@@ -73,23 +73,6 @@ int existsUser(UsersManager *usersManager, char *id) {
     return 1;
 }
 
-<<<<<<< HEAD
-=======
-int getAccountStatusUser(char *id, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
-    User *user = getData(usersCatalog->users, key, id);
-    if (user == NULL) return -1;
-    return getUserAccountStatus(user);
-}
-
-Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
-    return usersManager->users;
-}
-
-OrdList *getUsersByName (UsersManager *usersManager) {
-    return usersManager->usersByName;
-}
-
 OrdList *getUsersByAccountCreation (UsersManager *usersManager) {
     return usersManager->usersByAccountCreation;
 }
@@ -114,25 +97,7 @@ OrdList *getOrdListUser (UsersManager *usersManager) {
     return usersManager->usersId;
 }
 */
-int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
-    User *user = getData(usersCatalog->users, key, id);
-    int res = 0;
-    if (type == 0)
-        res = getUListSize(user);
-    else if(type == 1)
-        res = getNumberFlights(user);
-    else if (type == 2)
-        res = getNumberReservations(user);
-    return res;
-}
-char *getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
-    int key = hashFunction(id_user);
-    User *user = getData(usersCatalog->users, key, id_user);
-    return getUListId(type, user, index);
-}
 
->>>>>>> 117138a (Query 10 - incompleta)
 //função que liberta o espaço em memória alocado pelo catálogo de utilizadores
 void destroyUsersCatalog(UsersManager *usersManager) {
     if (usersManager == NULL) return; //se o catálogo não existir

@@ -469,7 +469,7 @@ void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
   }
   free(field0); free(field1); 
 
-  return result;
+  return;
 }
 
 void Q10 (int year, int month, Catalogs* catalogs, QueryResult* qresult) {
