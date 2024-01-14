@@ -58,48 +58,71 @@ int compare_files (char* file_path1, char* file_path2) {
 
 int main (int argc, char** argv) {
     if (argc == 4) {
+    if (valid_directory_dataset(argv[1])) {
+    if (exist_file(argv[2])) {
     //inicialização de variáveis para medição de tempo
-    struct timespec start, end, interm;
-    double elapsed, cat, par, sor, com, des;
+    struct timespec start, end;
+    //, interm;
+    double elapsed;
+    //, cat, par, sor, com, des;
     clock_gettime(CLOCK_REALTIME, &start);
     setlocale(LC_COLLATE, "en_US.UTF-8");
     //inicialização dos catalogos
     Catalogs *catalogs = createCatalogs();
-        clock_gettime(CLOCK_REALTIME, &interm);
-        cat = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &interm);
+        //cat = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
 
     parse_all_files(argv[1],catalogs);
-        clock_gettime(CLOCK_REALTIME, &end);
-        par = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &end);
+        //par = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
     sortCatalogs(catalogs);
-        clock_gettime(CLOCK_REALTIME, &interm);
-        sor = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &interm);
+        //sor = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
-    parseCommandFile(argv[2],catalogs,1);
-        clock_gettime(CLOCK_REALTIME, &end);
-        com = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+    FILE *commands_file;
+    char *command = NULL;
+    size_t command_len;
+    ssize_t command_read;
+    int nCommands = 0;
+    double *commands_time = NULL;
+    double qTime[11] = {0.0};
+    commands_file = fopen(argv[2], "r");
+    while ((command_read = getline(&command, &command_len, commands_file)) != -1) {
+        nCommands++;
+    }
+    commands_time = malloc(sizeof(double)*nCommands);
+    for (int w = 0; w < nCommands; w++) {
+        commands_time[w] = 0.0;
+    }
+    fclose(commands_file);
+    
+    free(command);
+    parseCommandFile(argv[2],catalogs,1,commands_time,qTime);
+
+        //clock_gettime(CLOCK_REALTIME, &end);
+        //com = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+
 
 //    printFullList(getUsersByName(getUsersCatalog(catalogs)));
 
     //liberta o espaço em memória dos catalogos
     destroyCatalogs(catalogs);
-        clock_gettime(CLOCK_REALTIME, &interm);
-        des = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &interm);
+        //des = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     //imprime tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);
     elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    /*
     printf("Elapsed time: %.6f seconds\n", elapsed);
         printf(" catalogs:\t %.6f seconds (%5.2f%%)\n", cat, (cat/elapsed)*100);
         printf(" parser:\t %.6f seconds (%5.2f%%)\n", par, (par/elapsed)*100);
         printf(" sort:\t\t %.6f seconds (%5.2f%%)\n", sor, (sor/elapsed)*100);
         printf(" commands:\t %.6f seconds (%5.2f%%)\n", com, (com/elapsed)*100);
         printf(" destroy:\t %.6f seconds (%5.2f%%)\n", des, (des/elapsed)*100);
-    struct rusage r_usage;
-    getrusage(RUSAGE_SELF, &r_usage);
+
     printf("Memory usage: %ld KB\n", r_usage.ru_maxrss);
-    /*
 
     nao apagar este codigo!
 
@@ -145,39 +168,41 @@ int main (int argc, char** argv) {
     char* output_file = malloc(23);
     char* our_output_file = malloc(33);
     int equal_files = 0;
+
     int i = 1;
-    int j, k;
-    float queries[10][3];
-    for (j=0; j<10; j++) {
-        for (k=0; k<3; k++)
-            queries[j][k] = 0;
-    }
-    FILE *commands_file;
+    int j;
+    int k = 0;
+    float queries[10][3] = {{0.0f, 0.0f, 0.0f}};
     commands_file = fopen(argv[2], "r");
-    char *command = NULL;
-    size_t command_len;
-    ssize_t command_read;
+    command = NULL;
+    
     strcpy(correct_output_file,argv[3]);
     sprintf(output_file, "/command%d_output.txt", i);
     strcat(correct_output_file,output_file);
-    while (exist_file(correct_output_file)) {
+    while (exist_file(correct_output_file) && (command_read = getline(&command, &command_len, commands_file)) != -1) {
+        sscanf(command, " %d", &j);
+        if (j > 0 && j<11) {
+        k = 1;
+        printf("Command %d (query %d): %s",i,j,command);
+        printf("Time taken for this command to complete: %.6f seconds\n",commands_time[i-1]);
         sprintf(our_output_file, "Resultados/command%d_output.txt", i);
         equal_files = compare_files(correct_output_file,our_output_file);
-        if ((command_read = getline(&command, &command_len, commands_file)) != -1) sscanf(command, " %d", &j);
+
         queries[j-1][2] += 1;
+
         if (equal_files == 0) {
-            printf("command%d_output.txt passou o teste",i);
-            if (i<10) printf("   ✅\n");
-            if (i>=10 && i<100) printf("  ✅\n");
-            if (i>=100) printf(" ✅\n");
+            printf("Command %d passed the test",i);
+            if (i<10) printf("   ✅\n\n");
+            if (i>=10 && i<100) printf("  ✅\n\n");
+            if (i>=100) printf(" ✅\n\n");
             queries[j-1][1] += 1;
         }
         else {
-            printf("command%d_output.txt falhou o teste",i);
+            printf("Command %d failed the test",i);
             if (i<10) printf("   ❌\n");
             if (i>=10 && i<100) printf("  ❌\n");
             if (i>=100) printf(" ❌\n");
-            printf("O primeiro erro está na linha %d...\n",equal_files);
+            printf("The first error is on line %d...\n\n",equal_files);
             if (queries[j-1][0] == 0)
                 queries[j-1][0] = i;
         }
@@ -185,21 +210,46 @@ int main (int argc, char** argv) {
         strcpy(correct_output_file,argv[3]);
         sprintf(output_file, "/command%d_output.txt", i);
         strcat(correct_output_file,output_file);
+        }
+        else i++;
     }
-    for (j=0; j<10; j++) {
-        if (queries[j][0] == 0)
-            printf("Querie %2d passou os testes ........... (%3.0f/%3.0f %3.0f%%)\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
-        else
-            printf("Querie %2d primeiro erro no comando %3.0f (%3.0f/%3.0f %3.0f%%)\n", j+1, queries[j][0], queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
+    if (i == nCommands+1 && i>1) {
+        for (j=0; j<10; j++) {
+            if (queries[j][2] != 0) {
+            k = 1;
+            printf("Query %2d total duration: %.6f\n",j+1,qTime[j]);
+            if (queries[j][0] == 0)
+                printf("Query %2d passed the tests ........... (%3.0f/%3.0f %3.0f%%) ✅\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
+            else {
+                printf("Query %2d failed the tests ........... (%3.0f/%3.0f %3.0f%%) ❌\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
+                printf("The first error is in command %d...\n",(int)queries[j][0]);
+            }
+            }
+        }
+        if (k == 1) printf("\n");
     }
     free(correct_output_file);
     free(output_file);
     free(our_output_file);
     free(command);
     fclose(commands_file);
-    printf("Elapsed time: %4.2f seconds\n", elapsed);
-    printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
+    free(commands_time);
+    if (i == nCommands+1 && i>1) {
+        printf("Elapsed time: %4.2f seconds\n", elapsed);
+        struct rusage r_usage;
+        getrusage(RUSAGE_SELF, &r_usage);
+        printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
     }
-    else printf("Erro: O programa requer exatamente 4 argumentos.\n");
+    if (i == 1 && i == nCommands+1) printf("Error: The provided file does not have any commands.\n");
+    else {
+        if (i != nCommands+1) printf("Error: The provided directory path does not correspond to the expected output files directory.\n");
+    }
+
+    }
+    else printf("Error: The provided file path does not match any existing file.\n");
+    }
+    else printf("Error: The provided directory path is not valid for the dataset.\n");
+    }
+    else printf("Error: The program requires exactly 4 arguments.\n");
     return 0;
 }

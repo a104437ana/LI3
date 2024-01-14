@@ -100,9 +100,9 @@ fazer o parsing de cada ficheiro, chamamos a função parse_file.*/
 void parse_all_files (char* directory, Catalogs *catalogs) {
 
         //inicialização de variáveis para medição de tempo
-        struct timespec start, end, interm;
-        double use, res, passc, fli, pass, des, total;
-        clock_gettime(CLOCK_REALTIME, &start);
+        //struct timespec start, end, interm;
+        //double use, res, passc, fli, pass, des, total;
+        //clock_gettime(CLOCK_REALTIME, &start);
 
     PassengersCounter* passengers_counter = createPassengersCounter(PASSENGERS_PER_FLIGHT_HASHTABLE_INI_SIZE);
 
@@ -110,44 +110,40 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
     char* file_path = malloc(size);
     char* error_file_path = malloc(35);
 
-    strcpy(file_path,directory);
-    strcat(file_path,"/users.csv");
+    sprintf(file_path,"%s/users.csv",directory);
     strcpy(error_file_path,"Resultados/users_errors.csv");
     parse_file(file_path,error_file_path,catalogs,passengers_counter);
-        clock_gettime(CLOCK_REALTIME, &interm);
-        use = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &interm);
+        //use = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
 
-    strcpy(file_path,directory);
-    strcat(file_path,"/reservations.csv");
+    sprintf(file_path,"%s/reservations.csv",directory);
     strcpy(error_file_path,"Resultados/reservations_errors.csv");
     parse_file(file_path,error_file_path,catalogs,passengers_counter);
-        clock_gettime(CLOCK_REALTIME, &end);
-        res = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &end);
+        //res = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
     count_passengers(directory,catalogs,passengers_counter);
-        clock_gettime(CLOCK_REALTIME, &interm);
-        passc = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &interm);
+        //passc = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
-    strcpy(file_path,directory);
-    strcat(file_path,"/flights.csv");
+    sprintf(file_path,"%s/flights.csv",directory);
     strcpy(error_file_path,"Resultados/flights_errors.csv");
     parse_file(file_path,error_file_path,catalogs,passengers_counter);
-        clock_gettime(CLOCK_REALTIME, &end);
-        fli = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &end);
+        //fli = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
-    strcpy(file_path,directory);
-    strcat(file_path,"/passengers.csv");
+    sprintf(file_path,"%s/passengers.csv",directory);
     strcpy(error_file_path,"Resultados/passengers_errors.csv");
     parse_file(file_path,error_file_path,catalogs,passengers_counter);
-        clock_gettime(CLOCK_REALTIME, &interm);
-        pass = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &interm);
+        //pass = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     free(file_path);
     free(error_file_path);
 
     destroyPassengersCounter(passengers_counter);
-        clock_gettime(CLOCK_REALTIME, &end);
-        des = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+        //clock_gettime(CLOCK_REALTIME, &end);
+        //des = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
         // Tamanho dos dados processados dataset normal
         // use = 10001
@@ -162,7 +158,7 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
         // res = ?
 
         //imprime tempo de execução
-        total = use + res + passc + fli + pass + des; total++;
+        //total = use + res + passc + fli + pass + des; total++;
         /*
         printf(" Parser:\n");
         printf("  user:\t\t %.6f seconds (%5.2f%%)\n", use, (use/total)*100);

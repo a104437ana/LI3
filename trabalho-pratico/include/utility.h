@@ -25,6 +25,7 @@ typedef enum gender {
 } Gender;
 //data com horas
 int exist_file (char* file_path);
+int valid_directory_dataset (char* directory);
 int base_e_expoente (int base, int expoente);
 int string_to_int (char* string);
 void remove_new_line (char* string);

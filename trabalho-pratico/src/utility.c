@@ -13,6 +13,28 @@ int exist_file (char* file_path) {
     return exist;
 }
 
+/* A função valid_directory_dataset verifica se um dada pasta tem ficheiro users.csv, reservations.csv, flights.csv, passengers.csv,
+ou seja, verifica se  é uma pasta válida para o dataset. Se sim, retorna 1. Se não, retorna 0.*/
+int valid_directory_dataset (char* directory) {
+    int r = 0;
+    int size = strlen(directory) + 18;
+    char* file_path = malloc(size);
+    sprintf(file_path,"%s/users.csv",directory);
+    if (exist_file(file_path)) {
+        sprintf(file_path,"%s/reservations.csv",directory);
+        if (exist_file(file_path)) {
+            sprintf(file_path,"%s/flights.csv",directory);
+            if (exist_file(file_path)) {
+                sprintf(file_path,"%s/passengers.csv",directory);
+                if (exist_file(file_path)) {
+                    r = 1;
+                }
+            }
+        }
+    }
+    return r;
+}
+
 /* A função base_e_expoente calcula uma potência, dado a base e o expoente, considerando apenas
 expoentes positivos ou nulos (pré-condição). A função retorna o valor calculado. */
 int base_e_expoente (int base, int expoente) {

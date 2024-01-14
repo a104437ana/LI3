@@ -230,11 +230,11 @@ Command* parseCommandLine (char* line){
 }
 
 //processa o ficheiro de comandos
-void parseCommandFile (char* name,Catalogs *catalogs, bool test){
+void parseCommandFile (char* name,Catalogs *catalogs, bool test, double* commands_time, double* qTime){
    //inicialização de variáveis para medição de tempo
    struct timespec start, end;
-   double qTime[11]; // indice 0 - tempo total, 1 - query 1, etc..
-   int j; for (j=0; j<11; j++) qTime[j] = 0;
+   //double qTime[11]; // indice 0 - tempo total, 1 - query 1, etc..
+   //int j; for (j=0; j<11; j++) qTime[j] = 0;
 
  char* line = NULL;
  ssize_t read;
@@ -249,21 +249,26 @@ void parseCommandFile (char* name,Catalogs *catalogs, bool test){
     Command *command = parseCommandLine(line);
     QueryResult * result = NULL;
     int q = processCommand(command, i,result,catalogs);
-    i++;
     free(command);
     clock_gettime(CLOCK_REALTIME, &end);
     double dif = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-    qTime[0]+=dif; if (q!=0) qTime[q]+=dif;
-    if (test==1) printf("Command %d :\t\t %.6f seconds\n", i-1, dif);
+    if (test == 1) {
+      qTime[0]+=dif; 
+      qTime[q]+=dif; 
+      commands_time[i-1] = dif;
+    }
+    i++;
+    //if (test==1) printf("Command %d :\t\t %.6f seconds\n", i-1, dif);
  }
     }
  free(line);
  if (file != NULL)
  fclose(file);
- //imprime tempo de execução
+ /*imprime tempo de execução
   printf(" Interpreter/queries:\n");
   for (j=1; j<11; j++){
     printf("Query %d :\t\t %.6f seconds (%5.2f%%)\n",j, qTime[j], (qTime[j]/qTime[0])*100);
   }
    printf("  total:\t %.6f seconds\n", qTime[0]);
+   */
 }
