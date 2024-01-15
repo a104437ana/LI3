@@ -254,7 +254,7 @@ void parseCommandFile (char* name,Catalogs *catalogs, bool test, double* command
     double dif = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     if (test == 1) {
       qTime[0]+=dif; 
-      qTime[q]+=dif; 
+      if (q != 0) qTime[q]+=dif; 
       commands_time[i-1] = dif;
     }
     i++;

@@ -163,6 +163,7 @@ int main (int argc, char** argv) {
     free(our_error_file);
 
     */
+    printf("Running the test with the assumption that the input file and output directory paths are correct:\n\n");
     int size = strlen(argv[3]) + 23;
     char* correct_output_file = malloc(size);
     char* output_file = malloc(23);
@@ -171,7 +172,6 @@ int main (int argc, char** argv) {
 
     int i = 1;
     int j;
-    int k = 0;
     float queries[10][3] = {{0.0f, 0.0f, 0.0f}};
     commands_file = fopen(argv[2], "r");
     command = NULL;
@@ -181,21 +181,17 @@ int main (int argc, char** argv) {
     strcat(correct_output_file,output_file);
     while (exist_file(correct_output_file) && (command_read = getline(&command, &command_len, commands_file)) != -1) {
         sscanf(command, " %d", &j);
-        if (j > 0 && j<11) {
-        k = 1;
         printf("Command %d (query %d): %s",i,j,command);
         printf("Time taken for this command to complete: %.6f seconds\n",commands_time[i-1]);
         sprintf(our_output_file, "Resultados/command%d_output.txt", i);
         equal_files = compare_files(correct_output_file,our_output_file);
-
-        queries[j-1][2] += 1;
-
+        if (j > 0 && j < 11) queries[j-1][2] += 1;
         if (equal_files == 0) {
             printf("Command %d passed the test",i);
             if (i<10) printf("   ✅\n\n");
             if (i>=10 && i<100) printf("  ✅\n\n");
             if (i>=100) printf(" ✅\n\n");
-            queries[j-1][1] += 1;
+            if (j > 0 && j < 11) queries[j-1][1] += 1;
         }
         else {
             printf("Command %d failed the test",i);
@@ -203,30 +199,23 @@ int main (int argc, char** argv) {
             if (i>=10 && i<100) printf("  ❌\n");
             if (i>=100) printf(" ❌\n");
             printf("The first error is on line %d...\n\n",equal_files);
-            if (queries[j-1][0] == 0)
-                queries[j-1][0] = i;
+            if (j > 0 && j < 11) {
+                if (queries[j-1][0] == 0) queries[j-1][0] = i;
+            }
         }
         i++;
         strcpy(correct_output_file,argv[3]);
         sprintf(output_file, "/command%d_output.txt", i);
         strcat(correct_output_file,output_file);
-        }
-        else i++;
     }
-    if (i == nCommands+1 && i>1) {
-        for (j=0; j<10; j++) {
-            if (queries[j][2] != 0) {
-            k = 1;
-            printf("Query %2d total duration: %.6f\n",j+1,qTime[j]);
-            if (queries[j][0] == 0)
-                printf("Query %2d passed the tests ........... (%3.0f/%3.0f %3.0f%%) ✅\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
-            else {
-                printf("Query %2d failed the tests ........... (%3.0f/%3.0f %3.0f%%) ❌\n", j+1, queries[j][1], queries[j][2], (queries[j][1] / queries[j][2]) * 100);
-                printf("The first error is in command %d...\n",(int)queries[j][0]);
-            }
-            }
+    for (j=0; j<10; j++) {
+        printf("Query %2d total duration: %.6f\n",j+1,qTime[j]);
+        if (queries[j][0] == 0)
+            printf("Query %2d passed the tests ........... (%3.0f/%3.0f %3.0f%%) ✅\n", j+1, queries[j][1], queries[j][2], (queries[j][2] == 0) ? 100 : (queries[j][1] / queries[j][2]) * 100);
+        else {
+            printf("Query %2d failed the tests ........... (%3.0f/%3.0f %3.0f%%) ❌\n", j+1, queries[j][1], queries[j][2], (queries[j][2] == 0) ? 100 : (queries[j][1] / queries[j][2]) * 100);
+            printf("The first error is in command %d...\n",(int)queries[j][0]);
         }
-        if (k == 1) printf("\n");
     }
     free(correct_output_file);
     free(output_file);
@@ -234,17 +223,10 @@ int main (int argc, char** argv) {
     free(command);
     fclose(commands_file);
     free(commands_time);
-    if (i == nCommands+1 && i>1) {
-        printf("Elapsed time: %4.2f seconds\n", elapsed);
-        struct rusage r_usage;
-        getrusage(RUSAGE_SELF, &r_usage);
-        printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
-    }
-    if (i == 1 && i == nCommands+1) printf("Error: The provided file does not have any commands.\n");
-    else {
-        if (i != nCommands+1) printf("Error: The provided directory path does not correspond to the expected output files directory.\n");
-    }
-
+    printf("\nElapsed time: %4.2f seconds\n", elapsed);
+    struct rusage r_usage;
+    getrusage(RUSAGE_SELF, &r_usage);
+    printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
     }
     else printf("Error: The provided file path does not match any existing file.\n");
     }

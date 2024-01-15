@@ -12,10 +12,12 @@
 
 char* get_string (int max_row, int max_col,int min_row,int min_col,int n);
 int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result);
-void printResultP (int line,int j,int x,QueryResult* result);
-int printResultPage (int page, int max_row,int j, QueryResult* result);
-void firstByPage (QueryResult* result, int max_row, int firstResult[]);
-int pagesNumber (QueryResult* result, int max_row);
+void printResultP_CSV (int line,int j,int x,QueryResult* result);
+void printResultPage_CSV (int page, int max_row,int j, QueryResult* result);
+void printResultP_Field (int line,int j,int x,QueryResult* result);
+void printResultPage_Field (int page, int max_row,int j, QueryResult* result);
+void firstByPage (QueryResult* result, int max_row, int firstResult[], int format);
+int pagesNumber (QueryResult* result, int max_row,int format);
 void interactive_mode(int max_row, int max_col, Catalogs* catalogs);
 
 #endif
