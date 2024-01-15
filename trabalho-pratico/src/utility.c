@@ -32,6 +32,7 @@ int valid_directory_dataset (char* directory) {
             }
         }
     }
+    free(file_path);
     return r;
 }
 

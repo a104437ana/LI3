@@ -33,13 +33,13 @@ void destroyHotelsCatalog(HotelsManager *hotelsManager) {
 }
 
 //queries
-void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryResult* result) {
+int hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryResult* result) {
     if (hotel_id == NULL) {
-        return;
+        return -1;
     }
     else {
         Hotel* hotel = getData(hotel_catalog->hotels,hashFunction(hotel_id),hotel_id);
-        if (hotel==NULL) return;
+        if (hotel==NULL) return -1;
         char* hotel_name = getHotelName(hotel); char * field1 = strdup("hotel_name");
         char hotel_stars = getHotelStars(hotel);
         char * stars = malloc(sizeof(char)*2);
@@ -51,6 +51,9 @@ void hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryR
 
         free(hotel_name); free(stars);
         free(field1); free(field2);
+
+        int city_tax = getHotelCityTax(hotel);
+        return city_tax;
     }
 }
 

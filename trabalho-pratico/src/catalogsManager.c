@@ -253,13 +253,14 @@ void catalogs_compute_Q1_flight (char *id, Catalogs* catalogs, QueryResult* resu
 }
 
 void catalogs_compute_Q1_reservation (char *id, Catalogs* catalogs, QueryResult* result) {
-    char* hotel_id = reservation_catalog_compute_Q1(id,catalogs->reservationsCatalog,result);
+    int ppn;
+    int nnights;
+    char* hotel_id = reservation_catalog_compute_Q1(id,&ppn,&nnights,catalogs->reservationsCatalog,result);
     if (hotel_id == NULL) return;
-    hotel_catalog_compute_Q1(hotel_id,catalogs->hotelsCatalog,result);
-    Reservation* reservation = getData(getHashtableReservCatalog(catalogs->reservationsCatalog),hashFunction(id),id);
-    int ppn = getReservPricePerNight(reservation); //preço por noite
-    int nnights = getReservNights(reservation); //número de noites
-    int cityTax = getHotelCityTax2(hotel_id, getHashtableHotelsCatalog(catalogs->hotelsCatalog)); //taxa turística
+    int cityTax = hotel_catalog_compute_Q1(hotel_id,catalogs->hotelsCatalog,result);
+
+    //int cityTax = getHotelCityTax2(hotel_id, getHashtableHotelsCatalog(catalogs->hotelsCatalog)); //taxa turística
+    
     double total = (ppn*nnights)+(((float)(ppn*nnights)/100)*cityTax);
     char * totalS = malloc(sizeof(char)*15);
     sprintf(totalS, "%.3f", total); char * field7 = strdup("total_price");

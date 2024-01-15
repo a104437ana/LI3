@@ -18,7 +18,7 @@ void printReservations(ReservationsManager *reservationsManager);
 //liberta o espaço em memória do catálogo de reservas
 void destroyreservationsCatalog(ReservationsManager *reservationsManager);
 
-char* reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservationsManager, QueryResult* result);
+char* reservation_catalog_compute_Q1 (char *id, int* price_per_night, int* nights, ReservationsManager* reservationsManager, QueryResult* result);
 int getReservationsQ10(int year, int month, int day, ReservationsManager * reservations);
 
 //gets

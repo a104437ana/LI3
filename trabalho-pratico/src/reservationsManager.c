@@ -38,7 +38,7 @@ void destroyreservationsCatalog(ReservationsManager *reservationsManager) {
 }
 
 //queries
-char * reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservationsManager, QueryResult* result) {
+char * reservation_catalog_compute_Q1 (char *id, int* price_per_night, int* nights, ReservationsManager* reservationsManager, QueryResult* result) {
     Reservation* reservation = getData(reservationsManager->reservations,hashFunction(id),id);
     char * hotel_id;
     if (reservation == NULL) {
@@ -70,6 +70,9 @@ char * reservation_catalog_compute_Q1 (char *id, ReservationsManager* reservatio
 
         destroyDate(begin_date); destroyDate(end_date); free(begin); free(end); free(breakfast); free(nNightsS);
         free(field0); free(field3); free(field4); free(field5); free(field6);
+
+        *price_per_night = getReservPricePerNight(reservation);
+        *nights = number_of_nights;
         }
     }
     return hotel_id;
