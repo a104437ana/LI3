@@ -77,44 +77,105 @@ char * reservation_catalog_compute_Q1 (char *id, int* price_per_night, int* nigh
     return hotel_id;
 }
 
+int compareDates_reservation(void *date, void *id, void *reservationsCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *reservations = ((ReservationsManager *) reservationsCatalog)->reservations;
+    Date * reservDate = getReservationBeginDate(id, (void *) reservations);
+    int day1 = getDay(d), month1 = getMonth(d), year1 = getYear(d);
+    int day2 = getDay(reservDate), month2 = getMonth(reservDate), year2 = getYear(reservDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else if (month1 > month2) return 1;
+    else if (month2 > month1) return -1;
+    else if (day1 > day2) return 1;
+    else if (day2 > day1) return -1;
+    else return 0;
+}
+
+int compareMonths_reservation(void *date, void *id, void *reservationsCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *reservations = ((ReservationsManager *) reservationsCatalog)->reservations;
+    Date * reservDate = getReservationBeginDate(id, (void *) reservations);
+    int month1 = getMonth(d), year1 = getYear(d);
+    int month2 = getMonth(reservDate), year2 = getYear(reservDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else if (month1 > month2) return 1;
+    else if (month2 > month1) return -1;
+    else return 0;
+}
+
+int compareYears_reservation(void *date, void *id, void *reservationsCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *reservations = ((ReservationsManager *) reservationsCatalog)->reservations;
+    Date * reservDate = getReservationBeginDate(id, (void *) reservations);
+    int year1 = getYear(d);
+    int year2 = getYear(reservDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else return 0;
+}
+
+
 int getReservationsQ10(int year, int month, int day, ReservationsManager * reservations){
-    int i; int res = 0; char * id;
-    int size = getOrdListSize(reservations->reservationsByBeginDate);
+    int res = 0;
     OrdList * list = reservations->reservationsByBeginDate;
+    Date * date = malloc(sizeof(Date));
+    date->year = year;
+    date->month = month;
+    date->day = day;
     if (day!=-1){
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            Reservation* reservation = getData(getHashtableReservCatalog(reservations),id);
-            if (getReservBeginYear(reservation)==year){
-                if (getReservBeginMonth(reservation)==month){
-                    if (getReservBeginDay(reservation)==day) res++;
-                    else if (getReservBeginDay(reservation)>day) break;
+        int i = searchDataOrdList(list, date, compareDates_reservation, reservations, 0, compareDates_reservation);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareDates_reservation(date, id, reservations) != 0) exit = 1;
+                else {
+                    i++;
+                    res++;
                 }
-                else if (getReservBeginMonth(reservation)>month) break;
             }
-            else if (getReservBeginYear(reservation)>year) break;
+            free(id);
         }
     }
     else if (month!=-1){
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            Reservation* reservation = getData(getHashtableReservCatalog(reservations),id);
-            if (getReservBeginYear(reservation)==year){
-                if (getReservBeginMonth(reservation)==month) res++;
-                else if (getReservBeginMonth(reservation)>month) break;
+        int i = searchDataOrdList(list, date, compareMonths_reservation, reservations, 0, compareMonths_reservation);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareMonths_reservation(date, id, reservations) != 0) exit = 1;
+                else {
+                    i++;
+                    res++;
+                }
             }
-            else if (getReservBeginYear(reservation)>year) break;
+            free(id);
         }
     }
-    else{
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            Reservation* reservation = getData(getHashtableReservCatalog(reservations),id);
-            if (getReservBeginYear(reservation)==year) res++;
-            else if (getReservBeginYear(reservation)>year) break;
+    else if (year!=-1){
+        int i = searchDataOrdList(list, date, compareYears_reservation, reservations, 0, compareYears_reservation);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareYears_reservation(date, id, reservations) != 0) exit = 1;
+                else {
+                    i++;
+                    res++;
+                }
+            }
+            free(id);
         }
     }
-    free(id);
+    destroyDate(date);
     return res;
 }
 

@@ -275,47 +275,97 @@ char *getNameUsersByName(int index, UsersManager *usersCatalog) {
     char *name = getName(user);
     return name;
 }
+
+int compareDates_user(void *date, void *id, void *usersCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *users = ((UsersManager *) usersCatalog)->users;
+    Date * userDate = getUserAccountCreation(id, (void *) users);
+    int res = compareDates(d,userDate)*(-1);
+    return res;
+}
+
+int compareMonths_user(void *date, void *id, void *usersCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *users = ((UsersManager *) usersCatalog)->users;
+    Date * userDate = getUserAccountCreation(id, (void *) users);
+    int month1 = getMonth(d), year1 = getYear(d);
+    int month2 = getMonth(userDate), year2 = getYear(userDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else if (month1 > month2) return 1;
+    else if (month2 > month1) return -1;
+    else return 0;
+}
+
+int compareYears_user(void *date, void *id, void *usersCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *users = ((UsersManager *) usersCatalog)->users;
+    Date * userDate = getUserAccountCreation(id, (void *) users);
+    int year1 = getYear(d);
+    int year2 = getYear(userDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else return 0;
+}
+
 int getNewUsers(int year, int month, int day, UsersManager * users){
-    int i; int res = 0; char * id;
-    int size = getOrdListSize(users->usersByAccountCreation);
+    int res = 0;
+    Date * date = malloc(sizeof(Date));
+    date->year = year;
+    date->month = month;
+    date->day = day;
     OrdList * list = users->usersByAccountCreation;
-    Date * accCre;
     if (day!=-1){
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            User* user = getData(getHashtableUserCatalog(users),id);
-            accCre = getAccountCreation(user);
-            if (getYear(accCre)==year){
-                if (getMonth(accCre)==month){
-                    if (getDay(accCre)==day) res++;
-                    else if (getDay(accCre)>day) break;
+        int i = searchDataOrdList(list, date, compareDates_user, users, 0, compareDates_user);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareDates_user(date, id, users) != 0) exit = 1;
+                else {
+                    i++;
+                    res++;
                 }
-                else if (getMonth(accCre)>month) break;
             }
-            else if (getYear(accCre)>year) break;
+            free(id);
         }
     }
-    else if (month!=-1){
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            User* user = getData(getHashtableUserCatalog(users),id);
-            accCre = getAccountCreation(user);
-            if (getYear(accCre)==year){
-                if (getMonth(accCre)==month) res++;
-                else if (getMonth(accCre)>month) break;
+    if (month!=-1){
+        int i = searchDataOrdList(list, date, compareMonths_user, users, 0, compareMonths_user);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareMonths_user(date, id, users) != 0) exit = 1;
+                else {
+                    i++;
+                    res++;
+                }
             }
-            else if (getYear(accCre)>year) break;
+            free(id);
         }
     }
-    else{
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            User* user = getData(getHashtableUserCatalog(users),id);
-            accCre = getAccountCreation(user);
-            if (getYear(accCre)==year) res++;
-            else if (getYear(accCre)>year) break;
+    else if (year!=-1){
+        int i = searchDataOrdList(list, date, compareYears_user, users, 0, compareYears_user);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareYears_user(date, id, users) != 0) exit = 1;
+                else {
+                    i++;
+                    res++;
+                }
+            }
+            free(id);
         }
     }
-    free(id); destroyDate(accCre);
+    destroyDate(date);
     return res;
 }

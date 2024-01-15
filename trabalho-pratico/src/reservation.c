@@ -75,6 +75,11 @@ char getReservHotelStars(Reservation *reservation, Hashtable *hotels) {
     return getHotelStars(reservation->id_hotel, hotels);
 }*/
 
+Date * getReservationBeginDate(void *id, void *lookupTable) {
+    Reservation *reservation = getData((Hashtable *) lookupTable, id);
+    return (reservation->begin);
+}
+
 Date *getReservBegin(Reservation *reservation) {
     Date * res = malloc(sizeof(Date));
     res->day = reservation->begin->day;

@@ -20,6 +20,7 @@ int getReservCityTax(Reservation *reservation, Hashtable *hotels);
 int getReservPricePerNight(Reservation *reservation);
 int getReservUserClassification(Reservation *reservation);
 //char getReservHotelStars(Reservation *reservation, Hashtable *hotels);
+Date * getReservationBeginDate(void *id, void *lookupTable);
 Date *getReservBegin(Reservation *reservation);
 Date *getReservEnd(Reservation *reservation);
 int getReservBeginDay(void *reservation);

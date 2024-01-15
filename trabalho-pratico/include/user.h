@@ -39,6 +39,7 @@ bool getUserAccountStatus(User* user);
 int getUListSize(User * user);
 int getNumberFlights(User* user);
 int getNumberReservations(User* user);
+Date * getUserAccountCreation(void *id, void *lookupTable);
 int getAccountCreationDay(void *user);
 int getAccountCreationMonth(void *user); 
 int getAccountCreationYear(void *user);

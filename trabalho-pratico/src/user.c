@@ -141,6 +141,12 @@ PhoneNumber *getPhoneNumber(User *user) {
     return number;
 }
 */
+
+Date * getUserAccountCreation(void *id, void *lookupTable) {
+    User *user = getData((Hashtable *) lookupTable,id);
+    return (user->accountCreation);
+}
+
 Date *getAccountCreation(User *user) {
     Date *accountCreation = malloc(sizeof(Date));
     accountCreation->day = user->accountCreation->day;

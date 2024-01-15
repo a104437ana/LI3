@@ -420,8 +420,10 @@ void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
 
 void Q10 (int year, int month, Catalogs* catalogs, QueryResult* qresult) {
   if(year==-1){ //se a query for executada sem argumentos
-     int y = BEGIN_YEAR;
-     for ( ;y<=END_YEAR; y++){
+     int begin = getYearFirstResults(catalogs);
+     int end = getYearLastResults(catalogs);
+     int y;
+     for (y = begin;y<=end; y++){
         Result * result = catalogs_compute_Q10(y, -1, -1, catalogs);
         if (result!=NULL){
             addSetResult(qresult, getNumberResults(qresult), result);

@@ -19,6 +19,10 @@ void printReservations(ReservationsManager *reservationsManager);
 void destroyreservationsCatalog(ReservationsManager *reservationsManager);
 
 char* reservation_catalog_compute_Q1 (char *id, int* price_per_night, int* nights, ReservationsManager* reservationsManager, QueryResult* result);
+
+int compareDates_reservation(void *date, void *id, void *reservationsCatalog);
+int compareMonths_reservation(void *date, void *id, void *reservationsCatalog);
+int compareYears_reservation(void *date, void *id, void *reservationsCatalog);
 int getReservationsQ10(int year, int month, int day, ReservationsManager * reservations);
 
 //gets

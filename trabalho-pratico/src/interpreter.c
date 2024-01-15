@@ -140,38 +140,38 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
         return 9;
      }
    }
-  // else if (command->query_id==10){
-  //    if (command->n_args==0){
-  //          if (i != 0) {
-  //             QueryResult * result = createQResult();
-  //             Q10(-1,-1,catalogs,result);
-  //             printQueryOutput(i,command->format_flag,result);
-  //             destroyQResult(result);
-  //          }
-  //          else Q10(-1,-1,catalogs,result2);
-  //          return 10;
-  //    }
-  //    else if (command->n_args==1){
-  //          if (i != 0) {
-  //             QueryResult * result = createQResult();
-  //             Q10(atoi(command->args[0]), -1,catalogs,result);
-  //             printQueryOutput(i,command->format_flag,result);
-  //             destroyQResult(result);
-  //          }
-  //          else Q10(atoi(command->args[0]), -1,catalogs,result2);
-  //          return 10;
-  //    }
-  //    else{
-  //          if (i != 0) {
-  //             QueryResult * result = createQResult();
-  //             Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result);
-  //             printQueryOutput(i,command->format_flag,result);
-  //             destroyQResult(result);
-  //          }
-  //          else Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result2);
-  //          return 10;
-  //    }
-  // }
+   else if (command->query_id==10){
+      if (command->n_args==0){
+            if (i != 0) {
+               QueryResult * result = createQResult();
+               Q10(-1,-1,catalogs,result);
+               printQueryOutput(i,command->format_flag,result);
+               destroyQResult(result);
+            }
+            else Q10(-1,-1,catalogs,result2);
+            return 10;
+      }
+      else if (command->n_args==1){
+            if (i != 0) {
+               QueryResult * result = createQResult();
+               Q10(atoi(command->args[0]), -1,catalogs,result);
+               printQueryOutput(i,command->format_flag,result);
+               destroyQResult(result);
+            }
+            else Q10(atoi(command->args[0]), -1,catalogs,result2);
+            return 10;
+      }
+      else{
+            if (i != 0) {
+               QueryResult * result = createQResult();
+               Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result);
+               printQueryOutput(i,command->format_flag,result);
+               destroyQResult(result);
+            }
+            else Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result2);
+            return 10;
+      }
+   }
     else return 0;
 }
 

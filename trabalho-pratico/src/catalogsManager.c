@@ -396,6 +396,41 @@ Result * catalogs_compute_Q10(int year, int month, int day, Catalogs* catalogs){
 }
 
 //gets
+int getYearFirstResults(Catalogs * catalogs){
+    OrdList * users = getUsersByAccountCreation(catalogs->usersCatalog);
+    char * firstUserId = getDataOrdList(users, 0);
+    int firstUserYear = getUserAccountCreationYear(firstUserId, catalogs);
+
+    OrdList * flights = getFlightsByDeparture(catalogs->flightsCatalog);
+    char * firstFlightId = getDataOrdList(flights, 0);
+    int firstFlightYear = getFlightDepartureYear(firstFlightId, catalogs);
+
+    OrdList * reservations = getReservByBeginDate(catalogs->reservationsCatalog);
+    char * firstReservId = getDataOrdList(reservations, 0);
+    int firstReservYear = getReservationBeginYear(firstReservId, catalogs);
+
+    if (firstUserYear<=firstFlightYear && firstUserYear<=firstReservYear) return firstUserYear;
+    else if (firstFlightYear<= firstReservYear) return firstFlightYear;
+    else return firstReservYear;
+}
+int getYearLastResults(Catalogs * catalogs){
+    OrdList * users = getUsersByAccountCreation(catalogs->usersCatalog);
+    char * lastUserId = getDataOrdList(users, getOrdListSize(users)-1);
+    int lastUserYear = getUserAccountCreationYear(lastUserId, catalogs);
+
+    OrdList * flights = getFlightsByDeparture(catalogs->flightsCatalog);
+    char * lastFlightId = getDataOrdList(flights, getOrdListSize(flights)-1);
+    int lastFlightYear = getFlightDepartureYear(lastFlightId, catalogs);
+
+    OrdList * reservations = getReservByBeginDate(catalogs->reservationsCatalog);
+    char * lastReservId = getDataOrdList(reservations, getOrdListSize(reservations)-1);
+    int lastReservYear = getReservationBeginYear(lastReservId, catalogs);
+
+    if (lastUserYear>=lastFlightYear && lastUserYear>=lastReservYear) return lastUserYear;
+    else if (lastFlightYear>= lastReservYear) return lastFlightYear;
+    else return lastReservYear;
+}
+
 //users
 int getAccountStatus(char *id, Catalogs *catalogs) {
     return getAccountStatusUser(id, catalogs->usersCatalog);

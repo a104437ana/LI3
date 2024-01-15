@@ -77,6 +77,8 @@ void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result);
 Result * catalogs_compute_Q10(int year, int month, int day, Catalogs* catalogs);
 
 //gets
+int getYearFirstResults(Catalogs * catalogs);
+int getYearLastResults(Catalogs * catalogs);
 //user
 int getAccountStatus(char *id, Catalogs *catalogs);
 int getUserListSize(int type, char *id, Catalogs *catalogs);
