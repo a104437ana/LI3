@@ -329,7 +329,7 @@ void addPair(int value, char *string, struct pairIntString *pair) {
 }
 
 void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
-  if (N == 0) return;
+  if (N <= 0) return;
   int passengers, numberAirports = getNumberAirports_catalog(catalogs);
   Heap h = createHeap(N, comparePair, comparePairAdd, NULL, destroyPair);
   int i = 0;

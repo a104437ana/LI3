@@ -31,29 +31,39 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
         if ((read = getline(&line,&n,file)) != -1) {
             create_error_file(error_file_path);
             add_invalid_line_to_error_file(error_file_path,line);
+            int invalid;
+            int  size_line;
+            int standart_size = 300;
+            char* line_modified = malloc(standart_size);
+            char* line_pointer;
             while((read = getline(&line,&n,file)) != -1) {
-                int size_line = strlen(line) + 1;
-                char* line_modified = malloc(size_line);
+                size_line = strlen(line) + 1;
+                if (size_line > standart_size) {
+                    line_modified = realloc(line_modified,size_line);
+                    standart_size = size_line;
+                }
                 strcpy(line_modified,line);
-                char *line_pointer = line_modified;
+                line_pointer = line_modified;
                 for (int i = 0; i < size; i++) {
                     token[i] = strsep(&line_pointer,";");
                 }
+                invalid = 1;
                 switch (type_file) {
                     //users
                     case 'u' : remove_new_line(token[11]);
                                //              id      name     email    phone_n  birth    gender   passport country  address  ac_creat pay_m     ac_status
                                if (valid_user(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[11])) {
+                                    invalid = 0;
                                     int gender = 0;
                                     int accountStatus = 0;
                                     if (token[5][0] == 'F' || token[5][0] == 'f') gender = 1;
                                     if (token[11][0] == 'a' || token[11][0] == 'A') accountStatus = 1;
                                     addUser(token[0],token[1],gender,token[7],token[6],token[4],token[9],accountStatus,catalogs);
                                }
-                               else add_invalid_line_to_error_file(error_file_path,line);
                                break;
                     //reservations                    id      id_user  id_hotel h_name   h_stars  cityTax  address  begin    end      pricePN  inc_break userClass
                     case 'r' : if (valid_reservation(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[12],catalogs)) {
+                                    invalid = 0;
                                     int cityTax = string_to_int(token[5]);
                                     int pricePerNight = atoi(token[9]);
                                     int includesBreakfast = 0;
@@ -63,27 +73,27 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                     addHotel(token[2],token[3],hotelStars,cityTax,userClassification,token[0],catalogs);
                                     addReservation(token[0],token[1],token[2],token[7],token[8],pricePerNight,includesBreakfast,userClassification,catalogs);
                                }
-                               else add_invalid_line_to_error_file(error_file_path,line);
                                break;
                     //flights                   id       airline  airplane t_seats  origin   dest     s_depart s_arriv  r_depart r_arriv  pilot     copilot
                     case 'f' : if (valid_flight(token[0],token[1],token[2],token[3],token[4],token[5],token[6],token[7],token[8],token[9],token[10],token[11],passengers_counter)) {
+                                    invalid = 0;
                                     toUpperS(token[4]);
                                     toUpperS(token[5]);
                                     int delay = addFlight(token[0],token[1],token[2],token[4],token[5],token[6],token[7],token[8],token[9],catalogs);
                                     addAirport(delay,token[4],token[5],token[0],catalogs);
                                }
-                               else add_invalid_line_to_error_file(error_file_path,line);
                                break;
                     //passengers
                     case 'p' : remove_new_line(token[1]);
                                if (valid_passenger(token[0],token[1],catalogs)) {
+                                    invalid = 0;
                                     addPassenger(token[0], token[1], catalogs);
                                }
-                               else add_invalid_line_to_error_file(error_file_path,line);
                                break;
                 }
-                free(line_modified);
+                if (invalid == 1) add_invalid_line_to_error_file(error_file_path,line);
             }
+            free(line_modified);
         }
         free(line);
         fclose(file);
