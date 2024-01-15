@@ -45,15 +45,15 @@ int getAccountCreationYear(void *user);
 char *getUListId(int *type, User *user, int index);
 
 //sets
-void setName(Hashtable *hashtable, unsigned int key, char *name, char *id);
-void setGender(Hashtable *hashtable, unsigned int key, Gender gender, char *id);
-void setCountry(Hashtable *hashtable, unsigned int key, char *country, char *id);
+void setName(Hashtable *hashtable, char *name, char *id);
+void setGender(Hashtable *hashtable, Gender gender, char *id);
+void setCountry(Hashtable *hashtable, char *country, char *id);
 //void setAdress(Hashtable *hashtable, unsigned int key, char *address, char *id);
-void setPassport(Hashtable *hashtable, unsigned int key, char *passport, char *id);
-void setBirth(Hashtable *hashtable, unsigned int key, Date *birth, char *id);
+void setPassport(Hashtable *hashtable, char *passport, char *id);
+void setBirth(Hashtable *hashtable, Date *birth, char *id);
 //void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id);
 //void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id);
-void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id);
+void setAccountCreation(Hashtable *hashtable, Date *accountCreation, char *id);
 
 //liberta espaço em memória do utilizador
 void destroyUser(void *user);

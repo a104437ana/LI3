@@ -13,7 +13,7 @@
 //};
 
 struct user {
-    char *id;
+//    char *id;
     char *name;
     Gender gender;
     char country[3];
@@ -29,7 +29,7 @@ struct user {
 //função que cria um novo utilizador
 User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus) {
     User *user = malloc(sizeof(User)); //aloca espaço a estrutura do utilizador
-    user->id = strdup(id); //preenche os diferentes campos com a informação dada
+//    user->id = strdup(id); //preenche os diferentes campos com a informação dada
     user->name = strdup(name);
     user->gender = gender;
     memcpy(user->country, country, 3);
@@ -162,9 +162,9 @@ int getAccountCreationYear(void *user) {
 }
 
 
-char *getUserId(User *user) {
-    return strdup(user->id); //falta encapsulamento
-}
+//char *getUserId(User *user) {
+//    return strdup(user->id); //falta encapsulamento
+//}
 
 double getTotalSpent(User* user) {
     return user->totalSpent;
@@ -199,20 +199,20 @@ char *getUListId(int *type, User *user, int index) {
 }
 
 //sets
-void setName(Hashtable *hashtable, unsigned int key, char *name, char *id) {
-    User *data = getData(hashtable, key, id);
+void setName(Hashtable *hashtable, char *name, char *id) {
+    User *data = getData(hashtable, id);
     char *oldName = data->name;
     data->name = strdup(name);
     free(oldName);
 }
 
-void setGender(Hashtable *hashtable, unsigned int key, Gender gender, char *id) {
-    User *data = getData(hashtable, key, id);
+void setGender(Hashtable *hashtable, Gender gender, char *id) {
+    User *data = getData(hashtable, id);
     data->gender = gender;
 }
 
-void setCountry(Hashtable *hashtable, unsigned int key, char *country, char *id) {
-    User *data = getData(hashtable, key, id);
+void setCountry(Hashtable *hashtable, char *country, char *id) {
+    User *data = getData(hashtable, id);
     memcpy(data->country, country, 2);
 //    char oldCountry[2];
 //    oldCountry[0] = data->country[0];
@@ -228,15 +228,15 @@ void setAdress(Hashtable *hashtable, unsigned int key, char *address, char *id) 
     free(oldAddress);
 }
 */
-void setPassport(Hashtable *hashtable, unsigned int key, char *passport, char *id) {
-    User *data = getData(hashtable, key, id);
+void setPassport(Hashtable *hashtable, char *passport, char *id) {
+    User *data = getData(hashtable, id);
     char *oldPassport = data->passport;
     data->passport = strdup(passport);
     free(oldPassport);
 }
 
-void setBirth(Hashtable *hashtable, unsigned int key, Date *birth, char *id) {
-    User *data = getData(hashtable, key, id);
+void setBirth(Hashtable *hashtable, Date *birth, char *id) {
+    User *data = getData(hashtable, id);
     data->birth = birth;
 }
 /*
@@ -254,8 +254,8 @@ void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNu
     data->phoneNumber = phoneNumber;
 }
 */
-void setAccountCreation(Hashtable *hashtable, unsigned int key, Date *accountCreation, char *id) {
-    User *data = getData(hashtable, key, id);
+void setAccountCreation(Hashtable *hashtable, Date *accountCreation, char *id) {
+    User *data = getData(hashtable, id);
     destroyDate(data->accountCreation);
     data->accountCreation = accountCreation;
 }
@@ -272,7 +272,7 @@ void destroyUser(void *user) {
     //free(((User *) user)->address);
 //    free(((User *) user)->country);
     free(((User *) user)->name);
-    free(((User *) user)->id);
+//    free(((User *) user)->id);
     destroyOrdList(((User *) user)->flightsReservationsByDate, destroyResultQ2);
     free(user);
 }

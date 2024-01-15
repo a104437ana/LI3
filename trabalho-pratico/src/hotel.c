@@ -4,7 +4,7 @@
 #include "hotel.h"
 
 struct hotel {
-    char *id;
+//    char *id;
     char *name;
     char stars;
     int cityTax;
@@ -15,7 +15,7 @@ struct hotel {
 //função que cria um novo hotel
 Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     Hotel *hotel = malloc(sizeof(Hotel)); //aloca espaço em memória para o hotel
-    hotel->id = strdup(id);
+//    hotel->id = strdup(id);
     hotel->name = strdup(name);
     hotel->stars = stars;
     hotel->cityTax = cityTax;
@@ -48,9 +48,9 @@ char *getHotelReservId(Hotel *hotel, int index) {
 }
 
 //gets dos campos do hotel
-char *getHotelId(Hotel *hotel) {
-    return strdup(hotel->id);
-}
+//char *getHotelId(Hotel *hotel) {
+//    return strdup(hotel->id);
+//}
 
 char *getHotelName(Hotel *hotel) {
     return strdup(hotel->name); 
@@ -73,8 +73,7 @@ char *getHotelAddress(Hotel *hotel) {
 }
 */
 int getHotelCityTax2(char *id, Hashtable *hotels) {
-    unsigned int key = hashFunction(id);
-    Hotel *hotel = getData(hotels, key, id);
+    Hotel *hotel = getData(hotels, id);
     return hotel->cityTax;
 }
 
@@ -83,11 +82,11 @@ int getHotelCityTax(Hotel *hotel) {
 }
 
 //sets dos campos do hotel
-void setHId(Hotel *hotel, char *id) {
-    char *oldHotelId = hotel->id;
-    hotel->id = strdup(id);
-    free(oldHotelId);
-}
+//void setHId(Hotel *hotel, char *id) {
+//    char *oldHotelId = hotel->id;
+//    hotel->id = strdup(id);
+//    free(oldHotelId);
+//}
 
 void setHName(Hotel *hotel, char *name) {
     char *oldName = name;
@@ -125,7 +124,7 @@ void addToHotelNumberRatings(Hotel *hotel, char rating) {
 
 void removeHId(Hotel *hotel) {
 //    char *oldHotelId = hotel->id;
-    hotel->id = NULL;
+//    hotel->id = NULL;
 //    free(oldHotelId);
 }
 
@@ -148,7 +147,7 @@ void destroyHotel(void *hotel) {
 //    destroyOrdList(((Hotel *) hotel)->reservationsByDate, destroyReservation);
     //free(((Hotel *) hotel)->address);
     free(((Hotel *) hotel)->name); //liberta espaço dos diferentes campos do hotel
-    free(((Hotel *) hotel)->id);
+//    free(((Hotel *) hotel)->id);
     destroyOrdList(((Hotel *) hotel)->reservationsByDate, free);
     free(hotel);
 }

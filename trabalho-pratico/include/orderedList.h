@@ -21,7 +21,7 @@ void printFullList(OrdList *list);
 //radixsorts
 void radixSort(OrdList *list, int (*getParameterFunction)(void*,void*), void *lookupTable, int interval, int offset);
 //quicksorts
-void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*), int equal);
+void quickSort(OrdList *list, int lower, int higher, int (*compareFunction)(void*,void*,void*), void *lookup, int equal);
 //inverte uma lista
 void reverseOrdList(OrdList* list);
 

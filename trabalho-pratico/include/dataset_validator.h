@@ -35,10 +35,10 @@ void destroyPassengersPerFlight (void* passengers_per_flight);
 
 typedef struct passengers_counter PassengersCounter;
 PassengersCounter *createPassengersCounter (int size);
-void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight);
+void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, char* id_flight);
 int existsPassengersPerFlight (PassengersCounter* passengers_counter, char* id_flight);
-void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, unsigned int key, char *id);
-int getPassengersNumber (PassengersCounter* passengers_counter, unsigned int key, char *id);
+void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, char *id);
+int getPassengersNumber (PassengersCounter* passengers_counter, char *id);
 void destroyPassengersCounter (PassengersCounter* passengers_counter);
 
 void count_passengers (char* directory, Catalogs *catalogs, PassengersCounter* passengers_counter);

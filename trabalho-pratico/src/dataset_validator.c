@@ -501,36 +501,32 @@ struct passengers_counter {
 hashtable. Esta função recebe um número que será o tamanho da hashtable criada. Esta função retorna a estrutura passengers_counter. */
 PassengersCounter *createPassengersCounter (int size) {
     PassengersCounter* passengers_counter = malloc(sizeof(PassengersCounter));
-    passengers_counter->passengers_per_flight = createHashtable(size);
+    passengers_counter->passengers_per_flight = createHashtable(size, hashFunction, strcmpVoid, strdupVoid, destroyPassengersPerFlight);
     return passengers_counter;
 }
 
 /* A função addPassengersPerFlight_ToPassengersCounter addiciona à hashtable uma estrutura passengers_per_flight, dada essa estrutura, a
 hashtable passengers_counter, o id de voo e a chave.*/
-void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, unsigned int key, char* id_flight) {
-    passengers_counter->passengers_per_flight = addHashtable(passengers_counter->passengers_per_flight, key, passengers_per_flight, id_flight);
+void addPassengersPerFlight_ToPassengersCounter (PassengersCounter* passengers_counter, PassengersPerFlight* passengers_per_flight, char* id_flight) {
+    passengers_counter->passengers_per_flight = addHashtable(passengers_counter->passengers_per_flight, passengers_per_flight, id_flight);
 }
 
 /* A função existsPassengersPerFlight verifica se para um id de voo existe uma estrutura passangers_per_flight na hashtable passengers_counter.
 Se existir, a função retorna 1. Se não, a função retorna 0.*/
 int existsPassengersPerFlight (PassengersCounter* passengers_counter, char* id_flight) {
-    int exist = 1;
-    int key = hashFunction(id_flight);
-    HashtableNode *passengers_per_flight = searchHashtable(passengers_counter->passengers_per_flight, key, id_flight);
-    if (passengers_per_flight == NULL) exist = 0;
-    return exist;
+    return existsData(passengers_counter->passengers_per_flight, id_flight);
 }
 
 /* A função addPassenger_ToPassengersPerFlight adiciona um ao número de passageiros de um voo guardados na hashtable passengers_counter, dado
 um id de voo, uma chave e a hashtable passengers_counter. */
-void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, unsigned int key, char *id) {
-    PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, key, id);
+void addPassenger_ToPassengersPerFlight (PassengersCounter* passengers_counter, char *id) {
+    PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, id);
     data->number++;
 }
 
 /* A função getPassengersNumber retorna o número de passageiros de um determinado voo, dado o id do voo, a chave e a hashtable passengers_counter.*/
-int getPassengersNumber (PassengersCounter* passengers_counter, unsigned int key, char *id) {
-    PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, key, id);
+int getPassengersNumber (PassengersCounter* passengers_counter, char *id) {
+    PassengersPerFlight *data = getData(passengers_counter->passengers_per_flight, id);
     int passengers = data->number;
     return passengers;
 }
@@ -539,7 +535,7 @@ int getPassengersNumber (PassengersCounter* passengers_counter, unsigned int key
 liberta a memória dinámica que guardava cada estrutura passengers_per_flight. */
 void destroyPassengersCounter (PassengersCounter* passengers_counter) {
     if (passengers_counter != NULL) {
-        destroyHashtable(passengers_counter->passengers_per_flight, destroyPassengersPerFlight);
+        destroyHashtable(passengers_counter->passengers_per_flight);
         free(passengers_counter);
     }
 }
@@ -578,9 +574,9 @@ void count_passengers (char* directory, Catalogs *catalogs, PassengersCounter* p
                 if (userExists(token[1],catalogs)) {
                     if (!(existsPassengersPerFlight(passengers_counter,token[0]))) {
                         PassengersPerFlight* passengers_per_flight = createPassengersPerFlight();
-                        addPassengersPerFlight_ToPassengersCounter(passengers_counter,passengers_per_flight,hashFunction(token[0]),token[0]);
+                        addPassengersPerFlight_ToPassengersCounter(passengers_counter,passengers_per_flight,token[0]);
                     }
-                    addPassenger_ToPassengersPerFlight(passengers_counter,hashFunction(token[0]),token[0]);
+                    addPassenger_ToPassengersPerFlight(passengers_counter,token[0]);
                 }
                 free(line_modified);
             }
@@ -605,7 +601,7 @@ int valid_total_seats (char* total_seats,PassengersCounter* passengers_counter, 
         if (!(existsPassengersPerFlight(passengers_counter,id_flight))) valid = 1;
         else {
             int seats = string_to_int(total_seats);
-            int passengers = getPassengersNumber(passengers_counter,hashFunction(id_flight),id_flight);
+            int passengers = getPassengersNumber(passengers_counter,id_flight);
             if (seats >= passengers) valid = 1;
         }
     }

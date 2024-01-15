@@ -10,56 +10,47 @@ struct usersManager {
 //função que cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager)); //aloca espaço em memória para a estrutura do catálogo
-    usersManager->users = createHashtable(size); //cria uma hastable para os utilizadores
+    usersManager->users = createHashtable(size, hashFunction, strcmpVoid, strdupVoid, destroyUser); //cria uma hastable para os utilizadores
     usersManager->usersByName = createOrdList(); //cria uma lista para os utilizadores
     usersManager->usersByAccountCreation = createOrdList();
     return usersManager;
 }
 //função que adiciona um utilizador ao catálogo de utilizadores
 void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
     User *user = createUser(id, name, gender, country, passport, birth, accountCreation, accountStatus);
-    usersCatalog->users = addHashtable(usersCatalog->users, key, user, id);
+    usersCatalog->users = addHashtable(usersCatalog->users, user, id);
+    char *id_user = strdup(id);
     if (accountStatus){
-        addOrdList(usersCatalog->usersByName, user);
+        addOrdList(usersCatalog->usersByName, id_user);
     }
-    addOrdList(usersCatalog->usersByAccountCreation, strdup(id));
-}
-//função que adiciona um utilizador à lista de utilizadores ordenada por nome do catálogo de utilizadores
-void addUserToCatalogList(UsersManager *usersManager, User *user) {
-    addOrdList(usersManager->usersByName, user);
-    addOrdList(usersManager->usersByAccountCreation, strdup(getUserId(user)));
+    addOrdList(usersCatalog->usersByAccountCreation, id_user);
 }
 //adiciona uma reserva à lista de reservas de um utilizador
 void addReservToUser(char *id_user, char *id_reserv, double totalSpent, UsersManager *usersCatalog) {
-    int key = hashFunction(id_user);
-    User *user = getData(usersCatalog->users, key, id_user);
+    User *user = getData(usersCatalog->users, id_user);
     addToUserList(user, id_reserv, 'R', totalSpent);
 }
 //adiciona o utilizador à lista de passageiros do voo
 void addFlightToUser(char *id_user, char *id_flight, UsersManager *usersCatalog) {
-    int key = hashFunction(id_user);
-    User *user = getData(usersCatalog->users, key, id_user);
+    User *user = getData(usersCatalog->users, id_user);
     addToUserList(user, id_flight, 'F', 0);
 }
 
 //função que ordena o catálogo de utilizadores
 void sortUsersByName(UsersManager *usersCatalog) {
     OrdList *usersByName = usersCatalog->usersByName;
-    quickSort(usersByName, 0, getOrdListSize(usersByName)-1, compareUsersNames, 0); //ordena os utilizadores por nome na lista de utilizadores
+    quickSort(usersByName, 0, getOrdListSize(usersByName)-1, compareUsersNames, usersCatalog->users, 0); //ordena os utilizadores por nome na lista de utilizadores
 }
 
 //função que compara o nome de dois utilizadores
-int compareUsersNames(void *user1, void *user2) {
-    char *name1 = getName((User *) user1);
-    char *name2 = getName((User *) user2);
+int compareUsersNames(void *id1, void *id2, void *lookup) {
+    User *user1 = getData((Hashtable *) lookup, id1);
+    User *user2 = getData((Hashtable *) lookup, id2);
+    char *name1 = getName(user1);
+    char *name2 = getName(user2);
     int compare = strcoll(name1, name2); //compara os dois nomes
-    if (compare == 0) { //caso sejam iguais compara os seus ids
-        char *id1 = getUserId((User *) user1), *id2 = getUserId((User *) user2);
-        compare = strcoll(id1, id2);
-        free(id1);
-        free(id2);
-    }
+    if (compare == 0) //caso sejam iguais compara os seus ids
+        compare = strcoll((char *) id1, (char *) id2);
     free(name1);
     free(name2);
     return compare;
@@ -67,28 +58,22 @@ int compareUsersNames(void *user1, void *user2) {
 
 //função que verifica se um utilizador já existe no catálogo de utilizadores
 int existsUser(UsersManager *usersManager, char *id) {
-    int key = hashFunction(id);
-    HashtableNode *user = searchHashtable(usersManager->users, key, id);
-    if (user == NULL) return 0;
-    return 1;
+    return existsData(usersManager->users, id);
 }
 
 OrdList *getUsersByAccountCreation (UsersManager *usersManager) {
     return usersManager->usersByAccountCreation;
 }
 int getCreationDayUser(char *id, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
-    User *user = getData(usersCatalog->users, key, id);
+    User *user = getData(usersCatalog->users, id);
     return getAccountCreationDay(user);
 }
 int getCreationMonthUser(char *id, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
-    User *user = getData(usersCatalog->users, key, id);
+    User *user = getData(usersCatalog->users, id);
     return getAccountCreationMonth(user);
 }
 int getCreationYearUser(char *id, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
-    User *user = getData(usersCatalog->users, key, id);
+    User *user = getData(usersCatalog->users, id);
     return getAccountCreationYear(user);
 }
 
@@ -101,15 +86,72 @@ OrdList *getOrdListUser (UsersManager *usersManager) {
 //função que liberta o espaço em memória alocado pelo catálogo de utilizadores
 void destroyUsersCatalog(UsersManager *usersManager) {
     if (usersManager == NULL) return; //se o catálogo não existir
-    destroyHashtable(usersManager->users, destroyUser); //liberta a hashtable de utilizadores
+    destroyHashtable(usersManager->users); //liberta a hashtable de utilizadores
     //destroyOrdList(usersManager->usersId,destroyUserId);
     destroyOnlyOrdList(usersManager->usersByName); //liberta a lista de utilizadores
     destroyOnlyOrdList(usersManager->usersByAccountCreation);
     free(usersManager);
 }
 
-int searchPrefix(char *prefix, int (*compareFunction)(void*,void*,void*), int (*compareFunctiobBack)(void*,void*,void*), UsersManager *usersCatalog) {
-    return searchDataOrdList(usersCatalog->usersByName, prefix, compareFunction, NULL, 0, compareFunctiobBack);
+char *sameLenPrefix(char *prefix, char *name) {
+  unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
+  int i = 0, j = 0, p = 0, n = 0, e = 0;
+  while (up[i] != '\0' && un[j] != '\0') {
+    if (up[i] == un[j]) e++;
+    if (up[i] > 128) {p++; i+=2;}
+    else if (up[i] != '\0') i++;
+    if (un[j] > 128) {n++; j+=2;}
+    else if (un[j] != '\0') j++;
+  }
+
+  char *namePrefix;
+  if (i == e + 1) return NULL;
+  else if (i < j) {
+    if (n > p) {i += n;}
+    namePrefix = malloc(sizeof(char) * (i + 1));
+    //namePrefix = 
+    strncpy(namePrefix, name, i);
+    namePrefix[i] = '\0';
+  }
+  else {
+    int len;
+    if (n > p) len = i + (n - p);
+    else len = i;
+    namePrefix = malloc(sizeof(char) * (len + 1));
+    //namePrefix = 
+    strncpy(namePrefix, name, len);
+    namePrefix[len] = '\0';
+  }
+
+  return namePrefix;
+}
+int prefixSearch(void *prefixVoid, void *id, void *lookup) {
+  int compare;
+  char *prefix = (char *) prefixVoid;
+  User *user = getData((Hashtable *) lookup, (char *) id);
+  char *name = getName(user); //nome do utilizador
+  char *namePrefix = sameLenPrefix(prefix, name);
+  if (namePrefix == NULL){
+    free(namePrefix); free(name);
+    return 0;
+  }
+  compare = strcoll(prefix, namePrefix); //compara os dois prefixos
+  free(namePrefix); //liberta o prefixo do utilizador
+  free(name);
+  return compare;
+}
+int prefixSearchBack(void *prefixVoid, void *id, void *lookup) {
+  int compare;
+  char *prefix = (char *) prefixVoid;
+  User *user = getData((Hashtable *) lookup, (char *) id);
+  char *name = getName(user); //nome do utilizador
+  compare = strcoll(prefix, name); //compara os dois prefixos
+  free(name);
+  return compare;
+}
+
+int searchPrefix(char *prefix, UsersManager *usersCatalog) {
+    return searchDataOrdList(usersCatalog->usersByName, prefix, prefixSearch, usersCatalog->users, 0, prefixSearchBack);
 }
 int sameFirstLetterUser(char *string1, char *string2) {
   int compare = 1;
@@ -120,7 +162,8 @@ int sameFirstLetterUser(char *string1, char *string2) {
   return compare;
 }
 int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *usersCatalog) {
-    User *user = getDataOrdList(usersCatalog->usersByName, index);
+    char *id = getDataOrdList(usersCatalog->usersByName, index);
+    User *user = getData(usersCatalog->users, id);
     char *name = getName(user);
     int nameSize = strlen(name);
     int prefixSize = strlen(prefix);
@@ -140,7 +183,7 @@ int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *u
 
 //queries
 void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, QueryResult* result) {
-    User* user = getData(usersManager->users,hashFunction(id),id);
+    User* user = getData(usersManager->users,id);
     if (user == NULL) {
         return;
     }
@@ -185,14 +228,12 @@ void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, QueryResult*
 
 //gets
 User *getUserCatalog(UsersManager *usersManager, char *id) {
-    int key = hashFunction(id);
-    User *user = (User*) getData(usersManager->users, key, id);
+    User *user = (User*) getData(usersManager->users, id);
     return user;
 }
 
 int getAccountStatusUser(char *id, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
-    User *user = getData(usersCatalog->users, key, id);
+    User *user = getData(usersCatalog->users, id);
     if (user == NULL) return -1;
     return getUserAccountStatus(user);
 }
@@ -206,8 +247,7 @@ OrdList *getUsersByName (UsersManager *usersManager) {
 }
 
 int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
-    int key = hashFunction(id);
-    User *user = getData(usersCatalog->users, key, id);
+    User *user = getData(usersCatalog->users, id);
     int res = 0;
     if (type == 0)
         res = getUListSize(user);
@@ -218,8 +258,7 @@ int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
     return res;
 }
 char *getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
-    int key = hashFunction(id_user);
-    User *user = getData(usersCatalog->users, key, id_user);
+    User *user = getData(usersCatalog->users, id_user);
     return getUListId(type, user, index);
 }
 
@@ -227,12 +266,14 @@ int getUsersByNameSize(UsersManager *usersCatalog) {
     return getOrdListSize(usersCatalog->usersByName);
 }
 char *getIdUsersByName(int index, UsersManager *usersCatalog) {
-    User *user = getDataOrdList(usersCatalog->usersByName, index);
-    return getUserId(user);
+    char *id = getDataOrdList(usersCatalog->usersByName, index);
+    return strdup(id);
 }
 char *getNameUsersByName(int index, UsersManager *usersCatalog) {
-    User *user = getDataOrdList(usersCatalog->usersByName, index);
-    return getName(user);
+    char *id = getDataOrdList(usersCatalog->usersByName, index);
+    User *user = getData(usersCatalog->users, id);
+    char *name = getName(user);
+    return name;
 }
 int getNewUsers(int year, int month, int day, UsersManager * users){
     int i; int res = 0; char * id;
@@ -242,7 +283,7 @@ int getNewUsers(int year, int month, int day, UsersManager * users){
     if (day!=-1){
         for (i=0; i<size; i++){
             id = strdup(getDataOrdList(list, i));
-            User* user = getData(getHashtableUserCatalog(users),hashFunction(id),id);
+            User* user = getData(getHashtableUserCatalog(users),id);
             accCre = getAccountCreation(user);
             if (getYear(accCre)==year){
                 if (getMonth(accCre)==month){
@@ -257,7 +298,7 @@ int getNewUsers(int year, int month, int day, UsersManager * users){
     else if (month!=-1){
         for (i=0; i<size; i++){
             id = strdup(getDataOrdList(list, i));
-            User* user = getData(getHashtableUserCatalog(users),hashFunction(id),id);
+            User* user = getData(getHashtableUserCatalog(users),id);
             accCre = getAccountCreation(user);
             if (getYear(accCre)==year){
                 if (getMonth(accCre)==month) res++;
@@ -269,7 +310,7 @@ int getNewUsers(int year, int month, int day, UsersManager * users){
     else{
         for (i=0; i<size; i++){
             id = strdup(getDataOrdList(list, i));
-            User* user = getData(getHashtableUserCatalog(users),hashFunction(id),id);
+            User* user = getData(getHashtableUserCatalog(users),id);
             accCre = getAccountCreation(user);
             if (getYear(accCre)==year) res++;
             else if (getYear(accCre)>year) break;

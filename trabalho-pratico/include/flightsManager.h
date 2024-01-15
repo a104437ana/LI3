@@ -26,7 +26,7 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
 void getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers);
 
 //gets
-Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned int key, char *id);
+Flight *getFlightCatalog(FlightsManager *flightsManager, char *id);
 int existsFlight (FlightsManager* flightsManager,char* id);
 Hashtable *getHashtableFlightsCatalog(FlightsManager *flightsManager);
 int getSDFlight(int time, char *id, FlightsManager *flightsCatalog);

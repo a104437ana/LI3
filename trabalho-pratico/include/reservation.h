@@ -10,7 +10,7 @@ typedef struct reservation Reservation;
 Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification);
 
 //gets
-Reservation *getReservCatalog(Hashtable *reservations, unsigned int key, char *id);
+Reservation *getReservCatalog(Hashtable *reservations, char *id);
 char *getReservId(Reservation *reservation);
 char *getReservUserId(Reservation *reservation);
 int getReservUserKey(Reservation *reservation);

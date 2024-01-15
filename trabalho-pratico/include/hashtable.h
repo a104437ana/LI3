@@ -6,37 +6,31 @@
 #include <string.h>
 #include "utility.h"
 
-typedef struct hashtableNode HashtableNode;
 typedef struct hashtable Hashtable;
 //funão de hash
-unsigned int hashFunction(char *id);
-//cria um nodo da hashtable
-HashtableNode *createHashtableNode();
+unsigned int hashFunction(void *key);
 //cria uma nova hashtable
-Hashtable *createHashtable(int size);
+Hashtable *createHashtable(int size, unsigned int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*));
 //devolve número de nodos usados
 int getHashtableUsed(Hashtable *hashtable);
-//procura nodo na hashtable
-HashtableNode **searchNode(Hashtable *hashtable, unsigned int key, char *id);
-HashtableNode *searchHashtable(Hashtable *hashtable, unsigned int key, char *id);
 //copia hashtable para outra hashtable
 void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable);
 //adiciona um elemnto à hashtbale
-Hashtable *addHashtable(Hashtable *hashtable, unsigned int key, void *data, char *id);
+Hashtable *addHashtable(Hashtable *hashtable, void *data, void *key);
 void removeHashtable(Hashtable *hashtable, unsigned int key);
 //verifica se existe um elemnto na hashtable
-int existsData(Hashtable *hashtable, unsigned int key, char *id);
+int existsData(Hashtable *hashtable, void *key);
 
 //gest e sets
 //obtem elemnto da hahtable
-void *getData(Hashtable *hashtable, unsigned int key, char *id);
+void *getData(Hashtable *hashtable, void *key);
 int getHashtableNodes(Hashtable *hashtable);
 //modifica elemento da hashtable
-void setData(Hashtable *hashtable, unsigned int key, void *data, char *id);
+void setData(Hashtable *hashtable, void *data, void *key);
 //ordena um parametro de todos os elementos da hashtable
 void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*,Hashtable*), Hashtable *lookupTable);
-//obtem o próximo elemento da hashtable
-void *getNextData(Hashtable *hashtable, unsigned int key, char *id);
+////obtem o próximo elemento da hashtable
+//void *getNextData(Hashtable *hashtable, unsigned int key, char *id);
 
 //para efeitos de teste
 //imprime todos os elemntos da hashtable
@@ -46,7 +40,7 @@ void printHotelTableReservs(Hashtable *hashtable, void (*printFunction)(void*));
 void printHashtableUsage(Hashtable *hashtable);
 
 //liberta espaço em memória da hashtable
-void destroyHashtable(Hashtable *hashtable, void (*destroyDataFunction)(void*));
+void destroyHashtable(Hashtable *hashtable);
 
 void ht_applyToAll(Hashtable *table, void function(void*), void *getFunction(void*));
 

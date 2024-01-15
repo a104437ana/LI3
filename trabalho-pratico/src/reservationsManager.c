@@ -12,16 +12,15 @@ struct reservationsManager {
 //função que cria um novo catálogo de reservas
 ReservationsManager *createReservsCatalog(int size) {
     ReservationsManager *reservationsManager = malloc(sizeof(ReservationsManager));
-    reservationsManager->reservations = createHashtable(size);
+    reservationsManager->reservations = createHashtable(size, hashFunction, strcmpVoid, strdupVoid, destroyReservation);
     reservationsManager->reservationsByBeginDate = createOrdList();
     return reservationsManager;
 }
 //função que adiciona uma reserva ao catálogo de reservas
 void addReservToCatalog(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog) {
     //adiciona reserva ao catalogo de reservas
-    unsigned int key = hashFunction(id);
     Reservation *reservation = createReservation(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification);
-    reservationsCatalog->reservations = addHashtable(reservationsCatalog->reservations, key, reservation, id);
+    reservationsCatalog->reservations = addHashtable(reservationsCatalog->reservations, reservation, id);
     addOrdList(reservationsCatalog->reservationsByBeginDate, strdup(id));
 }
 
@@ -32,14 +31,14 @@ OrdList * getReservByBeginDate (ReservationsManager *reservations){
 //função que liberta o espaço em memória alocado pelo catálogo de reservas
 void destroyreservationsCatalog(ReservationsManager *reservationsManager) {
     if (reservationsManager == NULL) return;
-    destroyHashtable(reservationsManager->reservations, destroyReservation);
+    destroyHashtable(reservationsManager->reservations);
     destroyOnlyOrdList(reservationsManager->reservationsByBeginDate);
     free(reservationsManager);
 }
 
 //queries
 char * reservation_catalog_compute_Q1 (char *id, int* price_per_night, int* nights, ReservationsManager* reservationsManager, QueryResult* result) {
-    Reservation* reservation = getData(reservationsManager->reservations,hashFunction(id),id);
+    Reservation* reservation = getData(reservationsManager->reservations,id);
     char * hotel_id;
     if (reservation == NULL) {
         hotel_id = NULL;
@@ -85,7 +84,7 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
     if (day!=-1){
         for (i=0; i<size; i++){
             id = strdup(getDataOrdList(list, i));
-            Reservation* reservation = getData(getHashtableReservCatalog(reservations),hashFunction(id),id);
+            Reservation* reservation = getData(getHashtableReservCatalog(reservations),id);
             if (getReservBeginYear(reservation)==year){
                 if (getReservBeginMonth(reservation)==month){
                     if (getReservBeginDay(reservation)==day) res++;
@@ -99,7 +98,7 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
     else if (month!=-1){
         for (i=0; i<size; i++){
             id = strdup(getDataOrdList(list, i));
-            Reservation* reservation = getData(getHashtableReservCatalog(reservations),hashFunction(id),id);
+            Reservation* reservation = getData(getHashtableReservCatalog(reservations),id);
             if (getReservBeginYear(reservation)==year){
                 if (getReservBeginMonth(reservation)==month) res++;
                 else if (getReservBeginMonth(reservation)>month) break;
@@ -110,7 +109,7 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
     else{
         for (i=0; i<size; i++){
             id = strdup(getDataOrdList(list, i));
-            Reservation* reservation = getData(getHashtableReservCatalog(reservations),hashFunction(id),id);
+            Reservation* reservation = getData(getHashtableReservCatalog(reservations),id);
             if (getReservBeginYear(reservation)==year) res++;
             else if (getReservBeginYear(reservation)>year) break;
         }
@@ -125,42 +124,35 @@ Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
 }
 
 int getReservPriceNoTax(char *id, ReservationsManager *reservationsCatalog) {
-    int key = hashFunction(id);
-    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
     int ppn = getReservPricePerNight(reservation);
     int nights = getReservNights(reservation);
     return ppn * nights;
 }
 int getReservPriceLimits(char *id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd) {
-    int key = hashFunction(id);
-    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
     int ppn = getReservPricePerNight(reservation);
     int nights = getReservNightsWithLimits(reservation, limitBegin, limitEnd);
     if (nights < 0) return nights;
     return ppn * nights;
 }
 int getBReserv(int time, char *id, ReservationsManager *reservationsCatalog) {
-    int key = hashFunction(id);
-    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
     return getReservationB(time, reservation);
 }
 char *getSReservDate(char *id, ReservationsManager *reservationsCatalog) {
-    int key = hashFunction(id);
-    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
     return getStringReservDate(reservation);
 }
 int getBeginDayReservation(char *id, ReservationsManager *reservationsCatalog) {
-    int key = hashFunction(id);
-    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
     return getReservBeginDay(reservation);
 }
 int getBeginMonthReservation(char *id, ReservationsManager *reservationsCatalog) {
-    int key = hashFunction(id);
-    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
     return getReservBeginMonth(reservation);
 }
 int getBeginYearReservation(char *id, ReservationsManager *reservationsCatalog) {
-    int key = hashFunction(id);
-    Reservation *reservation = getData(reservationsCatalog->reservations, key, id);
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
     return getReservBeginYear(reservation);
 }

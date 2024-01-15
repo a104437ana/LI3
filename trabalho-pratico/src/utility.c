@@ -298,6 +298,14 @@ void toUpperS (char *word){
     }
 }
 
+int strcmpVoid(void* s1, void *s2) {
+    return strcmp((const char *) s1, (const char *) s2);
+}
+
+void *strdupVoid(void *s) {
+    return (void *) strdup((char *) s);
+}
+
 //função que liberta o espaço em memória alocado por uma data
 void destroyDate(Date *date) {
     if (date == NULL) return; //se não existir a data

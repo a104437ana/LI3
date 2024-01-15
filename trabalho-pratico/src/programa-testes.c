@@ -227,6 +227,23 @@ int main (int argc, char** argv) {
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
     printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
+//    Hashtable *uH, *fH, *rH, *hH, *aH;
+//    uH = getUsers_catalog(catalogs);
+//    fH = getFlights_catalog(catalogs);
+//    rH = getReservations_catalog(catalogs);
+//    hH = getHotels_catalog(catalogs);
+//    aH = getAirports_catalog(catalogs);
+//    printf("\nUser:\n");
+//    printHashtableUsage(uH);
+//    printf("\nFlight:\n");
+//    printHashtableUsage(fH);
+//    printf("\nReservation:\n");
+//    printHashtableUsage(rH);
+//    printf("\nHotel:\n");
+//    printHashtableUsage(hH);
+//    printf("\nAirport:\n");
+//    printHashtableUsage(aH);
+//    destroyCatalogs(catalogs);
     }
     else printf("Error: The provided file path does not match any existing file.\n");
     }

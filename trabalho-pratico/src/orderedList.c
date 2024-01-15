@@ -101,18 +101,18 @@ void swapOrdList(OrdList *list, int i, int j) {
 
 //função de partição recebe uma lista os indices inferiores e superiores onde se pretende fazer uma partição
 //um elemento pivô uma função que compara dois elementos da lista e o valor de retorno dessa função caso sejam iguais
-int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int (*compareFunction)(void*,void*), int equal) {
+int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int (*compareFunction)(void*,void*,void*), void *lookup, int equal) {
     void *data = getDataOrdList(list, lower); //obtem o elemento do indice inferior da lista
     //enquanto os indices inferior e superior não se cruzarem
     while (higher > lower) {
         //enquanto o elemento do indice inferior for menor que o pivô
-        while (compareFunction(data, pivotData) < equal) {
+        while (compareFunction(data, pivotData, lookup) < equal) {
             lower++; //incrementa o indice inferior
             data = getDataOrdList(list, lower);
         }
         data = getDataOrdList(list, higher); //obtem o elemento do indice superior
         //enquanto o elemento do indice superior for maior ou igual que o pivô
-        while (higher-1 >= lower && compareFunction(data, pivotData) >= equal) {
+        while (higher-1 >= lower && compareFunction(data, pivotData, lookup) >= equal) {
             higher--; //decrementa o indice superior
             data = getDataOrdList(list, higher);
         }
@@ -124,17 +124,17 @@ int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int 
 }
 //quicksort recebe uma lista os indices inferiores e superiores para ordenar uma função que compara
 //dois elementos da lista e o valor que a função retorna caso os elementos sejam iguais
-void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void*,void*), int equal) {
+void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void*,void*,void*), void *lookup, int equal) {
     if (higher - lower > 1) { //se a sublista tiver apenas um elemento está ordenada
         int pivot = (lower + higher) / 2; //escolhe elemento central como pivô
         swapOrdList(list, pivot, higher); //move pivô para o fim da sublista
         void *pivotData = getDataOrdList(list, higher); //obtem a data do pivô
         //faz uma partição da sublista fazendo swaps até obter o indice para o qual
         //todos os elementos da sublista à esquerda do indice são menores que o pivô e à direita maiores
-        int partition = partitionOrdList(list, lower, higher-1, pivotData, compareFunction, equal);
+        int partition = partitionOrdList(list, lower, higher-1, pivotData, compareFunction, lookup, equal);
         swapOrdList(list, partition, higher); //move pivô para a posição da partição
-        quickSort(list, lower, partition, compareFunction, equal); //chamada recursiva para a metade esquerda da sublista
-        quickSort(list, partition, higher, compareFunction, equal); //chamada recursiva para a metade direita da sublista
+        quickSort(list, lower, partition, compareFunction, lookup, equal); //chamada recursiva para a metade esquerda da sublista
+        quickSort(list, partition, higher, compareFunction, lookup, equal); //chamada recursiva para a metade direita da sublista
     }
 }
 //função que inverte a posição de todos os elementos de uma lista

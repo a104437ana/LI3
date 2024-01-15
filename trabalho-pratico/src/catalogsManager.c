@@ -118,11 +118,11 @@ void radixSortUserList(OrdList *list, void *lookupTable) {
 }
 
 //função que compara os ids de duas reservas
-int compareReservsIds(void *id1, void *id2) {
+int compareReservsIds(void *id1, void *id2, void *lookup) {
     return strcoll(id1, id2);
 }
 //função que compara os ids de dois voos ou reservas
-int compareFlightReservsIds(void *data1, void *data2) {
+int compareFlightReservsIds(void *data1, void *data2, void *lookup) {
     char *id1 = getIdResultQ2((ResultQ2 *)data1), *id2 = getIdResultQ2((ResultQ2 *)data2);
     return strcoll(id1, id2);
 }
@@ -138,7 +138,7 @@ void sortHotelReservationsByDate(char *id, Catalogs *catalogs) {
     Hotel *hotel = getHotelCatalog(catalogs->hotelsCatalog, id);
     OrdList *list = getHotelOrdList(hotel); //obtem lista de reservas
     if(!isOrdered(list)) {
-        quickSort(list, 0, getOrdListSize(list)-1, compareReservsIds, 0); //ordena as reservas por ids
+        quickSort(list, 0, getOrdListSize(list)-1, compareReservsIds, NULL, 0); //ordena as reservas por ids
         reverseOrdList(list); //inverte a lista
         radixSortReservDate(list, catalogs); //ordena as reservas por data
         setOrdListOrd(list, 1);
@@ -149,7 +149,7 @@ void sortUserList(char *id, Catalogs *catalogs) {
     User *user = getUserCatalog(catalogs->usersCatalog, id);
     OrdList *list = getUserList(user);
     if (!isOrdered(list)) {
-        quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, 0);
+        quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, NULL, 0);
         reverseOrdList(list);
         radixSortUserList(list, catalogs);
         setOrdListOrd(list, 1);
@@ -276,7 +276,7 @@ void catalogs_compute_Q3(char* id_hotel, Catalogs* catalogs, QueryResult* result
 }
 
 void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
-    Hotel* hotel = getData(getHashtableHotelsCatalog(catalogs->hotelsCatalog),hashFunction(id),id);
+    Hotel* hotel = getData(getHashtableHotelsCatalog(catalogs->hotelsCatalog),id);
     if (hotel==NULL) return; //se o id não existir
     else {
        int i;
@@ -286,7 +286,7 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
        setNumberResults (result,listSize);
        for(i=0;i<listSize; i++){
             char *id = getDataOrdList(reservations, i); char * field0 = strdup("id");
-            Reservation* reservation = getData(getHashtableReservCatalog(catalogs->reservationsCatalog),hashFunction(id),id);
+            Reservation* reservation = getData(getHashtableReservCatalog(catalogs->reservationsCatalog),id);
             int rating = getReservUserClassification(reservation);
             if (rating>=1){
                 setNumberFieldsQ(result, listSize-i-1, 6);
@@ -409,8 +409,8 @@ char *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
 int getUsersByNameSize_catalog(Catalogs *catalogs) {
     return getUsersByNameSize(catalogs->usersCatalog);
 }
-int searchPrefix_catalog(char *prefix, int (*compareFunction)(void*,void*,void*), int (*compareFunctiobBack)(void*,void*,void*), Catalogs *catalogs) {
-    return searchPrefix(prefix, compareFunction, compareFunctiobBack, catalogs->usersCatalog);
+int searchPrefix_catalog(char *prefix, Catalogs *catalogs) {
+    return searchPrefix(prefix, catalogs->usersCatalog);
 }
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs) {
     return (isPrefixUser(firstLetterCheck, prefix, index, catalogs->usersCatalog));
@@ -495,3 +495,28 @@ char *getNextAirportId_catalog(int index, Catalogs *catalogs) {
 int getNumberAirports_catalog(Catalogs *catalogs) {
     return getNumberAirports_airportsCatalog(catalogs->airportsCatalog);
 }
+
+void getAllHashtables(Hashtable *u, Hashtable *f, Hashtable *r, Hashtable *h, Hashtable *a, Catalogs *catalogs) {
+    u = getHashtableUserCatalog(catalogs->usersCatalog);
+    f = getHashtableFlightsCatalog(catalogs->flightsCatalog);
+    r = getHashtableReservCatalog(catalogs->reservationsCatalog);
+    h = getHashtableHotelsCatalog(catalogs->hotelsCatalog);
+    a = getHashtableAirportsCatalog(catalogs->airportsCatalog);
+}
+
+Hashtable *getUsers_catalog(Catalogs *catalogs) {
+    return getHashtableUserCatalog(catalogs->usersCatalog);
+}
+Hashtable *getFlights_catalog(Catalogs *catalogs) {
+    return getHashtableFlightsCatalog(catalogs->flightsCatalog);
+}
+Hashtable *getReservations_catalog(Catalogs *catalogs) {
+    return getHashtableReservCatalog(catalogs->reservationsCatalog);
+}
+Hashtable *getHotels_catalog(Catalogs *catalogs) {
+    return getHashtableHotelsCatalog(catalogs->hotelsCatalog);
+}
+Hashtable *getAirports_catalog(Catalogs *catalogs) {
+    return getHashtableAirportsCatalog(catalogs->airportsCatalog);
+}
+

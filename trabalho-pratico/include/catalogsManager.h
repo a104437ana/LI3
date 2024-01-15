@@ -83,7 +83,7 @@ int getUserListSize(int type, char *id, Catalogs *catalogs);
 char *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs);
 int getFlightScheduleDepartureTime(int time, char *id, Catalogs *catalogs);
 int getUsersByNameSize_catalog(Catalogs *catalogs);
-int searchPrefix_catalog(char *prefix, int (*compareFunction)(void*,void*,void*), int (*compareFunctiobBack)(void*,void*,void*), Catalogs *catalogs);
+int searchPrefix_catalog(char *prefix, Catalogs *catalogs);
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs);
 char *getIdUsersByName_catalog(int index, Catalogs *catalogs);
 char *getNameUsersByName_catalog(int index, Catalogs *catalogs);
@@ -112,5 +112,12 @@ int getFlightDepartureYear(void *id, void *catalogs);
 int getUserAccountCreationDay(void *id, void *catalogs);
 int getUserAccountCreationMonth(void *id, void *catalogs);
 int getUserAccountCreationYear(void *id, void *catalogs);
+
+void getAllHashtables(Hashtable *u, Hashtable *f, Hashtable *r, Hashtable *h, Hashtable *a, Catalogs *catalogs);
+Hashtable *getUsers_catalog(Catalogs *catalogs);
+Hashtable *getFlights_catalog(Catalogs *catalogs);
+Hashtable *getReservations_catalog(Catalogs *catalogs);
+Hashtable *getHotels_catalog(Catalogs *catalogs);
+Hashtable *getAirports_catalog(Catalogs *catalogs);
 
 #endif

@@ -127,60 +127,6 @@ int sameFirstLetter(char *prefix, User *user) {
   return compare;
 }
 */
-char *sameLenPrefix(char *prefix, char *name) {
-  unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
-  int i = 0, j = 0, p = 0, n = 0, e = 0;
-  while (up[i] != '\0' && un[j] != '\0') {
-    if (up[i] == un[j]) e++;
-    if (up[i] > 128) {p++; i+=2;}
-    else if (up[i] != '\0') i++;
-    if (un[j] > 128) {n++; j+=2;}
-    else if (un[j] != '\0') j++;
-  }
-
-  char *namePrefix;
-  if (i == e + 1) return NULL;
-  else if (i < j) {
-    if (n > p) {i += n;}
-    namePrefix = malloc(sizeof(char) * (i + 1));
-    //namePrefix = 
-    strncpy(namePrefix, name, i);
-    namePrefix[i] = '\0';
-  }
-  else {
-    int len;
-    if (n > p) len = i + (n - p);
-    else len = i;
-    namePrefix = malloc(sizeof(char) * (len + 1));
-    //namePrefix = 
-    strncpy(namePrefix, name, len);
-    namePrefix[len] = '\0';
-  }
-
-  return namePrefix;
-}
-int prefixSearch(void *prefixVoid, void *user, void *lookup) {
-  int compare;
-  char *prefix = (char *) prefixVoid;
-  char *name = getName((User *) user); //nome do utilizador
-  char *namePrefix = sameLenPrefix(prefix, name);
-  if (namePrefix == NULL){
-    free(namePrefix); free(name);
-    return 0;
-  }
-  compare = strcoll(prefix, namePrefix); //compara os dois prefixos
-  free(namePrefix); //liberta o prefixo do utilizador
-  free(name);
-  return compare;
-}
-int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
-  int compare;
-  char *prefix = (char *) prefixVoid;
-  char *name = getName((User *) user); //nome do utilizador
-  compare = strcoll(prefix, name); //compara os dois prefixos
-  free(name);
-  return compare;
-}
 /*
 //verifica se uma string é um prefixo do nome de um utilizador
 int isPrefix(void *prefix, void *user) {
@@ -447,7 +393,7 @@ void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResul
 //query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
 void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
   int size = getUsersByNameSize_catalog(catalogs);
-  int i = searchPrefix_catalog(prefix, prefixSearch, prefixSearchBack, catalogs);
+  int i = searchPrefix_catalog(prefix, catalogs);
   if (i < 0) return; //se não existir nomes começados pelo prefixo dado
   int firstLetterCheck, validPrefix = isPrefix_catalog(&firstLetterCheck, prefix, i, catalogs);
   int j = 0;
@@ -458,7 +404,7 @@ void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
     if (validPrefix == 0) {
       addResult(result, j);
       setNumberFieldsQ(result,j, 2);
-      char* id = getIdUsersByName_catalog(i, catalogs);
+      char* id = getIdUsersByName_catalog(i, catalogs); //receber os dois na mesma função para melhorar desempenho
       char* name = getNameUsersByName_catalog(i, catalogs);
       setFieldQ(result,j,0,field0,id);
       setFieldQ(result,j,1,field1,name);

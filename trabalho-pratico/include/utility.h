@@ -51,6 +51,8 @@ int daysInsideDates(Date *limitBegin, Date *limitEnd, Date *begin, Date *end);
 int strcollNames(char *name1, char *name2);
 int strcoll_names(char *name1, char *name2);
 void toUpperS (char *word);
+int strcmpVoid(void* s1, void *s2);
+void *strdupVoid(void *s);
 
 void destroyDate(Date *date);
 
