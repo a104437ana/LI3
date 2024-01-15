@@ -522,7 +522,7 @@ int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date 
 }
 //airports
 int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs) {
-    return getAirportPassengersYear_airportsCatalog(year, id, compareFlightYear_flightsCatalog, 0, (void *) catalogs->flightsCatalog, getNumberPassengers_filghtsCatalog, catalogs->airportsCatalog);
+    return getAirportPassengersYear_airportsCatalog(year, id, compareFlightYear_flightsCatalog, 0, (void *) catalogs->flightsCatalog, getNumberPassengers_flightsCatalog, catalogs->airportsCatalog);
 }
 char *getNextAirportId_catalog(int index, Catalogs *catalogs) {
     return getNextAirportId(index, catalogs->airportsCatalog);

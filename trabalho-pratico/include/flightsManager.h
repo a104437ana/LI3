@@ -23,6 +23,10 @@ int getDepartureYearFlight(char *id, FlightsManager *flightsCatalog);
 void destroyFlightsCatalog(FlightsManager *flightsManager);
 
 void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryResult* result);
+
+int compareDates_flight(void *date, void *id, void *flightsCatalog);
+int compareMonths_flight(void *date, void *id, void *flightsCatalog);
+int compareYears_flight(void *date, void *id, void *flightsCatalog);
 void getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers);
 
 //gets
@@ -32,6 +36,6 @@ Hashtable *getHashtableFlightsCatalog(FlightsManager *flightsManager);
 int getSDFlight(int time, char *id, FlightsManager *flightsCatalog);
 char *getSFlightDate(char *id, FlightsManager *flightsCatalog);
 int compareFlightYear_flightsCatalog(void *year, void *id, void *flightsCatalog);
-int getNumberPassengers_filghtsCatalog(void *id, void *flightsCatalog);
+int getNumberPassengers_flightsCatalog(void *id, void *flightsCatalog);
 
 #endif

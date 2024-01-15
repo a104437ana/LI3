@@ -181,6 +181,11 @@ int getFlightSD(int time, Flight *flight) {
     return res;
 }
 
+Date * getFlightDepartureDate(void *id, void *lookupTable) {
+    Flight *flight = getData((Hashtable *) lookupTable, id);
+    return (flight->scheduleDeparture);
+}
+
 char *getStringFlightDateNoHours(Flight *flight) {
     return dateToStringNoHours(flight->scheduleDeparture);
 }

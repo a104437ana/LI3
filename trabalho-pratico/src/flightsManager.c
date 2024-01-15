@@ -111,90 +111,107 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
     }
 }
 
+int compareDates_flight(void *date, void *id, void *flightsCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
+    Date * flightDate = getFlightDepartureDate(id, (void *) flights);
+    int day1 = getDay(d), month1 = getMonth(d), year1 = getYear(d);
+    int day2 = getDay(flightDate), month2 = getMonth(flightDate), year2 = getYear(flightDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else if (month1 > month2) return 1;
+    else if (month2 > month1) return -1;
+    else if (day1 > day2) return 1;
+    else if (day2 > day1) return -1;
+    else return 0;
+}
+
+int compareMonths_flight(void *date, void *id, void *flightsCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
+    Date * flightDate = getFlightDepartureDate(id, (void *) flights);
+    int month1 = getMonth(d), year1 = getYear(d);
+    int month2 = getMonth(flightDate), year2 = getYear(flightDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else if (month1 > month2) return 1;
+    else if (month2 > month1) return -1;
+    else return 0;
+}
+
+int compareYears_flight(void *date, void *id, void *flightsCatalog) {
+    Date * d = (Date *) date;
+    Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
+    Date * flightDate = getFlightDepartureDate(id, (void *) flights);
+    int year1 = getYear(d);
+    int year2 = getYear(flightDate);
+    if (year1 > year2) return 1;
+    else if (year2 > year1) return -1;
+    else return 0;
+}
+
 void getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers){
-    int i; (*flights) = 0; (*passengers) = 0; (*unique_passengers) = 0; //OrdList * unique_passengers_list = createOrdList();
-    int size = getOrdListSize(flightsCatalog->flightsByDepartureDate);
-    OrdList * list = flightsCatalog->flightsByDepartureDate; Date * sDep; char * id;
+    (*flights) = 0; (*passengers) = 0; (*unique_passengers) = 0;
+    OrdList * list = flightsCatalog->flightsByDepartureDate;
+    Date * date = malloc(sizeof(Date));
+    date->year = year;
+    date->month = month;
+    date->day = day;
     if (day!=-1){
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            Flight* flight = getData(getHashtableFlightsCatalog(flightsCatalog),id);
-            sDep = getFlightScheduleDeparture(flight);
-            if (getYear(sDep)==year){
-                if (getMonth(sDep)==month){
-                    if (getDay(sDep)==day){
-                        (*flights)++;
-                        OrdList * passengers_list = getPassengers(flight);
-                        (*passengers)+= getOrdListSize(passengers_list);
-                        //int j;
-                        //for (j=0; j<getOrdListSize(passengers_list); j++){
-                        //    int k; int res = 0;
-                        //    for (k=0; k<getOrdListSize(unique_passengers_list); k++){
-                        //        if (strcmp((char *)getDataOrdList(passengers_list, j),(char *)getDataOrdList(unique_passengers_list, k))==0){
-                        //            res = 1; break;
-                        //        }
-                        //    }
-                        //    if (res==0) addOrdList(unique_passengers_list, strdup(getDataOrdList(passengers_list, j)));
-                        //  }
-                    }
-                    else if (getDay(sDep)>day) break;
+        int i = searchDataOrdList(list, date, compareDates_flight, flightsCatalog, 0, compareDates_flight);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareDates_flight(date, id, flightsCatalog) != 0) exit = 1;
+                else {
+                    i++;
+                    (*flights)++;
+                    (*passengers)+=getNumberPassengers_flightsCatalog(id, flightsCatalog);
                 }
-                else if (getMonth(sDep)>month) break;
             }
-            else if (getYear(sDep)>year) break;
+            free(id);
         }
     }
     else if (month!=-1){
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            Flight* flight = getData(getHashtableFlightsCatalog(flightsCatalog),id);
-            sDep = getFlightScheduleDeparture(flight);
-            if (getYear(sDep)==year){
-                if (getMonth(sDep)==month){
+        int i = searchDataOrdList(list, date, compareMonths_flight, flightsCatalog, 0, compareMonths_flight);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareMonths_flight(date, id, flightsCatalog) != 0) exit = 1;
+                else {
+                    i++;
                     (*flights)++;
-                    OrdList * passengers_list = getPassengers(flight);
-                    (*passengers)+= getOrdListSize(passengers_list);
-                    //int j;
-                    //for (j=0; j<getOrdListSize(passengers_list); j++){
-                    //    int k; int res = 0;
-                    //    for (k=0; k<getOrdListSize(unique_passengers_list); k++){
-                    //        if (strcmp((char *)getDataOrdList(passengers_list, j),(char *)getDataOrdList(unique_passengers_list, k))==0){
-                    //            res = 1; break;
-                    //        }
-                    //    }   
-                    //    if (res==0) addOrdList(unique_passengers_list, strdup(getDataOrdList(passengers_list, j)));
-                    //}
+                    (*passengers)+=getNumberPassengers_flightsCatalog(id, flightsCatalog);
                 }
-                else if (getMonth(sDep)>month) break;
             }
-            else if (getYear(sDep)>year) break;
+            free(id);
         }
     }
-    else{
-        for (i=0; i<size; i++){
-            id = strdup(getDataOrdList(list, i));
-            Flight* flight = getData(getHashtableFlightsCatalog(flightsCatalog),id);
-            sDep = getFlightScheduleDeparture(flight);
-            if (getYear(sDep)==year){
+    else if (year!=-1){
+        int i = searchDataOrdList(list, date, compareYears_flight, flightsCatalog, 0, compareYears_flight);
+        if (i>=0){
+            int size = getOrdListSize(list);
+            int exit = 0;
+            char * id;
+            while (i < size && !exit) {
+                id = strdup (getDataOrdList(list, i));
+                if (compareYears_flight(date, id, flightsCatalog) != 0) exit = 1;
+                else {
+                    i++;
                     (*flights)++;
-                    OrdList * passengers_list = getPassengers(flight);
-                    (*passengers)+= getOrdListSize(passengers_list);
-                    //int j;
-                    //for (j=0; j<getOrdListSize(passengers_list); j++){
-                    //    int k; int res = 0;
-                    //    for (k=0; k<getOrdListSize(unique_passengers_list); k++){
-                    //        if (strcmp((char *)getDataOrdList(passengers_list, j),(char *)getDataOrdList(unique_passengers_list, k))==0){
-                    //            res = 1; break;
-                    //        }
-                    //    }
-                    //    if (res==0) addOrdList(unique_passengers_list, strdup(getDataOrdList(passengers_list, j)));
-                    //}
+                    (*passengers)+=getNumberPassengers_flightsCatalog(id, flightsCatalog);
+                }
             }
-            else if (getYear(sDep)>year) break;
+            free(id);
         }
     }
-    //(*unique_passengers)=getOrdListSize(unique_passengers_list);
-    free(id); //destroyOnlyOrdList(unique_passengers_list); destroyDate(sDep);
+    destroyDate(date);
 }
 
 //gets
@@ -215,7 +232,7 @@ int compareFlightYear_flightsCatalog(void *year, void *id, void *flightsCatalog)
     else if (*y < yearFlight) res--;
     return res;
 }
-int getNumberPassengers_filghtsCatalog(void *id, void *flightsCatalog) {
+int getNumberPassengers_flightsCatalog(void *id, void *flightsCatalog) {
     char *id_flight = (char *) id;
     Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
     Flight *flight = getData(flights, id_flight);
