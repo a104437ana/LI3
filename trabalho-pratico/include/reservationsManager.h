@@ -35,4 +35,8 @@ char *getSReservDate(char *id, ReservationsManager *reservationsCatalog);
 int getBeginDayReservation(char *id, ReservationsManager *reservationsCatalog);
 int getBeginMonthReservation(char *id, ReservationsManager *reservationsCatalog);
 int getBeginYearReservation(char *id, ReservationsManager *reservationsCatalog);
+int getEndDayReservation(char *id, ReservationsManager *reservationsCatalog);
+int getEndMonthReservation(char *id, ReservationsManager *reservationsCatalog);
+int getEndYearReservation(char *id, ReservationsManager *reservationsCatalog);
+int compareReservDates_reservationsCatalog(Date *date, char *id, ReservationsManager *reservationsCatalog);
 #endif

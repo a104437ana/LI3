@@ -46,15 +46,25 @@ struct hashtable {
 
 //funcao de hash
 unsigned int hashFunction(void *key) {
-    char *id = (char *) key;
+    unsigned char *id = (unsigned char *) key, c;
     if (id == NULL) return 0;
-    int size = strlen(id);
-    unsigned long int hash = 1;
-    for (int i=0; i<size; i++) //para cada caracter
-        hash = hash * 33 ^ id[i]; // hash[i] = (hash[i-1] * 33) XOR id[i]
+    unsigned long int hash = 5381;
+    while ((c = *id++)) //para cada caracter
+        hash = ((hash << 5) + hash) + c; // hash[i] = (hash[i] * 33) + id[i]
 
     return hash;
 }
+////funcao de hash
+//unsigned int hashFunction(void *key) {
+//    char *id = (char *) key;
+//    if (id == NULL) return 0;
+//    int size = strlen(id);
+//    unsigned long int hash = 1;
+//    for (int i=0; i<size; i++) //para cada caracter
+//        hash = hash * 33 ^ id[i]; // hash[i] = (hash[i-1] * 33) XOR id[i]
+//
+//    return hash;
+//}
 //função que cria uma nova hashtable com o tamanho dado
 Hashtable *createHashtable(int size, unsigned int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*)) {
     Hashtable *newHashtable = malloc(sizeof(Hashtable));

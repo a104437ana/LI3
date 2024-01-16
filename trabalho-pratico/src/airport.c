@@ -75,7 +75,7 @@ int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(
     OrdList *origin = airport->originFlights; //voos de origem do aeroporto
     OrdList *destination = airport->destinationFlights; //voos de destino do aeroporto
     void *data = (void *) &year;
-    int i = searchDataOrdList(origin, data, compareFunction, lookup, equal, compareFunction);
+    int i = searchDataOrdList(origin, data, compareFunction, lookup, equal, compareFunction, 0);
     int passengers = 0, size, exit;
     if (i >= 0) { //se não houver voos nesse ano
         size = getOrdListSize(origin);
@@ -89,7 +89,7 @@ int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(
             }
         }
     }
-    i = searchDataOrdList(destination, data, compareFunction, lookup, equal, compareFunction);
+    i = searchDataOrdList(destination, data, compareFunction, lookup, equal, compareFunction, 0);
     if (i >= 0) { //se houver voos nesse ano
         exit = 0;
         size = getOrdListSize(destination);

@@ -6,8 +6,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define BEGIN_YEAR 1900
-#define END_YEAR 2200
+#define BEGIN_YEAR 1950
+#define END_YEAR 2050
 #define N_YEARS (END_YEAR - BEGIN_YEAR + 1)
 
 typedef struct date {

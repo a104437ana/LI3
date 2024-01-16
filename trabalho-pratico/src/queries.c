@@ -364,15 +364,31 @@ void Q7 (int n, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q7(n,catalogs,result);
 }
 
+//pesquisa lista ordenada por data inicial e corte quando data inicial > data final limite
+//4576.99 MB 13.2175 seg (4)
+
+//pesquisa binária data final
+//4625.19 MB 13.9375 seg (4)
+
+//percorrer lista toda e ir calculando o preço de cada reserva entre as datas limite
+//4576.99 MB 1.9325 seg (4)
+
 //quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
 void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResult *result) {
   if (doesHotelExist(id, catalogs) == 0) return; //se o hotel não existir
   Date *begin = string_to_date(beginDate);
   Date *end = string_to_date(endDate);
-  sortHotelReservationsByDate(id, catalogs);
+//  sortHotelReservationsByDate(id, catalogs); //nlog(n)
+//  sortHotelReservationsByEndDate(id, catalogs); //nlog(n)
   int size = getHotelReservationsSize(id, catalogs);
   int total = 0, price = 0;
+//  int lower = searchHotelDates_catalog(begin, id, catalogs); //log(n)
 
+//  if (lower < 0) {
+//    destroyDate(begin);
+//    destroyDate(end);
+//    return;
+//  } //reservas dentro datas + extras limites (n - k (limites corte) se k pequeno aprox n se k grande aprox k) melhor caso k pior n
   for (int i=0; i<size && getHotelReservPriceBetweenDates(id, i, &price, begin, end, catalogs); i++) { //enquanto dia limite maior ou igual a dia atual
     total += price;
     price = 0;
@@ -390,27 +406,81 @@ void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResul
   free(field0); free(revenue);
 }
 
+////query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
+//void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
+//  int size = getUsersByNameSize_catalog(catalogs);
+//  int i = searchPrefix_catalog(prefix, catalogs);
+//  if (i < 0) return; //se não existir nomes começados pelo prefixo dado
+//  int firstLetterCheck, validPrefix = isPrefix_catalog(&firstLetterCheck, prefix, i, catalogs);
+//  int j = 0;
+//  char* field0 = strdup("id");
+//  char* field1 = strdup("name");
+//  while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado
+//    validPrefix = isPrefix_catalog(&firstLetterCheck, prefix, i, catalogs);
+//    if (validPrefix == 0) {
+//      addResult(result, j);
+//      setNumberFieldsQ(result,j, 2);
+////      char* id = getIdUsersByName_catalog(i, catalogs); //receber os dois na mesma função para melhorar desempenho
+////      char* name = getNameUsersByName_catalog(i, catalogs);
+//      char *id = NULL, *name = NULL;
+//      getIdNameUsersByName_catalog(i, &id, &name, catalogs);
+//      setFieldQ(result,j,0,field0,id);
+//      setFieldQ(result,j,1,field1,name);
+//      free(id); free(name);
+//      j++;
+//    }
+//    i++;
+//  }
+//  free(field0); free(field1); 
+//
+//  return;
+//}
+
+int sameFirstLetterString(char *string1, char *string2) {
+  int compare = 1;
+  char c1 = string1[0], c2 = string2[0];
+  if (c1 == c2) compare = 0;
+  else if (c1 == 'A' || c1 == 'E' || c1 == 'I' || c1 == 'O' || c1 == 'U' ||
+           c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U') compare = 0;
+  return compare;
+}
+int isNamePrefix(int *firstLetterCheck, char *prefix, char *name) {
+    int nameSize = strlen(name);
+    int prefixSize = strlen(prefix);
+    char *namePrefix;
+    if (nameSize > prefixSize) {
+        namePrefix = malloc(sizeof(char) * (prefixSize + 1));
+        namePrefix = strncpy(namePrefix, name, prefixSize); //prefixo do utilizador com o mesmo tamanho do prefixo a comparar
+        namePrefix[prefixSize] = '\0';
+    }
+    else
+        namePrefix = strdup(name);
+    int compare = strcoll(prefix, namePrefix); //compara os dois prefixos
+    *firstLetterCheck = sameFirstLetterString(prefix, name);
+    free(namePrefix); //liberta o prefixo do utilizador
+    return compare;
+}
+
 //query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
 void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
   int size = getUsersByNameSize_catalog(catalogs);
   int i = searchPrefix_catalog(prefix, catalogs);
   if (i < 0) return; //se não existir nomes começados pelo prefixo dado
-  int firstLetterCheck, validPrefix = isPrefix_catalog(&firstLetterCheck, prefix, i, catalogs);
+  int firstLetterCheck = 0, validPrefix = 0;
   int j = 0;
-  char* field0 = strdup("id");
-  char* field1 = strdup("name");
-  while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado
-    validPrefix = isPrefix_catalog(&firstLetterCheck, prefix, i, catalogs);
+  char* field0 = strdup("id"), *id = NULL;
+  char* field1 = strdup("name"), *name = NULL;
+  while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado ou primeira letra for a mesma
+    getIdNameUsersByName_catalog(i, &id, &name, catalogs);
+    validPrefix = isNamePrefix(&firstLetterCheck, prefix, name);
     if (validPrefix == 0) {
       addResult(result, j);
       setNumberFieldsQ(result,j, 2);
-      char* id = getIdUsersByName_catalog(i, catalogs); //receber os dois na mesma função para melhorar desempenho
-      char* name = getNameUsersByName_catalog(i, catalogs);
       setFieldQ(result,j,0,field0,id);
       setFieldQ(result,j,1,field1,name);
-      free(id); free(name);
       j++;
     }
+    free(id); free(name);
     i++;
   }
   free(field0); free(field1); 

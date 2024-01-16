@@ -215,6 +215,11 @@ char *getStringReservDate(Reservation *reservation) {
     return dateToStringNoHours(reservation->begin);
 }
 
+int compareReservDates(Reservation *reservation, Date *date) {
+    Date *reservDate = reservation->end;
+    return compareDates(reservDate, date);
+}
+
 //sets dos campos da reserva
 //void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *reservId) {
 //    Reservation *data = getData(hashtable, key, reservId);

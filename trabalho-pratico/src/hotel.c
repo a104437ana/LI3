@@ -9,6 +9,7 @@ struct hotel {
     char stars;
     int cityTax;
     OrdList *reservationsByDate;
+//    OrdList *reservationsByEndDate;
     double ratingsSum;
     int numberRatings;
 };
@@ -22,12 +23,15 @@ Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     hotel->ratingsSum = 0;
     hotel->numberRatings = 0;
     hotel->reservationsByDate = createOrdList(); //cria uma lista vazia de reservas do hotel
+//    hotel->reservationsByEndDate = createOrdList();
 
     return hotel;
 }
 //função que adiciona uma reserva à lista de reservas de um hotel
 void addReservationToHotel(Hotel *hotel, char *id_reserv, char rating) {
-    addOrdList(hotel->reservationsByDate, strdup(id_reserv));
+    char *id = strdup(id_reserv);
+    addOrdList(hotel->reservationsByDate, id);
+//    addOrdList(hotel->reservationsByEndDate, id);
     if (rating != '\0') {
         hotel->ratingsSum += (double) (rating - '0');
         hotel->numberRatings += 1;
@@ -42,10 +46,17 @@ int getHotelNumberOfReservations(Hotel* hotel) {
 OrdList *getHotelOrdList(Hotel *hotel) {
     return hotel->reservationsByDate;
 }
+//OrdList *getHotelEndOrdList(Hotel *hotel) {
+//    return hotel->reservationsByEndDate;
+//}
 char *getHotelReservId(Hotel *hotel, int index) {
     char *id = (char *) getDataOrdList(hotel->reservationsByDate, index);
     return strdup(id);
 }
+
+//int searchHotelDates(Date *date, int (*compareDate)(void*,void*,void*), void *lookup, Hotel *hotel) {
+//    return searchDataOrdList(hotel->reservationsByEndDate, date, compareDate, lookup, 0, compareDate, 1);
+//}
 
 //gets dos campos do hotel
 //char *getHotelId(Hotel *hotel) {

@@ -125,7 +125,7 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
     date->month = month;
     date->day = day;
     if (day!=-1){
-        int i = searchDataOrdList(list, date, compareDates_reservation, reservations, 0, compareDates_reservation);
+        int i = searchDataOrdList(list, date, compareDates_reservation, reservations, 0, compareDates_reservation, 0);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;
@@ -142,7 +142,7 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
         }
     }
     else if (month!=-1){
-        int i = searchDataOrdList(list, date, compareMonths_reservation, reservations, 0, compareMonths_reservation);
+        int i = searchDataOrdList(list, date, compareMonths_reservation, reservations, 0, compareMonths_reservation, 0);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;
@@ -159,7 +159,7 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
         }
     }
     else if (year!=-1){
-        int i = searchDataOrdList(list, date, compareYears_reservation, reservations, 0, compareYears_reservation);
+        int i = searchDataOrdList(list, date, compareYears_reservation, reservations, 0, compareYears_reservation, 0);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;
@@ -216,4 +216,20 @@ int getBeginMonthReservation(char *id, ReservationsManager *reservationsCatalog)
 int getBeginYearReservation(char *id, ReservationsManager *reservationsCatalog) {
     Reservation *reservation = getData(reservationsCatalog->reservations, id);
     return getReservBeginYear(reservation);
+}
+int getEndDayReservation(char *id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+    return getReservEndDay(reservation);
+}
+int getEndMonthReservation(char *id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+    return getReservEndMonth(reservation);
+}
+int getEndYearReservation(char *id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+    return getReservEndYear(reservation);
+}
+int compareReservDates_reservationsCatalog(Date *date, char *id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+    return compareReservDates(reservation, date);
 }

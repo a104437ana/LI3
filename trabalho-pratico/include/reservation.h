@@ -41,6 +41,7 @@ char *getReservUserIdId(void *id, void *lookupTable);
 Date *getReservBeginId(void *id, void *lookupTable);
 Date *getReservEndId(void *id, void *lookupTable);
 char *getStringReservDate(Reservation *reservation);
+int compareReservDates(Reservation *reservation, Date *date);
 
 //sets
 //void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *ReservId);

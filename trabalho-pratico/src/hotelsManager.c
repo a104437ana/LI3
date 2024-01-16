@@ -104,3 +104,7 @@ char *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
     Hotel *hotel = getData(hotelsCatalog->hotels, id);
     return getHotelReservId(hotel, index);
 }
+//int searchHotelDates_hotelsCatalog(Date *date, char *id, int (*compareDate)(void*,void*,void*), void *lookup, HotelsManager *hotelsCatalog) {
+//    Hotel *hotel = getData(hotelsCatalog->hotels, id);
+//    return searchHotelDates(date, compareDate, lookup, hotel);
+//}

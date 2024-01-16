@@ -209,7 +209,7 @@ int main (int argc, char** argv) {
         strcat(correct_output_file,output_file);
     }
     for (j=0; j<10; j++) {
-        printf("Query %2d total duration: %.6f\n",j+1,qTime[j]);
+        printf("Query %2d total duration: %.6f\n",j+1,qTime[j+1]);
         if (queries[j][0] == 0)
             printf("Query %2d passed the tests ........... (%3.0f/%3.0f %3.0f%%) ✅\n", j+1, queries[j][1], queries[j][2], (queries[j][2] == 0) ? 100 : (queries[j][1] / queries[j][2]) * 100);
         else {

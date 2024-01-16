@@ -28,6 +28,7 @@ void sortAirportCatalog(Catalogs *catalogs);
 void sortUserList(char *id, Catalogs *catalogs);
 //ordena as reservas do hotel
 void sortHotelReservationsByDate(char *id, Catalogs *catalogs);
+void sortHotelReservationsByEndDate(char *id, Catalogs *catalogs);
 
 void sortReservationsByBeginDate(Catalogs *catalogs);
 void sortFlightsByDepartureDate(Catalogs * catalogs);
@@ -89,6 +90,7 @@ int searchPrefix_catalog(char *prefix, Catalogs *catalogs);
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs);
 char *getIdUsersByName_catalog(int index, Catalogs *catalogs);
 char *getNameUsersByName_catalog(int index, Catalogs *catalogs);
+void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *catalogs);
 //flights
 int getFlightScheduleDepartureTime(int time, char *id, Catalogs *catalogs);
 char *getStringFlightDate(char *id, Catalogs *catalogs);
@@ -103,6 +105,10 @@ int getHotelReservPriceBetweenDates(char *id, int index, int *price, Date *begin
 int getReservationBeginDay(void *id, void *catalogs);
 int getReservationBeginMonth(void *id, void *catalogs);
 int getReservationBeginYear(void *id, void *catalogs);
+int getReservationEndDay(void *id, void *catalogs);
+int getReservationEndMonth(void *id, void *catalogs);
+int getReservationEndYear(void *id, void *catalogs);
+int searchHotelDates_catalog(Date *date, char *id, Catalogs *catalogs);
 //airports
 int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs);
 char *getNextAirportId_catalog(int index, Catalogs *catalogs);

@@ -69,5 +69,6 @@ int searchPrefix(char *prefix, UsersManager *usersCatalog);
 int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *usersCatalog);
 char *getIdUsersByName(int index, UsersManager *usersCatalog);
 char *getNameUsersByName(int index, UsersManager *usersCatalog);
+void getIdNameUsersByName(int index, char **id, char **name, UsersManager *usersCatalog);
 
 #endif

@@ -92,7 +92,7 @@ void radixSortFlightDate(OrdList *list, void *lookupTable) {
 }
 //função que compara os ids de dois voos
 int compareFlightsIds(void *id1, void *id2, void *lookup) {
-    return strcoll(id1, id2);
+    return strcoll(id1, id2) * (-1);
 }
 //ordena os voos do aeroporto
 void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
@@ -100,13 +100,13 @@ void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
     OrdList *destination = getAirportDestinationOrdList(airport);
     if (!isOrdered(origin)) {
         quickSort(origin, 0, getOrdListSize(origin)-1, compareFlightsIds, NULL, 0); //ordena por ids
-        reverseOrdList(origin);
+//        reverseOrdList(origin);
         radixSortFlightDate(origin, airports); //ordena por datas
         setOrdListOrd(origin, 1);
     }
     if (!isOrdered(destination)) {
         quickSort(destination, 0, getOrdListSize(destination)-1, compareFlightsIds, NULL, 0); //ordena por ids
-        reverseOrdList(destination);
+//        reverseOrdList(destination);
         radixSortFlightDate(destination, airports); //ordena por datas
         setOrdListOrd(destination, 1);
     }

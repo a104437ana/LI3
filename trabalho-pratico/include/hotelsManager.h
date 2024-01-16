@@ -30,5 +30,6 @@ Hotel *getHotelCatalog(HotelsManager *hotelsCatalog, char *id);
 int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog);
 int hotelExists(char *id, HotelsManager *hotelsCatalog);
 char *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog);
+int searchHotelDates_hotelsCatalog(Date *date, char *id, int (*compareDates)(void*,void*,void*), void *lookup, HotelsManager *hotelsCatalog);
 
 #endif

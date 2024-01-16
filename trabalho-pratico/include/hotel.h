@@ -16,7 +16,9 @@ void addReservationToHotel(Hotel *hotel, char *id_reserv, char rating);
 int getHotelNumberOfReservations(Hotel* hotel);
 //obtem a lista de reservas do hotel
 OrdList *getHotelOrdList(Hotel *hotel);
+OrdList *getHotelEndOrdList(Hotel *hotel);
 char *getHotelReservId(Hotel *hotel, int index);
+int searchHotelDates(Date *date, int (*compareDate)(void*,void*,void*), void *lookup, Hotel *hotel);
 
 //gets
 char *getHotelId(Hotel *hotel);
