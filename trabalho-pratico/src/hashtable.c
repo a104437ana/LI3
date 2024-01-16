@@ -45,7 +45,7 @@ struct hashtable {
 };
 
 //funcao de hash
-unsigned int hashFunction(void *key) {
+unsigned int hashString(void *key) {
     unsigned char *id = (unsigned char *) key, c;
     if (id == NULL) return 0;
     unsigned long int hash = 5381;
@@ -54,8 +54,11 @@ unsigned int hashFunction(void *key) {
 
     return hash;
 }
+unsigned int hashInt(void *key) {
+    return *((unsigned int *) key);
+}
 ////funcao de hash
-//unsigned int hashFunction(void *key) {
+//unsigned int hashString(void *key) {
 //    char *id = (char *) key;
 //    if (id == NULL) return 0;
 //    int size = strlen(id);

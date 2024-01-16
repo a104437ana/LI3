@@ -13,14 +13,14 @@ struct airportsManager {
 //cria um novo catálogo de aeroportos
 AirportsManager *createAirportsCatalog(int size) {
     AirportsManager *airportsManager = malloc(sizeof(AirportsManager));
-    airportsManager->airports = createHashtable(size, hashFunction, strcmpVoid, strdupVoid, destroyAirport);
+    airportsManager->airports = createHashtable(size, hashString, strcmpVoid, strdupVoid, destroyAirport);
     airportsManager->airportsByMedianOfDelays = createOrdList();
     airportsManager->size_delays = 0;
     return airportsManager;
 }
 
 //atualiza o catálogo de aeroportos
-void updateAirportCatalog(int delay, char *id_origin, char *id_destination, char *id_flight, AirportsManager *airportsCatalog) {
+void updateAirportCatalog(int delay, char *id_origin, char *id_destination, int *id_flight, AirportsManager *airportsCatalog) {
     int existsAirportOrigin = existsData(airportsCatalog->airports, id_origin); //verifica se o aeroporto já existe no catálogo de aeroportos
     int existsAirportDestination = existsData(airportsCatalog->airports, id_destination); //verifica se o aeroporto já existe no catálogo de aeroportos
     Airport *airport_origin;
@@ -92,7 +92,7 @@ void radixSortFlightDate(OrdList *list, void *lookupTable) {
 }
 //função que compara os ids de dois voos
 int compareFlightsIds(void *id1, void *id2, void *lookup) {
-    return strcoll(id1, id2) * (-1);
+    return intcmpVoid(id1, id2) * (-1);
 }
 //ordena os voos do aeroporto
 void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
@@ -124,7 +124,8 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
         OrdList* airportsByDate = getAirportOriginOrdList(airport);
         int size = getOrdListSize(airportsByDate);
         int i = 0;
-        char* id_flight;
+        int* id_flight;
+        char *id_flightS;
         Flight* flight;
         while (i < size) {
             id_flight = getDataOrdList(airportsByDate,i);
@@ -158,13 +159,14 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
                 char* field3 = strdup("airline");
                 char* field4 = strdup("plane_model");
                 i++;
-                setFieldQ(result,j,0,field0,id_flight);
+                id_flightS = flightIdToString(id_flight);
+                setFieldQ(result,j,0,field0,id_flightS);
                 setFieldQ(result,j,1,field1,string_date);
                 setFieldQ(result,j,2,field2,destination);
                 setFieldQ(result,j,3,field3,airline);
                 setFieldQ(result,j,4,field4,plane_model);
                 free(field0); free(field1); free(field2); free(field3); free(field4);
-                free(string_date); free(destination); free(airline); free(plane_model);
+                free(string_date); free(destination); free(airline); free(plane_model); free(id_flightS);
                 j++;
                 destroyDate(date);
             }

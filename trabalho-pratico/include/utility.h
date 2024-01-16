@@ -53,6 +53,12 @@ int strcoll_names(char *name1, char *name2);
 void toUpperS (char *word);
 int strcmpVoid(void* s1, void *s2);
 void *strdupVoid(void *s);
+int intcmpVoid(void *n1, void *n2);
+void *intdupVoid(void *n);
+char *flightIdToString(int *id);
+char *reservIdToString(int *id);
+int *flightIdToInt(char *id);
+int *reservIdToInt(char *id);
 
 void destroyDate(Date *date);
 

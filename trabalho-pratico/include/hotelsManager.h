@@ -11,7 +11,7 @@ typedef struct hotelsManager HotelsManager;
 //cria um novo catálogo de hoteis
 HotelsManager *createHotelsCatalog(int size);
 //atualiza catálogo de hoteis
-void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, char *id_reserv, HotelsManager *hotelsCatalog);
+void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, int *id_reserv, HotelsManager *hotelsCatalog);
 
 //imprime o catálogo de hoteis, para efeitos de teste
 void printHotels(HotelsManager *hotelsManager);
@@ -29,7 +29,7 @@ int getCityTax(char *id, HotelsManager *hotelsCatalog);
 Hotel *getHotelCatalog(HotelsManager *hotelsCatalog, char *id);
 int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog);
 int hotelExists(char *id, HotelsManager *hotelsCatalog);
-char *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog);
+int *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog);
 int searchHotelDates_hotelsCatalog(Date *date, char *id, int (*compareDates)(void*,void*,void*), void *lookup, HotelsManager *hotelsCatalog);
 
 #endif

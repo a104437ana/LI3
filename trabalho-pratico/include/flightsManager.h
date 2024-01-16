@@ -10,14 +10,14 @@ typedef struct flightsManager FlightsManager;
 //cria um catalogo de voos
 FlightsManager *createFlightsCatalog(int size);
 //adiciona um voo ao catalogo de voos
-int addFlightToCatalog(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, FlightsManager *flightsCatalog);
+int addFlightToCatalog(int *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, FlightsManager *flightsCatalog);
 //adiciona o utilizador à lista de passageiros do voo
-void addUserToFlight(char *id_flight, char *id_user, FlightsManager *flightsCatalog);
+void addUserToFlight(int *id_flight, char *id_user, FlightsManager *flightsCatalog);
 
 OrdList * getFlightsByDeparture(FlightsManager * flights);
-int getDepartureDayFlight(char *id, FlightsManager *flightsCatalog);
-int getDepartureMonthFlight(char *id, FlightsManager *flightsCatalog);
-int getDepartureYearFlight(char *id, FlightsManager *flightsCatalog);
+int getDepartureDayFlight(int *id, FlightsManager *flightsCatalog);
+int getDepartureMonthFlight(int *id, FlightsManager *flightsCatalog);
+int getDepartureYearFlight(int *id, FlightsManager *flightsCatalog);
 
 //liberta espaço em memória do catalogo de voos
 void destroyFlightsCatalog(FlightsManager *flightsManager);
@@ -30,11 +30,11 @@ int compareYears_flight(void *date, void *id, void *flightsCatalog);
 void getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers);
 
 //gets
-Flight *getFlightCatalog(FlightsManager *flightsManager, char *id);
+Flight *getFlightCatalog(FlightsManager *flightsManager, int *id);
 int existsFlight (FlightsManager* flightsManager,char* id);
 Hashtable *getHashtableFlightsCatalog(FlightsManager *flightsManager);
-int getSDFlight(int time, char *id, FlightsManager *flightsCatalog);
-char *getSFlightDate(char *id, FlightsManager *flightsCatalog);
+int getSDFlight(int time, int *id, FlightsManager *flightsCatalog);
+char *getSFlightDate(int *id, FlightsManager *flightsCatalog);
 int compareFlightYear_flightsCatalog(void *year, void *id, void *flightsCatalog);
 int getNumberPassengers_flightsCatalog(void *id, void *flightsCatalog);
 

@@ -124,12 +124,21 @@ void radixSortUserList(OrdList *list, void *lookupTable) {
 
 //função que compara os ids de duas reservas
 int compareReservsIds(void *id1, void *id2, void *lookup) {
-    return strcoll(id1, id2) * (-1);
+    return intcmpVoid(id1, id2) * (-1);
 }
 //função que compara os ids de dois voos ou reservas
 int compareFlightReservsIds(void *data1, void *data2, void *lookup) {
-    char *id1 = getIdResultQ2((ResultQ2 *)data1), *id2 = getIdResultQ2((ResultQ2 *)data2);
-    return strcoll(id1, id2) * (-1);
+    int res = 0;
+    ResultQ2 *r1 = (ResultQ2 *) data1, *r2 = (ResultQ2 *) data2;
+    Q2Type t1 = getResultType(r1), t2 = getResultType(r2);
+    if (t1 == t2) {
+        int id1 = getIdResultQ2(r1), id2 = getIdResultQ2(r2);
+        if (id1 < id2) res++;
+        else if (id2 < id1) res--;
+    }
+    else if (t1 == RESERVATIONS) res--;
+    else if (t1 == FLIGHTS) res++;
+    return res;
 }
 /*
 //função que compara os ids de dois voos
@@ -193,28 +202,29 @@ void addUser(char *id, char *name, int gender, char *country, char *passport, ch
     addUserToCatalog(id, name, gender, country, passport, birth, accountCreation, accountStatus, catalogs->usersCatalog);
 }
 //adiciona uma reserva ao catálogo
-void addReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs) {
-    addReservToCatalog(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification, catalogs->reservationsCatalog);
-    double reservPrice = getReservationPrice(id, id_hotel, catalogs);
+void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs) {
+    int priceNoTax = addReservToCatalog(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification, catalogs->reservationsCatalog);
+    int cityTax = getCityTax(id_hotel, catalogs->hotelsCatalog);
+    double reservPrice = priceNoTax + (((double) priceNoTax / 100) * cityTax);
     addReservToUser(id_user, id, reservPrice, catalogs->usersCatalog);
 }
 //adiciona um voo ao catálogo
-int addFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs) {
+int addFlight(int *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs) {
     int delay = addFlightToCatalog(id, airline, airplane, origin, destination, scheduleDeparture, scheduleArrival, realDeparture, realArrival, catalogs->flightsCatalog);
     return delay;
 }
 //adiciona uma reserva ao catálogo
-void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, char *id_reserv, Catalogs *catalogs) {
+void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, int *id_reserv, Catalogs *catalogs) {
     updateHotelCatalog(id, name, stars, cityTax, userClassification, id_reserv, catalogs->hotelsCatalog);
 }
 //adiciona uma reserva ao catálogo
-void addAirport(int delay, char *id_origin, char *id_destination, char *id_flight, Catalogs *catalogs) {
+void addAirport(int delay, char *id_origin, char *id_destination, int *id_flight, Catalogs *catalogs) {
     updateAirportCatalog(delay, id_origin, id_destination, id_flight, catalogs->airportsCatalog);
 }
 //adiciona um passageiro ao catálogo
 //função que adiciona um utilizador à lista de passageiros de um certo voo no catálogo
 //e adiciona esse voo à lista de voos do utilizador
-void addPassenger(char *flightId, char *userId, Catalogs *catalogs) {
+void addPassenger(int *flightId, char *userId, Catalogs *catalogs) {
     addUserToFlight(flightId, userId, catalogs->flightsCatalog); //adiciona o utilizador à lista de passageiros do voo
     addFlightToUser(userId, flightId, catalogs->usersCatalog); //adiciona o voo à lista de voos do utilizador
 }
@@ -300,8 +310,9 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
        int listSize = getOrdListSize(reservations);
        setNumberResults (result,listSize);
        for(i=0;i<listSize; i++){
-            char *id = getDataOrdList(reservations, i); char * field0 = strdup("id");
-            Reservation* reservation = getData(getHashtableReservCatalog(catalogs->reservationsCatalog),id);
+            int key = *((int *) (getDataOrdList(reservations, i))); char * field0 = strdup("id");
+            char *id_reserv = reservIdToString(&key);
+            Reservation* reservation = getData(getHashtableReservCatalog(catalogs->reservationsCatalog),&key);
             int rating = getReservUserClassification(reservation);
             if (rating>=1){
                 setNumberFieldsQ(result, listSize-i-1, 6);
@@ -319,14 +330,14 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
                 char * totalS = malloc(sizeof(char)*15);
                 sprintf(totalS, "%.3f", total); char * field5 = strdup("total_price");
 
-                setFieldQ(result, listSize-i-1, 0, field0, id);
+                setFieldQ(result, listSize-i-1, 0, field0, id_reserv);
                 setFieldQ(result, listSize-i-1, 1, field1, begin); 
                 setFieldQ(result, listSize-i-1, 2, field2, end); 
                 setFieldQ(result, listSize-i-1, 3, field3, userId);
                 setFieldQ(result, listSize-i-1, 4, field4, ratingS); 
                 setFieldQ(result, listSize-i-1, 5, field5, totalS); 
 
-                destroyDate(begin_date); destroyDate(end_date); free(begin); free(end); free(userId); free(ratingS); free(totalS);
+                destroyDate(begin_date); destroyDate(end_date); free(begin); free(end); free(userId); free(ratingS); free(totalS); free(id_reserv);
                 free(field0); free(field1); free(field2); free(field3); free(field4); free(field5);
             }
             else{
@@ -343,13 +354,13 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
                 char * totalS = malloc(sizeof(char)*15);
                 sprintf(totalS, "%.3f", total); char * field4 = strdup("total_price");
 
-                setFieldQ(result, listSize-i-1, 0, field0, id);
+                setFieldQ(result, listSize-i-1, 0, field0, id_reserv);
                 setFieldQ(result, listSize-i-1, 1, field1, begin); 
                 setFieldQ(result, listSize-i-1, 2, field2, end); 
                 setFieldQ(result, listSize-i-1, 3, field3, userId);
                 setFieldQ(result, listSize-i-1, 4, field4, totalS); 
 
-                destroyDate(begin_date); destroyDate(end_date); free(begin); free(end); free(userId); free(totalS);
+                destroyDate(begin_date); destroyDate(end_date); free(begin); free(end); free(userId); free(totalS); free(id_reserv);
                 free(field0); free(field1); free(field2); free(field3); free(field4);
             }
        }
@@ -453,7 +464,7 @@ int getAccountStatus(char *id, Catalogs *catalogs) {
 int getUserListSize(int type, char *id, Catalogs *catalogs) {
     return getSizeUserList(type, id, catalogs->usersCatalog);
 }
-char *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
+int *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
     return getIdUserList(type, id_user, index, catalogs->usersCatalog);
 }
 int getUsersByNameSize_catalog(Catalogs *catalogs) {
@@ -476,23 +487,23 @@ void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *c
 }
 
 //flights
-int getFlightScheduleDepartureTime(int time, char *id, Catalogs *catalogs) {
+int getFlightScheduleDepartureTime(int time, int *id, Catalogs *catalogs) {
     return getSDFlight(time, id, catalogs->flightsCatalog);
 }
-char *getStringFlightDate(char *id, Catalogs *catalogs) {
+char *getStringFlightDate(int *id, Catalogs *catalogs) {
     return getSFlightDate(id, catalogs->flightsCatalog);
 }
 //reservations
-int getReservationBegin(int time, char *id, Catalogs *catalogs) {
+int getReservationBegin(int time, int *id, Catalogs *catalogs) {
     return getBReserv(time, id, catalogs->reservationsCatalog);
 }
-double getReservationPrice(char *id_reserv, char *id_hotel, Catalogs *catalogs){
+double getReservationPrice(int *id_reserv, char *id_hotel, Catalogs *catalogs){
     int reservPrice = getReservPriceNoTax(id_reserv, catalogs->reservationsCatalog); //preço por noite * número de noites
     int cityTax = getCityTax(id_hotel, catalogs->hotelsCatalog); //taxa turística
     double res = reservPrice + (((float)reservPrice / 100) * cityTax);
     return res;
 }
-char *getStringReservationDate(char *id, Catalogs *catalogs) {
+char *getStringReservationDate(int *id, Catalogs *catalogs) {
     return getSReservDate(id, catalogs->reservationsCatalog);
 }
 int getReservationBeginDay(void *id, void *catalogs){
@@ -542,7 +553,7 @@ int doesHotelExist(char *id, Catalogs *catalogs) {
     return hotelExists(id, catalogs->hotelsCatalog);
 }
 int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date *begin, Date *end, Catalogs *catalogs) {
-    char *id_reserv = getHotelReservationId(id_hotel, index, catalogs->hotelsCatalog);
+    int *id_reserv = getHotelReservationId(id_hotel, index, catalogs->hotelsCatalog);
     int p = getReservPriceLimits(id_reserv, catalogs->reservationsCatalog, begin, end);
     free(id_reserv);
 //    if (p == -2) return 0;

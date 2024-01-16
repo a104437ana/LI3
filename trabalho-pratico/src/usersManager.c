@@ -10,7 +10,7 @@ struct usersManager {
 //função que cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size) {
     UsersManager *usersManager = malloc(sizeof(UsersManager)); //aloca espaço em memória para a estrutura do catálogo
-    usersManager->users = createHashtable(size, hashFunction, strcmpVoid, strdupVoid, destroyUser); //cria uma hastable para os utilizadores
+    usersManager->users = createHashtable(size, hashString, strcmpVoid, strdupVoid, destroyUser); //cria uma hastable para os utilizadores
     usersManager->usersByName = createOrdList(); //cria uma lista para os utilizadores
     usersManager->usersByAccountCreation = createOrdList();
     return usersManager;
@@ -26,12 +26,12 @@ void addUserToCatalog(char *id, char *name, int gender, char *country, char *pas
     addOrdList(usersCatalog->usersByAccountCreation, id_user);
 }
 //adiciona uma reserva à lista de reservas de um utilizador
-void addReservToUser(char *id_user, char *id_reserv, double totalSpent, UsersManager *usersCatalog) {
+void addReservToUser(char *id_user, int *id_reserv, double totalSpent, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id_user);
     addToUserList(user, id_reserv, 'R', totalSpent);
 }
 //adiciona o utilizador à lista de passageiros do voo
-void addFlightToUser(char *id_user, char *id_flight, UsersManager *usersCatalog) {
+void addFlightToUser(char *id_user, int *id_flight, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id_user);
     addToUserList(user, id_flight, 'F', 0);
 }
@@ -88,7 +88,7 @@ void destroyUsersCatalog(UsersManager *usersManager) {
     if (usersManager == NULL) return; //se o catálogo não existir
     destroyHashtable(usersManager->users); //liberta a hashtable de utilizadores
     //destroyOrdList(usersManager->usersId,destroyUserId);
-    destroyOnlyOrdList(usersManager->usersByName); //liberta a lista de utilizadores
+    destroyOrdList(usersManager->usersByName, free); //liberta a lista de utilizadores
     destroyOnlyOrdList(usersManager->usersByAccountCreation);
     free(usersManager);
 }
@@ -257,7 +257,7 @@ int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
         res = getNumberReservations(user);
     return res;
 }
-char *getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
+int *getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id_user);
     return getUListId(type, user, index);
 }
@@ -413,8 +413,8 @@ int getNewUsers(int year, int month, int day, UsersManager * users){
                     i++;
                     res++;
                 }
+                free(id);
             }
-            free(id);
         }
     }
     destroyDate(date);

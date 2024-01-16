@@ -19,7 +19,7 @@ struct flight {
     OrdList *passengers; //não necessário apenas número de passageiros
 };
 //função que cria um novo voo
-Flight *createFlight(char *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival) {
+Flight *createFlight(char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival) {
     Flight *flight = malloc(sizeof(Flight));
 //    flight->id = strdup(id);
     flight->airline = strdup(airline);

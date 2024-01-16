@@ -11,7 +11,7 @@ typedef struct airportsManager AirportsManager;
 //cria um novo catálogo de aeroportos
 AirportsManager *createAirportsCatalog(int size);
 //atualiza o catálogo de aeroportos
-void updateAirportCatalog(int delay, char *id_origin, char *id_destination, char *id_flight, AirportsManager *airportsCatalog);
+void updateAirportCatalog(int delay, char *id_origin, char *id_destination, int *id_flight, AirportsManager *airportsCatalog);
 
 void sortAirports (AirportsManager* airportsManager);
 void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, Hashtable *lookup);

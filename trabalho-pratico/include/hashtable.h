@@ -8,7 +8,8 @@
 
 typedef struct hashtable Hashtable;
 //funão de hash
-unsigned int hashFunction(void *key);
+unsigned int hashString(void *key);
+unsigned int hashInt(void *key);
 //cria uma nova hashtable
 Hashtable *createHashtable(int size, unsigned int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*));
 //devolve número de nodos usados

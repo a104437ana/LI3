@@ -31,8 +31,9 @@ Airport *createAirport(char *name) {
 }
 
 //adiciona voo à lista de voos de um aeroporto
-void addFlightToAirport(Airport *airport, char *id_flight, int origin) {
-    char *flight = strdup(id_flight);
+void addFlightToAirport(Airport *airport, int *id_flight, int origin) {
+    int *flight = malloc(sizeof(int));
+    *flight = *id_flight;
     if (origin)
     addOrdList(airport->originFlights, flight);
     else

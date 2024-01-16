@@ -34,7 +34,7 @@ typedef enum{
 } Q2Type;
 
 typedef struct resultQ2{
-    char* id; //flight ou reservation
+    int* id; //flight ou reservation
     Q2Type resultType;
 } ResultQ2;
 
@@ -79,7 +79,8 @@ int getBeginYear(void* data, void *catalog);
 int getBeginSeconds(void* data, void *catalog);
 int getBeginMinutes(void* data, void *catalog);
 int getBeginHours(void* data, void *catalog);
-char * getIdResultQ2(ResultQ2* data);
+int getIdResultQ2(ResultQ2* data);
+Q2Type getResultType(ResultQ2 *data);
 void destroyResultQ2(void * data);
 
 void Q1(char *id, Catalogs* catalogs, QueryResult* result);

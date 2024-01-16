@@ -28,8 +28,9 @@ Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     return hotel;
 }
 //função que adiciona uma reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, char *id_reserv, char rating) {
-    char *id = strdup(id_reserv);
+void addReservationToHotel(Hotel *hotel, int *id_reserv, char rating) {
+    int *id = malloc(sizeof(int));
+    *id = *id_reserv;
     addOrdList(hotel->reservationsByDate, id);
 //    addOrdList(hotel->reservationsByEndDate, id);
     if (rating != '\0') {
@@ -49,9 +50,9 @@ OrdList *getHotelOrdList(Hotel *hotel) {
 //OrdList *getHotelEndOrdList(Hotel *hotel) {
 //    return hotel->reservationsByEndDate;
 //}
-char *getHotelReservId(Hotel *hotel, int index) {
-    char *id = (char *) getDataOrdList(hotel->reservationsByDate, index);
-    return strdup(id);
+int *getHotelReservId(Hotel *hotel, int index) {
+    int *id = (int *) getDataOrdList(hotel->reservationsByDate, index);
+    return (int *) intdupVoid(id);
 }
 
 //int searchHotelDates(Date *date, int (*compareDate)(void*,void*,void*), void *lookup, Hotel *hotel) {

@@ -7,7 +7,7 @@
 
 typedef struct reservation Reservation;
 //cria uma nova reserva
-Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification);
+Reservation *createReservation(char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification);
 
 //gets
 Reservation *getReservCatalog(Hashtable *reservations, char *id);
@@ -42,6 +42,7 @@ Date *getReservBeginId(void *id, void *lookupTable);
 Date *getReservEndId(void *id, void *lookupTable);
 char *getStringReservDate(Reservation *reservation);
 int compareReservDates(Reservation *reservation, Date *date);
+int compareReservationsBeginDates(Reservation *r1, Reservation *r2);
 
 //sets
 //void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *ReservId);

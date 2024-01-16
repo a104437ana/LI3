@@ -27,9 +27,9 @@ UsersManager *createUsersCatalog(int size);
 //adiciona um utilizador ao catálogo de utilizadores
 void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog);
 //adiciona uma reserva à lista de reservas de um utilizador
-void addReservToUser(char *id_user, char *id_reserv, double totalSpent, UsersManager *usersCatalog);
+void addReservToUser(char *id_user, int *id_reserv, double totalSpent, UsersManager *usersCatalog);
 //adiciona o utilizador à lista de passageiros do voo
-void addFlightToUser(char *id_user, char *id_flight, UsersManager *usersCatalog);
+void addFlightToUser(char *id_user, int *id_flight, UsersManager *usersCatalog);
 //função que ordena o catálogo de utilizadores
 void sortUsersByName(UsersManager *usersCatalog);
 //compara o nome de dois utilizadores
@@ -63,7 +63,7 @@ int compareDates_user(void *date, void *id, void *usersCatalog);
 int compareMonths_user(void *date, void *id, void *usersCatalog);
 int compareYears_user(void *date, void *id, void *usersCatalog);
 int getSizeUserList(int type, char *id, UsersManager *usersCatalog);
-char *getIdUserList(int *type, char* id_user, int index, UsersManager *usersCatalog);
+int *getIdUserList(int *type, char* id_user, int index, UsersManager *usersCatalog);
 int getUsersByNameSize(UsersManager *usersCatalog);
 int searchPrefix(char *prefix, UsersManager *usersCatalog);
 int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *usersCatalog);

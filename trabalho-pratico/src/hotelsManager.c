@@ -9,11 +9,11 @@ struct hotelsManager {
 //função que cria um novo catálogo de hoteis
 HotelsManager *createHotelsCatalog(int size) {
     HotelsManager *hotelsManager = malloc(sizeof(HotelsManager));
-    hotelsManager->hotels = createHashtable(size, hashFunction, strcmpVoid, strdupVoid, destroyHotel);
+    hotelsManager->hotels = createHashtable(size, hashString, strcmpVoid, strdupVoid, destroyHotel);
     return hotelsManager;
 }
 //atualiza catálogo de hoteis
-void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, char *id_reserv, HotelsManager *hotelsCatalog) {
+void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, int *id_reserv, HotelsManager *hotelsCatalog) {
     int existsHotel = existsData(hotelsCatalog->hotels, id); //verifica se o hotel já existe no catálogo de hoteis
     Hotel *hotel;
     if (existsHotel == 0) { //caso não exista cria um novo hotel
@@ -100,7 +100,7 @@ int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog) {
 int hotelExists(char *id, HotelsManager *hotelsCatalog) {
     return existsData(hotelsCatalog->hotels, id);
 }
-char *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
+int *getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
     Hotel *hotel = getData(hotelsCatalog->hotels, id);
     return getHotelReservId(hotel, index);
 }

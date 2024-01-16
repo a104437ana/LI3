@@ -30,7 +30,7 @@ struct hashtable {
 };
 
 //funcao de hash
-unsigned int hashFunction(char *id) {
+unsigned int hashString(char *id) {
     unsigned long int hash = 1;
     if (id == NULL) return 0;
     for (int i=0; id[i] != '\0'; i++) //para cada caracter

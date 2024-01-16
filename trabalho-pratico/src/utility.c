@@ -298,12 +298,50 @@ void toUpperS (char *word){
     }
 }
 
-int strcmpVoid(void* s1, void *s2) {
+int strcmpVoid(void *s1, void *s2) {
     return strcmp((const char *) s1, (const char *) s2);
 }
 
 void *strdupVoid(void *s) {
     return (void *) strdup((char *) s);
+}
+
+int intcmpVoid(void *n1, void *n2) {
+    int res = 0;
+    int i = *((int *) n1), j = *((int *) n2);
+    if (i < j) res--;
+    else if (j < i) res++;
+    return res;
+}
+
+void *intdupVoid(void *n) {
+    int *res = malloc(sizeof(int));
+    *res = *((int *) n);
+    return (void *) res;
+}
+
+char *flightIdToString(int *id) {
+    char *s = malloc(sizeof(char)*11);
+    sprintf(s, "%010d", *id);
+    return s;
+}
+
+char *reservIdToString(int *id) {
+    char *s = malloc(sizeof(char)*15);
+    sprintf(s, "Book%010d", *id);
+    return s;
+}
+
+int *flightIdToInt(char *id) {
+    int *n = malloc(sizeof(int));
+    *n = atoi(id);
+    return n;
+}
+
+int *reservIdToInt(char *id) {
+    int *n = malloc(sizeof(int));
+    *n = atoi(id+4);
+    return n;
 }
 
 //função que liberta o espaço em memória alocado por uma data

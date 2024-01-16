@@ -11,7 +11,7 @@ typedef struct airport Airport;
 //cria um novo aeroporto
 Airport *createAirport(char *name);
 //adiciona voo à lista de voos de um aeroporto
-void addFlightToAirport(Airport *airport, char *id_flight, int origin);
+void addFlightToAirport(Airport *airport, int *id_flight, int origin);
 void addDelayToAirport(Airport* airport, int delay);
 
 //obtem a lista de voos do aeroporto

@@ -47,7 +47,7 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
     return user;
 }
 //adiciona um voo ou reserva à lista de voos e ereservas de um utilizador
-void addToUserList(User *user, char *id, char type, double totalSpent) {
+void addToUserList(User *user, int *id, char type, double totalSpent) {
     ResultQ2 *res = malloc(sizeof(ResultQ2));
     if (type == 'R') {
         res->resultType = RESERVATIONS;
@@ -58,7 +58,8 @@ void addToUserList(User *user, char *id, char type, double totalSpent) {
         res->resultType = FLIGHTS;
         user->nFlights++;
     }
-    res->id = strdup(id);
+    res->id = malloc(sizeof(int));
+    *(res->id) = *id;
     addOrdList(user->flightsReservationsByDate, res);
 }
 
@@ -197,11 +198,13 @@ int getNumberReservations(User* user){
     return (user->nReservations);
 }
 
-char *getUListId(int *type, User *user, int index) {
+int *getUListId(int *type, User *user, int index) {
     OrdList *list = user->flightsReservationsByDate;
     ResultQ2 *res = (ResultQ2 *) getDataOrdList(list, index);
     *type = res->resultType;
-    return strdup(res->id);
+    int *id = malloc(sizeof(int));
+    *id = *(res->id);
+    return id;
 }
 
 //sets

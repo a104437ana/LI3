@@ -8,7 +8,7 @@
 typedef struct hashtable Hashtable;
 
 //funcao de hash
-unsigned int hashFunction(char *id);
+unsigned int hashString(char *id);
 
 //função que cria uma nova hashtable com o tamanho dado
 Hashtable *createHashtable(int size, unsigned int (*hash)(void*), unsigned int (*index)(int), void (*destroy)(void*));

@@ -90,10 +90,14 @@ int getBeginHours(void* data, void *catalog) {
 }
 
 //devolve o id de uma reserva ou voo
-char * getIdResultQ2(ResultQ2* data){
-  return data->id;
+int getIdResultQ2(ResultQ2* data){
+  return *(data->id);
 //  if (data->resultType == FLIGHTS) return (getFlightId((Flight *)data->result));
 //  else return (getReservId((Reservation *)data->result));
+}
+
+Q2Type getResultType(ResultQ2 *data) {
+  return data->resultType;
 }
 
 //liberta dados do tipo ResultQ2
@@ -165,7 +169,7 @@ void Q1 (char *id, Catalogs* catalogs, QueryResult* result) {
 ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservationsCatalog,FlightsManager *flightsCatalog){
     if(same_prefix("Book", id) == 1){ //se o id for de uma reserva
       ResultQ1* result = malloc(sizeof(ResultQ1));
-      result->result = getReservCatalog(getHashtableReservCatalog(reservationsCatalog), hashFunction(id), id);
+      result->result = getReservCatalog(getHashtableReservCatalog(reservationsCatalog), hashString(id), id);
       if (result->result==NULL){ //se o id não existir
         free(result);
         return NULL;
@@ -175,7 +179,7 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
     }
     else if (id[0]>='0' && id[0]<='9'){ //se o id for de um voo
       ResultQ1* result = malloc(sizeof(ResultQ1));
-      result->result = getFlightCatalog(flightsCatalog, hashFunction(id), id);
+      result->result = getFlightCatalog(flightsCatalog, hashString(id), id);
       if (result->result==NULL){ //se o id não existir
         free(result);
         return NULL;
@@ -185,7 +189,7 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
     }
     else{ //se o id for de um utilizador
       ResultQ1* result = malloc(sizeof(ResultQ1));
-      result->result = getUserCatalog(usersCatalog, hashFunction(id), id);
+      result->result = getUserCatalog(usersCatalog, hashString(id), id);
       if (result->result==NULL){ //se o id não existir
         free(result);
         return NULL;
@@ -218,14 +222,16 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
     Q2Type resultType;
     if (type==BOTH) {
       for(i=0, j=resultSize-1;j>=0; i++, j--){
-        id = getUserListId((int *) &resultType, id_user, i, catalogs);
+        int *key = getUserListId((int *) &resultType, id_user, i, catalogs);
         if (resultType == FLIGHTS) {
-          dateS = getStringFlightDate(id, catalogs);
+          dateS = getStringFlightDate(key, catalogs);
           typeS = strdup("flight");
+          id = flightIdToString(key);
         }
         else if (resultType == RESERVATIONS) {
-          dateS = getStringReservationDate(id, catalogs);
+          dateS = getStringReservationDate(key, catalogs);
           typeS = strdup("reservation");
+          id = reservIdToString(key);
         }
         setNumberFieldsQ(result, j, 3);
         setFieldQ(result, j, 0, field0, id);
@@ -234,23 +240,29 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
         free(dateS);
         free(typeS);
         free(id);
+        free(key);
       }
     }
     else {
       for(i=0, j=resultSize-1;i<listSize; i++){
-        id = getUserListId((int *) &resultType, id_user, i, catalogs);
+        int *key = getUserListId((int *) &resultType, id_user, i, catalogs);
         if (resultType==type){ //verifica se a posição atual tem um voo ou uma reserva
-          if (resultType == FLIGHTS)
-            dateS = getStringFlightDate(id, catalogs);
-          else if (resultType == RESERVATIONS)
-            dateS = getStringReservationDate(id, catalogs);
+          if (resultType == FLIGHTS) {
+            dateS = getStringFlightDate(key, catalogs);
+            id = flightIdToString(key);
+          }
+          else if (resultType == RESERVATIONS) {
+            dateS = getStringReservationDate(key, catalogs);
+            id = reservIdToString(key);
+          }
           setNumberFieldsQ(result, j, 2);
           setFieldQ(result, j, 0, field0, id);
           setFieldQ(result, j, 1, field1, dateS);
           free(dateS);
+          free(id);
           j--;
         }
-        free(id);
+        free(key);
       }
     }
     free(field0); free(field1); free(field2);
@@ -262,7 +274,7 @@ void Q3 (char* id_hotel, Catalogs* catalogs, QueryResult* result) {
 }
 /*
 double Q3(char *id, HotelsManager *hotelsCatalog) {
-  Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
+  Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashString(id), id);
   if (hotel==NULL) return -1; //se o id não existir
   int numberClassifications = getOrdListSize(getHotelOrdList(hotel));
   double result = getHotelRatingsSum(hotel);
@@ -272,7 +284,7 @@ double Q3(char *id, HotelsManager *hotelsCatalog) {
 
 ////query 4 - devolve a lista de reservas do hotel com o id passado como argumento, se existir
 //ResultsQ4* Q4(char *id, HotelsManager *hotelsCatalog, ReservationsManager *reservationsCatalog){
-//    Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashFunction(id), id);
+//    Hotel *hotel = getHotelCatalog(getHashtableHotelsCatalog(hotelsCatalog), hashString(id), id);
 //    if (hotel==NULL) return NULL; //se o id não existir
 //    int i;
 //    ResultsQ4 *results = malloc(sizeof(ResultsQ4));
@@ -309,7 +321,7 @@ int comparePair(void *pair1, void *pair2, void *lookup) {
   int res = 0;
   if (p1->value > p2->value) res++;
   else if (p1->value < p2->value) res--;
-  else res = strcoll(p1->string,p2->string) * (-1);
+  else res = strcmp(p1->string,p2->string) * (-1);
   return res;
 }
 
@@ -319,7 +331,7 @@ int comparePairAdd(void *pair1, void *pair2, void *lookup) {
   int res = 0;
   if (p1->value > p2->value) res++;
   else if (p1->value < p2->value) res--;
-  else res = strcoll(p1->string,p2->string);
+  else res = strcmp(p1->string,p2->string);
   return res;
 }
 

@@ -17,7 +17,7 @@ struct reservation {
     char userClassification;
 };
 //função que cria uma nova reserva dados os dados da mesma
-Reservation *createReservation(char *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification) {
+Reservation *createReservation(char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification) {
     Reservation *reservation = malloc(sizeof(Reservation)); //aloca espaço em memória para a reserva
 //    reservation->id = strdup(id); //aloca espaço para os diferentes campos da reserva
     reservation->id_user = strdup(id_user);
@@ -52,7 +52,7 @@ char *getReservHotelId(Reservation *reservation) {
 }
 
 int getReservUserKey(Reservation *reservation) {
-    return hashFunction(reservation->id_user);
+    return hashString(reservation->id_user);
 }
 /*
 char *getReservHotelName(Reservation *reservation, Hashtable *hotels) {
@@ -218,6 +218,12 @@ char *getStringReservDate(Reservation *reservation) {
 int compareReservDates(Reservation *reservation, Date *date) {
     Date *reservDate = reservation->end;
     return compareDates(reservDate, date);
+}
+
+int compareReservationsBeginDates(Reservation *r1, Reservation *r2) {
+    Date *d1 = r1->begin;
+    Date *d2 = r2->begin;
+    return compareDates(d1, d2);
 }
 
 //sets dos campos da reserva

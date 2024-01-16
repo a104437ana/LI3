@@ -501,7 +501,7 @@ struct passengers_counter {
 hashtable. Esta função recebe um número que será o tamanho da hashtable criada. Esta função retorna a estrutura passengers_counter. */
 PassengersCounter *createPassengersCounter (int size) {
     PassengersCounter* passengers_counter = malloc(sizeof(PassengersCounter));
-    passengers_counter->passengers_per_flight = createHashtable(size, hashFunction, strcmpVoid, strdupVoid, destroyPassengersPerFlight);
+    passengers_counter->passengers_per_flight = createHashtable(size, hashString, strcmpVoid, strdupVoid, destroyPassengersPerFlight);
     return passengers_counter;
 }
 
