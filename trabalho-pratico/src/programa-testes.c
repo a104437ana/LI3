@@ -66,7 +66,8 @@ int main (int argc, char** argv) {
     double elapsed;
     //, cat, par, sor, com, des;
     clock_gettime(CLOCK_REALTIME, &start);
-    setlocale(LC_COLLATE, "en_US.UTF-8");
+    setlocale(LC_ALL, "en_US.UTF-8");
+    //setlocale(LC_COLLATE, "en_US.UTF-8");
     //inicialização dos catalogos
     Catalogs *catalogs = createCatalogs();
         //clock_gettime(CLOCK_REALTIME, &interm);

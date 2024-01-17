@@ -18,8 +18,9 @@ int main (int argc, char** argv) {
     //struct timespec start, end, interm;
     //double elapsed, cat, par, sor, com, des;
     //clock_gettime(CLOCK_REALTIME, &start);
-    setlocale(LC_COLLATE, "en_US.UTF-8");
-    setlocale(LC_CTYPE, "en_US.UTF-8");
+    //setlocale(LC_COLLATE, "en_US.UTF-8");
+    //setlocale(LC_CTYPE, "en_US.UTF-8");
+    setlocale(LC_ALL, "en_US.UTF-8");
     //inicialização dos catalogos
     Catalogs *catalogs = createCatalogs();
         //clock_gettime(CLOCK_REALTIME, &interm);
@@ -46,9 +47,9 @@ int main (int argc, char** argv) {
     }
     else {
     if (argc == 1) {
-    printf("Attention: This program requires a maximized window at all times for optimal performance. Please ensure that the window is maximized before proceeding. Press Enter to continue...");
+    printf("Attention: This program requires a minimum window size of 154x26. Please adjust the window size now to meet the requirements and your preferences. Press Enter to continue...");
     getchar();
-    setlocale(LC_ALL,""); //permite a utilização de caracteres especiais da nossa localidade
+    //setlocale(LC_ALL,""); //permite a utilização de caracteres especiais da nossa localidade
     initscr(); //inicia ncurses
 
     noecho(); //para não escrever as teclas que são pressionadas no teclado
@@ -58,7 +59,12 @@ int main (int argc, char** argv) {
     int max_row, max_col;
     getmaxyx(stdscr, max_row, max_col);
     
-    interactive_mode(max_row,max_col,catalogs);
+    if (max_row < 26 || max_col < 154) {
+        mvprintw(0,0,"The window is too small.\nExiting the program...");
+        refresh();
+        sleep(5);
+    }
+    else interactive_mode(max_row,max_col,catalogs);
 
     endwin(); //termina ncurses
     }

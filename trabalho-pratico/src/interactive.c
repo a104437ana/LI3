@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "interpreter.h"
 #include "results.h"
+#include <ctype.h>
 
 char* get_string (int max_row, int max_col,int min_row,int min_col, int n) {
     char* path = malloc(n);
@@ -109,6 +110,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
 
     int query = get_option(4,11);
     clear();
+    int c;
     char* string1 = NULL;
     char* string2 = NULL;
     char* string3 = NULL;
@@ -172,16 +174,34 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
         case 6: mvprintw(0, 0, "Query 6 - Lists the top N airports with the most passengers for a given year.");
                 mvprintw(2, 0, "Enter the year: ");
                 string1 = get_string(max_row,max_col,2,16,6);
-                mvprintw(4,0, "Enter the number N: ");
+                mvprintw(4,0, "Enter a non-negative number N (e.g. 12): ");
                 x = 6;
-                string2 = get_string(max_row,max_col,4,20,10);
+                string2 = get_string(max_row,max_col,4,41,10);
+                for (c = 0; string2[c] != '\0';c++) {
+                    if (!isdigit(string2[c])) break;
+                }
+                if (string2[c] != '\0' || c==0) {
+                    mvprintw(4,0, "Enter a non-negative number N (e.g. 12) (use digits only instead of text): ");
+                    refresh();
+                    free(string2);
+                    string2 = get_string(max_row,max_col,4,75,10);
+                }
                 command = malloc(5+strlen(string1)+strlen(string2));
                 sprintf(command,"%d %s %s",query,string1,string2);
                 break;
         case 7: mvprintw(0, 0, "Query 7 - Lists the top N airports with the highest median of delays.");
-                mvprintw(2,0, "Enter the number N: ");
+                mvprintw(2,0, "Enter a non-negative number N (e.g. 12): ");
                 x = 4;
-                string1 = get_string(max_row,max_col,2,20,10);
+                string1 = get_string(max_row,max_col,2,41,10);
+                for (c = 0; string1[c] != '\0';c++) {
+                    if (!isdigit(string1[c])) break;
+                }
+                if (string1[c] != '\0' || c==0) {
+                    mvprintw(2,0, "Enter a non-negative number N (e.g. 12) (use digits only instead of text): ");
+                    refresh();
+                    free(string1);
+                    string1 = get_string(max_row,max_col,2,75,10);
+                }
                 command = malloc(4+strlen(string1));
                 sprintf(command,"%d %s",query,string1);
                 break;
@@ -276,7 +296,6 @@ void printResultPage_CSV (int page, int max_row,int j, QueryResult* result) {
         if (j<=nResults) x = getNumberFieldsQ(result,j-1);
         else break;
     }
-    //return j;
 }
 
 void printResultP_Field (int line,int j,int x,QueryResult* result) {
@@ -300,7 +319,6 @@ void printResultPage_Field (int page, int max_row,int j, QueryResult* result) {
         if (j<=nResults) x = getNumberFieldsQ(result,j-1);
         else break;
     }
-    //return j;
 }
 
 void firstByPage (QueryResult* result, int max_row, int firstResult[],int format) {
@@ -362,22 +380,23 @@ int pagesNumber (QueryResult* result, int max_row, int format) {
 }
 
 void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
-    mvprintw(0, 0, "Welcome to Interactive Mode!\n\nEnter the path of the dataset: ");
+    mvprintw(0, 0, "Welcome to Interactive Mode!\n\nWARNING: Do not resize the window during program execution.\nResizing may cause unexpected behavior.\nFrom now on, please keep the window size unchanged.\n\nEnter the path of the dataset: ");
     refresh();
-    char* path = get_string(max_row,max_col,2,31,500);
+    char* path = get_string(max_row,max_col,6,31,500);
     int n = 0;
+    int not_error = 4;
     while (!valid_directory_dataset(path) && n<2) {
+        not_error = 0;
         clear();
         mvprintw(0,0,"Invalid path for the dataset. Please try again!");
         refresh();
-        sleep(1);
         mvprintw(2,0,"Enter the path of the dataset: ");
         refresh();
         path = get_string(max_row,max_col,2,31,500);
         n++;
     }
     if (valid_directory_dataset(path)) {
-    mvprintw(4,0, "Parsing files and sorting data. Please wait...");
+    mvprintw(4 + not_error,0, "Parsing files and sorting data. Please wait...");
     refresh();
     parse_all_files(path,catalogs);
     free(path);
