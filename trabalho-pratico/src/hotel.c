@@ -39,6 +39,16 @@ void addReservationToHotel(Hotel *hotel, int *id_reserv, char rating) {
     }
 }
 
+void sortHotelReservationsByDate_hotel(Hotel *hotel, void (*radixsortReservsDate)(void*,void*), void *lookup) {
+    OrdList *list = hotel->reservationsByDate; //obtem lista de reservas
+    if(!isOrdered(list)) {
+        quickSort(list, 0, getOrdListSize(list)-1, intcmpReverseVoid, NULL, 0); //ordena as reservas por ids
+//        reverseOrdList(list); //inverte a lista
+        radixsortReservsDate(list, lookup);
+        setOrdListOrd(list, 1);
+    }
+}
+
 int getHotelNumberOfReservations(Hotel* hotel) {
     return getOrdListSize(hotel->reservationsByDate);
 }

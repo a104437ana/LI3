@@ -54,6 +54,7 @@ void toUpperS (char *word);
 int strcmpVoid(void* s1, void *s2);
 void *strdupVoid(void *s);
 int intcmpVoid(void *n1, void *n2);
+int intcmpReverseVoid(void *n1, void *n2, void *lookup);
 void *intdupVoid(void *n);
 char *flightIdToString(int *id);
 char *reservIdToString(int *id);

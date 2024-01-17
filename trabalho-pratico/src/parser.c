@@ -74,7 +74,7 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                     if (token[10][0] == 't' || token[10][0] == 'T' || token[10][0] == '1') includesBreakfast = 1;
                                     int *id = reservIdToInt(token[0]);
                                     addHotel(token[2],token[3],hotelStars,cityTax,userClassification,id,catalogs);
-                                    addReservation(id,token[1],token[2],token[7],token[8],pricePerNight,includesBreakfast,userClassification,catalogs);
+                                    addReservation(id,token[1],token[2],token[7],token[8],pricePerNight,includesBreakfast,userClassification,cityTax,catalogs);
                                     free(id);
                                }
                                break;

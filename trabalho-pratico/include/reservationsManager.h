@@ -11,6 +11,8 @@ typedef struct reservationsManager ReservationsManager;
 ReservationsManager *createReservsCatalog(int size);
 //adiciona uma reserva ao catálogo de reservas
 int addReservToCatalog(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog);
+void sortReservationsByBeginDate(ReservationsManager *reservationsCatalog);
+void radixSortReservDate(OrdList *list, void *lookupTable);
 
 //imprime o catálogo de reservas
 void printReservations(ReservationsManager *reservationsManager);
@@ -28,6 +30,8 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
 //gets
 Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
 OrdList * getReservByBeginDate (ReservationsManager *reservations);
+int getFirstReservationBeginYear_reservationsCatalog(ReservationsManager *reservationsCatalog);
+int getLastReservationBeginYear_reservationsCatalog(ReservationsManager *reservationsCatalog);
 int getReservPriceNoTax(int *id, ReservationsManager *reservationsCatalog);
 int getReservPriceLimits(int *id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd);
 int getBReserv(int time, int *id, ReservationsManager *reservationsCatalog);

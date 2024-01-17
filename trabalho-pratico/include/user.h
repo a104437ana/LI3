@@ -40,9 +40,9 @@ int getUListSize(User * user);
 int getNumberFlights(User* user);
 int getNumberReservations(User* user);
 Date * getUserAccountCreation(void *id, void *lookupTable);
-int getAccountCreationDay(void *user);
-int getAccountCreationMonth(void *user); 
-int getAccountCreationYear(void *user);
+int getAccountCreationDay(void *user, void *lookup);
+int getAccountCreationMonth(void *user, void *lookup); 
+int getAccountCreationYear(void *user, void *lookup);
 int *getUListId(int *type, User *user, int index);
 int getIndice (User* user);
 

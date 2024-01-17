@@ -37,6 +37,7 @@ void addReservToUser(char *id_user, int *id_reserv, double totalSpent, UsersMana
 void addFlightToUser(char *id_user, int *id_flight, UsersManager *usersCatalog);
 //função que ordena o catálogo de utilizadores
 void sortUsersByName(UsersManager *usersCatalog);
+void sortUsersByAccountCreation(UsersManager *usersCatalog);
 //compara o nome de dois utilizadores
 int compareUsersNames(void *id1, void *id2, void *lookup);
 
@@ -64,6 +65,8 @@ OrdList *getUsersByAccountCreation (UsersManager *usersManager);
 int getCreationDayUser(char *id, UsersManager *usersCatalog);
 int getCreationMonthUser(char *id, UsersManager *usersCatalog);
 int getCreationYearUser(char *id, UsersManager *usersCatalog);
+int getYearFirstResults_usersCatalog(UsersManager *usersCatalog);
+int getYearLastResults_usersCatalog(UsersManager *usersCatalog);
 int compareDates_user(void *date, void *id, void *usersCatalog);
 int compareMonths_user(void *date, void *id, void *usersCatalog);
 int compareYears_user(void *date, void *id, void *usersCatalog);

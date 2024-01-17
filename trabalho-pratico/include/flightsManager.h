@@ -13,11 +13,14 @@ FlightsManager *createFlightsCatalog(int size);
 int addFlightToCatalog(int *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, FlightsManager *flightsCatalog);
 //adiciona o utilizador à lista de passageiros do voo
 void addUserToFlight(int *id_flight, char *id_user, FlightsManager *flightsCatalog);
+void sortFlightsByDepartureDate(FlightsManager * flightsCatalog);
 
 OrdList * getFlightsByDeparture(FlightsManager * flights);
 int getDepartureDayFlight(int *id, FlightsManager *flightsCatalog);
 int getDepartureMonthFlight(int *id, FlightsManager *flightsCatalog);
 int getDepartureYearFlight(int *id, FlightsManager *flightsCatalog);
+int getFirstFlightDepartureYear_flightsCatalog(FlightsManager *flightsCatalog);
+int getLastFlightDepartureYear_flightsCatalog(FlightsManager *flightsCatalog);
 
 //liberta espaço em memória do catalogo de voos
 void destroyFlightsCatalog(FlightsManager *flightsManager);

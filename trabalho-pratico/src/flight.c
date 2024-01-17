@@ -142,15 +142,15 @@ int getFlightScheduleDepartureHours(void *id, void *lookupTable) {
 }
 
 
-int getDepartureDay(void *flight) {
+int getDepartureDay(void *flight, void *lookup) {
     return ((Flight*)flight)->scheduleDeparture->day;
 }
 
-int getDepartureMonth(void *flight) {
+int getDepartureMonth(void *flight, void *lookup) {
     return ((Flight*)flight)->scheduleDeparture->month;
 }
 
-int getDepartureYear(void *flight) {
+int getDepartureYear(void *flight, void *lookup) {
     return ((Flight*)flight)->scheduleDeparture->year;
 }
 

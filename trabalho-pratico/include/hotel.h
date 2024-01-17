@@ -12,6 +12,7 @@ typedef struct hotel Hotel;
 Hotel *createHotel(char *id, char *name, char stars, int cityTax);
 //adiciona reserva à lista de reservas de um hotel
 void addReservationToHotel(Hotel *hotel, int *id_reserv, char rating);
+void sortHotelReservationsByDate_hotel(Hotel *hotel, void (*radixsortReservsDate)(void*,void*), void *lookup);
 
 int getHotelNumberOfReservations(Hotel* hotel);
 //obtem a lista de reservas do hotel

@@ -146,15 +146,15 @@ Date *getReservEndId(void *id, void *lookupTable) {
     return res;
 }
 
-int getReservBeginDay(void *reservation) {
+int getReservBeginDay(void *reservation, void *lookup) {
     return ((Reservation*)reservation)->begin->day;
 }
 
-int getReservBeginMonth(void *reservation) {
+int getReservBeginMonth(void *reservation, void *lookup) {
     return ((Reservation*)reservation)->begin->month;
 }
 
-int getReservBeginYear(void *reservation) {
+int getReservBeginYear(void *reservation, void *lookup) {
     return ((Reservation*)reservation)->begin->year;
 }
 

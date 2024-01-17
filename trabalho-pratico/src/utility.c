@@ -314,6 +314,14 @@ int intcmpVoid(void *n1, void *n2) {
     return res;
 }
 
+int intcmpReverseVoid(void *n1, void *n2, void* lookup) {
+    int res = 0;
+    int i = *((int *) n1), j = *((int *) n2);
+    if (i < j) res++;
+    else if (j < i) res--;
+    return res;
+}
+
 void *intdupVoid(void *n) {
     int *res = malloc(sizeof(int));
     *res = *((int *) n);

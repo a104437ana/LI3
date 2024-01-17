@@ -12,6 +12,7 @@ typedef struct hotelsManager HotelsManager;
 HotelsManager *createHotelsCatalog(int size);
 //atualiza catálogo de hoteis
 void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, int *id_reserv, HotelsManager *hotelsCatalog);
+void sortHotelReservationsByDate_hotelsCatalog(char *id, HotelsManager *hotelsCatalog, void (*sortFunction)(void*,void*), void *lookup);
 
 //imprime o catálogo de hoteis, para efeitos de teste
 void printHotels(HotelsManager *hotelsManager);

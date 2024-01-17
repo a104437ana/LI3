@@ -24,6 +24,11 @@ void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char user
     addReservationToHotel(hotel, id_reserv, userClassification); //adiciona reserva às reservas do hotel e atualiza classificação do hotel
 }
 
+void sortHotelReservationsByDate_hotelsCatalog(char *id, HotelsManager *hotelsCatalog, void (*sortFunction)(void*,void*), void *lookup) {
+    Hotel *hotel = getData(hotelsCatalog->hotels, id);
+    sortHotelReservationsByDate_hotel(hotel, sortFunction, lookup);
+}
+
 //função que liberta a memória alocada do catálogo de hoteis
 void destroyHotelsCatalog(HotelsManager *hotelsManager) {
     if (hotelsManager == NULL) return; //se o catálogo não existir

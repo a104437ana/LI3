@@ -28,9 +28,9 @@ Catalogs *createCatalogs() {
 void sortCatalogs(Catalogs *catalogs) {
 //    sortHotelCatalog(catalogs); //ordena o catálogo dos hoteis
     sortUsersByName(catalogs->usersCatalog); //ordena o catálogo dos utilizadores
-    sortUsersByAccountCreation(catalogs); 
-    sortFlightsByDepartureDate(catalogs);
-    sortReservationsByBeginDate(catalogs);
+    sortUsersByAccountCreation(catalogs->usersCatalog); 
+    sortFlightsByDepartureDate(catalogs->flightsCatalog);
+    sortReservationsByBeginDate(catalogs->reservationsCatalog);
 //    sortAirportCatalog(catalogs); //ordena o catálogo de aeroportos
 }
 
@@ -44,56 +44,11 @@ void sortCatalogs(Catalogs *catalogs) {
 void sortUserCatalog(char *id, Catalogs *catalogs) {
 }
 //ordena reservas por data
-void radixSortReservDate(OrdList *list, void *lookupTable) {
-    radixSort(list, getReservationBeginDay, lookupTable, 31, 0);
-    radixSort(list, getReservationBeginMonth, lookupTable, 12, 0);
-    radixSort(list, getReservationBeginYear, lookupTable, N_YEARS, BEGIN_YEAR);
-}
 //void radixSortReservEndDate(OrdList *list, void *lookupTable) {
 //    radixSort(list, getReservationEndDay, lookupTable, 31, 0);
 //    radixSort(list, getReservationEndMonth, lookupTable, 12, 0);
 //    radixSort(list, getReservationEndYear, lookupTable, N_YEARS, BEGIN_YEAR);
 //}
-
-void sortReservationsByBeginDate(Catalogs *catalogs) {
-    ReservationsManager * reservations = catalogs->reservationsCatalog;
-    OrdList * list = getReservByBeginDate(reservations);
-    if(!isOrdered(list)) {
-        radixSortReservDate(list, catalogs); //ordena as reservas por data
-        setOrdListOrd(list, 1);
-    }
-}
-
-void sortFlightsByDepartureDate(Catalogs * catalogs) {
-    FlightsManager * flights = catalogs->flightsCatalog;
-    OrdList *list = getFlightsByDeparture(flights);
-    if (!isOrdered(list)) {
-        radixSortDeparture(list, catalogs); //ordena as reservas por data
-        setOrdListOrd(list, 1);
-    }
-}
-
-void radixSortDeparture(OrdList *list, void *lookupTable) {
-    radixSort(list, getFlightDepartureDay, lookupTable, 31, 0);
-    radixSort(list, getFlightDepartureMonth, lookupTable, 12, 0);
-    radixSort(list, getFlightDepartureYear, lookupTable, N_YEARS, BEGIN_YEAR);
-}
-
-void sortUsersByAccountCreation(Catalogs *catalogs) {
-    UsersManager * users = catalogs->usersCatalog;
-    OrdList * list = getUsersByAccountCreation(users);
-    if(!isOrdered(list)) {
-        radixSortAccountCreation(list, catalogs); //ordena as reservas por data
-        setOrdListOrd(list, 1);
-    }
-}
-
-void radixSortAccountCreation(OrdList *list, void *lookupTable) {
-    radixSort(list, getUserAccountCreationDay, lookupTable, 31, 0);
-    radixSort(list, getUserAccountCreationMonth, lookupTable, 12, 0);
-    radixSort(list, getUserAccountCreationYear, lookupTable, N_YEARS, BEGIN_YEAR);
-}
-
 
 ////ordena o catálogo de aeroportos
 //void sortAirportCatalog(Catalogs *catalogs) {
@@ -120,6 +75,12 @@ void radixSortUserList(OrdList *list, void *lookupTable) {
     radixSort(list, getBeginDay, lookupTable, 31, 0);
     radixSort(list, getBeginMonth, lookupTable, 12, 0);
     radixSort(list, getBeginYear, lookupTable, N_YEARS, BEGIN_YEAR);
+}
+
+void radixSortHotelReservByDate(void *list, void *lookupTable) {
+    radixSort((OrdList *) list, getReservationBeginDay, lookupTable, 31, 0);
+    radixSort((OrdList *) list, getReservationBeginMonth, lookupTable, 12, 0);
+    radixSort((OrdList *) list, getReservationBeginYear, lookupTable, N_YEARS, BEGIN_YEAR);
 }
 
 //função que compara os ids de duas reservas
@@ -149,14 +110,7 @@ int compareFlightsIds(void *id1, void *id2) {
 
 //função que ordena a lista de reservas de um hotel
 void sortHotelReservationsByDate(char *id, Catalogs *catalogs) {
-    Hotel *hotel = getHotelCatalog(catalogs->hotelsCatalog, id);
-    OrdList *list = getHotelOrdList(hotel); //obtem lista de reservas
-    if(!isOrdered(list)) {
-        quickSort(list, 0, getOrdListSize(list)-1, compareReservsIds, NULL, 0); //ordena as reservas por ids
-//        reverseOrdList(list); //inverte a lista
-        radixSortReservDate(list, catalogs); //ordena as reservas por data
-        setOrdListOrd(list, 1);
-    }
+    sortHotelReservationsByDate_hotelsCatalog(id, catalogs->hotelsCatalog, radixSortHotelReservByDate, catalogs);
 }
 //void sortHotelReservationsByEndDate(char *id, Catalogs *catalogs) {
 //    Hotel *hotel = getHotelCatalog(catalogs->hotelsCatalog, id);
@@ -202,9 +156,8 @@ void addUser(char *id, char *name, int gender, char *country, char *passport, ch
     addUserToCatalog(id, name, gender, country, passport, birth, accountCreation, accountStatus, indice, catalogs->usersCatalog);
 }
 //adiciona uma reserva ao catálogo
-void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs) {
+void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, int cityTax, Catalogs *catalogs) {
     int priceNoTax = addReservToCatalog(id, id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification, catalogs->reservationsCatalog);
-    int cityTax = getCityTax(id_hotel, catalogs->hotelsCatalog);
     double reservPrice = priceNoTax + (((double) priceNoTax / 100) * cityTax);
     addReservToUser(id_user, id, reservPrice, catalogs->usersCatalog);
 }
@@ -425,34 +378,40 @@ Result * catalogs_compute_Q10(int year, int month, int day, Catalogs* catalogs){
 
 //gets
 int getYearFirstResults(Catalogs * catalogs){
-    OrdList * users = getUsersByAccountCreation(catalogs->usersCatalog);
-    char * firstUserId = getDataOrdList(users, 0);
-    int firstUserYear = getUserAccountCreationYear(firstUserId, catalogs);
+//    OrdList * users = getUsersByAccountCreation(catalogs->usersCatalog);
+//    char * firstUserId = getDataOrdList(users, 0);
+//    int firstUserYear = getUserAccountCreationYear(firstUserId, catalogs);
+    int firstUserYear = getYearFirstResults_usersCatalog(catalogs->usersCatalog);
 
-    OrdList * flights = getFlightsByDeparture(catalogs->flightsCatalog);
-    char * firstFlightId = getDataOrdList(flights, 0);
-    int firstFlightYear = getFlightDepartureYear(firstFlightId, catalogs);
+//    OrdList * flights = getFlightsByDeparture(catalogs->flightsCatalog);
+//    char * firstFlightId = getDataOrdList(flights, 0);
+//    int firstFlightYear = getFlightDepartureYear(firstFlightId, catalogs);
+    int firstFlightYear = getFirstFlightDepartureYear_flightsCatalog(catalogs->flightsCatalog);
 
-    OrdList * reservations = getReservByBeginDate(catalogs->reservationsCatalog);
-    char * firstReservId = getDataOrdList(reservations, 0);
-    int firstReservYear = getReservationBeginYear(firstReservId, catalogs);
+//    OrdList * reservations = getReservByBeginDate(catalogs->reservationsCatalog);
+//    char * firstReservId = getDataOrdList(reservations, 0);
+//    int firstReservYear = getReservationBeginYear(firstReservId, catalogs);
+    int firstReservYear = getFirstReservationBeginYear_reservationsCatalog(catalogs->reservationsCatalog);
 
     if (firstUserYear<=firstFlightYear && firstUserYear<=firstReservYear) return firstUserYear;
     else if (firstFlightYear<= firstReservYear) return firstFlightYear;
     else return firstReservYear;
 }
 int getYearLastResults(Catalogs * catalogs){
-    OrdList * users = getUsersByAccountCreation(catalogs->usersCatalog);
-    char * lastUserId = getDataOrdList(users, getOrdListSize(users)-1);
-    int lastUserYear = getUserAccountCreationYear(lastUserId, catalogs);
+//    OrdList * users = getUsersByAccountCreation(catalogs->usersCatalog);
+//    char * lastUserId = getDataOrdList(users, getOrdListSize(users)-1);
+//    int lastUserYear = getUserAccountCreationYear(lastUserId, catalogs);
+    int lastUserYear = getYearLastResults_usersCatalog(catalogs->usersCatalog);
 
-    OrdList * flights = getFlightsByDeparture(catalogs->flightsCatalog);
-    char * lastFlightId = getDataOrdList(flights, getOrdListSize(flights)-1);
-    int lastFlightYear = getFlightDepartureYear(lastFlightId, catalogs);
+//    OrdList * flights = getFlightsByDeparture(catalogs->flightsCatalog);
+//    char * lastFlightId = getDataOrdList(flights, getOrdListSize(flights)-1);
+//    int lastFlightYear = getFlightDepartureYear(lastFlightId, catalogs);
+    int lastFlightYear = getLastFlightDepartureYear_flightsCatalog(catalogs->flightsCatalog);
 
-    OrdList * reservations = getReservByBeginDate(catalogs->reservationsCatalog);
-    char * lastReservId = getDataOrdList(reservations, getOrdListSize(reservations)-1);
-    int lastReservYear = getReservationBeginYear(lastReservId, catalogs);
+//    OrdList * reservations = getReservByBeginDate(catalogs->reservationsCatalog);
+//    char * lastReservId = getDataOrdList(reservations, getOrdListSize(reservations)-1);
+//    int lastReservYear = getReservationBeginYear(lastReservId, catalogs);
+    int lastReservYear = getLastReservationBeginYear_reservationsCatalog(catalogs->reservationsCatalog);
 
     if (lastUserYear>=lastFlightYear && lastUserYear>=lastReservYear) return lastUserYear;
     else if (lastFlightYear>= lastReservYear) return lastFlightYear;

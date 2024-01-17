@@ -30,11 +30,11 @@ void sortUserList(char *id, Catalogs *catalogs);
 void sortHotelReservationsByDate(char *id, Catalogs *catalogs);
 void sortHotelReservationsByEndDate(char *id, Catalogs *catalogs);
 
-void sortReservationsByBeginDate(Catalogs *catalogs);
-void sortFlightsByDepartureDate(Catalogs * catalogs);
-void radixSortDeparture(OrdList *list, void *lookupTable);
-void sortUsersByAccountCreation(Catalogs *catalogs);
-void radixSortAccountCreation(OrdList *list, void *lookupTable);
+//void sortReservationsByBeginDate(Catalogs *catalogs);
+//void sortFlightsByDepartureDate(Catalogs * catalogs);
+//void radixSortDeparture(OrdList *list, void *lookupTable);
+//void sortUsersByAccountCreation_catalog(Catalogs *catalogs);
+//void radixSortAccountCreation(OrdList *list, void *lookupTable);
 
 //ordena os voos do aeroporto
 //void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs);
@@ -43,7 +43,7 @@ void sortAirportFlightsByDepartureDate_catalog(char *id, Catalogs* catalogs);
 //funções sobre diferêntes catálogos
 //adiciona um utilizador ao catálogo
 void addUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice, Catalogs *catalogs);
-void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs);
+void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, int cityTax, Catalogs *catalogs);
 int addFlight(int *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs);
 void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, int *id_reserv, Catalogs *catalogs);
 void addAirport(int delay, char *id_origin, char *id_destination, int *id_flight, Catalogs *catalogs);

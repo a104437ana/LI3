@@ -13,7 +13,7 @@
 //};
 
 struct user {
-//    char *id;
+    char *id;
     char *name;
     Gender gender;
     char country[3];
@@ -30,7 +30,7 @@ struct user {
 //função que cria um novo utilizador
 User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice) {
     User *user = malloc(sizeof(User)); //aloca espaço a estrutura do utilizador
-//    user->id = strdup(id); //preenche os diferentes campos com a informação dada
+    user->id = strdup(id); //preenche os diferentes campos com a informação dada
     user->name = strdup(name);
     user->gender = gender;
     memcpy(user->country, country, 3);
@@ -158,22 +158,22 @@ Date *getAccountCreation(User *user) {
     return accountCreation;
 }
 
-int getAccountCreationDay(void *user) {
+int getAccountCreationDay(void *user, void *lookup) {
     return ((User*)user)->accountCreation->day;
 }
 
-int getAccountCreationMonth(void *user) {
+int getAccountCreationMonth(void *user, void *lookup) {
     return ((User*)user)->accountCreation->month;
 }
 
-int getAccountCreationYear(void *user) {
+int getAccountCreationYear(void *user, void *lookup) {
     return ((User*)user)->accountCreation->year;
 }
 
 
-//char *getUserId(User *user) {
-//    return strdup(user->id); //falta encapsulamento
-//}
+char *getUserId(User *user) {
+    return strdup(user->id); //falta encapsulamento
+}
 
 double getTotalSpent(User* user) {
     return user->totalSpent;
@@ -286,7 +286,7 @@ void destroyUser(void *user) {
     //free(((User *) user)->address);
 //    free(((User *) user)->country);
     free(((User *) user)->name);
-//    free(((User *) user)->id);
+    free(((User *) user)->id);
     destroyOrdList(((User *) user)->flightsReservationsByDate, destroyResultQ2);
     free(user);
 }
