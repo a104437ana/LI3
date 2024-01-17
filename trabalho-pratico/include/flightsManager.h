@@ -27,7 +27,7 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
 int compareDates_flight(void *date, void *id, void *flightsCatalog);
 int compareMonths_flight(void *date, void *id, void *flightsCatalog);
 int compareYears_flight(void *date, void *id, void *flightsCatalog);
-void getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers);
+OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers);
 
 //gets
 Flight *getFlightCatalog(FlightsManager *flightsManager, int *id);

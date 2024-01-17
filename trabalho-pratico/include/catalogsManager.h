@@ -42,7 +42,7 @@ void sortAirportFlightsByDepartureDate_catalog(char *id, Catalogs* catalogs);
 
 //funções sobre diferêntes catálogos
 //adiciona um utilizador ao catálogo
-void addUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, Catalogs *catalogs);
+void addUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice, Catalogs *catalogs);
 void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs);
 int addFlight(int *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs);
 void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, int *id_reserv, Catalogs *catalogs);
@@ -127,5 +127,7 @@ Hashtable *getFlights_catalog(Catalogs *catalogs);
 Hashtable *getReservations_catalog(Catalogs *catalogs);
 Hashtable *getHotels_catalog(Catalogs *catalogs);
 Hashtable *getAirports_catalog(Catalogs *catalogs);
+
+void createListPassengers_UsersManager (Catalogs* catalogs, int size);
 
 #endif

@@ -198,8 +198,8 @@ void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs) {
 
 //funções sobre diferêntes catálogos
 //adiciona um utilizador ao catálogo
-void addUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, Catalogs *catalogs) {
-    addUserToCatalog(id, name, gender, country, passport, birth, accountCreation, accountStatus, catalogs->usersCatalog);
+void addUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice, Catalogs *catalogs) {
+    addUserToCatalog(id, name, gender, country, passport, birth, accountCreation, accountStatus, indice, catalogs->usersCatalog);
 }
 //adiciona uma reserva ao catálogo
 void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, Catalogs *catalogs) {
@@ -379,7 +379,9 @@ void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result){
 Result * catalogs_compute_Q10(int year, int month, int day, Catalogs* catalogs){
     int new_users = getNewUsers(year, month, day, catalogs->usersCatalog);
     int flights; int passengers; int unique_passengers;
-    getFlightsDataQ10(year, month, day, catalogs->flightsCatalog, &flights, &passengers, &unique_passengers);
+    OrdList* list_passengers = getFlightsDataQ10(year, month, day, catalogs->flightsCatalog, &flights, &passengers, &unique_passengers);
+    unique_passengers = count_unique_passengers(catalogs->usersCatalog,list_passengers);
+    destroyOrdList(list_passengers,free);
     int reservations = getReservationsQ10(year, month, day, catalogs->reservationsCatalog);
     if (new_users==0 && flights==0 && reservations==0) return NULL;
     else{
@@ -599,3 +601,6 @@ Hashtable *getAirports_catalog(Catalogs *catalogs) {
     return getHashtableAirportsCatalog(catalogs->airportsCatalog);
 }
 
+void createListPassengers_UsersManager (Catalogs* catalogs, int size) {
+    createListPassengers(catalogs->usersCatalog, size);
+}

@@ -36,6 +36,7 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
             int standart_size = 300;
             char* line_modified = malloc(standart_size);
             char* line_pointer;
+            int indice = 0;
             while((read = getline(&line,&n,file)) != -1) {
                 size_line = strlen(line) + 1;
                 if (size_line > standart_size) {
@@ -58,7 +59,8 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                     int accountStatus = 0;
                                     if (token[5][0] == 'F' || token[5][0] == 'f') gender = 1;
                                     if (token[11][0] == 'a' || token[11][0] == 'A') accountStatus = 1;
-                                    addUser(token[0],token[1],gender,token[7],token[6],token[4],token[9],accountStatus,catalogs);
+                                    addUser(token[0],token[1],gender,token[7],token[6],token[4],token[9],accountStatus,indice,catalogs);
+                                    indice++;
                                }
                                break;
                     //reservations                    id      id_user  id_hotel h_name   h_stars  cityTax  address  begin    end      pricePN  inc_break userClass
@@ -99,6 +101,7 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                 }
                 if (invalid == 1) add_invalid_line_to_error_file(error_file_path,line);
             }
+            if (type_file == 'u' && indice > 0) createListPassengers_UsersManager(catalogs,indice);
             free(line_modified);
         }
         free(line);

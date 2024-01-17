@@ -6,6 +6,8 @@ struct usersManager {
     Hashtable *users;
     OrdList *usersByName;
     OrdList *usersByAccountCreation;
+    int* passengers_list;
+    int size;
 };
 //função que cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size) {
@@ -15,9 +17,44 @@ UsersManager *createUsersCatalog(int size) {
     usersManager->usersByAccountCreation = createOrdList();
     return usersManager;
 }
+
+void allZerosListPassengers (UsersManager* usersCatalog) {
+    int size = usersCatalog->size;
+    for (int i = 0; i < size; i++) {
+        usersCatalog->passengers_list[i] = 0;
+    }
+}
+
+void count_passenger (UsersManager* usersCatalog, char* id_user) {
+    User* user =  getData(usersCatalog->users, id_user);
+    int indice = getIndice(user);
+    usersCatalog->passengers_list[indice] = 1;
+}
+
+int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
+    int size_list = getOrdListSize(list);
+    for (int i = 0; i < size_list; i++) {
+        char* id = getDataOrdList(list,i);
+        count_passenger(usersCatalog,id);
+    }
+    int size = usersCatalog->size;
+    int unique_passengers = 0;
+    for (int i = 0; i < size; i++) {
+        if (usersCatalog->passengers_list[i] != 0) unique_passengers++;
+    }
+    allZerosListPassengers(usersCatalog);
+    return unique_passengers;
+}
+
+void createListPassengers (UsersManager* usersCatalog, int size) {
+    usersCatalog->passengers_list = malloc(sizeof(int)*size);
+    usersCatalog->size = size;
+    allZerosListPassengers(usersCatalog);
+}
+
 //função que adiciona um utilizador ao catálogo de utilizadores
-void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog) {
-    User *user = createUser(id, name, gender, country, passport, birth, accountCreation, accountStatus);
+void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice, UsersManager *usersCatalog) {
+    User *user = createUser(id, name, gender, country, passport, birth, accountCreation, accountStatus, indice);
     usersCatalog->users = addHashtable(usersCatalog->users, user, id);
     char *id_user = strdup(id);
     if (accountStatus){

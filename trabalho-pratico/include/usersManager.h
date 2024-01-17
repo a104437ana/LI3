@@ -24,8 +24,13 @@ typedef enum {
 typedef struct usersManager UsersManager;
 //cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size);
+void allZerosListPassengers (UsersManager* usersCatalog);
+void count_passenger (UsersManager* usersCatalog, char* id_user);
+int count_unique_passengers (UsersManager* usersCatalog,OrdList* list);
+void createListPassengers (UsersManager* usersCatalog, int size);
+void createListPassengers (UsersManager* usersCatalog, int size);
 //adiciona um utilizador ao catálogo de utilizadores
-void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, UsersManager *usersCatalog);
+void addUserToCatalog(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice, UsersManager *usersCatalog);
 //adiciona uma reserva à lista de reservas de um utilizador
 void addReservToUser(char *id_user, int *id_reserv, double totalSpent, UsersManager *usersCatalog);
 //adiciona o utilizador à lista de passageiros do voo

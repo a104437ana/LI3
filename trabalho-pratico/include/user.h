@@ -17,7 +17,7 @@
 //} Gender;
 typedef struct user User;
 //cria um novo utilizador
-User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus);
+User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice);
 //adiciona um voo ou reserva à lista de voos e ereservas de um utilizador
 void addToUserList(User *user, int *id, char type, double totalSpent);
 
@@ -44,6 +44,7 @@ int getAccountCreationDay(void *user);
 int getAccountCreationMonth(void *user); 
 int getAccountCreationYear(void *user);
 int *getUListId(int *type, User *user, int index);
+int getIndice (User* user);
 
 //sets
 void setName(Hashtable *hashtable, char *name, char *id);

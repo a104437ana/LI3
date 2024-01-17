@@ -25,9 +25,10 @@ struct user {
     double totalSpent;
     int nFlights;
     int nReservations;
+    int indice;
 };
 //função que cria um novo utilizador
-User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus) {
+User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice) {
     User *user = malloc(sizeof(User)); //aloca espaço a estrutura do utilizador
 //    user->id = strdup(id); //preenche os diferentes campos com a informação dada
     user->name = strdup(name);
@@ -43,6 +44,7 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
     user->flightsReservationsByDate = createOrdList(); //cria a lista de voos e reservas do utilizador
     user->nFlights=0;
     user->nReservations=0;
+    user->indice = indice;
 
     return user;
 }
@@ -207,6 +209,9 @@ int *getUListId(int *type, User *user, int index) {
     return id;
 }
 
+int getIndice (User* user) {
+    return user->indice;
+}
 //sets
 void setName(Hashtable *hashtable, char *name, char *id) {
     User *data = getData(hashtable, id);
