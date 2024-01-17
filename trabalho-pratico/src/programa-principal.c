@@ -47,7 +47,7 @@ int main (int argc, char** argv) {
     }
     else {
     if (argc == 1) {
-    printf("Attention: This program requires a minimum window size of 154x26. Please adjust the window size now to meet the requirements and your preferences. Press Enter to continue...");
+    printf("Attention: This program requires a minimum window size of 154x26. Please adjust the window size now to meet the requirements and your preferences. Note that resizing won't be supported after this adjustment, so choose wisely. After adjusting, press Enter to continue...");
     getchar();
     //setlocale(LC_ALL,""); //permite a utilização de caracteres especiais da nossa localidade
     initscr(); //inicia ncurses
