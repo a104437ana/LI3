@@ -96,7 +96,7 @@ void setNumberFieldsQ (QueryResult* result, int i, int n){
 
 void setNumberFields (Result* result, int n){
     result->number_of_fields = n;
-    result->fields = malloc(sizeof(Result_Field *)*n);
+    result->fields = realloc(result->fields,sizeof(Result_Field *)*n);
     int i;
     for (i=0; i<n; i++){
         result->fields[i] = createField();

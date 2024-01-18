@@ -40,9 +40,11 @@ int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
     int size = usersCatalog->size;
     int unique_passengers = 0;
     for (int i = 0; i < size; i++) {
-        if (usersCatalog->passengers_list[i] != 0) unique_passengers++;
+        if (usersCatalog->passengers_list[i] != 0) {
+            unique_passengers++;
+            usersCatalog->passengers_list[i] = 0;
+        }
     }
-    allZerosListPassengers(usersCatalog);
     return unique_passengers;
 }
 
