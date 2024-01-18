@@ -18,12 +18,13 @@ UsersManager *createUsersCatalog(int size) {
     return usersManager;
 }
 
+/*
 void allZerosListPassengers (UsersManager* usersCatalog) {
     int size = usersCatalog->size;
     for (int i = 0; i < size; i++) {
         usersCatalog->passengers_list[i] = 0;
     }
-}
+}*/
 
 void count_passenger (UsersManager* usersCatalog, char* id_user) {
     User* user =  getData(usersCatalog->users, id_user);
@@ -33,10 +34,12 @@ void count_passenger (UsersManager* usersCatalog, char* id_user) {
 
 int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
     int size_list = getOrdListSize(list);
+    char* id;
     for (int i = 0; i < size_list; i++) {
-        char* id = getDataOrdList(list,i);
+        id = getDataOrdList(list,i);
         count_passenger(usersCatalog,id);
     }
+
     int size = usersCatalog->size;
     int unique_passengers = 0;
     for (int i = 0; i < size; i++) {
@@ -51,7 +54,7 @@ int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
 void createListPassengers (UsersManager* usersCatalog, int size) {
     usersCatalog->passengers_list = malloc(sizeof(int)*size);
     usersCatalog->size = size;
-    allZerosListPassengers(usersCatalog);
+    memset(usersCatalog->passengers_list, 0, size * sizeof(int));
 }
 
 //função que adiciona um utilizador ao catálogo de utilizadores

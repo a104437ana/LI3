@@ -167,8 +167,8 @@ int main (int argc, char** argv) {
     printf("Running the test with the assumption that the input file and output directory paths are correct:\n\n");
     int size = strlen(argv[3]) + 23;
     char* correct_output_file = malloc(size);
-    char* output_file = malloc(23);
-    char* our_output_file = malloc(33);
+    char* output_file = malloc(30); //-O2
+    char* our_output_file = malloc(40); //-O2
     int equal_files = 0;
 
     int i = 1;

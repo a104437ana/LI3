@@ -1,6 +1,6 @@
 CC=gcc
 
-CFLAGS=-Wall -Iinclude -g
+CFLAGS=-Wall -Iinclude -g -O2
 
 LIBS= -lncursesw
 

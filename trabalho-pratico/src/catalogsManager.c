@@ -274,7 +274,7 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
                 char * begin = dateToStringNoHours(begin_date); char * field1 = strdup("begin_date");
                 char * end = dateToStringNoHours(end_date); char * field2 = strdup("end_date");
                 char * userId = getReservUserId(reservation); char * field3 = strdup("user_id");
-                char * ratingS = malloc(sizeof(char)*3);
+                char * ratingS = malloc(sizeof(char)*11); // -O2
                 sprintf(ratingS, "%d", rating); char * field4 = strdup("rating");
                 int ppn = getReservPricePerNight(reservation); //preço por noite
                 int nnights = getReservNights(reservation); //número de noites

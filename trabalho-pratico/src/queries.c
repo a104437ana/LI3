@@ -208,7 +208,8 @@ ResultQ1* Q1(char *id, UsersManager *usersCatalog,ReservationsManager *reservati
 void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
     int userAccountStatus = getAccountStatus(id_user, catalogs);
     if (userAccountStatus<=0) return; //se o id não existir ou o utilizador não estiver ativo
-    int i, j;
+    int i;
+    int j = 0; //-O2
     int listSize, resultSize;
     listSize = getUserListSize(0, id_user, catalogs);
     sortUserList(id_user, catalogs);
@@ -218,7 +219,9 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
     resultSize = getUserListSize(j, id_user, catalogs); //tamanho do tipo de lista que for pedida
     setNumberResults(result, resultSize);
     char *field0 = strdup("id"), *field1 = strdup("date"), *field2 = strdup("type");
-    char *id = 0, *dateS, *typeS;
+    char *id = 0;
+    char *dateS = NULL; //-O2
+    char *typeS = NULL; //-O2
     Q2Type resultType;
     if (type==BOTH) {
       for(i=0, j=resultSize-1;j>=0; i++, j--){
