@@ -218,7 +218,7 @@ int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
 }
 
 int searchPrefix(char *prefix, UsersManager *usersCatalog) {
-    return searchDataOrdList(usersCatalog->usersByName, prefix, prefixSearch, usersCatalog->users, 0, prefixSearchBack, 0);
+    return searchDataOrdList(usersCatalog->usersByName, prefix, prefixSearch, usersCatalog->users, 0, prefixSearchBack);
 }
 int sameFirstLetterUser(char *string1, char *string2) {
   int compare = 1;
@@ -435,7 +435,7 @@ int getNewUsers(int year, int month, int day, UsersManager * users){
     date->day = day;
     OrdList * list = users->usersByAccountCreation;
     if (day!=-1){
-        int i = searchDataOrdList(list, date, compareDates_user, users, 0, compareDates_user, 0);
+        int i = searchDataOrdList(list, date, compareDates_user, users, 0, compareDates_user);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;
@@ -451,7 +451,7 @@ int getNewUsers(int year, int month, int day, UsersManager * users){
         }
     }
     if (month!=-1){
-        int i = searchDataOrdList(list, date, compareMonths_user, users, 0, compareMonths_user, 0);
+        int i = searchDataOrdList(list, date, compareMonths_user, users, 0, compareMonths_user);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;
@@ -467,7 +467,7 @@ int getNewUsers(int year, int month, int day, UsersManager * users){
         }
     }
     else if (year!=-1){
-        int i = searchDataOrdList(list, date, compareYears_user, users, 0, compareYears_user, 0);
+        int i = searchDataOrdList(list, date, compareYears_user, users, 0, compareYears_user);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;

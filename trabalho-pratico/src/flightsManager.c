@@ -192,7 +192,7 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
     date->month = month;
     date->day = day;
     if (day!=-1){
-        int i = searchDataOrdList(list, date, compareDates_flight, flightsCatalog, 0, compareDates_flight, 0);
+        int i = searchDataOrdList(list, date, compareDates_flight, flightsCatalog, 0, compareDates_flight);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;
@@ -218,7 +218,7 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
         }
     }
     else if (month!=-1){
-        int i = searchDataOrdList(list, date, compareMonths_flight, flightsCatalog, 0, compareMonths_flight, 0);
+        int i = searchDataOrdList(list, date, compareMonths_flight, flightsCatalog, 0, compareMonths_flight);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;
@@ -244,7 +244,7 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
         }
     }
     else if (year!=-1){
-        int i = searchDataOrdList(list, date, compareYears_flight, flightsCatalog, 0, compareYears_flight, 0);
+        int i = searchDataOrdList(list, date, compareYears_flight, flightsCatalog, 0, compareYears_flight);
         if (i>=0){
             int size = getOrdListSize(list);
             int exit = 0;

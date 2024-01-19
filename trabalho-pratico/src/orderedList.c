@@ -38,13 +38,21 @@ void addOrdList(OrdList *ordList, void *data) {
     ordList->maxSize = maxSize;
 }
 //função que devolve o indice da primeira ocorrência de um elemento numa lista
-int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*,void*), void *lookup, int equal, int (*searchBackFunction)(void*,void*,void*), int first) {
+int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,void*,void*), void *lookup, int equal, int (*searchBackFunction)(void*,void*,void*)) {
     int lower = 0, higher = list->size - 1; //limites para procura
     if (higher == -1) return -2;
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
     void *compareData = list->data[i]; //elemento a comparar
     //enquanto os elementos não forem iguais e os limites não se cruzarem
 //    printf("Prefix: %s\n", (char*) data);
+
+    // caso a lista tenha apenas 1 elemento (logo se tiver algum igual, será apenas este)
+    if (higher == lower) {
+        if ((compare = compareFunction(data, compareData, lookup)) == equal) return i;
+        else return -1;
+    }
+
+    // se tiver mais de 1 elemento
     while ((compare = compareFunction(data, compareData, lookup)) != equal && (higher - lower) > 1) {
         if (compare < equal) higher = i; //se o elemento for menor o limite superior passa a ser o indice do elemento
         else lower = i; //caso contrário o limite inferior passa a ser o indice do elemento
@@ -52,12 +60,21 @@ int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,vo
         compareData = list->data[i]; //novo elemento a comparar
 //        printf("\t%s\n", getName(compareData));
     }
-    if (first) return (lower + higher) / 2;
-    if (higher - lower == 1 && compare != equal) return -1; //se o elemento nao existir na lista
+
+    if (higher - lower == 1 && compare != equal) {
+        if (compare < equal) {
+            i = lower;
+        }
+        else {
+            i = higher;
+        }
+        compareData = list->data[i];
+        if ((compare = compareFunction(data, compareData, lookup)) != equal) return -1;
+    }
+
     while (i > 0 && compare <= equal) { //compara com o anterior até encontrar um elemento diferente
         compareData = list->data[i-1];
         compare = searchBackFunction(data, compareData, lookup);
-//        printf("\t%s\n", getName(compareData));
         i--;
     }
     if (compare != equal && i != 0) i++; //quando a comparação não dá igual incrementa indice para apontar para o último elemento que deu igual

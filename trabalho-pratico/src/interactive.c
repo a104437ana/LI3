@@ -418,7 +418,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
             return 0;
         }
         proceed = option;
-        printw("\n\nExecuting query. Please wait...");
+        mvprintw(x+6,0,"Executing query. Please wait...");
         refresh();
         Command* c = parseCommandLine(command);
         processCommand(c,0,result,catalogs);
@@ -541,7 +541,7 @@ int pagesNumber (QueryResult* result, int max_row, int format) {
 void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
     int proceed = 1;
     int* pointer = &proceed;
-    mvprintw(0, 0, "Welcome to Interactive Mode!\n\nWARNING: From now on, please keep the window size unchanged.\nThis program cannot handle resizing.\nIf you resize the window, the program will end immediately.\n\nEnter the path of the dataset: ");
+    mvprintw(0, 0, "Welcome to Interactive Mode!\n\nWARNING: From now on, please keep the window size unchanged.\nThis program cannot handle window resizing.\nIf you resize the window, the program will end immediately.\n\nEnter the path of the dataset: ");
     refresh();
     char* path = get_string(max_row,max_col,6,31,500,pointer);
     int n = 0;
