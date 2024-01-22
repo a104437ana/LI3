@@ -128,13 +128,9 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
      else{
       if (i != 0) {
          QueryResult * result = createQResult();
-         //UsersManager *usersCatalog = getUsersCatalog(catalogs);
-        //OrdList* list = 
          Q9(command->args[0],catalogs,result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
-        //printOutputQ9(command->format_flag, list, i);
-        //destroyOnlyOrdList(list);
       }
       else Q9(command->args[0],catalogs,result2);
         return 9;
