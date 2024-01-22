@@ -16,7 +16,7 @@ struct flight {
     Date *scheduleArrival;
     Date *realDeparture;
     Date *realArrival;
-    OrdList *passengers; //não necessário apenas número de passageiros
+    OrdList *passengers;
 };
 //função que cria um novo voo
 Flight *createFlight(char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival) {

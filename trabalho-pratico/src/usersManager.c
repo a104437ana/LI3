@@ -6,7 +6,7 @@ struct usersManager {
     Hashtable *users;
     OrdList *usersByName;
     OrdList *usersByAccountCreation;
-    int* passengers_list;
+    bool* passengers_list;
     int size;
 };
 //função que cria um novo catálogo de utilizadores
@@ -52,9 +52,9 @@ int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
 }
 
 void createListPassengers (UsersManager* usersCatalog, int size) {
-    usersCatalog->passengers_list = malloc(sizeof(int)*size);
+    usersCatalog->passengers_list = malloc(sizeof(bool)*size);
     usersCatalog->size = size;
-    memset(usersCatalog->passengers_list, 0, size * sizeof(int));
+    memset(usersCatalog->passengers_list, 0, size * sizeof(bool));
 }
 
 //função que adiciona um utilizador ao catálogo de utilizadores
