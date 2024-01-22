@@ -11,14 +11,14 @@ typedef struct hotel Hotel;
 //cria um novo hotel
 Hotel *createHotel(char *id, char *name, char stars, int cityTax);
 //adiciona reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, int *id_reserv, char rating);
+void addReservationToHotel(Hotel *hotel, int id_reserv, char rating);
 void sortHotelReservationsByDate_hotel(Hotel *hotel, void (*radixsortReservsDate)(void*,void*), void *lookup);
 
 int getHotelNumberOfReservations(Hotel* hotel);
 //obtem a lista de reservas do hotel
 OrdList *getHotelOrdList(Hotel *hotel);
 OrdList *getHotelEndOrdList(Hotel *hotel);
-int *getHotelReservId(Hotel *hotel, int index);
+int getHotelReservId(Hotel *hotel, int index);
 int searchHotelDates(Date *date, int (*compareDate)(void*,void*,void*), void *lookup, Hotel *hotel);
 
 //gets

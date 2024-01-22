@@ -157,22 +157,22 @@ int getDepartureYear(void *flight, void *lookup) {
 int getFlightSD(int time, Flight *flight) {
     int res;
     switch (time) {
-        case 0:
+        case TIME_DAY:
             res = getDay(flight->scheduleDeparture);
             break;
-        case 1:
+        case TIME_MONTH:
             res = getMonth(flight->scheduleDeparture);
             break;
-        case 2:
+        case TIME_YEAR:
             res = getYear(flight->scheduleDeparture);
             break;
-        case 3:
+        case TIME_SECONDS:
             res = getSeconds(flight->scheduleDeparture);
             break;
-        case 4:
+        case TIME_MINUTES:
             res = getMinutes(flight->scheduleDeparture);
             break;
-        case 5:
+        case TIME_HOURS:
             res = getHours(flight->scheduleDeparture);
             break;
         default:

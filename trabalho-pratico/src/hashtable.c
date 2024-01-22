@@ -1,5 +1,5 @@
 #include "hashtable.h"
-
+#include <math.h>
 
 //normal
 //123.53 seg 4910.48 MB
@@ -44,6 +44,21 @@ struct hashtable {
     void (*destroy)(void*);
 };
 
+//void eratosthenes_primesTo(unsigned char p[], unsigned int n) {
+//    unsigned int sqrtn = sqrt(n) + 1;
+//    unsigned int i, j;
+//    for (i = 0; i < n; i++) p[i] = 1;
+//    for (i = 2; i <= sqrtn; i++) {
+//        if (!p[i]) {
+//            for (j = i * i; j <= n; j += i)
+//                p[j] = 0;
+//        }
+//    }
+//}
+//
+//#define MAX 10000000
+//unsigned char prime[MAX], check = 0;
+
 //funcao de hash
 unsigned int hashString(void *key) {
     unsigned char *id = (unsigned char *) key, c;
@@ -80,6 +95,11 @@ Hashtable *createHashtable(int size, unsigned int (*hash)(void*), int (*compareK
     newHashtable->node = malloc(sizeof(struct hashtableNode) * size);
     for (int i=0; i<size; i++)
         newHashtable->node[i] = NULL;
+
+//    if (!check) {
+//        eratosthenes_primesTo(prime, MAX);
+//        check = 1;
+//    }
 
     return newHashtable;
 }
@@ -125,7 +145,7 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
 Hashtable *addHashtable(Hashtable *hashtable, void *data, void *key) {
     int nodes = hashtable->nodes, size = hashtable->size;
     float usage = nodes / size;
-    if (usage >= 2) {
+    if (usage >= 0.8) {
         Hashtable *newHashtable = createHashtable(size * 2, hashtable->hash, hashtable->compareKey, hashtable->dupKey, hashtable->destroy);
         copyHashtable(hashtable, newHashtable);
         Hashtable *oldHashtable = hashtable;

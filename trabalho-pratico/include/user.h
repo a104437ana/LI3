@@ -19,7 +19,8 @@ typedef struct user User;
 //cria um novo utilizador
 User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice);
 //adiciona um voo ou reserva à lista de voos e ereservas de um utilizador
-void addToUserList(User *user, int *id, char type, double totalSpent);
+void addToUserList(User *user, int id, char type, double totalSpent);
+int compareUsersNames_user(User *user1, User *user2);
 
 //gets
 char *getName(User *user);
@@ -43,7 +44,7 @@ Date * getUserAccountCreation(void *id, void *lookupTable);
 int getAccountCreationDay(void *user, void *lookup);
 int getAccountCreationMonth(void *user, void *lookup); 
 int getAccountCreationYear(void *user, void *lookup);
-int *getUListId(int *type, User *user, int index);
+int getUListId(int *type, User *user, int index);
 int getIndice (User* user);
 
 //sets

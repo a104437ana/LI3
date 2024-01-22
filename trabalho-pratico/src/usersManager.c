@@ -67,12 +67,12 @@ void addUserToCatalog(char *id, char *name, int gender, char *country, char *pas
     addOrdList(usersCatalog->usersByAccountCreation, user);
 }
 //adiciona uma reserva à lista de reservas de um utilizador
-void addReservToUser(char *id_user, int *id_reserv, double totalSpent, UsersManager *usersCatalog) {
+void addReservToUser(char *id_user, int id_reserv, double totalSpent, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id_user);
     addToUserList(user, id_reserv, 'R', totalSpent);
 }
 //adiciona o utilizador à lista de passageiros do voo
-void addFlightToUser(char *id_user, int *id_flight, UsersManager *usersCatalog) {
+void addFlightToUser(char *id_user, int id_flight, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id_user);
     addToUserList(user, id_flight, 'F', 0);
 }
@@ -80,7 +80,8 @@ void addFlightToUser(char *id_user, int *id_flight, UsersManager *usersCatalog) 
 //função que ordena o catálogo de utilizadores
 void sortUsersByName(UsersManager *usersCatalog) {
     OrdList *usersByName = usersCatalog->usersByName;
-    quickSort(usersByName, 0, getOrdListSize(usersByName)-1, compareUsersNames, NULL, 0); //ordena os utilizadores por nome na lista de utilizadores
+    heapsort(usersByName, compareUsersNames, NULL, 0);
+//    quickSort(usersByName, 0, getOrdListSize(usersByName)-1, compareUsersNames, NULL, 0); //ordena os utilizadores por nome na lista de utilizadores
 }
 
 void radixSortAccountCreation(OrdList *list, void *lookupTable) {
@@ -100,17 +101,7 @@ void sortUsersByAccountCreation(UsersManager *usersCatalog) {
 
 //função que compara o nome de dois utilizadores
 int compareUsersNames(void *user1, void *user2, void *lookup) {
-    char *name1 = getName(user1);
-    char *name2 = getName(user2);
-    int compare = strcoll(name1, name2); //compara os dois nomes
-    if (compare == 0) { //caso sejam iguais compara os seus ids
-        char *id1 = getUserId(user1), *id2 = getUserId(user2);
-        compare = strcoll(id1, id2);
-        free(id1); free(id2);
-    }
-    free(name1);
-    free(name2);
-    return compare;
+    return compareUsersNames_user((User *) user1, (User *) user2);
 }
 
 //função que verifica se um utilizador já existe no catálogo de utilizadores
@@ -324,7 +315,7 @@ int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
         res = getNumberReservations(user);
     return res;
 }
-int *getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
+int getIdUserList(int *type, char *id_user, int index, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id_user);
     return getUListId(type, user, index);
 }

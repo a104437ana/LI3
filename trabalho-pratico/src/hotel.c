@@ -22,16 +22,14 @@ Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     hotel->cityTax = cityTax;
     hotel->ratingsSum = 0;
     hotel->numberRatings = 0;
-    hotel->reservationsByDate = createOrdList(); //cria uma lista vazia de reservas do hotel
+    hotel->reservationsByDate = createOrdListInt(); //cria uma lista vazia de reservas do hotel
 //    hotel->reservationsByEndDate = createOrdList();
 
     return hotel;
 }
 //função que adiciona uma reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, int *id_reserv, char rating) {
-    int *id = malloc(sizeof(int));
-    *id = *id_reserv;
-    addOrdList(hotel->reservationsByDate, id);
+void addReservationToHotel(Hotel *hotel, int id_reserv, char rating) {
+    addOrdListInt(hotel->reservationsByDate, id_reserv);
 //    addOrdList(hotel->reservationsByEndDate, id);
     if (rating != '\0') {
         hotel->ratingsSum += (double) (rating - '0');
@@ -42,7 +40,8 @@ void addReservationToHotel(Hotel *hotel, int *id_reserv, char rating) {
 void sortHotelReservationsByDate_hotel(Hotel *hotel, void (*radixsortReservsDate)(void*,void*), void *lookup) {
     OrdList *list = hotel->reservationsByDate; //obtem lista de reservas
     if(!isOrdered(list)) {
-        quickSort(list, 0, getOrdListSize(list)-1, intcmpReverseVoid, NULL, 0); //ordena as reservas por ids
+//        quickSort(list, 0, getOrdListSize(list)-1, intcmpReverse, NULL, 0); //ordena as reservas por ids
+        heapsortInt(list, intcmpReverse, NULL, 0);
 //        reverseOrdList(list); //inverte a lista
         radixsortReservsDate(list, lookup);
         setOrdListOrd(list, 1);
@@ -60,9 +59,9 @@ OrdList *getHotelOrdList(Hotel *hotel) {
 //OrdList *getHotelEndOrdList(Hotel *hotel) {
 //    return hotel->reservationsByEndDate;
 //}
-int *getHotelReservId(Hotel *hotel, int index) {
-    int *id = (int *) getDataOrdList(hotel->reservationsByDate, index);
-    return (int *) intdupVoid(id);
+int getHotelReservId(Hotel *hotel, int index) {
+    int id = getValueOrdList(hotel->reservationsByDate, index);
+    return id;
 }
 
 //int searchHotelDates(Date *date, int (*compareDate)(void*,void*,void*), void *lookup, Hotel *hotel) {
@@ -170,6 +169,6 @@ void destroyHotel(void *hotel) {
     //free(((Hotel *) hotel)->address);
     free(((Hotel *) hotel)->name); //liberta espaço dos diferentes campos do hotel
 //    free(((Hotel *) hotel)->id);
-    destroyOrdList(((Hotel *) hotel)->reservationsByDate, free);
+    destroyOrdListInt(((Hotel *) hotel)->reservationsByDate);
     free(hotel);
 }

@@ -11,8 +11,9 @@ typedef struct airport Airport;
 //cria um novo aeroporto
 Airport *createAirport(char *name);
 //adiciona voo à lista de voos de um aeroporto
-void addFlightToAirport(Airport *airport, int *id_flight, int origin);
+void addFlightToAirport(Airport *airport, int id_flight, int origin);
 void addDelayToAirport(Airport* airport, int delay);
+void sortAirportFlightsByDepartureDate_airport(Airport *airport, void (*radixsortFlightsDate)(void*,void*), void *lookup);
 
 //obtem a lista de voos do aeroporto
 OrdList *getAirportOriginOrdList(Airport *airport);
@@ -22,7 +23,7 @@ char *getAirportId(Airport *airport);
 double getAirportMedian(Airport *airport);
 int getAirportListSize(Airport *airport);
 int getAirportDelayListSize(Airport *airport);
-int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*));
+int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(int,int,void*), int equal, void *lookup, int (*getFunction)(int,void*));
 
 //sets
 void swapL(int a[], int i, int j);

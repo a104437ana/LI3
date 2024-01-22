@@ -77,8 +77,8 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Cat
        char* resultT; //se o resultado é um voo ou uma reserva
        int key = getIdResultQ2(output->results[j]);
        char *id;
-       if (output->results[j]->resultType==FLIGHTS) {resultT=strdup("flight"); id = flightIdToString(&key);}
-       else {resultT = strdup("reservation"); id = reservIdToString(&key);}
+       if (output->results[j]->resultType==FLIGHTS) {resultT=strdup("flight"); id = flightIdToString(key);}
+       else {resultT = strdup("reservation"); id = reservIdToString(key);}
        fprintf (file, "--- %d ---\n", (j+1));
        fprintf (file,"id: %s\ndate: %04d/%02d/%02d\ntype: %s\n", id,getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs), resultT);
        if (j<output->N-1) fprintf (file, "\n"); //se não for o último resultado, escreve um newline
@@ -89,7 +89,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Cat
      if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
         int key = getIdResultQ2(output->results[j]);
-        char *id = flightIdToString(&key);
+        char *id = flightIdToString(key);
         fprintf (file, "--- %d ---\n", (j+1));
         fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", id,getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
         if (j<output->N-1) fprintf (file, "\n");
@@ -99,7 +99,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Cat
      else{
       for (j=0; j<output->N; j++){
         int key = getIdResultQ2(output->results[j]);
-        char *id = reservIdToString(&key);
+        char *id = reservIdToString(key);
         fprintf (file, "--- %d ---\n", (j+1));
         fprintf (file,"id: %s\ndate: %04d/%02d/%02d\n", id,getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
         if (j<output->N-1) fprintf (file, "\n");
@@ -114,8 +114,8 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Cat
        char* resultT;
        int key = getIdResultQ2(output->results[j]);
        char *id;
-       if (output->results[j]->resultType==FLIGHTS) {resultT=strdup("flight"); flightIdToString(&key);}
-       else {resultT = strdup("reservation"); id = reservIdToString(&key);}
+       if (output->results[j]->resultType==FLIGHTS) {resultT=strdup("flight"); flightIdToString(key);}
+       else {resultT = strdup("reservation"); id = reservIdToString(key);}
        fprintf (file,"%s;%04d/%02d/%02d;%s\n", id,getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs), resultT);
        free(resultT); free(id);
       }
@@ -123,7 +123,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Cat
      else if(qType==FLIGHTS){
       for (j=0; j<output->N; j++){
         int key = getIdResultQ2(output->results[j]);
-        char *id = flightIdToString(&key);
+        char *id = flightIdToString(key);
         fprintf (file,"%s;%04d/%02d/%02d\n", id,getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
         free(id);
       }
@@ -131,7 +131,7 @@ void printOutputQ2 (char format_flag, Q2Type qType,ResultsQ2* output, int i, Cat
      else{
       for (j=0; j<output->N; j++){
         int key = getIdResultQ2(output->results[j]);
-        char *id = reservIdToString(&key);
+        char *id = reservIdToString(key);
         fprintf (file,"%s;%04d/%02d/%02d\n", id,getBeginYear(output->results[j], catalogs),getBeginMonth(output->results[j], catalogs),getBeginDay(output->results[j], catalogs));
         free(id);
       }

@@ -126,7 +126,7 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
 Hashtable *addHashtable(Hashtable *hashtable, void *data, void *key) {
     int nodes = hashtable->nodes, size = hashtable->size;
     float usage = nodes / size;
-    if (usage >= 2) {
+    if (usage >= 0.8) {
         Hashtable *newHashtable = createHashtable(size * 2, hashtable->hash, hashtable->compareKey, hashtable->dupKey, hashtable->destroy);
         copyHashtable(hashtable, newHashtable);
         Hashtable *oldHashtable = hashtable;

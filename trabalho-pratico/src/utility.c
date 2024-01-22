@@ -322,34 +322,44 @@ int intcmpReverseVoid(void *n1, void *n2, void* lookup) {
     return res;
 }
 
+int intcmp(int n1, int n2) {
+    int res = 0;
+    if (n1 < n2) res--;
+    else if (n2 < n1) res++;
+    return res;
+}
+
+int intcmpReverse(int n1, int n2, void* lookup) {
+    int res = 0;
+    if (n1 < n2) res++;
+    else if (n2 < n1) res--;
+    return res;
+}
+
 void *intdupVoid(void *n) {
     int *res = malloc(sizeof(int));
     *res = *((int *) n);
     return (void *) res;
 }
 
-char *flightIdToString(int *id) {
+char *flightIdToString(int id) {
     char *s = malloc(sizeof(char)*11);
-    sprintf(s, "%010d", *id);
+    sprintf(s, "%010d", id);
     return s;
 }
 
-char *reservIdToString(int *id) {
+char *reservIdToString(int id) {
     char *s = malloc(sizeof(char)*15);
-    sprintf(s, "Book%010d", *id);
+    sprintf(s, "Book%010d", id);
     return s;
 }
 
-int *flightIdToInt(char *id) {
-    int *n = malloc(sizeof(int));
-    *n = atoi(id);
-    return n;
+int flightIdToInt(char *id) {
+    return atoi(id);
 }
 
-int *reservIdToInt(char *id) {
-    int *n = malloc(sizeof(int));
-    *n = atoi(id+4);
-    return n;
+int reservIdToInt(char *id) {
+    return atoi(id+4);
 }
 
 //função que liberta o espaço em memória alocado por uma data

@@ -38,16 +38,16 @@ void sortHotelReservationsByEndDate(char *id, Catalogs *catalogs);
 
 //ordena os voos do aeroporto
 //void sortAirportFlightsByDepartureDate(char *id, Catalogs *catalogs);
-void sortAirportFlightsByDepartureDate_catalog(char *id, Catalogs* catalogs);
+void sortAirportFlightsByDepartureDate(char *id, Catalogs* catalogs);
 
 //funções sobre diferêntes catálogos
 //adiciona um utilizador ao catálogo
 void addUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice, Catalogs *catalogs);
-void addReservation(int *id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, int cityTax, Catalogs *catalogs);
-int addFlight(int *id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs);
-void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, int *id_reserv, Catalogs *catalogs);
-void addAirport(int delay, char *id_origin, char *id_destination, int *id_flight, Catalogs *catalogs);
-void addPassenger(int *flightId, char *userId, Catalogs *catalogs);
+void addReservation(int id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, int cityTax, Catalogs *catalogs);
+int addFlight(int id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, Catalogs *catalogs);
+void addHotel(char *id, char *name, char stars, int cityTax, char userClassification, int id_reserv, Catalogs *catalogs);
+void addAirport(int delay, char *id_origin, char *id_destination, int id_flight, Catalogs *catalogs);
+void addPassenger(int flightId, char *userId, Catalogs *catalogs);
 int userExists(char *id, Catalogs *catalogs);
 int flightExists(char *id, Catalogs *catalogs);
 //funções alternativas enquanto encapsulamento não está completo
@@ -83,7 +83,7 @@ int getYearLastResults(Catalogs * catalogs);
 //user
 int getAccountStatus(char *id, Catalogs *catalogs);
 int getUserListSize(int type, char *id, Catalogs *catalogs);
-int *getUserListId(int *type, char *id_user, int index, Catalogs *catalogs);
+int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs);
 int getUsersByNameSize_catalog(Catalogs *catalogs);
 int searchPrefix_catalog(char *prefix, Catalogs *catalogs);
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs);
@@ -91,19 +91,19 @@ char *getIdUsersByName_catalog(int index, Catalogs *catalogs);
 char *getNameUsersByName_catalog(int index, Catalogs *catalogs);
 void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *catalogs);
 //flights
-int getFlightScheduleDepartureTime(int time, int *id, Catalogs *catalogs);
-char *getStringFlightDate(int *id, Catalogs *catalogs);
+int getFlightScheduleDepartureTime(int time, int id, Catalogs *catalogs);
+char *getStringFlightDate(int id, Catalogs *catalogs);
 //reservations
 double getReservationPrice(int *id_reserv, char *id_hotel, Catalogs *catalogs);
-int getReservationBegin(int time, int *id, Catalogs *catalog);
-char *getStringReservationDate(int *id, Catalogs *catalogs);
+int getReservationBegin(int time, int id, Catalogs *catalog);
+char *getStringReservationDate(int id, Catalogs *catalogs);
 //hotels
 int getHotelReservationsSize(char *id, Catalogs *catalogs);
 int doesHotelExist(char *id, Catalogs *catalogs);
 int getHotelReservPriceBetweenDates(char *id, int index, int *price, Date *begin, Date *end, Catalogs *catalogs);
-int getReservationBeginDay(void *id, void *catalogs);
-int getReservationBeginMonth(void *id, void *catalogs);
-int getReservationBeginYear(void *id, void *catalogs);
+int getReservationBeginDay(int id, void *catalogs);
+int getReservationBeginMonth(int id, void *catalogs);
+int getReservationBeginYear(int id, void *catalogs);
 int getReservationEndDay(void *id, void *catalogs);
 int getReservationEndMonth(void *id, void *catalogs);
 int getReservationEndYear(void *id, void *catalogs);
@@ -114,9 +114,12 @@ int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs);
 char *getNextAirportId_catalog(int index, Catalogs *catalogs);
 int getNumberAirports_catalog(Catalogs *catalogs);
 
-int getFlightDepartureDay(void *id, void *catalogs);
-int getFlightDepartureMonth(void *id, void *catalogs);
-int getFlightDepartureYear(void *id, void *catalogs);
+int getFlightDepartureDay(int id, void *catalogs);
+int getFlightDepartureMonth(int id, void *catalogs);
+int getFlightDepartureYear(int id, void *catalogs);
+int getFlightDepartureSeconds(int id, void *catalogs);
+int getFlightDepartureMinutes(int id, void *catalogs);
+int getFlightDepartureHours(int id, void *catalogs);
 int getUserAccountCreationDay(void *id, void *catalogs);
 int getUserAccountCreationMonth(void *id, void *catalogs);
 int getUserAccountCreationYear(void *id, void *catalogs);

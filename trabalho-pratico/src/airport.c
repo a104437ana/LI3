@@ -20,8 +20,8 @@ struct airport {
 Airport *createAirport(char *name) {
     Airport *airport = malloc(sizeof(Airport));
     memcpy(airport->name, name, 4);
-    airport->originFlights = createOrdList();
-    airport->destinationFlights = createOrdList();
+    airport->originFlights = createOrdListInt();
+    airport->destinationFlights = createOrdListInt();
     airport->median = -1.0;
     airport->size_list = 0;
     airport->listOfDelays = malloc(sizeof(int)*500);
@@ -31,13 +31,11 @@ Airport *createAirport(char *name) {
 }
 
 //adiciona voo à lista de voos de um aeroporto
-void addFlightToAirport(Airport *airport, int *id_flight, int origin) {
-    int *flight = malloc(sizeof(int));
-    *flight = *id_flight;
+void addFlightToAirport(Airport *airport, int id_flight, int origin) {
     if (origin)
-    addOrdList(airport->originFlights, flight);
+    addOrdListInt(airport->originFlights, id_flight);
     else
-    addOrdList(airport->destinationFlights, flight);
+    addOrdListInt(airport->destinationFlights, id_flight);
 }
 
 void addDelayToAirport(Airport* airport, int delay) {
@@ -47,6 +45,26 @@ void addDelayToAirport(Airport* airport, int delay) {
     }
     airport->listOfDelays[airport->size_list] = delay;
     airport->size_list++;
+}
+
+//ordena os voos do aeroporto
+void sortAirportFlightsByDepartureDate_airport(Airport *airport, void (*radixsortFlightsDate)(void*,void*), void *lookup) {
+    OrdList *origin = airport->originFlights;
+    OrdList *destination = airport->destinationFlights;
+    if (!isOrdered(origin)) {
+//        quickSort(origin, 0, getOrdListSize(origin)-1, compareFlightsIds, NULL, 0); //ordena por ids
+        heapsortInt(origin, intcmpReverse, NULL, 0);
+//        reverseOrdList(origin);
+        radixsortFlightsDate(origin, lookup); //ordena por datas
+        setOrdListOrd(origin, 1);
+    }
+    if (!isOrdered(destination)) {
+//        quickSort(destination, 0, getOrdListSize(destination)-1, compareFlightsIds, NULL, 0); //ordena por ids
+        heapsortInt(destination, intcmpReverse, NULL, 0);
+//        reverseOrdList(destination);
+        radixsortFlightsDate(destination, lookup); //ordena por datas
+        setOrdListOrd(destination, 1);
+    }
 }
 
 //obtem a lista de voos do aeroporto
@@ -72,31 +90,31 @@ int getAirportListSize(Airport *airport) {
     return getOrdListSize(airport->originFlights);
 }
 
-int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*)) {
+int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(int,int,void*), int equal, void *lookup, int (*getFunction)(int,void*)) {
     OrdList *origin = airport->originFlights; //voos de origem do aeroporto
     OrdList *destination = airport->destinationFlights; //voos de destino do aeroporto
-    void *data = (void *) &year;
-    int i = searchDataOrdList(origin, data, compareFunction, lookup, equal, compareFunction);
+//    void *data = (void *) &year;
+    int i = searchValueOrdList(origin, year, compareFunction, lookup, equal, compareFunction, 0);
     int passengers = 0, size, exit;
     if (i >= 0) { //se não houver voos nesse ano
         size = getOrdListSize(origin);
         exit = 0;
         while (i < size && !exit) {
-            char *id = (char *) getDataOrdList(origin, i);
-            if (compareFunction(data, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
+            int id = getValueOrdList(origin, i);
+            if (compareFunction(year, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
             else {
                 i++;
                 passengers+=getFunction(id, lookup); //adiona número de passageiros do voo
             }
         }
     }
-    i = searchDataOrdList(destination, data, compareFunction, lookup, equal, compareFunction);
+    i = searchValueOrdList(destination, year, compareFunction, lookup, equal, compareFunction, 0);
     if (i >= 0) { //se houver voos nesse ano
         exit = 0;
         size = getOrdListSize(destination);
         while (i < size && !exit) {
-            char *id = (char *) getDataOrdList(destination, i);
-            if (compareFunction(data, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
+            int id = getValueOrdList(destination, i);
+            if (compareFunction(year, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
             else {
                 i++;
                 passengers+=getFunction(id, lookup); //adiciona número de passageiros do voo
@@ -153,8 +171,8 @@ int sortAirportDelays (Airport* airport) {
 
 //liberta espaço em memória do aeroporto
 void destroyAirport(void *airport) {
-    destroyOrdList(((Airport *) airport)->originFlights, free);
-    destroyOrdList(((Airport *) airport)->destinationFlights, free);
+    destroyOrdListInt(((Airport *) airport)->originFlights);
+    destroyOrdListInt(((Airport *) airport)->destinationFlights);
     free(((Airport*)airport)->listOfDelays);
     free(((Airport *) airport)->name);
 }

@@ -72,10 +72,9 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                     char hotelStars = token[4][0];
                                     char userClassification = token[12][0];
                                     if (token[10][0] == 't' || token[10][0] == 'T' || token[10][0] == '1') includesBreakfast = 1;
-                                    int *id = reservIdToInt(token[0]);
+                                    int id = reservIdToInt(token[0]);
                                     addHotel(token[2],token[3],hotelStars,cityTax,userClassification,id,catalogs);
                                     addReservation(id,token[1],token[2],token[7],token[8],pricePerNight,includesBreakfast,userClassification,cityTax,catalogs);
-                                    free(id);
                                }
                                break;
                     //flights                   id       airline  airplane t_seats  origin   dest     s_depart s_arriv  r_depart r_arriv  pilot     copilot
@@ -83,19 +82,17 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                     invalid = 0;
                                     toUpperS(token[4]);
                                     toUpperS(token[5]);
-                                    int *id = flightIdToInt(token[0]);
+                                    int id = flightIdToInt(token[0]);
                                     int delay = addFlight(id,token[1],token[2],token[4],token[5],token[6],token[7],token[8],token[9],catalogs);
                                     addAirport(delay,token[4],token[5],id,catalogs);
-                                    free(id);
                                }
                                break;
                     //passengers
                     case 'p' : remove_new_line(token[1]);
                                if (valid_passenger(token[0],token[1],catalogs)) {
                                     invalid = 0;
-                                    int *id = flightIdToInt(token[0]);
+                                    int id = flightIdToInt(token[0]);
                                     addPassenger(id, token[1], catalogs);
-                                    free(id);
                                }
                                break;
                 }

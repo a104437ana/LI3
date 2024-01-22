@@ -20,7 +20,7 @@ AirportsManager *createAirportsCatalog(int size) {
 }
 
 //atualiza o catálogo de aeroportos
-void updateAirportCatalog(int delay, char *id_origin, char *id_destination, int *id_flight, AirportsManager *airportsCatalog) {
+void updateAirportCatalog(int delay, char *id_origin, char *id_destination, int id_flight, AirportsManager *airportsCatalog) {
     int existsAirportOrigin = existsData(airportsCatalog->airports, id_origin); //verifica se o aeroporto já existe no catálogo de aeroportos
     int existsAirportDestination = existsData(airportsCatalog->airports, id_destination); //verifica se o aeroporto já existe no catálogo de aeroportos
     Airport *airport_origin;
@@ -81,55 +81,35 @@ int compareDelays (void *pointer1, void *pointer2, void *lookup) {
     return result;
 }
 
-//ordena voos por data
-void radixSortFlightDate(OrdList *list, void *lookupTable) {
-    radixSort(list, getFlightScheduleDepartureSeconds, lookupTable, 60, 0);
-    radixSort(list, getFlightScheduleDepartureMinutes, lookupTable, 60, 0);
-    radixSort(list, getFlightScheduleDepartureHours, lookupTable, 24, 0);
-    radixSort(list, getFlightScheduleDepartureDay, lookupTable, 31, 0);
-    radixSort(list, getFlightScheduleDepartureMonth, lookupTable, 12, 0);
-    radixSort(list, getFlightScheduleDepartureYear, lookupTable, N_YEARS, BEGIN_YEAR);
-}
-//função que compara os ids de dois voos
-int compareFlightsIds(void *id1, void *id2, void *lookup) {
-    return intcmpVoid(id1, id2) * (-1);
-}
-//ordena os voos do aeroporto
-void sortAirportFlightsByDepartureDate(Airport *airport, Hashtable *airports) {
-    OrdList *origin = getAirportOriginOrdList(airport);
-    OrdList *destination = getAirportDestinationOrdList(airport);
-    if (!isOrdered(origin)) {
-        quickSort(origin, 0, getOrdListSize(origin)-1, compareFlightsIds, NULL, 0); //ordena por ids
-//        reverseOrdList(origin);
-        radixSortFlightDate(origin, airports); //ordena por datas
-        setOrdListOrd(origin, 1);
-    }
-    if (!isOrdered(destination)) {
-        quickSort(destination, 0, getOrdListSize(destination)-1, compareFlightsIds, NULL, 0); //ordena por ids
-//        reverseOrdList(destination);
-        radixSortFlightDate(destination, airports); //ordena por datas
-        setOrdListOrd(destination, 1);
-    }
-}
-void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, Hashtable *lookup) {
+////ordena voos por data
+//void radixSortFlightDate(OrdList *list, void *lookupTable) {
+//    radixSort(list, getFlightScheduleDepartureSeconds, lookupTable, 60, 0);
+//    radixSort(list, getFlightScheduleDepartureMinutes, lookupTable, 60, 0);
+//    radixSort(list, getFlightScheduleDepartureHours, lookupTable, 24, 0);
+//    radixSort(list, getFlightScheduleDepartureDay, lookupTable, 31, 0);
+//    radixSort(list, getFlightScheduleDepartureMonth, lookupTable, 12, 0);
+//    radixSort(list, getFlightScheduleDepartureYear, lookupTable, N_YEARS, BEGIN_YEAR);
+//}
+
+void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, void (*sortFunction)(void*,void*), void *lookup) {
     Airport *airport = getData(airportsCatalog->airports, id);
-    sortAirportFlightsByDepartureDate(airport, lookup);
+    sortAirportFlightsByDepartureDate_airport(airport, sortFunction, lookup);
 }
 
 void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,Hashtable* lookup) {
     toUpperS(id);
     Airport* airport = getData(airports->airports,id);
-    if (airport != NULL) {   
-        sortAirportFlightsByDepartureDate(airport,lookup);
+    if (airport != NULL) {
+//        sortAirportFlightsByDepartureDate(airport,lookup);
         OrdList* airportsByDate = getAirportOriginOrdList(airport);
         int size = getOrdListSize(airportsByDate);
         int i = 0;
-        int* id_flight;
+        int id_flight;
         char *id_flightS;
         Flight* flight;
         while (i < size) {
-            id_flight = getDataOrdList(airportsByDate,i);
-            flight = getData(lookup,id_flight);
+            id_flight = getValueOrdList(airportsByDate,i);
+            flight = getData(lookup,&id_flight);
             Date * date = getFlightScheduleDeparture(flight);
             if (compareDates(begin,date) >= 0) {
                 destroyDate(date);
@@ -142,8 +122,8 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
         }
         int j = 0;
         while (i < size) {
-            id_flight = getDataOrdList(airportsByDate,i);
-            flight = getData(lookup,id_flight);
+            id_flight = getValueOrdList(airportsByDate,i);
+            flight = getData(lookup,&id_flight);
             Date * date = getFlightScheduleDeparture(flight);
             if (compareDates(end,date) <= 0) {
                 addResult(result, j);
@@ -218,7 +198,7 @@ int getAirportListSize_airportsCatalog(char *id, AirportsManager *airportsCatalo
     return getAirportListSize(airport);
 }
 
-int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFunction)(void*,void*,void*), int equal, void *lookup, int (*getFunction)(void*,void*), AirportsManager *airportsCatalog) {
+int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFunction)(int,int,void*), int equal, void *lookup, int (*getFunction)(int,void*), AirportsManager *airportsCatalog) {
     Airport *airport = getData(airportsCatalog->airports, id);
     return getAirportPassengersYear(year, airport, compareFunction, equal, lookup, getFunction);
 }

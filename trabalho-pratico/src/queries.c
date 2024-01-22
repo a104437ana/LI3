@@ -91,7 +91,7 @@ int getBeginHours(void* data, void *catalog) {
 
 //devolve o id de uma reserva ou voo
 int getIdResultQ2(ResultQ2* data){
-  return *(data->id);
+  return data->id;
 //  if (data->resultType == FLIGHTS) return (getFlightId((Flight *)data->result));
 //  else return (getReservId((Reservation *)data->result));
 }
@@ -102,7 +102,7 @@ Q2Type getResultType(ResultQ2 *data) {
 
 //liberta dados do tipo ResultQ2
 void destroyResultQ2(void * data){
-  free(((ResultQ2*)data)->id);
+//  free(((ResultQ2*)data)->id);
   free((ResultQ2*)data);
 }
 
@@ -225,7 +225,7 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
     Q2Type resultType;
     if (type==BOTH) {
       for(i=0, j=resultSize-1;j>=0; i++, j--){
-        int *key = getUserListId((int *) &resultType, id_user, i, catalogs);
+        int key = getUserListId((int *) &resultType, id_user, i, catalogs);
         if (resultType == FLIGHTS) {
           dateS = getStringFlightDate(key, catalogs);
           typeS = strdup("flight");
@@ -243,12 +243,11 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
         free(dateS);
         free(typeS);
         free(id);
-        free(key);
       }
     }
     else {
       for(i=0, j=resultSize-1;i<listSize; i++){
-        int *key = getUserListId((int *) &resultType, id_user, i, catalogs);
+        int key = getUserListId((int *) &resultType, id_user, i, catalogs);
         if (resultType==type){ //verifica se a posição atual tem um voo ou uma reserva
           if (resultType == FLIGHTS) {
             dateS = getStringFlightDate(key, catalogs);
@@ -265,7 +264,6 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
           free(id);
           j--;
         }
-        free(key);
       }
     }
     free(field0); free(field1); free(field2);
@@ -350,7 +348,7 @@ void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
   int i = 0;
   while (i < numberAirports) {
     char *id = getNextAirportId_catalog(i, catalogs);
-    sortAirportFlightsByDepartureDate_catalog(id, catalogs);
+    sortAirportFlightsByDepartureDate(id, catalogs);
     passengers = getAirportPassengersYear_catalog(year, id, catalogs);
     struct pairIntString *airport = malloc(sizeof(struct pairIntString));
     addPair(passengers, id, airport);
