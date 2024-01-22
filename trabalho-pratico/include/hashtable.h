@@ -45,4 +45,15 @@ void destroyHashtable(Hashtable *hashtable);
 
 void ht_applyToAll(Hashtable *table, void function(void*), void *getFunction(void*));
 
+typedef struct hashtableInt HashtableInt;
+HashtableInt *createHashtableInt(int size, void (*destroy)(void*));
+int getHashtableIntUsed(HashtableInt *hashtable);
+void copyHashtableInt(HashtableInt *hashtable, HashtableInt *newHashtable);
+HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, int key);
+int existsDataInt(HashtableInt *hashtable, int key);
+void *getDataInt(HashtableInt *hashtable, int key);
+int getHashtableNodesInt(HashtableInt *hashtable);
+void setDataInt(HashtableInt *hashtable, void *data, int key);
+void destroyHashtableInt(HashtableInt *hashtable);
+
 #endif
