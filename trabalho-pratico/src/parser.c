@@ -120,17 +120,14 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
 
     int size = strlen(directory) + 18;
     char* file_path = malloc(size);
-    char* error_file_path = malloc(35);
 
     sprintf(file_path,"%s/users.csv",directory);
-    strcpy(error_file_path,"Resultados/users_errors.csv");
-    parse_file(file_path,error_file_path,catalogs,passengers_counter);
+    parse_file(file_path,"Resultados/users_errors.csv",catalogs,passengers_counter);
         //clock_gettime(CLOCK_REALTIME, &interm);
         //use = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
 
     sprintf(file_path,"%s/reservations.csv",directory);
-    strcpy(error_file_path,"Resultados/reservations_errors.csv");
-    parse_file(file_path,error_file_path,catalogs,passengers_counter);
+    parse_file(file_path,"Resultados/reservations_errors.csv",catalogs,passengers_counter);
         //clock_gettime(CLOCK_REALTIME, &end);
         //res = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
@@ -139,19 +136,16 @@ void parse_all_files (char* directory, Catalogs *catalogs) {
         //passc = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     sprintf(file_path,"%s/flights.csv",directory);
-    strcpy(error_file_path,"Resultados/flights_errors.csv");
-    parse_file(file_path,error_file_path,catalogs,passengers_counter);
+    parse_file(file_path,"Resultados/flights_errors.csv",catalogs,passengers_counter);
         //clock_gettime(CLOCK_REALTIME, &end);
         //fli = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
 
     sprintf(file_path,"%s/passengers.csv",directory);
-    strcpy(error_file_path,"Resultados/passengers_errors.csv");
-    parse_file(file_path,error_file_path,catalogs,passengers_counter);
+    parse_file(file_path,"Resultados/passengers_errors.csv",catalogs,passengers_counter);
         //clock_gettime(CLOCK_REALTIME, &interm);
         //pass = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     free(file_path);
-    free(error_file_path);
 
     destroyPassengersCounter(passengers_counter);
         //clock_gettime(CLOCK_REALTIME, &end);
