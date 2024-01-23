@@ -49,11 +49,11 @@ typedef struct hashtableInt HashtableInt;
 HashtableInt *createHashtableInt(int size, void (*destroy)(void*));
 int getHashtableIntUsed(HashtableInt *hashtable);
 void copyHashtableInt(HashtableInt *hashtable, HashtableInt *newHashtable);
-HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, int key);
-int existsDataInt(HashtableInt *hashtable, int key);
-void *getDataInt(HashtableInt *hashtable, int key);
+HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, unsigned long int key);
+int existsDataInt(HashtableInt *hashtable, unsigned long int key);
+void *getDataInt(HashtableInt *hashtable, unsigned long int key);
 int getHashtableNodesInt(HashtableInt *hashtable);
-void setDataInt(HashtableInt *hashtable, void *data, int key);
+void setDataInt(HashtableInt *hashtable, void *data, unsigned long int key);
 void destroyHashtableInt(HashtableInt *hashtable);
 
 #endif

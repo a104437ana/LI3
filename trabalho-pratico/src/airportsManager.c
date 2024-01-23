@@ -96,7 +96,7 @@ void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager
     sortAirportFlightsByDepartureDate_airport(airport, sortFunction, lookup);
 }
 
-void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,Hashtable* lookup) {
+void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,HashtableInt* lookup) {
     toUpperS(id);
     Airport* airport = getData(airports->airports,id);
     if (airport != NULL) {
@@ -109,7 +109,7 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
         Flight* flight;
         while (i < size) {
             id_flight = getValueOrdList(airportsByDate,i);
-            flight = getData(lookup,&id_flight);
+            flight = getDataInt(lookup,id_flight);
             Date * date = getFlightScheduleDeparture(flight);
             if (compareDates(begin,date) >= 0) {
                 destroyDate(date);
@@ -123,7 +123,7 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
         int j = 0;
         while (i < size) {
             id_flight = getValueOrdList(airportsByDate,i);
-            flight = getData(lookup,&id_flight);
+            flight = getDataInt(lookup,id_flight);
             Date * date = getFlightScheduleDeparture(flight);
             if (compareDates(end,date) <= 0) {
                 addResult(result, j);

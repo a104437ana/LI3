@@ -34,8 +34,8 @@ Reservation *createReservation(char *id_user, char *id_hotel, char *begin, char 
 }
 
 //gets dos campos da reserva
-Reservation *getReservCatalog(Hashtable *reservations, char *id) {
-    Reservation *reservation = (Reservation *) getData(reservations, id);
+Reservation *getReservCatalog(HashtableInt *reservations, char *id) {
+    Reservation *reservation = (Reservation *) getDataInt(reservations, *((int *)id));
     return reservation;
 }
 
@@ -70,15 +70,6 @@ int getReservPricePerNight(Reservation *reservation) {
 int getReservUserClassification(Reservation *reservation) {
     return (reservation->userClassification-'0');
 }
-/*
-char getReservHotelStars(Reservation *reservation, Hashtable *hotels) {
-    return getHotelStars(reservation->id_hotel, hotels);
-}*/
-
-Date * getReservationBeginDate(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    return (reservation->begin);
-}
 
 Date *getReservBegin(Reservation *reservation) {
     Date * res = malloc(sizeof(Date));
@@ -99,50 +90,6 @@ Date *getReservEnd(Reservation *reservation) {
     res->hours = 0;
     res->minutes = 0;
     res->seconds = 0;
-    return res;
-}
-
-int getReservBeginDayId(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    return reservation->begin->day;
-}
-
-int getReservBeginMonthId(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    return reservation->begin->month;
-}
-
-int getReservBeginYearId(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    return reservation->begin->year;
-}
-
-int getReservUserClassificationId(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    return (reservation->userClassification-'0');
-}
-
-char *getReservUserIdId(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    char * res = strdup(reservation->id_user);
-    return res;
-}
-
-Date *getReservBeginId(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    Date * res = malloc(sizeof(Date));
-    res->day = reservation->begin->day;
-    res->month = reservation->begin->month;
-    res->year = reservation->begin->year;
-    return res;
-}
-
-Date *getReservEndId(void *id, void *lookupTable) {
-    Reservation *reservation = getData((Hashtable *) lookupTable, id);
-    Date * res = malloc(sizeof(Date));
-    res->day = reservation->end->day;
-    res->month = reservation->end->month;
-    res->year = reservation->end->year;
     return res;
 }
 
@@ -170,7 +117,7 @@ int getReservEndYear(void *reservation) {
     return ((Reservation*)reservation)->end->year;
 }
 
-int getReservationB(int time, Reservation *reservation) {
+int getReservationBegin_reservation(int time, Reservation *reservation) {
     int res;
     switch (time) {
         case 0:

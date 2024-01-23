@@ -111,37 +111,6 @@ Date *getFlightRealArrival(Flight *flight) {
     return res;
 }
 
-int getFlightScheduleDepartureDay(void *id, void *lookupTable) {
-    Flight *flight = getData((Hashtable *) lookupTable, id);
-    return getDay(flight->scheduleDeparture);
-}
-
-int getFlightScheduleDepartureMonth(void *id, void *lookupTable) {
-    Flight *flight = getData((Hashtable *) lookupTable, id);
-    return getMonth(flight->scheduleDeparture);
-}
-
-int getFlightScheduleDepartureYear(void *id, void *lookupTable) {
-    Flight *flight = getData((Hashtable *) lookupTable, id);
-    return getYear(flight->scheduleDeparture);
-}
-
-int getFlightScheduleDepartureSeconds(void *id, void *lookupTable) {
-    Flight *flight = getData((Hashtable *) lookupTable, id);
-    return getSeconds(flight->scheduleDeparture);
-}
-
-int getFlightScheduleDepartureMinutes(void *id, void *lookupTable) {
-    Flight *flight = getData((Hashtable *) lookupTable, id);
-    return getMinutes(flight->scheduleDeparture);
-}
-
-int getFlightScheduleDepartureHours(void *id, void *lookupTable) {
-    Flight *flight = getData((Hashtable *) lookupTable, id);
-    return getHours(flight->scheduleDeparture);
-}
-
-
 int getDepartureDay(void *flight, void *lookup) {
     return ((Flight*)flight)->scheduleDeparture->day;
 }

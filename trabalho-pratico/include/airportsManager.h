@@ -16,7 +16,7 @@ void updateAirportCatalog(int delay, char *id_origin, char *id_destination, int 
 void sortAirports (AirportsManager* airportsManager);
 void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, void (*sortFunction)(void*,void*), void *lookup);
 int compareDelays (void *pointer1, void *pointer2, void *lookup);
-void airport_catalog_compute_Q5(char* airport,Date* begin,Date* end,AirportsManager* airports, QueryResult* result, Hashtable *lookup);
+void airport_catalog_compute_Q5(char* airport,Date* begin,Date* end,AirportsManager* airports, QueryResult* result, HashtableInt *lookup);
 void airport_calalog_compute_Q7 (int n, AirportsManager *airports, QueryResult* result);
 //liberta espaço em memória do catálogo de aeroportos
 void destroyAirportsCatalog(AirportsManager *airportsManager);

@@ -264,7 +264,7 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
        for(i=0;i<listSize; i++){
             int key = getValueOrdList(reservations, i); char * field0 = strdup("id");
             char *id_reserv = reservIdToString(key);
-            Reservation* reservation = getData(getHashtableReservCatalog(catalogs->reservationsCatalog),&key);
+            Reservation* reservation = getDataInt(getHashtableReservCatalog(catalogs->reservationsCatalog),key);
             int rating = getReservUserClassification(reservation);
             if (rating>=1){
                 setNumberFieldsQ(result, listSize-i-1, 6);
@@ -320,7 +320,7 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
 }
 
 void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,QueryResult* result) {
-    Hashtable *lookup = getHashtableFlightsCatalog(catalogs->flightsCatalog);
+    HashtableInt *lookup = getHashtableFlightsCatalog(catalogs->flightsCatalog);
     sortAirportFlightsByDepartureDate(airport, catalogs);
     airport_catalog_compute_Q5(airport,begin,end,catalogs->airportsCatalog,result,lookup);
 }
@@ -456,13 +456,7 @@ char *getStringFlightDate(int id, Catalogs *catalogs) {
 }
 //reservations
 int getReservationBegin(int time, int id, Catalogs *catalogs) {
-    return getBReserv(time, id, catalogs->reservationsCatalog);
-}
-double getReservationPrice(int *id_reserv, char *id_hotel, Catalogs *catalogs){
-    int reservPrice = getReservPriceNoTax(id_reserv, catalogs->reservationsCatalog); //preço por noite * número de noites
-    int cityTax = getCityTax(id_hotel, catalogs->hotelsCatalog); //taxa turística
-    double res = reservPrice + (((float)reservPrice / 100) * cityTax);
-    return res;
+    return getReservationBegin_reservationsCatalog(time, id, catalogs->reservationsCatalog);
 }
 char *getStringReservationDate(int id, Catalogs *catalogs) {
     return getSReservDate(id, catalogs->reservationsCatalog);
@@ -542,30 +536,6 @@ char *getNextAirportId_catalog(int index, Catalogs *catalogs) {
 }
 int getNumberAirports_catalog(Catalogs *catalogs) {
     return getNumberAirports_airportsCatalog(catalogs->airportsCatalog);
-}
-
-void getAllHashtables(Hashtable *u, Hashtable *f, Hashtable *r, Hashtable *h, Hashtable *a, Catalogs *catalogs) {
-    u = getHashtableUserCatalog(catalogs->usersCatalog);
-    f = getHashtableFlightsCatalog(catalogs->flightsCatalog);
-    r = getHashtableReservCatalog(catalogs->reservationsCatalog);
-    h = getHashtableHotelsCatalog(catalogs->hotelsCatalog);
-    a = getHashtableAirportsCatalog(catalogs->airportsCatalog);
-}
-
-Hashtable *getUsers_catalog(Catalogs *catalogs) {
-    return getHashtableUserCatalog(catalogs->usersCatalog);
-}
-Hashtable *getFlights_catalog(Catalogs *catalogs) {
-    return getHashtableFlightsCatalog(catalogs->flightsCatalog);
-}
-Hashtable *getReservations_catalog(Catalogs *catalogs) {
-    return getHashtableReservCatalog(catalogs->reservationsCatalog);
-}
-Hashtable *getHotels_catalog(Catalogs *catalogs) {
-    return getHashtableHotelsCatalog(catalogs->hotelsCatalog);
-}
-Hashtable *getAirports_catalog(Catalogs *catalogs) {
-    return getHashtableAirportsCatalog(catalogs->airportsCatalog);
 }
 
 void createListPassengers_UsersManager (Catalogs* catalogs, int size) {

@@ -10,7 +10,7 @@ typedef struct reservation Reservation;
 Reservation *createReservation(char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification);
 
 //gets
-Reservation *getReservCatalog(Hashtable *reservations, char *id);
+Reservation *getReservCatalog(HashtableInt *reservations, char *id);
 char *getReservId(Reservation *reservation);
 char *getReservUserId(Reservation *reservation);
 int getReservUserKey(Reservation *reservation);
@@ -29,7 +29,7 @@ int getReservBeginYear(void *reservation, void* lookup);
 int getReservBeginDayId(void *id, void *lookupTable);
 int getReservBeginMonthId(void *id, void *lookupTable);
 int getReservBeginYearId(void *id, void *lookupTable);
-int getReservationB(int time, Reservation *reservation);
+int getReservationBegin_reservation(int time, Reservation *reservation);
 int getReservEndDay(void *reservation);
 int getReservEndMonth(void *reservation);
 int getReservEndYear(void *reservation);

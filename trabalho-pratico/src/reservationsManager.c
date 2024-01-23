@@ -6,13 +6,13 @@
 #include "hashtable.h"
 
 struct reservationsManager {
-    Hashtable *reservations;
+    HashtableInt *reservations;
     OrdList * reservationsByBeginDate;
 };
 //função que cria um novo catálogo de reservas
 ReservationsManager *createReservsCatalog(int size) {
     ReservationsManager *reservationsManager = malloc(sizeof(ReservationsManager));
-    reservationsManager->reservations = createHashtable(size, hashInt, intcmpVoid, intdupVoid, destroyReservation);
+    reservationsManager->reservations = createHashtableInt(size, destroyReservation);
     reservationsManager->reservationsByBeginDate = createOrdList();
     return reservationsManager;
 }
@@ -20,7 +20,7 @@ ReservationsManager *createReservsCatalog(int size) {
 int addReservToCatalog(int id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog) {
     //adiciona reserva ao catalogo de reservas
     Reservation *reservation = createReservation(id_user, id_hotel, begin, end, pricePerNight, includesBreakfast, userClassification);
-    reservationsCatalog->reservations = addHashtable(reservationsCatalog->reservations, reservation, &id);
+    reservationsCatalog->reservations = addHashtableInt(reservationsCatalog->reservations, reservation, id);
     addOrdList(reservationsCatalog->reservationsByBeginDate, reservation);
     int ppn = getReservPricePerNight(reservation);
     int nights = getReservNights(reservation);
@@ -48,7 +48,7 @@ OrdList * getReservByBeginDate (ReservationsManager *reservations){
 //função que liberta o espaço em memória alocado pelo catálogo de reservas
 void destroyreservationsCatalog(ReservationsManager *reservationsManager) {
     if (reservationsManager == NULL) return;
-    destroyHashtable(reservationsManager->reservations);
+    destroyHashtableInt(reservationsManager->reservations);
     destroyOnlyOrdList(reservationsManager->reservationsByBeginDate);
     free(reservationsManager);
 }
@@ -56,7 +56,7 @@ void destroyreservationsCatalog(ReservationsManager *reservationsManager) {
 //queries
 char * reservation_catalog_compute_Q1 (char *id, int* price_per_night, int* nights, ReservationsManager* reservationsManager, QueryResult* result) {
     int key = reservIdToInt(id);
-    Reservation* reservation = getData(reservationsManager->reservations,&key);
+    Reservation* reservation = getDataInt(reservationsManager->reservations,key);
     char * hotel_id;
     if (reservation == NULL) {
         hotel_id = NULL;
@@ -198,7 +198,7 @@ int getReservationsQ10(int year, int month, int day, ReservationsManager * reser
 }
 
 //gets
-Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
+HashtableInt *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
     return reservationsManager->reservations;
 }
 
@@ -213,52 +213,46 @@ int getLastReservationBeginYear_reservationsCatalog(ReservationsManager *reserva
     return getReservBeginYear(reserv, NULL);
 }
 
-int getReservPriceNoTax(int *id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, id);
-    int ppn = getReservPricePerNight(reservation);
-    int nights = getReservNights(reservation);
-    return ppn * nights;
-}
 int getReservPriceLimits(int id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, &id);
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     int ppn = getReservPricePerNight(reservation);
     int nights = getReservNightsWithLimits(reservation, limitBegin, limitEnd);
     if (nights < 0) return nights;
     return ppn * nights;
 }
-int getBReserv(int time, int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, &id);
-    return getReservationB(time, reservation);
+int getReservationBegin_reservationsCatalog(int time, int id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
+    return getReservationBegin_reservation(time, reservation);
 }
 char *getSReservDate(int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, &id);
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getStringReservDate(reservation);
 }
 int getBeginDayReservation(int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, &id);
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getReservBeginDay(reservation, NULL);
 }
 int getBeginMonthReservation(int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, &id);
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getReservBeginMonth(reservation, NULL);
 }
 int getBeginYearReservation(int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, &id);
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getReservBeginYear(reservation, NULL);
 }
-int getEndDayReservation(int *id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+int getEndDayReservation(int id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getReservEndDay(reservation);
 }
-int getEndMonthReservation(int *id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+int getEndMonthReservation(int id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getReservEndMonth(reservation);
 }
-int getEndYearReservation(int *id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+int getEndYearReservation(int id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getReservEndYear(reservation);
 }
-int compareReservDates_reservationsCatalog(Date *date, int *id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getData(reservationsCatalog->reservations, id);
+int compareReservDates_reservationsCatalog(Date *date, int id, ReservationsManager *reservationsCatalog) {
+    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return compareReservDates(reservation, date);
 }

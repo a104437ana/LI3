@@ -28,19 +28,19 @@ int compareYears_reservation(void *date, void *id, void *reservationsCatalog);
 int getReservationsQ10(int year, int month, int day, ReservationsManager * reservations);
 
 //gets
-Hashtable *getHashtableReservCatalog(ReservationsManager *reservationsManager);
+HashtableInt *getHashtableReservCatalog(ReservationsManager *reservationsManager);
 OrdList * getReservByBeginDate (ReservationsManager *reservations);
 int getFirstReservationBeginYear_reservationsCatalog(ReservationsManager *reservationsCatalog);
 int getLastReservationBeginYear_reservationsCatalog(ReservationsManager *reservationsCatalog);
-int getReservPriceNoTax(int *id, ReservationsManager *reservationsCatalog);
+int getReservPriceNoTax(int id, ReservationsManager *reservationsCatalog);
 int getReservPriceLimits(int id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd);
-int getBReserv(int time, int id, ReservationsManager *reservationsCatalog);
+int getReservationBegin_reservationsCatalog(int time, int id, ReservationsManager *reservationsCatalog);
 char *getSReservDate(int id, ReservationsManager *reservationsCatalog);
 int getBeginDayReservation(int id, ReservationsManager *reservationsCatalog);
 int getBeginMonthReservation(int id, ReservationsManager *reservationsCatalog);
 int getBeginYearReservation(int id, ReservationsManager *reservationsCatalog);
-int getEndDayReservation(int *id, ReservationsManager *reservationsCatalog);
-int getEndMonthReservation(int *id, ReservationsManager *reservationsCatalog);
-int getEndYearReservation(int *id, ReservationsManager *reservationsCatalog);
-int compareReservDates_reservationsCatalog(Date *date, int *id, ReservationsManager *reservationsCatalog);
+int getEndDayReservation(int id, ReservationsManager *reservationsCatalog);
+int getEndMonthReservation(int id, ReservationsManager *reservationsCatalog);
+int getEndYearReservation(int id, ReservationsManager *reservationsCatalog);
+int compareReservDates_reservationsCatalog(Date *date, int id, ReservationsManager *reservationsCatalog);
 #endif

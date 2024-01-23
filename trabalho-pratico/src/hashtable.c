@@ -261,7 +261,7 @@ void destroyHashtable(Hashtable *hashtable) {
 }
 
 struct hashtableNodeInt {
-    int key; //chave usada para hash
+    unsigned long int key; //chave usada para hash
     void *data; //data guardada
     struct hashtableNodeInt *next; //próximo nodo para gerir colisões
 };
@@ -290,10 +290,10 @@ int getHashtableIntUsed(HashtableInt *hashtable) {
 }
 
 //funcção que retorna o apontador do nodo procurado
-struct hashtableNodeInt *searchHashtableInt(HashtableInt *hashtable, int key) {
+struct hashtableNodeInt *searchHashtableInt(HashtableInt *hashtable, unsigned long int key) {
     int index = (key) % hashtable->size; //indice para onde a chave mapeia
     struct hashtableNodeInt* node = hashtable->node[index]; //primeiro nodo
-    while (node != NULL && node->key == key) //procura em todos os nodos o elemento
+    while (node != NULL && node->key != key) //procura em todos os nodos o elemento
         node = node->next;
     return node;
 }
@@ -322,10 +322,10 @@ void copyHashtableInt(HashtableInt *hashtable, HashtableInt *newHashtable) {
 }
 
 //função que adiciona um novo elemento à hashtable
-HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, int key) {
+HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, unsigned long int key) {
     int nodes = hashtable->nodes, size = hashtable->size;
     float usage = nodes / size;
-    if (usage >= 2) {
+    if (usage >= 0.8) {
         HashtableInt *newHashtable = createHashtableInt(size * 2, hashtable->destroy);
         copyHashtableInt(hashtable, newHashtable);
         HashtableInt *oldHashtable = hashtable;
@@ -346,14 +346,14 @@ HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, int key) {
 }
 
 //função que verifica se um elemento existe na hashtable
-int existsDataInt(HashtableInt *hashtable, int key) {
+int existsDataInt(HashtableInt *hashtable, unsigned long int key) {
     if (searchHashtableInt(hashtable, key)) return 1; //caso o elemento exista
     return 0; //caso o elemnto não exista
 }
 
 //gets
 //função que devolve o elemento guardado na hashtable
-void *getDataInt(HashtableInt *hashtable, int key) {
+void *getDataInt(HashtableInt *hashtable, unsigned long int key) {
     struct hashtableNodeInt *node = searchHashtableInt(hashtable, key);
     if (!node) return NULL;
     return node->data;
@@ -364,7 +364,7 @@ int getHashtableNodesInt(HashtableInt *hashtable) {
     return hashtable->nodes;
 }
 //função que altera um elemento da hashtable
-void setDataInt(HashtableInt *hashtable, void *data, int key) {
+void setDataInt(HashtableInt *hashtable, void *data, unsigned long int key) {
     struct hashtableNodeInt *node = searchHashtableInt(hashtable, key);
     void *oldData = node->data;
     node->data = data;

@@ -6,27 +6,27 @@
 #include "utility.h"
 
 struct flightsManager {
-    Hashtable *flights;
+    HashtableInt *flights;
     OrdList *flightsByDepartureDate;
 };
 //função que cria um catálogo de voos
 FlightsManager *createFlightsCatalog(int size) {
     FlightsManager *flightsManager = malloc(sizeof(FlightsManager)); //aloca espaço para o catálogo
-    flightsManager->flights = createHashtable(size, hashInt, intcmpVoid, intdupVoid, destroyFlight); //cria uma hashtable para o catálogo
+    flightsManager->flights = createHashtableInt(size, destroyFlight); //cria uma hashtable para o catálogo
     flightsManager->flightsByDepartureDate = createOrdList();
     return flightsManager;
 }
 //função que adiciona um voo ao catálogo de voos
 int addFlightToCatalog(int id, char *airline, char *airplane, char *origin, char *destination, char *scheduleDeparture, char *scheduleArrival, char *realDeparture, char *realArrival, FlightsManager *flightsCatalog) {
     Flight *flight = createFlight(airline, airplane, origin, destination, scheduleDeparture, scheduleArrival, realDeparture, realArrival);
-    flightsCatalog->flights = addHashtable(flightsCatalog->flights, flight, &id);
+    flightsCatalog->flights = addHashtableInt(flightsCatalog->flights, flight, id);
     addOrdList(flightsCatalog->flightsByDepartureDate, flight);
     return getDelay(flight);
 }
 
 //adiciona o utilizador à lista de passageiros do voo
 void addUserToFlight(int id_flight, char *id_user, FlightsManager *flightsCatalog) {
-    Flight *flight = getData(flightsCatalog->flights, &id_flight);
+    Flight *flight = getDataInt(flightsCatalog->flights, id_flight);
     addPassengerToFlight(flight, id_user);
 }
 
@@ -45,17 +45,17 @@ void sortFlightsByDepartureDate(FlightsManager * flightsCatalog) {
 }
 
 //gets
-Flight *getFlightCatalog(FlightsManager *flightsManager, int *id) {
-    Flight *flight = (Flight*) getData(flightsManager->flights, id);
+Flight *getFlightCatalog(FlightsManager *flightsManager, int id) {
+    Flight *flight = (Flight*) getDataInt(flightsManager->flights, id);
     return flight;
 }
 
 int existsFlight (FlightsManager* flightsManager,char* id) {
     int key = atoi(id);
-    return existsData(flightsManager->flights, &key);
+    return existsDataInt(flightsManager->flights, key);
 }
 
-Hashtable *getHashtableFlightsCatalog(FlightsManager *flightsManager) {
+HashtableInt *getHashtableFlightsCatalog(FlightsManager *flightsManager) {
     return flightsManager->flights;
 }
 
@@ -64,22 +64,22 @@ OrdList * getFlightsByDeparture(FlightsManager * flights){
 }
 
 int getFlightSD_flightscatalog(int time, int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getData(flightsCatalog->flights, &id);
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
     return getFlightSD(time, flight);
 }
 
 int getDepartureDayFlight(int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getData(flightsCatalog->flights, &id);
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
     return getDepartureDay(flight, NULL);
 }
 
 int getDepartureMonthFlight(int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getData(flightsCatalog->flights, &id);
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
     return getDepartureMonth(flight, NULL);
 }
 
 int getDepartureYearFlight(int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getData(flightsCatalog->flights, &id);
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
     return getDepartureYear(flight, NULL);
 }
 
@@ -97,7 +97,7 @@ int getLastFlightDepartureYear_flightsCatalog(FlightsManager *flightsCatalog) {
 //função que liberta o espaço em memória alocado pelo catálogo de voos
 void destroyFlightsCatalog(FlightsManager *flightsManager) {
     if (flightsManager == NULL) return; //se não exitir o catálogo
-    destroyHashtable(flightsManager->flights); //liberta a hashtable
+    destroyHashtableInt(flightsManager->flights); //liberta a hashtable
     destroyOnlyOrdList(flightsManager->flightsByDepartureDate);
     free(flightsManager);
 }
@@ -105,7 +105,7 @@ void destroyFlightsCatalog(FlightsManager *flightsManager) {
 //queries
 void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryResult* result) {
     int key = flightIdToInt(id);
-    Flight* flight = getData(flightsManager->flights,&key);
+    Flight* flight = getDataInt(flightsManager->flights,key);
     if (flight == NULL)
         return;
     else {
@@ -277,16 +277,16 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
 
 //gets
 int getSDFlight(int time, int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getData(flightsCatalog->flights, &id);
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
     return getFlightSD(time, flight);
 }
 char *getSFlightDate(int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getData(flightsCatalog->flights, &id);
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
     return getStringFlightDateNoHours(flight);
 }
 int compareFlightYear_flightsCatalog(int year, int id, void *flightsCatalog) {
-    Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
-    Flight *flight = getData(flights, &id);
+    HashtableInt *flights = ((FlightsManager *) flightsCatalog)->flights;
+    Flight *flight = getDataInt(flights, id);
     int yearFlight = getFlightSD(TIME_YEAR, flight);
     int res = 0;
     if (year > yearFlight) res++;
@@ -294,7 +294,7 @@ int compareFlightYear_flightsCatalog(int year, int id, void *flightsCatalog) {
     return res;
 }
 int getNumberPassengers_flightsCatalog(int id, void *flightsCatalog) {
-    Hashtable *flights = ((FlightsManager *) flightsCatalog)->flights;
-    Flight *flight = getData(flights, &id);
+    HashtableInt *flights = ((FlightsManager *) flightsCatalog)->flights;
+    Flight *flight = getDataInt(flights, id);
     return getNumberPassengers(flight);
 }

@@ -34,9 +34,9 @@ int compareYears_flight(void *date, void *id, void *flightsCatalog);
 OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers);
 
 //gets
-Flight *getFlightCatalog(FlightsManager *flightsManager, int *id);
+Flight *getFlightCatalog(FlightsManager *flightsManager, int id);
 int existsFlight (FlightsManager* flightsManager,char* id);
-Hashtable *getHashtableFlightsCatalog(FlightsManager *flightsManager);
+HashtableInt *getHashtableFlightsCatalog(FlightsManager *flightsManager);
 int getSDFlight(int time, int id, FlightsManager *flightsCatalog);
 char *getSFlightDate(int id, FlightsManager *flightsCatalog);
 int compareFlightYear_flightsCatalog(int year, int id, void *flightsCatalog);
