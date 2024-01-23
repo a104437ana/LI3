@@ -26,28 +26,28 @@ void allZerosListPassengers (UsersManager* usersCatalog) {
     }
 }*/
 
-void count_passenger (UsersManager* usersCatalog, char* id_user) {
+int count_passenger (UsersManager* usersCatalog, char* id_user) {
     User* user =  getData(usersCatalog->users, id_user);
     int indice = getIndice(user);
-    usersCatalog->passengers_list[indice] = 1;
+    if (usersCatalog->passengers_list[indice] == 0) {
+        usersCatalog->passengers_list[indice] = 1;
+        return 1;
+    }
+    else return 0;
 }
 
 int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
     int size_list = getOrdListSize(list);
     char* id;
+    int  unique_passengers = 0;
     for (int i = 0; i < size_list; i++) {
         id = getDataOrdList(list,i);
-        count_passenger(usersCatalog,id);
+        unique_passengers += count_passenger(usersCatalog,id);
     }
 
     int size = usersCatalog->size;
-    int unique_passengers = 0;
-    for (int i = 0; i < size; i++) {
-        if (usersCatalog->passengers_list[i] != 0) {
-            unique_passengers++;
-            usersCatalog->passengers_list[i] = 0;
-        }
-    }
+    memset(usersCatalog->passengers_list, 0, size * sizeof(bool));
+    
     return unique_passengers;
 }
 

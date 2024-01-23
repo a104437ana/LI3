@@ -60,6 +60,7 @@ int main (int argc, char** argv) {
     if (argc == 4) {
     if (valid_directory_dataset(argv[1])) {
     if (exist_file(argv[2])) {
+    if (exist_directory(argv[3])) {
     //inicialização de variáveis para medição de tempo
     struct timespec start, end;
     //, interm;
@@ -164,7 +165,7 @@ int main (int argc, char** argv) {
     free(our_error_file);
 
     */
-    printf("Running the test with the assumption that the input file and output directory paths are correct:\n\n");
+    printf("Running the test with the assumption that the input file and the output directory paths are correct:\n\n");
     int size = strlen(argv[3]) + 23;
     char* correct_output_file = malloc(size);
     char* output_file = malloc(30); //-O2
@@ -246,9 +247,11 @@ int main (int argc, char** argv) {
 //    printHashtableUsage(aH);
 //    destroyCatalogs(catalogs);
     }
+    else printf("Error: The second provided directory path does not match any existing directory.\n");
+    }
     else printf("Error: The provided file path does not match any existing file.\n");
     }
-    else printf("Error: The provided directory path is not valid for the dataset.\n");
+    else printf("Error: The first provided directory path is not valid for the dataset.\n");
     }
     else printf("Error: The program requires exactly 4 arguments.\n");
     return 0;

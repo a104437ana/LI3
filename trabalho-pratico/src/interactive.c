@@ -549,7 +549,7 @@ void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
     while (!valid_directory_dataset(path) && n<2 && proceed == 1) {
         not_error = 0;
         clear();
-        mvprintw(0,0,"Invalid path for the dataset. Please try again!");
+        mvprintw(0,0,"Invalid path for the dataset. Please try again! Note: Do not surround the text with double quotation marks (\").");
         refresh();
         mvprintw(2,0,"Enter the path of the dataset: ");
         refresh();

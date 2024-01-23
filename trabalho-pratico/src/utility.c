@@ -1,15 +1,27 @@
 #include "utility.h"
+#include <dirent.h>
+
+int exist_directory (char* directory) {
+    DIR *dir = opendir(directory);
+    if (dir != NULL) {
+        closedir(dir);
+        return 1;
+    }
+    else return 0;
+}
 
 /* A função exist_file verifica se um ficheiro existe ou não, dado um caminho relativo ou absoluto para o ficheiro.
 Se o ficheiro existir, a função retorna 1. Se não, a função restorna 0. */
 int exist_file (char* file_path) {
     int exist = 0;
-	FILE *file;
-	file = fopen(file_path,"r"); //abertura do ficheiro em modo de leitura. O ficheiro deve existir senão file será NULL.
-	if (file != NULL) {
-		exist = 1;
-        fclose(file);
-	}
+    if (!exist_directory(file_path)) { //se não for diretoria
+        FILE *file;
+	    file = fopen(file_path,"r"); //abertura do ficheiro em modo de leitura. O ficheiro deve existir senão file será NULL.
+	    if (file != NULL) {
+		    exist = 1;
+            fclose(file);
+	    }
+    }
     return exist;
 }
 
@@ -17,22 +29,24 @@ int exist_file (char* file_path) {
 ou seja, verifica se  é uma pasta válida para o dataset. Se sim, retorna 1. Se não, retorna 0.*/
 int valid_directory_dataset (char* directory) {
     int r = 0;
-    int size = strlen(directory) + 18;
-    char* file_path = malloc(size);
-    sprintf(file_path,"%s/users.csv",directory);
-    if (exist_file(file_path)) {
-        sprintf(file_path,"%s/reservations.csv",directory);
+    if (exist_directory(directory)) {
+        int size = strlen(directory) + 18;
+        char* file_path = malloc(size);
+        sprintf(file_path,"%s/users.csv",directory);
         if (exist_file(file_path)) {
-            sprintf(file_path,"%s/flights.csv",directory);
+            sprintf(file_path,"%s/reservations.csv",directory);
             if (exist_file(file_path)) {
-                sprintf(file_path,"%s/passengers.csv",directory);
+                sprintf(file_path,"%s/flights.csv",directory);
                 if (exist_file(file_path)) {
-                    r = 1;
+                    sprintf(file_path,"%s/passengers.csv",directory);
+                    if (exist_file(file_path)) {
+                        r = 1;
+                    }
                 }
             }
         }
+        free(file_path);
     }
-    free(file_path);
     return r;
 }
 

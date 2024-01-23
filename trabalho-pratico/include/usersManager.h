@@ -25,7 +25,7 @@ typedef struct usersManager UsersManager;
 //cria um novo catálogo de utilizadores
 UsersManager *createUsersCatalog(int size);
 void allZerosListPassengers (UsersManager* usersCatalog);
-void count_passenger (UsersManager* usersCatalog, char* id_user);
+int count_passenger (UsersManager* usersCatalog, char* id_user);
 int count_unique_passengers (UsersManager* usersCatalog,OrdList* list);
 void createListPassengers (UsersManager* usersCatalog, int size);
 void createListPassengers (UsersManager* usersCatalog, int size);
