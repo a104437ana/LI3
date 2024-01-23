@@ -11,10 +11,12 @@
 #define MONTH 10
 #define DAY 01
 
-//typedef enum gender {
-//    MALE,
-//    FEMALE,
-//} Gender;
+typedef enum{
+   FLIGHTS,
+   RESERVATIONS,
+   BOTH
+} Q2Type;
+typedef struct resultQ2 ResultQ2;
 typedef struct user User;
 //cria um novo utilizador
 User *createUser(char *id, char *name, int gender, char *country, char *passport, char *birth, char *accountCreation, int accountStatus, int indice);
@@ -26,18 +28,24 @@ int compareUsersNames_user(User *user1, User *user2);
 char *getName(User *user);
 Gender getGender(User *user);
 char *getCountry(User *user);
-//char *getAdress(User *user);
 char *getPassport(User *user);
 Date *getBirth(User *user);
 int getAge(User* user);
-//char *getEmail(User *user);
-//PhoneNumber *getPhoneNumber(User *user);
 Date *getAccountCreation(User *user);
 char *getUserId(User *user);
 double getTotalSpent(User* user);
 OrdList * getUserList(User* user);
 bool getUserAccountStatus(User* user);
 int getUListSize(User * user);
+int getBeginDay(void* data, void *catalog);
+int getBeginMonth(void* data, void *catalog);
+int getBeginYear(void* data, void *catalog);
+int getBeginSeconds(void* data, void *catalog);
+int getBeginMinutes(void* data, void *catalog);
+int getBeginHours(void* data, void *catalog);
+int getIdResultQ2(ResultQ2* data);
+Q2Type getResultType(ResultQ2 *data);
+void destroyResultQ2(void * data);
 int getNumberFlights(User* user);
 int getNumberReservations(User* user);
 Date * getUserAccountCreation(void *id, void *lookupTable);
@@ -51,11 +59,8 @@ int getIndice (User* user);
 void setName(Hashtable *hashtable, char *name, char *id);
 void setGender(Hashtable *hashtable, Gender gender, char *id);
 void setCountry(Hashtable *hashtable, char *country, char *id);
-//void setAdress(Hashtable *hashtable, unsigned int key, char *address, char *id);
 void setPassport(Hashtable *hashtable, char *passport, char *id);
 void setBirth(Hashtable *hashtable, Date *birth, char *id);
-//void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id);
-//void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id);
 void setAccountCreation(Hashtable *hashtable, Date *accountCreation, char *id);
 
 //liberta espaço em memória do utilizador

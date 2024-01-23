@@ -30,12 +30,14 @@ void addUserToFlight(int id_flight, char *id_user, FlightsManager *flightsCatalo
     addPassengerToFlight(flight, id_user);
 }
 
+//ordena voos por data de partida
 void radixSortDeparture(OrdList *list, void *lookupTable) {
     radixSort(list, getDepartureDay, lookupTable, 31, 0);
     radixSort(list, getDepartureMonth, lookupTable, 12, 0);
     radixSort(list, getDepartureYear, lookupTable, N_YEARS, BEGIN_YEAR);
 }
 
+//ordena uma lista de voos
 void sortFlightsByDepartureDate(FlightsManager * flightsCatalog) {
     OrdList *list = flightsCatalog->flightsByDepartureDate;
     if (!isOrdered(list)) {
@@ -45,6 +47,7 @@ void sortFlightsByDepartureDate(FlightsManager * flightsCatalog) {
 }
 
 //gets
+
 Flight *getFlightCatalog(FlightsManager *flightsManager, unsigned long int id) {
     Flight *flight = (Flight*) getDataInt(flightsManager->flights, id);
     return flight;
@@ -68,21 +71,6 @@ int getFlightSD_flightscatalog(int time, unsigned long int id, FlightsManager *f
     return getFlightSD(time, flight);
 }
 
-int getDepartureDayFlight(unsigned long int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getDataInt(flightsCatalog->flights, id);
-    return getDepartureDay(flight, NULL);
-}
-
-int getDepartureMonthFlight(unsigned long int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getDataInt(flightsCatalog->flights, id);
-    return getDepartureMonth(flight, NULL);
-}
-
-int getDepartureYearFlight(unsigned long int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getDataInt(flightsCatalog->flights, id);
-    return getDepartureYear(flight, NULL);
-}
-
 int getFirstFlightDepartureYear_flightsCatalog(FlightsManager *flightsCatalog) {
     Flight *flight = getDataOrdList(flightsCatalog->flightsByDepartureDate, 0);
     return getDepartureYear(flight, NULL);
@@ -94,6 +82,72 @@ int getLastFlightDepartureYear_flightsCatalog(FlightsManager *flightsCatalog) {
     return getDepartureYear(flight, NULL);
 }
 
+int getSDFlight(int time, unsigned long int id, FlightsManager *flightsCatalog) {
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
+    return getFlightSD(time, flight);
+}
+char *getSFlightDate(unsigned long int id, FlightsManager *flightsCatalog) {
+    Flight *flight = getDataInt(flightsCatalog->flights, id);
+    return getStringFlightDateNoHours(flight);
+}
+int compareFlightYear_flightsCatalog(unsigned long int year, unsigned long int id, void *flightsCatalog) {
+    HashtableInt *flights = ((FlightsManager *) flightsCatalog)->flights;
+    Flight *flight = getDataInt(flights, id);
+    int yearFlight = getFlightSD(TIME_YEAR, flight);
+    int res = 0;
+    if (year > yearFlight) res++;
+    else if (year < yearFlight) res--;
+    return res;
+}
+//compara uma data com a data de partida de um voo
+int compareDates_flight(void *date, void *flight, void *flightsCatalog) {
+    Date * d = (Date *) date;
+    Date * flightDate = getFlightScheduleDeparture((Flight *) flight);
+    int day1 = getDay(d), month1 = getMonth(d), year1 = getYear(d);
+    int day2 = getDay(flightDate), month2 = getMonth(flightDate), year2 = getYear(flightDate);
+    int res = 0;
+    if (year1 > year2) res = 1;
+    else if (year2 > year1) res = -1;
+    else if (month1 > month2) res = 1;
+    else if (month2 > month1) res = -1;
+    else if (day1 > day2) res = 1;
+    else if (day2 > day1) res = -1;
+    destroyDate(flightDate);
+    return res;
+}
+//compara uma data com a data de partida de um voo, sem considerar o dia
+int compareMonths_flight(void *date, void *flight, void *flightsCatalog) {
+    Date * d = (Date *) date;
+    Date * flightDate = getFlightScheduleDeparture((Flight *) flight);
+    int month1 = getMonth(d), year1 = getYear(d);
+    int month2 = getMonth(flightDate), year2 = getYear(flightDate);
+    int res = 0;
+    if (year1 > year2) res = 1;
+    else if (year2 > year1) res = -1;
+    else if (month1 > month2) res = 1;
+    else if (month2 > month1) res = -1;
+    destroyDate(flightDate);
+    return res;
+}
+//compara uma data com a data de partida de um voo, só considerando o ano
+int compareYears_flight(void *date, void *flight, void *flightsCatalog) {
+    Date * d = (Date *) date;
+    Date * flightDate = getFlightScheduleDeparture((Flight *) flight);
+    int year1 = getYear(d);
+    int year2 = getYear(flightDate);
+    int res = 0;
+    if (year1 > year2) res = 1;
+    else if (year2 > year1) res = -1;
+    destroyDate(flightDate);
+    return res;
+}
+int getNumberPassengers_flightsCatalog(unsigned long int id, void *flightsCatalog) {
+    HashtableInt *flights = ((FlightsManager *) flightsCatalog)->flights;
+    Flight *flight = getDataInt(flights, id);
+    return getNumberPassengers(flight);
+}
+
+
 //função que liberta o espaço em memória alocado pelo catálogo de voos
 void destroyFlightsCatalog(FlightsManager *flightsManager) {
     if (flightsManager == NULL) return; //se não exitir o catálogo
@@ -103,6 +157,8 @@ void destroyFlightsCatalog(FlightsManager *flightsManager) {
 }
 
 //queries
+
+//calcula os dados de um voo para a query 1
 void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryResult* result) {
     unsigned long int key = flightIdToInt(id);
     Flight* flight = getDataInt(flightsManager->flights,key);
@@ -143,48 +199,7 @@ void flight_catalog_compute_Q1 (char *id, FlightsManager* flightsManager, QueryR
     }
 }
 
-int compareDates_flight(void *date, void *flight, void *flightsCatalog) {
-    Date * d = (Date *) date;
-    Date * flightDate = getFlightScheduleDeparture((Flight *) flight);
-    int day1 = getDay(d), month1 = getMonth(d), year1 = getYear(d);
-    int day2 = getDay(flightDate), month2 = getMonth(flightDate), year2 = getYear(flightDate);
-    int res = 0;
-    if (year1 > year2) res = 1;
-    else if (year2 > year1) res = -1;
-    else if (month1 > month2) res = 1;
-    else if (month2 > month1) res = -1;
-    else if (day1 > day2) res = 1;
-    else if (day2 > day1) res = -1;
-    destroyDate(flightDate);
-    return res;
-}
-
-int compareMonths_flight(void *date, void *flight, void *flightsCatalog) {
-    Date * d = (Date *) date;
-    Date * flightDate = getFlightScheduleDeparture((Flight *) flight);
-    int month1 = getMonth(d), year1 = getYear(d);
-    int month2 = getMonth(flightDate), year2 = getYear(flightDate);
-    int res = 0;
-    if (year1 > year2) res = 1;
-    else if (year2 > year1) res = -1;
-    else if (month1 > month2) res = 1;
-    else if (month2 > month1) res = -1;
-    destroyDate(flightDate);
-    return res;
-}
-
-int compareYears_flight(void *date, void *flight, void *flightsCatalog) {
-    Date * d = (Date *) date;
-    Date * flightDate = getFlightScheduleDeparture((Flight *) flight);
-    int year1 = getYear(d);
-    int year2 = getYear(flightDate);
-    int res = 0;
-    if (year1 > year2) res = 1;
-    else if (year2 > year1) res = -1;
-    destroyDate(flightDate);
-    return res;
-}
-
+//calcula dados de uma data para a query 10 - número de voos, número de passageiros e lista de passageiros (para ser calculado o número de passageiros únicos)
 OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flightsCatalog,int * flights,int * passengers,int  * unique_passengers){
     OrdList* list_passengers = createOrdList();
     (*flights) = 0; (*passengers) = 0; (*unique_passengers) = 0;
@@ -193,24 +208,24 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
     date->year = year;
     date->month = month;
     date->day = day;
-    if (day!=-1){
-        int i = searchDataOrdList(list, date, compareDates_flight, flightsCatalog, 0, compareDates_flight);
-        if (i>=0){
+    if (day!=-1){ //se a data tiver dia
+        int i = searchDataOrdList(list, date, compareDates_flight, flightsCatalog, 0, compareDates_flight); //primeiro voo nessa data
+        if (i>=0){ //se existir algum voo nessa data
             int size = getOrdListSize(list);
             int exit = 0;
             Flight * flight;
             while (i < size && !exit) {
                 flight = getDataOrdList(list, i);
-                if (compareDates_flight(date, flight, NULL) != 0) exit = 1;
+                if (compareDates_flight(date, flight, NULL) != 0) exit = 1; //se a data do voo for maior que a pedida
                 else {
                     i++;
-                    (*flights)++;
-                    (*passengers)+=getNumberPassengers(flight);
+                    (*flights)++; //incrementa o número de voos
+                    (*passengers)+=getNumberPassengers(flight); //adiciona ao número de passageiros dessa data o número de passageiros do voo
 
                     OrdList * passengers_list = getPassengers(flight);
                     int j;
                     int size = getOrdListSize(passengers_list);
-                    for (j=0; j<size; j++){
+                    for (j=0; j<size; j++){ //adiciona à lista de passageiros os passageiros do voo
                         char *id_user = getDataOrdList(passengers_list,j);
                         addOrdList(list_passengers,strdup(id_user));
                     }
@@ -219,24 +234,24 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
             }
         }
     }
-    else if (month!=-1){
-        int i = searchDataOrdList(list, date, compareMonths_flight, flightsCatalog, 0, compareMonths_flight);
-        if (i>=0){
+    else if (month!=-1){ //se não for considerado o dia
+        int i = searchDataOrdList(list, date, compareMonths_flight, flightsCatalog, 0, compareMonths_flight); //primeiro voo nessa data
+        if (i>=0){ //se existir algum voo nessa data
             int size = getOrdListSize(list);
             int exit = 0;
             Flight * flight;
             while (i < size && !exit) {
                 flight = getDataOrdList(list, i);
-                if (compareMonths_flight(date, flight, NULL) != 0) exit = 1;
+                if (compareMonths_flight(date, flight, NULL) != 0) exit = 1; //se a data do voo for maior que a pedida
                 else {
                     i++;
-                    (*flights)++;
-                    (*passengers)+=getNumberPassengers(flight);
+                    (*flights)++; //incrementa o número de voos
+                    (*passengers)+=getNumberPassengers(flight); //adiciona ao número de passageiros dessa data o número de passageiros do voo
 
                     OrdList * passengers_list = getPassengers(flight);
                     int j;
                     int size = getOrdListSize(passengers_list);
-                    for (j=0; j<size; j++){
+                    for (j=0; j<size; j++){ //adiciona à lista de passageiros os passageiros do voo
                         char *id_user = getDataOrdList(passengers_list,j);
                         addOrdList(list_passengers,strdup(id_user));
                     }
@@ -245,24 +260,24 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
             }
         }
     }
-    else if (year!=-1){
-        int i = searchDataOrdList(list, date, compareYears_flight, flightsCatalog, 0, compareYears_flight);
-        if (i>=0){
+    else if (year!=-1){ //se só for considerado o ano
+        int i = searchDataOrdList(list, date, compareYears_flight, flightsCatalog, 0, compareYears_flight); //primeiro voo nessa data
+        if (i>=0){ //se existir algum voo nessa data
             int size = getOrdListSize(list);
             int exit = 0;
             Flight * flight;
             while (i < size && !exit) {
                 flight = getDataOrdList(list, i);
-                if (compareYears_flight(date, flight, NULL) != 0) exit = 1;
+                if (compareYears_flight(date, flight, NULL) != 0) exit = 1; //se a data do voo for maior que a pedida
                 else {
                     i++;
-                    (*flights)++;
-                    (*passengers)+=getNumberPassengers(flight);
+                    (*flights)++; //incrementa o número de voos
+                    (*passengers)+=getNumberPassengers(flight); //adiciona ao número de passageiros dessa data o número de passageiros do voo
 
                     OrdList * passengers_list = getPassengers(flight);
                     int j;
                     int size = getOrdListSize(passengers_list);
-                    for (j=0; j<size; j++){
+                    for (j=0; j<size; j++){ //adiciona à lista de passageiros os passageiros do voo
                         char *id_user = getDataOrdList(passengers_list,j);
                         addOrdList(list_passengers,strdup(id_user));
                     }
@@ -273,28 +288,4 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
     }
     destroyDate(date);
     return list_passengers;
-}
-
-//gets
-int getSDFlight(int time, unsigned long int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getDataInt(flightsCatalog->flights, id);
-    return getFlightSD(time, flight);
-}
-char *getSFlightDate(unsigned long int id, FlightsManager *flightsCatalog) {
-    Flight *flight = getDataInt(flightsCatalog->flights, id);
-    return getStringFlightDateNoHours(flight);
-}
-int compareFlightYear_flightsCatalog(unsigned long int year, unsigned long int id, void *flightsCatalog) {
-    HashtableInt *flights = ((FlightsManager *) flightsCatalog)->flights;
-    Flight *flight = getDataInt(flights, id);
-    int yearFlight = getFlightSD(TIME_YEAR, flight);
-    int res = 0;
-    if (year > yearFlight) res++;
-    else if (year < yearFlight) res--;
-    return res;
-}
-int getNumberPassengers_flightsCatalog(unsigned long int id, void *flightsCatalog) {
-    HashtableInt *flights = ((FlightsManager *) flightsCatalog)->flights;
-    Flight *flight = getDataInt(flights, id);
-    return getNumberPassengers(flight);
 }

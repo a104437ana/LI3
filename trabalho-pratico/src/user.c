@@ -7,10 +7,10 @@
 #include "orderedList.h"
 #include "queries.h"
 
-//enum gender {
-//    MALE,
-//    FEMALE,
-//};
+struct resultQ2{
+    unsigned long int id;
+    Q2Type resultType; //flight ou reservation
+};
 
 struct user {
     char *id;
@@ -137,21 +137,61 @@ int getAge(User* user){
   return r;
 }
 
-/*
-char *getEmail(User *user) {
-    char *email;
-    email = user->email; //falta encapsulamento
-
-    return email;
+//devolve o dia de início de uma reserva ou de um voo
+int getBeginDay(void* data, void *catalog){
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS) return (getFlightScheduleDepartureTime(0, res->id, (Catalogs *) catalog));
+  else return (getReservationBegin(0, res->id, (Catalogs *) catalog));
 }
 
-PhoneNumber *getPhoneNumber(User *user) {
-    PhoneNumber *number;
-    number = user->phoneNumber;
-
-    return number;
+//devolve o mês de início de uma reserva ou de um voo
+int getBeginMonth(void* data, void *catalog){
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS) return (getFlightScheduleDepartureTime(1, res->id, (Catalogs *) catalog));
+  else return (getReservationBegin(1, res->id, (Catalogs *) catalog));
 }
-*/
+
+//devolve o ano de início de uma reserva ou de um voo
+int getBeginYear(void* data, void *catalog){
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS) return (getFlightScheduleDepartureTime(2, res->id, (Catalogs *) catalog));
+  else return (getReservationBegin(2, res->id, (Catalogs *) catalog));
+}
+
+//devolve o segundo de início de um voo
+int getBeginSeconds(void* data, void *catalog) {
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS) return (getFlightScheduleDepartureTime(3, res->id, (Catalogs *) catalog));
+  else return (0);
+}
+
+//devolve o minuto de início de um voo
+int getBeginMinutes(void* data, void *catalog) {
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS) return (getFlightScheduleDepartureTime(4, res->id, (Catalogs *) catalog));
+  else return (0);
+}
+
+//devolve a hora de início de um voo
+int getBeginHours(void* data, void *catalog) {
+  ResultQ2* res = (ResultQ2*) data;
+  if (res->resultType == FLIGHTS) return (getFlightScheduleDepartureTime(5, res->id, (Catalogs *) catalog));
+  else return (0);
+}
+
+//devolve o id de uma reserva ou voo
+int getIdResultQ2(ResultQ2* data){
+  return data->id;
+}
+
+Q2Type getResultType(ResultQ2 *data) {
+  return data->resultType;
+}
+
+//liberta dados do tipo ResultQ2
+void destroyResultQ2(void * data){
+  free((ResultQ2*)data);
+}
 
 Date * getUserAccountCreation(void *id, void *lookupTable) {
     User *user = getData((Hashtable *) lookupTable,id);

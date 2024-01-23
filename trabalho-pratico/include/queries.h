@@ -25,63 +25,7 @@
 #define MONTH 10
 #define DAY 01
 
-
-
-typedef enum{
-   FLIGHTS,
-   RESERVATIONS,
-   BOTH
-} Q2Type;
-
-typedef struct resultQ2{
-    unsigned long int id; //flight ou reservation
-    Q2Type resultType;
-} ResultQ2;
-
-typedef struct resultsQ2{
-    ResultQ2** results;
-    int N;
-} ResultsQ2;
-
-
-typedef struct resultsQ5{
-    Flight** results;
-    int N;
-} ResultsQ5;
-
-typedef struct resultQ6{
-    char* name;
-    int nPassengers;
-} ResultQ6;
-
-typedef struct resultsQ6{
-    ResultQ6** results;
-    int N;
-} ResultsQ6;
-
-typedef struct resultQ9{
-    char* id;
-    char* name;
-} ResultQ9;
-
-typedef struct resultsQ9{
-    ResultQ9** results;
-    int N;
-} ResultsQ9;
-
-int getAge(User* user);
-int getNumberPassengers(Flight* flight);
-int getDelay(Flight* flight);
-double getReservPrice(Reservation* reservation, Hashtable *hotels);
-int getBeginDay(void* data, void *catalog);
-int getBeginMonth(void* data, void *catalog);
-int getBeginYear(void* data, void *catalog);
-int getBeginSeconds(void* data, void *catalog);
-int getBeginMinutes(void* data, void *catalog);
-int getBeginHours(void* data, void *catalog);
-int getIdResultQ2(ResultQ2* data);
-Q2Type getResultType(ResultQ2 *data);
-void destroyResultQ2(void * data);
+int same_prefix (char* prefix, char* name);
 
 void Q1(char *id, Catalogs* catalogs, QueryResult* result);
 
@@ -99,9 +43,6 @@ void Q7 (int n, Catalogs* catalogs, QueryResult* result);
 
 void Q8(char *id, char *begin, char *end, Catalogs *catalogs, QueryResult* result);
 
-int same_prefix (char* prefix, char* name);
-//int bigger_user (char* id1, char* id2, char* name1, char* name2);
-//void ord_list_by_name (OrdList* list, int begin, int end,UsersManager *usersCatalog);
 void Q9(char *prefix, Catalogs* catalogs, QueryResult* result);
 
 void Q10 (int year, int month, Catalogs* catalogs, QueryResult* qresult);

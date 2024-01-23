@@ -12,7 +12,9 @@ void createOutputFile (int nCommand){
 char * printResultF(QueryResult * result, int r){
   int nFields = getNumberFieldsQ(result,r);
   char * res = malloc(sizeof(char)*100*nFields);
+  sprintf (res, "--- %d ---\n", (r+1)); //imprime o número do resultado (índice na lista + 1)
   int i; int ssize = 0;
+  ssize+=(strlen(res)); 
   for (i=0; i<nFields; i++){
     char * name = getFieldName(result,r,i); //nome do campo
     char * data = getFieldData(result,r,i); //valor desse campo
@@ -20,7 +22,8 @@ char * printResultF(QueryResult * result, int r){
     ssize+=(strlen(name)+ strlen(data)+3); //atualiza o tamanho da string, somando-lhe o tamanho do nome do campo e resultado atuais mais 3 (para o caracter ':', o espaço, e o newline)
     free(name); free(data);
   }
-  res[ssize] = '\0'; //termina a string
+  res[ssize] = '\n'; //coloca o newline
+  res[ssize+1] = '\0'; //termina a string
   return res;
 }
 
@@ -49,10 +52,9 @@ void printQueryOutput (int commandN, char format_flag, QueryResult * output){
    int nResults = getNumberResults(output);
    if (format_flag=='F'){
      for (i=0; i<nResults; i++){ //imprime cada elemento da lista de resultados da query, com a format flag 'F'
-       fprintf (file, "--- %d ---\n", (i+1)); //imprime o número do resultado (índice na lista + 1)
        char * print = printResultF (output,i);
+       if (i==nResults-1) print[strlen(print)-1] = '\0'; //retira o último newline
        fprintf (file, "%s", print);
-       if (i<nResults-1) fprintf(file, "\n"); //coloca um newline, se não estiver no último resultado
        free(print);
      }
     }
