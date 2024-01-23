@@ -11,20 +11,20 @@ struct command {
 //função que processa um comando, chamando a respetiva query e a função que imprime o resultado
 int processCommand(Command* command, int i, QueryResult* result2, Catalogs* catalogs){
    if (i!= 0) createOutputFile(i); //cria um ficheiro mesmo que o comando não seja executado
-   if (command->query_id==1){
+   if (command->query_id==1){ //query 1
      if (command->n_args==0) return 0;
      else{
-        if (i != 0) {
+        if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q1(command->args[0],catalogs,result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
         }
-        else Q1(command->args[0],catalogs,result2);
+        else Q1(command->args[0],catalogs,result2); //modo interativo
         return 1;
      }
    }
-    else if (command->query_id==2){
+    else if (command->query_id==2){ //query 2
      if (command->n_args==0) return 0;
      else{
         Q2Type type;
@@ -32,139 +32,139 @@ int processCommand(Command* command, int i, QueryResult* result2, Catalogs* cata
         else if ((strcmp(command->args[1], "flights")==0)) type = FLIGHTS;
         else if ((strcmp(command->args[1], "reservations")==0)) type = RESERVATIONS;
         else return 0;
-        if (i != 0) {
+        if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q2(command->args[0], type, catalogs, result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
         }
-        else  Q2(command->args[0], type, catalogs, result2);
+        else Q2(command->args[0], type, catalogs, result2); //modo interativo
         return 2;
      }
    }
-    else if (command->query_id==3){
+    else if (command->query_id==3){ //query 3
      if (command->n_args==0) return 0;
      else{
-        if (i != 0) {
+        if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q3(command->args[0], catalogs, result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
         }
-        else Q3(command->args[0], catalogs, result2);
+        else Q3(command->args[0], catalogs, result2); //modo interativo
         return 3;
      }
    }
-    else if (command->query_id==4){
+    else if (command->query_id==4){ //query 4
      if (command->n_args==0) return 0;
      else{
-        if (i != 0) {
+        if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q4(command->args[0], catalogs,result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
         }
-        else Q4(command->args[0], catalogs,result2);
+        else Q4(command->args[0], catalogs,result2); //modo interativo
         return 4;
      }
    }
-    else if (command->query_id==5){
+    else if (command->query_id==5){ //query 5
      if (command->n_args<3) return 0;
      else{
         Date *begin = string_to_date_hours(command->args[1]);
         Date *end = string_to_date_hours(command->args[2]);
-        if (i != 0) {
+        if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q5(command->args[0], begin, end, catalogs, result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
         }
-        else Q5(command->args[0], begin, end, catalogs, result2);
+        else Q5(command->args[0], begin, end, catalogs, result2); //modo interativo
         destroyDate(begin); destroyDate(end);
         return 5;
      }
    }
-    else if (command->query_id==6){
+    else if (command->query_id==6){ //query 6
      if (command->n_args<2) return 0;
      else{
-      if (i != 0) {
+      if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q6(atoi(command->args[0]), atoi(command->args[1]), catalogs, result);
          printQueryOutput(i,command->format_flag, result);
          destroyQResult(result);
       }
-      else Q6(atoi(command->args[0]), atoi(command->args[1]), catalogs, result2);
+      else Q6(atoi(command->args[0]), atoi(command->args[1]), catalogs, result2); //modo interativo
         return 6;
      }
    }
-    else if (command->query_id==7){
+    else if (command->query_id==7){ //query 7
      if (command->n_args==0) return 0;
      else{
-        if (i != 0) {
+        if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q7(atoi(command->args[0]),catalogs,result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
         }
-        else Q7(atoi(command->args[0]),catalogs,result2);
+        else Q7(atoi(command->args[0]),catalogs,result2); //modo interativo
         return 7;
      }
    }
-    else if (command->query_id==8){
+    else if (command->query_id==8){ //query 8
      if (command->n_args<3) return 0;
      else{
-      if (i != 0) {
+      if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q8(command->args[0], command->args[1], command->args[2], catalogs, result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
       }
-      else Q8(command->args[0], command->args[1], command->args[2], catalogs, result2);
+      else Q8(command->args[0], command->args[1], command->args[2], catalogs, result2); //modo interativo
         return 8;
      }
    }
-    else if (command->query_id==9){
+    else if (command->query_id==9){ //query 9
      if (command->n_args==0) return 0;
      else{
-      if (i != 0) {
+      if (i != 0) { //modo batch
          QueryResult * result = createQResult();
          Q9(command->args[0],catalogs,result);
          printQueryOutput(i,command->format_flag,result);
          destroyQResult(result);
       }
-      else Q9(command->args[0],catalogs,result2);
+      else Q9(command->args[0],catalogs,result2); //modo interativo
         return 9;
      }
    }
-   else if (command->query_id==10){
-      if (command->n_args==0){
-            if (i != 0) {
+   else if (command->query_id==10){ //query 10
+      if (command->n_args==0){ //query é executada sem argumentos
+            if (i != 0) { //modo batch
                QueryResult * result = createQResult();
                Q10(-1,-1,catalogs,result);
                printQueryOutput(i,command->format_flag,result);
                destroyQResult(result);
             }
-            else Q10(-1,-1,catalogs,result2);
+            else Q10(-1,-1,catalogs,result2); //modo interativo
             return 10;
       }
-      else if (command->n_args==1){
-            if (i != 0) {
+      else if (command->n_args==1){ //query é executada com um argumento - o ano
+            if (i != 0) { //modo batch
                QueryResult * result = createQResult();
                Q10(atoi(command->args[0]), -1,catalogs,result);
                printQueryOutput(i,command->format_flag,result);
                destroyQResult(result);
             }
-            else Q10(atoi(command->args[0]), -1,catalogs,result2);
+            else Q10(atoi(command->args[0]), -1,catalogs,result2); //modo interativo
             return 10;
       }
-      else{
-            if (i != 0) {
+      else{ //query é executada com dois argumentos - ano e mês
+            if (i != 0) { //modo batch
                QueryResult * result = createQResult();
                Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result);
                printQueryOutput(i,command->format_flag,result);
                destroyQResult(result);
             }
-            else Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result2);
+            else Q10(atoi(command->args[0]),atoi(command->args[1]),catalogs,result2); //modo interativo
             return 10;
       }
    }
@@ -227,10 +227,7 @@ Command* parseCommandLine (char* line){
 
 //processa o ficheiro de comandos
 void parseCommandFile (char* name,Catalogs *catalogs, bool test, double* commands_time, double* qTime){
-   //inicialização de variáveis para medição de tempo
    struct timespec start, end;
-   //double qTime[11]; // indice 0 - tempo total, 1 - query 1, etc..
-   //int j; for (j=0; j<11; j++) qTime[j] = 0;
 
  char* line = NULL;
  ssize_t read;
@@ -240,31 +237,23 @@ void parseCommandFile (char* name,Catalogs *catalogs, bool test, double* command
  FILE* file = fopen(name, "r");
     if (file != NULL) {
  while((read = getline(&line, &len, file))!= -1){
-    clock_gettime(CLOCK_REALTIME, &start);
+    clock_gettime(CLOCK_REALTIME, &start); //lê o tempo de início
     line[read-1]='\0'; //retira o newline
     Command *command = parseCommandLine(line);
     QueryResult * result = NULL;
     int q = processCommand(command, i,result,catalogs);
     free(command);
-    clock_gettime(CLOCK_REALTIME, &end);
-    double dif = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-    if (test == 1) {
-      qTime[0]+=dif; 
-      if (q != 0) qTime[q]+=dif; 
-      commands_time[i-1] = dif;
+    clock_gettime(CLOCK_REALTIME, &end); //lê o tempo de fim da execução do comando
+    double dif = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9; //tempo de execução
+    if (test == 1) { //se estiver no modo testes
+      qTime[0]+=dif; //adiciona o tempo ao total da execução das queries
+      if (q != 0) qTime[q]+=dif; //adiciona o tempo ao total de execução dessa query (a função processCommand devolve o id da query executada)
+      commands_time[i-1] = dif; //guarda o tempo de execução do comando
     }
     i++;
-    //if (test==1) printf("Command %d :\t\t %.6f seconds\n", i-1, dif);
  }
     }
  free(line);
  if (file != NULL)
  fclose(file);
- /*imprime tempo de execução
-  printf(" Interpreter/queries:\n");
-  for (j=1; j<11; j++){
-    printf("Query %d :\t\t %.6f seconds (%5.2f%%)\n",j, qTime[j], (qTime[j]/qTime[0])*100);
-  }
-   printf("  total:\t %.6f seconds\n", qTime[0]);
-   */
 }
