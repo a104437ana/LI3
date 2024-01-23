@@ -18,8 +18,8 @@ struct user {
     Gender gender;
     char country[3];
     char *passport;
-    Date *birth;
-    Date *accountCreation;
+    Date birth;
+    Date accountCreation;
     bool accounStatus;          
     OrdList *flightsReservationsByDate;
     double totalSpent;
@@ -35,10 +35,12 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
     user->gender = gender;
     memcpy(user->country, country, 3);
     user->passport = strdup(passport);
-    Date *birthDate = string_to_date(birth);
-    user->birth = birthDate;
-    Date *accountCreationDate = string_to_date(accountCreation);
-    user->accountCreation = accountCreationDate;
+    stringToDate(&(user->birth), birth);
+    stringToDate(&(user->accountCreation), accountCreation);
+//    Date *birthDate = string_to_date(birth);
+//    user->birth = birthDate;
+//    Date *accountCreationDate = string_to_date(accountCreation);
+//    user->accountCreation = accountCreationDate;
     user->accounStatus = accountStatus;
     user->totalSpent = 0;
     user->flightsReservationsByDate = createOrdList(); //cria a lista de voos e reservas do utilizador
@@ -109,9 +111,9 @@ char *getPassport(User *user) {
 
 Date *getBirth(User *user) {
     Date *birth = malloc(sizeof(Date));
-    birth->day = user->birth->day;
-    birth->month = user->birth->month;
-    birth->year = user->birth->year;
+    birth->day = user->birth.day;
+    birth->month = user->birth.month;
+    birth->year = user->birth.year;
     birth->hours = 0;
     birth->minutes = 0;
     birth->seconds = 0;
@@ -153,27 +155,27 @@ PhoneNumber *getPhoneNumber(User *user) {
 
 Date * getUserAccountCreation(void *id, void *lookupTable) {
     User *user = getData((Hashtable *) lookupTable,id);
-    return (user->accountCreation);
+    return (&(user->accountCreation));
 }
 
 Date *getAccountCreation(User *user) {
     Date *accountCreation = malloc(sizeof(Date));
-    accountCreation->day = user->accountCreation->day;
-    accountCreation->month = user->accountCreation->month;
-    accountCreation->year = user->accountCreation->year;
+    accountCreation->day = user->accountCreation.day;
+    accountCreation->month = user->accountCreation.month;
+    accountCreation->year = user->accountCreation.year;
     return accountCreation;
 }
 
 int getAccountCreationDay(void *user, void *lookup) {
-    return ((User*)user)->accountCreation->day;
+    return ((User*)user)->accountCreation.day;
 }
 
 int getAccountCreationMonth(void *user, void *lookup) {
-    return ((User*)user)->accountCreation->month;
+    return ((User*)user)->accountCreation.month;
 }
 
 int getAccountCreationYear(void *user, void *lookup) {
-    return ((User*)user)->accountCreation->year;
+    return ((User*)user)->accountCreation.year;
 }
 
 
@@ -254,10 +256,6 @@ void setPassport(Hashtable *hashtable, char *passport, char *id) {
     free(oldPassport);
 }
 
-void setBirth(Hashtable *hashtable, Date *birth, char *id) {
-    User *data = getData(hashtable, id);
-    data->birth = birth;
-}
 /*
 void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id) {
     User *data = getData(hashtable, key, id);
@@ -273,17 +271,12 @@ void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNu
     data->phoneNumber = phoneNumber;
 }
 */
-void setAccountCreation(Hashtable *hashtable, Date *accountCreation, char *id) {
-    User *data = getData(hashtable, id);
-    destroyDate(data->accountCreation);
-    data->accountCreation = accountCreation;
-}
 
 //função que liberto o espaço em memória de um utilizador
 void destroyUser(void *user) {
     if (user == NULL) return; //se o utilizador não existir
-    destroyDate(((User *)user)->birth); //liberta as datas
-    destroyDate(((User *) user)->accountCreation);
+//    destroyDate(((User *)user)->birth); //liberta as datas
+//    destroyDate(((User *) user)->accountCreation);
     //destroyPhoneNumber(((User *) user)->phoneNumber);
     //free(((User *) user)->paymentMethod);
     //free(((User *) user)->email);

@@ -115,6 +115,33 @@ Date *createDateHours(char day, char month, int year, char hours, char minutes, 
 }
 
 //Transforma uma string num tipo Date
+void stringToDateHours(Date *date, char *string) {
+    int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
+    int month = (string[5] - '0') * 10 + (string[6] - '0');
+    int day = (string[8] - '0') * 10 + (string[9] - '0');
+    int hours = (string[11] - '0') * 10 + (string[12] - '0');
+    int minutes = (string[14] - '0') * 10 + (string[15] - '0');
+    int seconds = (string[17] - '0') * 10 + (string[18] - '0');
+    date->day = day;
+    date->month = month;
+    date->year = year;
+    date->hours = hours;
+    date->minutes = minutes;
+    date->seconds = seconds;
+}
+
+void stringToDate(Date *date, char *string) {
+    int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
+    int month = (string[5] - '0') * 10 + (string[6] - '0');
+    int day = (string[8] - '0') * 10 + (string[9] - '0');
+    date->day = day;
+    date->month = month;
+    date->year = year;
+    date->hours = 0;
+    date->minutes = 0;
+    date->seconds = 0;
+}
+
 Date* string_to_date (char* string) {
     int year = (string[0] - '0') * 1000 + (string[1] - '0') * 100 + (string[2] -'0') * 10 + (string[3] - '0');
     int month = (string[5] - '0') * 10 + (string[6] - '0');

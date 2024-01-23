@@ -40,6 +40,8 @@ void remove_new_line (char* string);
 
 Date *createDate(char day, char month, int year);
 Date *createDateHours(char day, char month, int year, char hours, char minutes, char seconds);
+void stringToDate(Date *date, char *string);
+void stringToDateHours(Date *date, char *string);
 Date* string_to_date (char* string);
 Date* string_to_date_hours (char* string);
 

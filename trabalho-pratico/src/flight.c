@@ -12,10 +12,10 @@ struct flight {
     char *airplane;
     char origin[4];
     char destination[4];
-    Date *scheduleDeparture;
-    Date *scheduleArrival;
-    Date *realDeparture;
-    Date *realArrival;
+    Date scheduleDeparture;
+    Date scheduleArrival;
+    Date realDeparture;
+    Date realArrival;
     OrdList *passengers;
 };
 //função que cria um novo voo
@@ -26,14 +26,18 @@ Flight *createFlight(char *airline, char *airplane, char *origin, char *destinat
     flight->airplane = strdup(airplane);
     memcpy(flight->origin, origin, 4);
     memcpy(flight->destination, destination, 4);
-    Date *scheduleDepartureDate = string_to_date_hours(scheduleDeparture);
-    Date *scheduleArrivalDate = string_to_date_hours(scheduleArrival);
-    Date *realDepartureDate = string_to_date_hours(realDeparture);
-    Date *realArrivalDate = string_to_date_hours(realArrival);
-    flight->scheduleDeparture = scheduleDepartureDate;
-    flight->scheduleArrival = scheduleArrivalDate;
-    flight->realDeparture = realDepartureDate;
-    flight->realArrival = realArrivalDate;
+    stringToDateHours(&(flight->scheduleDeparture), scheduleDeparture);
+    stringToDateHours(&(flight->scheduleArrival), scheduleArrival);
+    stringToDateHours(&(flight->realDeparture), realDeparture);
+    stringToDateHours(&(flight->realArrival), realArrival);
+//    Date *scheduleDepartureDate = string_to_date_hours(scheduleDeparture);
+//    Date *scheduleArrivalDate = string_to_date_hours(scheduleArrival);
+//    Date *realDepartureDate = string_to_date_hours(realDeparture);
+//    Date *realArrivalDate = string_to_date_hours(realArrival);
+//    flight->scheduleDeparture = scheduleDepartureDate;
+//    flight->scheduleArrival = scheduleArrivalDate;
+//    flight->realDeparture = realDepartureDate;
+//    flight->realArrival = realArrivalDate;
     flight->passengers = createOrdList(); //cria uma lista de passageiros desse voo
 
     return flight;
@@ -69,80 +73,80 @@ char *getFlightDestination(Flight *flight) {
 
 Date *getFlightScheduleDeparture(Flight *flight) {
     Date * res = malloc(sizeof(Date));
-    res->day = flight->scheduleDeparture->day;
-    res->month = flight->scheduleDeparture->month;
-    res->year = flight->scheduleDeparture->year;
-    res->seconds = flight->scheduleDeparture->seconds;
-    res->minutes = flight->scheduleDeparture->minutes;
-    res->hours = flight->scheduleDeparture->hours;
+    res->day = flight->scheduleDeparture.day;
+    res->month = flight->scheduleDeparture.month;
+    res->year = flight->scheduleDeparture.year;
+    res->seconds = flight->scheduleDeparture.seconds;
+    res->minutes = flight->scheduleDeparture.minutes;
+    res->hours = flight->scheduleDeparture.hours;
     return res;
 }
 
 Date *getFlightScheduleArrival(Flight *flight) {
     Date * res = malloc(sizeof(Date));
-    res->day = flight->scheduleArrival->day;
-    res->month = flight->scheduleArrival->month;
-    res->year = flight->scheduleArrival->year;
-    res->seconds = flight->scheduleArrival->seconds;
-    res->minutes = flight->scheduleArrival->minutes;
-    res->hours = flight->scheduleArrival->hours;
+    res->day = flight->scheduleArrival.day;
+    res->month = flight->scheduleArrival.month;
+    res->year = flight->scheduleArrival.year;
+    res->seconds = flight->scheduleArrival.seconds;
+    res->minutes = flight->scheduleArrival.minutes;
+    res->hours = flight->scheduleArrival.hours;
     return res;
 }
 
 Date *getFlightRealDeparture(Flight *flight) {
     Date * res = malloc(sizeof(Date));
-    res->day = flight->realDeparture->day;
-    res->month = flight->realDeparture->month;
-    res->year = flight->realDeparture->year;
-    res->seconds = flight->realDeparture->seconds;
-    res->minutes = flight->realDeparture->minutes;
-    res->hours = flight->realDeparture->hours;
+    res->day = flight->realDeparture.day;
+    res->month = flight->realDeparture.month;
+    res->year = flight->realDeparture.year;
+    res->seconds = flight->realDeparture.seconds;
+    res->minutes = flight->realDeparture.minutes;
+    res->hours = flight->realDeparture.hours;
     return res;
 }
 
 Date *getFlightRealArrival(Flight *flight) {
     Date * res = malloc(sizeof(Date));
-    res->day = flight->realArrival->day;
-    res->month = flight->realArrival->month;
-    res->year = flight->realArrival->year;
-    res->seconds = flight->realArrival->seconds;
-    res->minutes = flight->realArrival->minutes;
-    res->hours = flight->realArrival->hours;
+    res->day = flight->realArrival.day;
+    res->month = flight->realArrival.month;
+    res->year = flight->realArrival.year;
+    res->seconds = flight->realArrival.seconds;
+    res->minutes = flight->realArrival.minutes;
+    res->hours = flight->realArrival.hours;
     return res;
 }
 
 int getDepartureDay(void *flight, void *lookup) {
-    return ((Flight*)flight)->scheduleDeparture->day;
+    return ((Flight*)flight)->scheduleDeparture.day;
 }
 
 int getDepartureMonth(void *flight, void *lookup) {
-    return ((Flight*)flight)->scheduleDeparture->month;
+    return ((Flight*)flight)->scheduleDeparture.month;
 }
 
 int getDepartureYear(void *flight, void *lookup) {
-    return ((Flight*)flight)->scheduleDeparture->year;
+    return ((Flight*)flight)->scheduleDeparture.year;
 }
 
 int getFlightSD(int time, Flight *flight) {
     int res;
     switch (time) {
         case TIME_DAY:
-            res = getDay(flight->scheduleDeparture);
+            res = getDay(&(flight->scheduleDeparture));
             break;
         case TIME_MONTH:
-            res = getMonth(flight->scheduleDeparture);
+            res = getMonth(&(flight->scheduleDeparture));
             break;
         case TIME_YEAR:
-            res = getYear(flight->scheduleDeparture);
+            res = getYear(&(flight->scheduleDeparture));
             break;
         case TIME_SECONDS:
-            res = getSeconds(flight->scheduleDeparture);
+            res = getSeconds(&(flight->scheduleDeparture));
             break;
         case TIME_MINUTES:
-            res = getMinutes(flight->scheduleDeparture);
+            res = getMinutes(&(flight->scheduleDeparture));
             break;
         case TIME_HOURS:
-            res = getHours(flight->scheduleDeparture);
+            res = getHours(&(flight->scheduleDeparture));
             break;
         default:
             res = 0;
@@ -150,13 +154,8 @@ int getFlightSD(int time, Flight *flight) {
     return res;
 }
 
-Date * getFlightDepartureDate(void *id, void *lookupTable) {
-    Flight *flight = getData((Hashtable *) lookupTable, id);
-    return (flight->scheduleDeparture);
-}
-
 char *getStringFlightDateNoHours(Flight *flight) {
-    return dateToStringNoHours(flight->scheduleDeparture);
+    return dateToStringNoHours(&(flight->scheduleDeparture));
 }
 
 /*
@@ -225,21 +224,6 @@ void setFlightDestination(Flight *flight, char destination[4]) {
     flight->destination[2] = destination[2];
 }
 
-void setFlightScheduleDeparture(Flight *flight, Date *scheduleDeparture) {
-    flight->scheduleDeparture = scheduleDeparture;
-}
-
-void setFlightScheduleArrival(Flight *flight, Date *scheduleArrival) {
-    flight->scheduleArrival = scheduleArrival;
-}
-
-void setFlightRealDeparture(Flight *flight, Date *realDeparture) {
-    flight->realDeparture = realDeparture;
-}
-
-void setFlightRealArrival(Flight *flight, Date *realArrival) {
-    flight->realArrival = realArrival;
-}
 /*
 void setFlightPilot(Flight *flight, char *pilot) {
     char *oldPilot = flight->pilot;
@@ -262,10 +246,10 @@ void setFlightNotes(Flight *flight, char *notes) {
 //funcção que liberta o espaço em memória alocado por um voo
 void destroyFlight(void *flight) {
     if (flight == NULL) return; //se o voo não existir
-    destroyDate(((Flight *) flight)->scheduleDeparture); //liberta as datas
-    destroyDate(((Flight *) flight)->scheduleArrival);
-    destroyDate(((Flight *) flight)->realDeparture);
-    destroyDate(((Flight *) flight)->realArrival);
+//    destroyDate(((Flight *) flight)->scheduleDeparture); //liberta as datas
+//    destroyDate(((Flight *) flight)->scheduleArrival);
+//    destroyDate(((Flight *) flight)->realDeparture);
+//    destroyDate(((Flight *) flight)->realArrival);
     //free(((Flight *) flight)->notes);
     //free(((Flight *) flight)->copilot);
     //free(((Flight *) flight)->pilot);

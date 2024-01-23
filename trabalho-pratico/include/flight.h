@@ -35,7 +35,6 @@ int getDepartureMonth(void *flight, void *lookup);
 int getDepartureYear(void *flight, void *lookup);
 
 int getFlightSD(int time, Flight *flight);
-Date * getFlightDepartureDate(void *id, void *lookupTable);
 char *getStringFlightDateNoHours(Flight *flight);
 char *getFlightId(Flight *flight);
 OrdList * getPassengers(Flight* flight);
