@@ -91,7 +91,7 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                 if (invalid == 1) {
                     fseek(file, -read, SEEK_CUR);
                     read = getline(&line, &n, file);
-                    fprintf(error_file,"\n%s",line);
+                    fprintf(error_file,"%s",line);
                 }
             }
             fclose(error_file);

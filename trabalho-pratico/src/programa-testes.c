@@ -137,28 +137,28 @@ int main (int argc, char** argv) {
     strcat(correct_error_file,"/users_errors.csv");
     strcpy(our_error_file,"Resultados/users_errors.csv");
     equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 1) printf("O ficheiro users_errors.csv está correto.✅\n");
+    if (equal_file == 0) printf("O ficheiro users_errors.csv está correto.✅\n");
     else printf("O ficheiro users_errors.csv não está correto.❌\n");
 
     strcpy(correct_error_file,argv[3]);
     strcat(correct_error_file,"/reservations_errors.csv");
     strcpy(our_error_file,"Resultados/reservations_errors.csv");
     equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 1) printf("O ficheiro reservations_errors.csv está correto.✅\n");
+    if (equal_file == 0) printf("O ficheiro reservations_errors.csv está correto.✅\n");
     else printf("O ficheiro reservations_errors.csv não está correto.❌\n");
 
     strcpy(correct_error_file,argv[3]);
     strcat(correct_error_file,"/flights_errors.csv");
     strcpy(our_error_file,"Resultados/flights_errors.csv");
     equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 1) printf("O ficheiro flights_errors.csv está correto.✅\n");
+    if (equal_file == 0) printf("O ficheiro flights_errors.csv está correto.✅\n");
     else printf("O ficheiro flights_errors.csv não está correto.❌\n");
 
     strcpy(correct_error_file,argv[3]);
     strcat(correct_error_file,"/passengers_errors.csv");
     strcpy(our_error_file,"Resultados/passengers_errors.csv");
     equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 1) printf("O ficheiro passengers_errors.csv está correto.✅\n");
+    if (equal_file == 0) printf("O ficheiro passengers_errors.csv está correto.✅\n");
     else printf("O ficheiro passengers_errors.csv não está correto.❌\n");
     
     free(correct_error_file);
