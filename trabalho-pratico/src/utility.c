@@ -336,14 +336,14 @@ int intcmpReverseVoid(void *n1, void *n2, void* lookup) {
     return res;
 }
 
-int intcmp(int n1, int n2) {
+int intcmp(unsigned long int n1, unsigned long int n2) {
     int res = 0;
     if (n1 < n2) res--;
     else if (n2 < n1) res++;
     return res;
 }
 
-int intcmpReverse(int n1, int n2, void* lookup) {
+int intcmpReverse(unsigned long int n1, unsigned long int n2, void* lookup) {
     int res = 0;
     if (n1 < n2) res++;
     else if (n2 < n1) res--;
@@ -356,23 +356,23 @@ void *intdupVoid(void *n) {
     return (void *) res;
 }
 
-char *flightIdToString(int id) {
+char *flightIdToString(unsigned long int id) {
     char *s = malloc(sizeof(char)*11);
-    sprintf(s, "%010d", id);
+    sprintf(s, "%010ld", id);
     return s;
 }
 
-char *reservIdToString(int id) {
+char *reservIdToString(unsigned long int id) {
     char *s = malloc(sizeof(char)*15);
-    sprintf(s, "Book%010d", id);
+    sprintf(s, "Book%010ld", id);
     return s;
 }
 
-int flightIdToInt(char *id) {
+unsigned long int flightIdToInt(char *id) {
     return atoi(id);
 }
 
-int reservIdToInt(char *id) {
+unsigned long int reservIdToInt(char *id) {
     return atoi(id+4);
 }
 

@@ -38,7 +38,7 @@ struct hashtable {
     int size; //tamanho
     int nodes; //numero de nodos
     struct hashtableNode **node; //lista dos primeiros nodos
-    unsigned int (*hash)(void*);
+    unsigned long int (*hash)(void*);
     int (*compareKey)(void*,void*);
     void *(*dupKey)(void*);
     void (*destroy)(void*);
@@ -60,7 +60,7 @@ struct hashtable {
 //unsigned char prime[MAX], check = 0;
 
 //funcao de hash
-unsigned int hashString(void *key) {
+unsigned long int hashString(void *key) {
     unsigned char *id = (unsigned char *) key, c;
     if (id == NULL) return 0;
     unsigned long int hash = 5381;
@@ -69,7 +69,7 @@ unsigned int hashString(void *key) {
 
     return hash;
 }
-unsigned int hashInt(void *key) {
+unsigned long int hashInt(void *key) {
     return *((unsigned int *) key);
 }
 ////funcao de hash
@@ -84,7 +84,7 @@ unsigned int hashInt(void *key) {
 //    return hash;
 //}
 //função que cria uma nova hashtable com o tamanho dado
-Hashtable *createHashtable(int size, unsigned int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*)) {
+Hashtable *createHashtable(int size, unsigned long int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*)) {
     Hashtable *newHashtable = malloc(sizeof(Hashtable));
     newHashtable->size = size;
     newHashtable->nodes = 0;
@@ -111,7 +111,7 @@ int getHashtableUsed(Hashtable *hashtable) {
 
 //funcção que retorna o apontador do nodo procurado
 struct hashtableNode *searchHashtable(Hashtable *hashtable, void *key) {
-    int index = hashtable->hash(key) % hashtable->size; //indice para onde a chave mapeia
+    unsigned long int index = hashtable->hash(key) % hashtable->size; //indice para onde a chave mapeia
     struct hashtableNode *node = hashtable->node[index]; //primeiro nodo
     int (*compareKey)(void*,void*) = hashtable->compareKey;
     while (node != NULL && compareKey(node->key, key)) //procura em todos os nodos o elemento
@@ -124,11 +124,11 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
     int size = hashtable->size;
     int newSize = newHashtable->size;
     struct hashtableNode **nodes = newHashtable->node;
-    unsigned int (*hash)(void*) = hashtable->hash;
+    unsigned long int (*hash)(void*) = hashtable->hash;
     for (int i=0; i<size; i++) {
         struct hashtableNode *node = hashtable->node[i];
         while (node != NULL) {
-            unsigned int index = hash(node->key) % newSize;
+            unsigned long int index = hash(node->key) % newSize;
             struct hashtableNode *new = malloc(sizeof(struct hashtableNode));
             new->key = node->key;
             new->data = node->data;
@@ -154,7 +154,7 @@ Hashtable *addHashtable(Hashtable *hashtable, void *data, void *key) {
         free(oldHashtable);
     }
     struct hashtableNode **node = hashtable->node;
-    int index = hashtable->hash(key) % hashtable->size;
+    unsigned long int index = hashtable->hash(key) % hashtable->size;
     struct hashtableNode *new = malloc(sizeof(struct hashtableNode));
     new->key = hashtable->dupKey(key);
     new->data = data;
@@ -291,7 +291,7 @@ int getHashtableIntUsed(HashtableInt *hashtable) {
 
 //funcção que retorna o apontador do nodo procurado
 struct hashtableNodeInt *searchHashtableInt(HashtableInt *hashtable, unsigned long int key) {
-    int index = (key) % hashtable->size; //indice para onde a chave mapeia
+    unsigned long int index = (key) % hashtable->size; //indice para onde a chave mapeia
     struct hashtableNodeInt* node = hashtable->node[index]; //primeiro nodo
     while (node != NULL && node->key != key) //procura em todos os nodos o elemento
         node = node->next;
@@ -307,7 +307,7 @@ void copyHashtableInt(HashtableInt *hashtable, HashtableInt *newHashtable) {
     for (int i=0; i<size; i++) {
         struct hashtableNodeInt *node = hashtable->node[i];
         while (node != NULL) {
-            unsigned int index = (node->key) % newSize;
+            unsigned long int index = (node->key) % newSize;
             struct hashtableNodeInt *new = malloc(sizeof(struct hashtableNodeInt));
             new->key = node->key;
             new->data = node->data;
@@ -334,7 +334,7 @@ HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, unsigned long
         free(oldHashtable);
     }
     struct hashtableNodeInt **node = hashtable->node;
-    int index = (key) % hashtable->size;
+    unsigned long int index = (key) % hashtable->size;
     struct hashtableNodeInt *new = malloc(sizeof(struct hashtableNodeInt));
     new->key = (key);
     new->data = data;

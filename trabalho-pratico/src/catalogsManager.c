@@ -425,8 +425,8 @@ int getAccountStatus(char *id, Catalogs *catalogs) {
 int getUserListSize(int type, char *id, Catalogs *catalogs) {
     return getSizeUserList(type, id, catalogs->usersCatalog);
 }
-int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
-    return getIdUserList(type, id_user, index, catalogs->usersCatalog);
+unsigned long int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
+    return getIdUserList_usersCatalog(type, id_user, index, catalogs->usersCatalog);
 }
 int getUsersByNameSize_catalog(Catalogs *catalogs) {
     return getUsersByNameSize(catalogs->usersCatalog);
@@ -448,10 +448,10 @@ void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *c
 }
 
 //flights
-int getFlightScheduleDepartureTime(int time, int id, Catalogs *catalogs) {
+int getFlightScheduleDepartureTime(int time, unsigned long int id, Catalogs *catalogs) {
     return getSDFlight(time, id, catalogs->flightsCatalog);
 }
-char *getStringFlightDate(int id, Catalogs *catalogs) {
+char *getStringFlightDate(unsigned long int id, Catalogs *catalogs) {
     return getSFlightDate(id, catalogs->flightsCatalog);
 }
 //reservations
@@ -461,13 +461,13 @@ int getReservationBegin(int time, int id, Catalogs *catalogs) {
 char *getStringReservationDate(int id, Catalogs *catalogs) {
     return getSReservDate(id, catalogs->reservationsCatalog);
 }
-int getReservationBeginDay(int id, void *catalogs){
+int getReservationBeginDay(unsigned long int id, void *catalogs){
     return getBeginDayReservation(id, ((Catalogs *) catalogs)->reservationsCatalog);
 }
-int getReservationBeginMonth(int id, void *catalogs){
+int getReservationBeginMonth(unsigned long int id, void *catalogs){
     return getBeginMonthReservation(id, ((Catalogs *) catalogs)->reservationsCatalog);
 }
-int getReservationBeginYear(int id, void *catalogs){
+int getReservationBeginYear(unsigned long int id, void *catalogs){
     return getBeginYearReservation(id, ((Catalogs *) catalogs)->reservationsCatalog);
 }
 //int getReservationEndDay(void *id, void *catalogs){
@@ -479,22 +479,22 @@ int getReservationBeginYear(int id, void *catalogs){
 //int getReservationEndYear(void *id, void *catalogs){
 //    return getEndYearReservation(id, ((Catalogs *) catalogs)->reservationsCatalog);
 //}
-int getFlightDepartureDay(int id, void *catalogs){
+int getFlightDepartureDay(unsigned long int id, void *catalogs){
     return getFlightSD_flightscatalog(TIME_DAY, id, ((Catalogs *) catalogs)->flightsCatalog);
 }
-int getFlightDepartureMonth(int id, void *catalogs){
+int getFlightDepartureMonth(unsigned long int id, void *catalogs){
     return getFlightSD_flightscatalog(TIME_MONTH, id, ((Catalogs *) catalogs)->flightsCatalog);
 }
-int getFlightDepartureYear(int id, void *catalogs){
+int getFlightDepartureYear(unsigned long int id, void *catalogs){
     return getFlightSD_flightscatalog(TIME_YEAR, id, ((Catalogs *) catalogs)->flightsCatalog);
 }
-int getFlightDepartureSeconds(int id, void *catalogs){
+int getFlightDepartureSeconds(unsigned long int id, void *catalogs){
     return getFlightSD_flightscatalog(TIME_SECONDS, id, ((Catalogs *) catalogs)->flightsCatalog);
 }
-int getFlightDepartureMinutes(int id, void *catalogs){
+int getFlightDepartureMinutes(unsigned long int id, void *catalogs){
     return getFlightSD_flightscatalog(TIME_MINUTES, id, ((Catalogs *) catalogs)->flightsCatalog);
 }
-int getFlightDepartureHours(int id, void *catalogs){
+int getFlightDepartureHours(unsigned long int id, void *catalogs){
     return getFlightSD_flightscatalog(TIME_HOURS, id, ((Catalogs *) catalogs)->flightsCatalog);
 }
 int getUserAccountCreationDay(void *id, void *catalogs){

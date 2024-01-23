@@ -28,7 +28,7 @@ Hotel *createHotel(char *id, char *name, char stars, int cityTax) {
     return hotel;
 }
 //função que adiciona uma reserva à lista de reservas de um hotel
-void addReservationToHotel(Hotel *hotel, int id_reserv, char rating) {
+void addReservationToHotel(Hotel *hotel, unsigned long int id_reserv, char rating) {
     addOrdListInt(hotel->reservationsByDate, id_reserv);
 //    addOrdList(hotel->reservationsByEndDate, id);
     if (rating != '\0') {
@@ -59,8 +59,8 @@ OrdList *getHotelOrdList(Hotel *hotel) {
 //OrdList *getHotelEndOrdList(Hotel *hotel) {
 //    return hotel->reservationsByEndDate;
 //}
-int getHotelReservId(Hotel *hotel, int index) {
-    int id = getValueOrdList(hotel->reservationsByDate, index);
+unsigned long int getHotelReservId(Hotel *hotel, int index) {
+    unsigned long int id = getValueOrdList(hotel->reservationsByDate, index);
     return id;
 }
 

@@ -10,7 +10,7 @@ typedef struct reservationsManager ReservationsManager;
 //cria um novo catálogo de reservas
 ReservationsManager *createReservsCatalog(int size);
 //adiciona uma reserva ao catálogo de reservas
-int addReservToCatalog(int id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog);
+int addReservToCatalog(unsigned long int id, char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification, ReservationsManager *reservationsCatalog);
 void sortReservationsByBeginDate(ReservationsManager *reservationsCatalog);
 void radixSortReservDate(OrdList *list, void *lookupTable);
 
@@ -32,15 +32,15 @@ HashtableInt *getHashtableReservCatalog(ReservationsManager *reservationsManager
 OrdList * getReservByBeginDate (ReservationsManager *reservations);
 int getFirstReservationBeginYear_reservationsCatalog(ReservationsManager *reservationsCatalog);
 int getLastReservationBeginYear_reservationsCatalog(ReservationsManager *reservationsCatalog);
-int getReservPriceNoTax(int id, ReservationsManager *reservationsCatalog);
-int getReservPriceLimits(int id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd);
-int getReservationBegin_reservationsCatalog(int time, int id, ReservationsManager *reservationsCatalog);
-char *getSReservDate(int id, ReservationsManager *reservationsCatalog);
-int getBeginDayReservation(int id, ReservationsManager *reservationsCatalog);
-int getBeginMonthReservation(int id, ReservationsManager *reservationsCatalog);
-int getBeginYearReservation(int id, ReservationsManager *reservationsCatalog);
-int getEndDayReservation(int id, ReservationsManager *reservationsCatalog);
-int getEndMonthReservation(int id, ReservationsManager *reservationsCatalog);
-int getEndYearReservation(int id, ReservationsManager *reservationsCatalog);
-int compareReservDates_reservationsCatalog(Date *date, int id, ReservationsManager *reservationsCatalog);
+int getReservPriceNoTax(unsigned long int id, ReservationsManager *reservationsCatalog);
+int getReservPriceLimits(unsigned long int id, ReservationsManager *reservationsCatalog, Date *limitBegin, Date *limitEnd);
+int getReservationBegin_reservationsCatalog(int time, unsigned long int id, ReservationsManager *reservationsCatalog);
+char *getSReservDate(unsigned long int id, ReservationsManager *reservationsCatalog);
+int getBeginDayReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
+int getBeginMonthReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
+int getBeginYearReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
+int getEndDayReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
+int getEndMonthReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
+int getEndYearReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
+int compareReservDates_reservationsCatalog(Date *date, unsigned long int id, ReservationsManager *reservationsCatalog);
 #endif

@@ -5,7 +5,7 @@ struct ordList {
     int size;
     bool ord; //1 se a lista está ordenada, 0 se não
     void **data;
-    int *value;
+    unsigned long int *value;
 };
 //função que cria uma nova lista vazia com um certo tamanho
 OrdList *createOrdList() {
@@ -278,7 +278,7 @@ void swap (OrdList *ordlist, int i, int j) {
 //função que cria uma nova lista vazia com um certo tamanho
 OrdList *createOrdListInt() {
     OrdList *ordList = malloc(sizeof(OrdList));
-    int *value = malloc(sizeof(int));
+    unsigned long int *value = malloc(sizeof(unsigned long int));
     ordList->maxSize = 1;
     ordList->size = 0;
     ordList->data = NULL;
@@ -288,12 +288,12 @@ OrdList *createOrdListInt() {
     return ordList;
 }
 //função que adiciona um novo elemento a uma lista
-void addOrdListInt(OrdList *ordList, int value) {
+void addOrdListInt(OrdList *ordList, unsigned long int value) {
     int maxSize = ordList->maxSize;
     int size = ordList->size;
     if (size == maxSize) { //se a lista estiver cheia cria uma nova lista com o dobro do tamanho
         maxSize *= 2;
-        int *newValue = malloc(sizeof(int *) * maxSize);
+        unsigned long int *newValue = malloc(sizeof(unsigned long int *) * maxSize);
         int i=0;
         while (i < size) {
             newValue[i] = ordList->value[i];
@@ -308,11 +308,11 @@ void addOrdListInt(OrdList *ordList, int value) {
     ordList->maxSize = maxSize;
 }
 //função que devolve o indice da primeira ocorrência de um elemento numa lista
-int searchValueOrdList(OrdList *list, int value, int (*compareFunction)(int,int,void*), void *lookup, int equal, int (*searchBackFunction)(int,int,void*), int first) {
+int searchValueOrdList(OrdList *list, unsigned long int value, int (*compareFunction)(unsigned long int,unsigned long int,void*), void *lookup, int equal, int (*searchBackFunction)(unsigned long int,unsigned long int,void*), int first) {
     int lower = 0, higher = list->size - 1; //limites para procura
     if (higher == -1) return -2;
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
-    int compareValue = list->value[i]; //elemento a comparar
+    unsigned long int compareValue = list->value[i]; //elemento a comparar
     //enquanto os elementos não forem iguais e os limites não se cruzarem
 //    printf("Prefix: %s\n", (char*) data);
     while ((compare = compareFunction(value, compareValue, lookup)) != equal && (higher - lower) > 1) {
@@ -337,10 +337,10 @@ int searchValueOrdList(OrdList *list, int value, int (*compareFunction)(int,int,
 
 //radixsort ordena uma lista por valores que estejam num intervalo conhecido
 //recebe uma função que devolve o valor do parametro para o qual queremos ordenar os elementos
-void radixSortInt(OrdList *list, int (*getParameterFunction)(int,void*), void *lookupTable, int interval, int offset) {
+void radixSortInt(OrdList *list, int (*getParameterFunction)(unsigned long int,void*), void *lookupTable, int interval, int offset) {
     int size = list->size;
-    int *newValue = malloc(sizeof(int) * size); //cria nova lista que irá ficar ordenada
-    int value;
+    unsigned long int *newValue = malloc(sizeof(unsigned long int) * size); //cria nova lista que irá ficar ordenada
+    unsigned long int value;
     int count[interval+1], i ,j; //array com de tamanho do intervalo de valores conhecido
     for (i=0; i<=interval; i++) count[i] = 0; //inicializa array a zero
     for (j=0; j<size; j++) {
@@ -363,15 +363,15 @@ void radixSortInt(OrdList *list, int (*getParameterFunction)(int,void*), void *l
 
 //função que troca duas posições de uma lista
 void swapOrdListInt(OrdList *list, int i, int j) {
-    int aux = list->value[i];
+    unsigned long int aux = list->value[i];
     list->value[i] = list->value[j];
     list->value[j] = aux;
 }
 
-void bubbledownInt(OrdList *list, int i, int size, int (*compareFunction)(int,int,void*), void *lookup, int equal) {
+void bubbledownInt(OrdList *list, int i, int size, int (*compareFunction)(unsigned long int,unsigned long int,void*), void *lookup, int equal) {
     int left = (2 * i) + 1, right = (2 * i) + 2;
     int max;
-    int *value = list->value;
+    unsigned long int *value = list->value;
     while (left < size) {
         if (right < size && compareFunction(value[left], value[right], lookup) < 0) max = right;
         else max = left;
@@ -385,7 +385,7 @@ void bubbledownInt(OrdList *list, int i, int size, int (*compareFunction)(int,in
     }
 }
 
-void heapsortInt(OrdList *list, int (*compareFunction)(int,int,void*), void *lookup, int equal) {
+void heapsortInt(OrdList *list, int (*compareFunction)(unsigned long int,unsigned long int,void*), void *lookup, int equal) {
     int size = list->size;
     int i;
     for (i=(size/2)-1; i>=0; i--)
@@ -397,7 +397,7 @@ void heapsortInt(OrdList *list, int (*compareFunction)(int,int,void*), void *loo
 }
 
 //função que devolve o elemento de uma lista dado um indice
-int getValueOrdList(OrdList *ordList, int index) {
+unsigned long int getValueOrdList(OrdList *ordList, int index) {
     return ordList->value[index];
 }
 

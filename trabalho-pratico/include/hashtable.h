@@ -8,10 +8,10 @@
 
 typedef struct hashtable Hashtable;
 //funão de hash
-unsigned int hashString(void *key);
-unsigned int hashInt(void *key);
+unsigned long int hashString(void *key);
+unsigned long int hashInt(void *key);
 //cria uma nova hashtable
-Hashtable *createHashtable(int size, unsigned int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*));
+Hashtable *createHashtable(int size, unsigned long int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*));
 //devolve número de nodos usados
 int getHashtableUsed(Hashtable *hashtable);
 //copia hashtable para outra hashtable

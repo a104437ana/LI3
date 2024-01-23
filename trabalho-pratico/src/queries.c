@@ -225,7 +225,7 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
     Q2Type resultType;
     if (type==BOTH) {
       for(i=0, j=resultSize-1;j>=0; i++, j--){
-        int key = getUserListId((int *) &resultType, id_user, i, catalogs);
+        unsigned long int key = getUserListId((int *) &resultType, id_user, i, catalogs);
         if (resultType == FLIGHTS) {
           dateS = getStringFlightDate(key, catalogs);
           typeS = strdup("flight");
@@ -247,7 +247,7 @@ void Q2(char *id_user, Q2Type type, Catalogs *catalogs, QueryResult *result){
     }
     else {
       for(i=0, j=resultSize-1;i<listSize; i++){
-        int key = getUserListId((int *) &resultType, id_user, i, catalogs);
+        unsigned long int key = getUserListId((int *) &resultType, id_user, i, catalogs);
         if (resultType==type){ //verifica se a posição atual tem um voo ou uma reserva
           if (resultType == FLIGHTS) {
             dateS = getStringFlightDate(key, catalogs);

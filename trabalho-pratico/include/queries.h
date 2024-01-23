@@ -34,7 +34,7 @@ typedef enum{
 } Q2Type;
 
 typedef struct resultQ2{
-    int id; //flight ou reservation
+    unsigned long int id; //flight ou reservation
     Q2Type resultType;
 } ResultQ2;
 

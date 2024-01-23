@@ -49,7 +49,7 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
     return user;
 }
 //adiciona um voo ou reserva à lista de voos e ereservas de um utilizador
-void addToUserList(User *user, int id, char type, double totalSpent) {
+void addToUserList(User *user, unsigned long int id, char type, double totalSpent) {
     ResultQ2 *res = malloc(sizeof(ResultQ2));
     if (type == 'R') {
         res->resultType = RESERVATIONS;
@@ -206,11 +206,11 @@ int getNumberReservations(User* user){
     return (user->nReservations);
 }
 
-int getUListId(int *type, User *user, int index) {
+unsigned long int getIdUserList_user(int *type, User *user, int index) {
     OrdList *list = user->flightsReservationsByDate;
     ResultQ2 *res = (ResultQ2 *) getDataOrdList(list, index);
     *type = res->resultType;
-    int id = res->id;
+    unsigned long int id = res->id;
     return id;
 }
 

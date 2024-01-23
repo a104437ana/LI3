@@ -20,7 +20,7 @@ AirportsManager *createAirportsCatalog(int size) {
 }
 
 //atualiza o catálogo de aeroportos
-void updateAirportCatalog(int delay, char *id_origin, char *id_destination, int id_flight, AirportsManager *airportsCatalog) {
+void updateAirportCatalog(int delay, char *id_origin, char *id_destination, unsigned long int id_flight, AirportsManager *airportsCatalog) {
     int existsAirportOrigin = existsData(airportsCatalog->airports, id_origin); //verifica se o aeroporto já existe no catálogo de aeroportos
     int existsAirportDestination = existsData(airportsCatalog->airports, id_destination); //verifica se o aeroporto já existe no catálogo de aeroportos
     Airport *airport_origin;
@@ -104,7 +104,7 @@ void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* 
         OrdList* airportsByDate = getAirportOriginOrdList(airport);
         int size = getOrdListSize(airportsByDate);
         int i = 0;
-        int id_flight;
+        unsigned long int id_flight;
         char *id_flightS;
         Flight* flight;
         while (i < size) {
@@ -198,7 +198,7 @@ int getAirportListSize_airportsCatalog(char *id, AirportsManager *airportsCatalo
     return getAirportListSize(airport);
 }
 
-int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFunction)(int,int,void*), int equal, void *lookup, int (*getFunction)(int,void*), AirportsManager *airportsCatalog) {
+int getAirportPassengersYear_airportsCatalog(int year, char *id, int (*compareFunction)(unsigned long int,unsigned long int,void*), int equal, void *lookup, int (*getFunction)(unsigned long int,void*), AirportsManager *airportsCatalog) {
     Airport *airport = getData(airportsCatalog->airports, id);
     return getAirportPassengersYear(year, airport, compareFunction, equal, lookup, getFunction);
 }

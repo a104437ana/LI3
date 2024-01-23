@@ -31,7 +31,7 @@ Airport *createAirport(char *name) {
 }
 
 //adiciona voo à lista de voos de um aeroporto
-void addFlightToAirport(Airport *airport, int id_flight, int origin) {
+void addFlightToAirport(Airport *airport, unsigned long int id_flight, int origin) {
     if (origin)
     addOrdListInt(airport->originFlights, id_flight);
     else
@@ -90,7 +90,7 @@ int getAirportListSize(Airport *airport) {
     return getOrdListSize(airport->originFlights);
 }
 
-int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(int,int,void*), int equal, void *lookup, int (*getFunction)(int,void*)) {
+int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(unsigned long int,unsigned long int,void*), int equal, void *lookup, int (*getFunction)(unsigned long int,void*)) {
     OrdList *origin = airport->originFlights; //voos de origem do aeroporto
     OrdList *destination = airport->destinationFlights; //voos de destino do aeroporto
 //    void *data = (void *) &year;
@@ -100,7 +100,7 @@ int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(
         size = getOrdListSize(origin);
         exit = 0;
         while (i < size && !exit) {
-            int id = getValueOrdList(origin, i);
+            unsigned long int id = getValueOrdList(origin, i);
             if (compareFunction(year, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
             else {
                 i++;
@@ -113,7 +113,7 @@ int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(
         exit = 0;
         size = getOrdListSize(destination);
         while (i < size && !exit) {
-            int id = getValueOrdList(destination, i);
+            unsigned long int id = getValueOrdList(destination, i);
             if (compareFunction(year, id, lookup) != equal) exit = 1; //se já não estamos no ano pedido
             else {
                 i++;

@@ -63,13 +63,13 @@ int strcmpVoid(void* s1, void *s2);
 void *strdupVoid(void *s);
 int intcmpVoid(void *n1, void *n2);
 int intcmpReverseVoid(void *n1, void *n2, void *lookup);
-int intcmp(int n1, int n2);
-int intcmpReverse(int n1, int n2, void *lookup);
+int intcmp(unsigned long int n1, unsigned long int n2);
+int intcmpReverse(unsigned long int n1, unsigned long int n2, void *lookup);
 void *intdupVoid(void *n);
-char *flightIdToString(int id);
-char *reservIdToString(int id);
-int flightIdToInt(char *id);
-int reservIdToInt(char *id);
+char *flightIdToString(unsigned long int id);
+char *reservIdToString(unsigned long int id);
+unsigned long int flightIdToInt(char *id);
+unsigned long int reservIdToInt(char *id);
 
 void destroyDate(Date *date);
 

@@ -13,7 +13,7 @@ HotelsManager *createHotelsCatalog(int size) {
     return hotelsManager;
 }
 //atualiza catálogo de hoteis
-void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, int id_reserv, HotelsManager *hotelsCatalog) {
+void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char userClassification, unsigned long int id_reserv, HotelsManager *hotelsCatalog) {
     int existsHotel = existsData(hotelsCatalog->hotels, id); //verifica se o hotel já existe no catálogo de hoteis
     Hotel *hotel;
     if (existsHotel == 0) { //caso não exista cria um novo hotel
@@ -105,7 +105,7 @@ int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog) {
 int hotelExists(char *id, HotelsManager *hotelsCatalog) {
     return existsData(hotelsCatalog->hotels, id);
 }
-int getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
+unsigned long int getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
     Hotel *hotel = getData(hotelsCatalog->hotels, id);
     return getHotelReservId(hotel, index);
 }
