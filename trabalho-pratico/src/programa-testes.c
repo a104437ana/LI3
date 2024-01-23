@@ -128,8 +128,8 @@ int main (int argc, char** argv) {
 
     nao apagar este codigo!
 
-    int size = strlen(argv[3]) + 25;
-    char* correct_error_file = malloc(size);
+    int size2 = strlen(argv[3]) + 25;
+    char* correct_error_file = malloc(size2);
     char* our_error_file = malloc(35);
     int equal_file = 0;
 

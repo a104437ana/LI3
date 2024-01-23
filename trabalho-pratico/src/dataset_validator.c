@@ -656,19 +656,3 @@ int valid_passenger (char* id_flight, char* id_user, Catalogs* catalogs) {
     }
     return valid;
 }
-
-/* A função add_invalid_line_to_error_file adiciona uma linha inválida ao ficheiro de erros, 
-dado o caminho relativo para esse ficheiro de erros e dada a linha inválida. Esta função
-também é usada para adicionar o header (o cabeçalho) do ficheiro original, ao ficheiro de erros.*/
-void add_invalid_line_to_error_file (char* file_path, char* string_line) {
-    FILE *file;
-    file = fopen(file_path,"a"); //abertura do ﬁcheiro em modo de escrita para acrescentar dados aos já existentes. O ﬁcheiro é criado se não existir.
-    fprintf(file,"%s",string_line);
-    fclose(file);
-}
-
-void create_error_file (char *file_path) {
-    FILE *file;
-    file = fopen(file_path,"w");
-    fclose(file);
-}

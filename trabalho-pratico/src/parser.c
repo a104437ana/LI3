@@ -29,22 +29,14 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
         size_t n;
         ssize_t read;
         if ((read = getline(&line,&n,file)) != -1) {
-            create_error_file(error_file_path);
-            add_invalid_line_to_error_file(error_file_path,line);
+            FILE *error_file;
+            error_file = fopen(error_file_path,"w");
+            fprintf(error_file,"%s",line);
             int invalid;
-            int  size_line;
-            int standart_size = 300;
-            char* line_modified = malloc(standart_size);
             char* line_pointer;
             int indice = 0;
             while((read = getline(&line,&n,file)) != -1) {
-                size_line = strlen(line) + 1;
-                if (size_line > standart_size) {
-                    line_modified = realloc(line_modified,size_line);
-                    standart_size = size_line;
-                }
-                strcpy(line_modified,line);
-                line_pointer = line_modified;
+                line_pointer = line;
                 for (int i = 0; i < size; i++) {
                     token[i] = strsep(&line_pointer,";");
                 }
@@ -96,10 +88,14 @@ void parse_file (char* file_path, char* error_file_path, Catalogs *catalogs, Pas
                                }
                                break;
                 }
-                if (invalid == 1) add_invalid_line_to_error_file(error_file_path,line);
+                if (invalid == 1) {
+                    fseek(file, -read, SEEK_CUR);
+                    read = getline(&line, &n, file);
+                    fprintf(error_file,"\n%s",line);
+                }
             }
+            fclose(error_file);
             if (type_file == 'u' && indice > 0) createListPassengers_UsersManager(catalogs,indice);
-            free(line_modified);
         }
         free(line);
         fclose(file);

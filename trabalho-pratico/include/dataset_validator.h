@@ -47,7 +47,4 @@ int valid_total_seats (char* total_seats,PassengersCounter* passengers_counter, 
 int valid_flight (char* id_flight, char* airline, char* plane_model, char* total_seats, char* origin, char* destination, char* schedule_departure_date, char* schedule_arrival_date, char* real_departure_date, char* real_arrival_date, char* pilot, char* copilot, PassengersCounter* passengers_counter);
 int valid_passenger (char* id_flight, char* id_user, Catalogs *catalogs);
 
-void add_invalid_line_to_error_file (char* file_path, char* string_line);
-void create_error_file (char *file_path);
-
 #endif
