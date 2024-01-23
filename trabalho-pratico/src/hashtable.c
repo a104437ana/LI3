@@ -1,5 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "hashtable.h"
-#include <math.h>
 
 //normal
 //123.53 seg 4910.48 MB
@@ -21,13 +23,6 @@
 
 //normal strlen size, guardar funções, void *key
 //121.13 seg 4902.83 MB
-typedef enum typeOfData {
-    user,
-    reservation,
-    hotel,
-    flight,
-} TypeOfData;
-
 struct hashtableNode {
     void *key; //chave usada para hash
     void *data; //data guardada
@@ -44,22 +39,7 @@ struct hashtable {
     void (*destroy)(void*);
 };
 
-//void eratosthenes_primesTo(unsigned char p[], unsigned int n) {
-//    unsigned int sqrtn = sqrt(n) + 1;
-//    unsigned int i, j;
-//    for (i = 0; i < n; i++) p[i] = 1;
-//    for (i = 2; i <= sqrtn; i++) {
-//        if (!p[i]) {
-//            for (j = i * i; j <= n; j += i)
-//                p[j] = 0;
-//        }
-//    }
-//}
-//
-//#define MAX 10000000
-//unsigned char prime[MAX], check = 0;
-
-//funcao de hash
+//funcões de hash
 unsigned long int hashString(void *key) {
     unsigned char *id = (unsigned char *) key, c;
     if (id == NULL) return 0;
@@ -70,20 +50,10 @@ unsigned long int hashString(void *key) {
     return hash;
 }
 unsigned long int hashInt(void *key) {
-    return *((unsigned int *) key);
+    return *((unsigned int *) key); //retorna o valor guardado no apontador
 }
-////funcao de hash
-//unsigned int hashString(void *key) {
-//    char *id = (char *) key;
-//    if (id == NULL) return 0;
-//    int size = strlen(id);
-//    unsigned long int hash = 1;
-//    for (int i=0; i<size; i++) //para cada caracter
-//        hash = hash * 33 ^ id[i]; // hash[i] = (hash[i-1] * 33) XOR id[i]
-//
-//    return hash;
-//}
-//função que cria uma nova hashtable com o tamanho dado
+
+//função que cria uma nova hashtable dado um tamanho, uma função de hash, uma função de comparação, uma função de copia da key e uma função para libertar memória da data
 Hashtable *createHashtable(int size, unsigned long int (*hash)(void*), int (*compareKey)(void*,void*), void *(*dupKey)(void*), void (*destroy)(void*)) {
     Hashtable *newHashtable = malloc(sizeof(Hashtable));
     newHashtable->size = size;
@@ -96,17 +66,7 @@ Hashtable *createHashtable(int size, unsigned long int (*hash)(void*), int (*com
     for (int i=0; i<size; i++)
         newHashtable->node[i] = NULL;
 
-//    if (!check) {
-//        eratosthenes_primesTo(prime, MAX);
-//        check = 1;
-//    }
-
     return newHashtable;
-}
-
-//devolve número de nodos usados
-int getHashtableUsed(Hashtable *hashtable) {
-    return hashtable->nodes;
 }
 
 //funcção que retorna o apontador do nodo procurado
@@ -120,22 +80,21 @@ struct hashtableNode *searchHashtable(Hashtable *hashtable, void *key) {
 }
 //função que copia toda a hashtable para outra hashtable
 void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
-//    struct hashtableNode *node, *oldNode;
     int size = hashtable->size;
     int newSize = newHashtable->size;
     struct hashtableNode **nodes = newHashtable->node;
     unsigned long int (*hash)(void*) = hashtable->hash;
     for (int i=0; i<size; i++) {
-        struct hashtableNode *node = hashtable->node[i];
+        struct hashtableNode *node = hashtable->node[i]; //para cada nodo da hashtable
         while (node != NULL) {
-            unsigned long int index = hash(node->key) % newSize;
+            unsigned long int index = hash(node->key) % newSize; //remapeia esse nodo para um novo lugar na newHashtable
             struct hashtableNode *new = malloc(sizeof(struct hashtableNode));
             new->key = node->key;
             new->data = node->data;
             new->next = nodes[index];
             nodes[index] = new;
             struct hashtableNode *oldNode = node;
-            node = node->next;
+            node = node->next; //próximo nodo na lista de colisões
             free(oldNode);
         }
     }
@@ -145,7 +104,7 @@ void copyHashtable(Hashtable *hashtable, Hashtable *newHashtable) {
 Hashtable *addHashtable(Hashtable *hashtable, void *data, void *key) {
     int nodes = hashtable->nodes, size = hashtable->size;
     float usage = nodes / size;
-    if (usage >= 0.8) {
+    if (usage >= 0.8) { //caso o uso dos nodos esteja acima de 80% cria uma nova hashtbale com o dobro do tamanho
         Hashtable *newHashtable = createHashtable(size * 2, hashtable->hash, hashtable->compareKey, hashtable->dupKey, hashtable->destroy);
         copyHashtable(hashtable, newHashtable);
         Hashtable *oldHashtable = hashtable;
@@ -164,10 +123,6 @@ Hashtable *addHashtable(Hashtable *hashtable, void *data, void *key) {
 
     return hashtable;
 }
-
-//falta remove elemento
-void removeHashtable(Hashtable *hashtable, unsigned int key) {
-}
 //função que verifica se um elemento existe na hashtable
 int existsData(Hashtable *hashtable, void *key) {
     if (searchHashtable(hashtable, key)) return 1; //caso o elemento exista
@@ -175,14 +130,15 @@ int existsData(Hashtable *hashtable, void *key) {
 }
 
 //gets
+//devolve número de nodos usados
+int getHashtableUsed(Hashtable *hashtable) {
+    return hashtable->nodes;
+}
 //função que devolve o elemento guardado na hashtable
 void *getData(Hashtable *hashtable, void *key) {
     struct hashtableNode *node = searchHashtable(hashtable, key);
-    if (!node) return NULL;
-    return node->data;
-}
-int getHashtableNodes(Hashtable *hashtable) {
-    return hashtable->nodes;
+    if (!node) return NULL; //caso o elemento não exista
+    return node->data; //caso exista
 }
 //função que altera um elemento da hashtable
 void setData(Hashtable *hashtable, void *data, void *key) {
@@ -191,55 +147,7 @@ void setData(Hashtable *hashtable, void *data, void *key) {
     node->data = data;
     free(oldData);
 }
-//função que ordena um parametro de todos os elementos de uma hashtable dada uma função de ordenação
-void sortOrdlistHashtable(Hashtable *hashtable, void (*sortFunction)(void*,Hashtable*), Hashtable *lookupTable) {
-    struct hashtableNode **node = hashtable->node; //todos os nodos da hashtable
-    int size = hashtable->size; //tamanho da hashtable
-    struct hashtableNode *iNode; //nodo de indice i da hashtable
-    for (int i=0; i<size; i++) { //para cada indice da hashtable
-        iNode = node[i];
-        while (iNode != NULL) { //percorre todos os nodos
-            sortFunction(iNode->data, lookupTable); //e aplica a função de ordenação a cada elemento da hashtable
-            iNode = iNode->next;
-        }
-    }
-}
-//void *getNextData(Hashtable *hashtable, unsigned int key, char *id) {
-//    int size = hashtable->size;
-//    int index = key % size;
-//    struct hashtableNode *node = hashtable->node[index];
-//    if (node && node->next != NULL) node = node->next;
-//    else {
-//        index = (index + 1) % size;
-//        while ((node = hashtable->node[index]) == NULL) index = (index + 1) % size;
-//    }
-//    return node->data;
-//}
-//função que imprime todos os elementos da hashtable, para efeitos de teste
-void printTable(Hashtable *hashtable, void (*printFunction)(void*)) {
-    struct hashtableNode *node;
-    int size = hashtable->size;
-    for (int i=0; i<size; i++) { //percorre todos os indices da hashtable
-        node = hashtable->node[i];
-        printf("%2d", i);
-        if (node == NULL) printf(" ->    X\n");
-        else {
-            while (node != NULL) { //aplica a função de imprimir um elemento a todos os elementos nos nodos nesse indice
-//                printf(" -> (%4d,", node->key);
-                (*printFunction)(node->data);
-                node = node->next;
-            }
-            printf(" -> X\n");
-        }
-    }
-}
-//função que imprime o nível de uso da hashtable, para efeitos de testes
-void printHashtableUsage(Hashtable *hashtable) {
-    float usage = (float) hashtable->nodes / (float) hashtable->size;
-    printf("usage: %.3f\n", usage);
-    printf("nodes: %d\n", hashtable->nodes);
-    printf("size: %d\n", hashtable->size);
-}
+
 //função que liberta toda a memória alocada pela hashtable
 void destroyHashtable(Hashtable *hashtable) {
     if (hashtable == NULL) return;
@@ -250,16 +158,16 @@ void destroyHashtable(Hashtable *hashtable) {
         while (node != NULL) { //percorre todos os nodos
             struct hashtableNode *nodeAux = node->next; //proximo nodo guardado para o próximo ciclo
             destroy(node->data); //liberta o espaço em memória de cada elemento
-//            free(node->data); //double free se função anterior já libertar o espaço em memória do apontador
             free(node->key); //liberta o id
             free(node); //liberta o nodo
             node = nodeAux; //avança para o próximo nodo
         }
     }
-    free(hashtable->node);
+    free(hashtable->node); //liberta a lista de nodos
     free(hashtable); //liberta a hashtable
 }
 
+//hashtable de inteiros
 struct hashtableNodeInt {
     unsigned long int key; //chave usada para hash
     void *data; //data guardada
@@ -273,6 +181,7 @@ struct hashtableInt {
     void (*destroy)(void*);
 };
 
+//função que cria uma nova hashtable dado um tamanho e uma função de libertar o espaço em memória de cada elemento
 HashtableInt *createHashtableInt(int size, void (*destroy)(void*)) {
     HashtableInt *newHashtable = malloc(sizeof(HashtableInt));
     newHashtable->size = size;
@@ -281,12 +190,6 @@ HashtableInt *createHashtableInt(int size, void (*destroy)(void*)) {
     newHashtable->node = malloc(sizeof(struct hashtableNodeInt) * size);
     for (int i=0; i<size; i++) newHashtable->node[i] = NULL;
     return newHashtable;
-}
-
-
-//devolve número de nodos usados
-int getHashtableIntUsed(HashtableInt *hashtable) {
-    return hashtable->nodes;
 }
 
 //funcção que retorna o apontador do nodo procurado
@@ -300,21 +203,20 @@ struct hashtableNodeInt *searchHashtableInt(HashtableInt *hashtable, unsigned lo
 
 //função que copia toda a hashtable para outra hashtable
 void copyHashtableInt(HashtableInt *hashtable, HashtableInt *newHashtable) {
-//    struct hashtableNode *node, *oldNode;
     int size = hashtable->size;
     int newSize = newHashtable->size;
     struct hashtableNodeInt **nodes = newHashtable->node;
     for (int i=0; i<size; i++) {
-        struct hashtableNodeInt *node = hashtable->node[i];
+        struct hashtableNodeInt *node = hashtable->node[i]; //para cada nodo da hashtable
         while (node != NULL) {
-            unsigned long int index = (node->key) % newSize;
+            unsigned long int index = (node->key) % newSize; //remapeia esse nodo para um novo lugar na newHashtable
             struct hashtableNodeInt *new = malloc(sizeof(struct hashtableNodeInt));
             new->key = node->key;
             new->data = node->data;
             new->next = nodes[index];
             nodes[index] = new;
             struct hashtableNodeInt *oldNode = node;
-            node = node->next;
+            node = node->next; //próximo nodo na lista de colisões
             free(oldNode);
         }
     }
@@ -325,7 +227,7 @@ void copyHashtableInt(HashtableInt *hashtable, HashtableInt *newHashtable) {
 HashtableInt *addHashtableInt(HashtableInt *hashtable, void *data, unsigned long int key) {
     int nodes = hashtable->nodes, size = hashtable->size;
     float usage = nodes / size;
-    if (usage >= 0.8) {
+    if (usage >= 0.8) { //caso o uso dos nodos esteja acima de 80% cria uma nova hashtbale com o dobro do tamanho
         HashtableInt *newHashtable = createHashtableInt(size * 2, hashtable->destroy);
         copyHashtableInt(hashtable, newHashtable);
         HashtableInt *oldHashtable = hashtable;
@@ -352,17 +254,18 @@ int existsDataInt(HashtableInt *hashtable, unsigned long int key) {
 }
 
 //gets
+//devolve número de nodos usados
+int getHashtableIntUsed(HashtableInt *hashtable) {
+    return hashtable->nodes;
+}
+
 //função que devolve o elemento guardado na hashtable
 void *getDataInt(HashtableInt *hashtable, unsigned long int key) {
     struct hashtableNodeInt *node = searchHashtableInt(hashtable, key);
-    if (!node) return NULL;
-    return node->data;
+    if (!node) return NULL; //caso não exista o elemento
+    return node->data; //caso exista
 }
 
-
-int getHashtableNodesInt(HashtableInt *hashtable) {
-    return hashtable->nodes;
-}
 //função que altera um elemento da hashtable
 void setDataInt(HashtableInt *hashtable, void *data, unsigned long int key) {
     struct hashtableNodeInt *node = searchHashtableInt(hashtable, key);
@@ -381,12 +284,10 @@ void destroyHashtableInt(HashtableInt *hashtable) {
         while (node != NULL) { //percorre todos os nodos
             struct hashtableNodeInt *nodeAux = node->next; //proximo nodo guardado para o próximo ciclo
             destroy(node->data); //liberta o espaço em memória de cada elemento
-//            free(node->data); //double free se função anterior já libertar o espaço em memória do apontador
-            //free(node->key); //liberta o id
             free(node); //liberta o nodo
             node = nodeAux; //avança para o próximo nodo
         }
     }
-    free(hashtable->node);
+    free(hashtable->node); //liberta a lista de nodos
     free(hashtable); //liberta a hashtable
 }

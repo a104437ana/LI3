@@ -1,13 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "orderedList.h"
 
 struct ordList {
-    int maxSize;
-    int size;
+    int maxSize; //tamanho máximo
+    int size; //tamanho atual
     bool ord; //1 se a lista está ordenada, 0 se não
-    void **data;
-    unsigned long int *value;
+    void **data; //lista de apontadores para data
+    unsigned long int *value; //lista de inteiros
 };
-//função que cria uma nova lista vazia com um certo tamanho
+//função que cria uma nova lista vazia com tamanho 1
 OrdList *createOrdList() {
     OrdList *ordList = malloc(sizeof(OrdList));
     void **data = malloc(sizeof(void *));
@@ -45,35 +48,25 @@ int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,vo
     if (higher == -1) return -2;
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
     void *compareData = list->data[i]; //elemento a comparar
-    //enquanto os elementos não forem iguais e os limites não se cruzarem
-//    printf("Prefix: %s\n", (char*) data);
-
     // caso a lista tenha apenas 1 elemento (logo se tiver algum igual, será apenas este)
     if (higher == lower) {
         if ((compare = compareFunction(data, compareData, lookup)) == equal) return i;
         else return -1;
     }
-
     // se tiver mais de 1 elemento
+    //enquanto os elementos não forem iguais e os limites não se cruzarem
     while ((compare = compareFunction(data, compareData, lookup)) != equal && (higher - lower) > 1) {
         if (compare < equal) higher = i; //se o elemento for menor o limite superior passa a ser o indice do elemento
         else lower = i; //caso contrário o limite inferior passa a ser o indice do elemento
         i = (higher + lower) / 2; //novo indice central entre os dois limites
         compareData = list->data[i]; //novo elemento a comparar
-//        printf("\t%s\n", getName(compareData));
     }
-
     if (higher - lower == 1 && compare != equal) {
-        if (compare < equal) {
-            i = lower;
-        }
-        else {
-            i = higher;
-        }
+        if (compare < equal) i = lower;
+        else i = higher;
         compareData = list->data[i];
         if ((compare = compareFunction(data, compareData, lookup)) != equal) return -1;
     }
-
     while (i > 0 && compare <= equal) { //compara com o anterior até encontrar um elemento diferente
         compareData = list->data[i-1];
         compare = searchBackFunction(data, compareData, lookup);
@@ -84,8 +77,7 @@ int searchDataOrdList(OrdList *list, void *data, int (*compareFunction)(void*,vo
     return i; //retorna indice do elemento que se procurou na lista
 }
 
-void removeOrdList(OrdList *ordList, unsigned int key) {
-}
+//funções de ordenação
 //radixsort ordena uma lista por valores que estejam num intervalo conhecido
 //recebe uma função que devolve o valor do parametro para o qual queremos ordenar os elementos
 void radixSort(OrdList *list, int (*getParameterFunction)(void*,void*), void *lookupTable, int interval, int offset) {
@@ -119,6 +111,7 @@ void swapOrdList(OrdList *list, int i, int j) {
     list->data[j] = aux;
 }
 
+//função bubbledown que faz trocas sucessivas de um elemento na heap com os filhos, até este se encontrar numa posição válida
 void bubbledown(OrdList *list, int i, int size, int (*compareFunction)(void*,void*,void*), void *lookup, int equal) {
     int left = (2 * i) + 1, right = (2 * i) + 2;
     int max;
@@ -136,55 +129,20 @@ void bubbledown(OrdList *list, int i, int size, int (*compareFunction)(void*,voi
     }
 }
 
+//função heapsort que ordena um array fazendo uso de uma heap, começa por transformar o array
+//numa heap e depois troca o elemento que se encontra em primeiro na heap com o último fazendo
+//bubbledown deste, diminuindo o tamanho da heap e repetindo o processo até o array estar ordenado
 void heapsort(OrdList *list, int (*compareFunction)(void*,void*,void*), void *lookup, int equal) {
     int size = list->size;
     int i;
-    for (i=(size/2)-1; i>=0; i--)
+    for (i=(size/2)-1; i>=0; i--) //transforma o array numa heap
         bubbledown(list, i, size, compareFunction, lookup, equal);
     for (i=size-1; i>=0; i--) {
-        swapOrdList(list, 0, i);
-        bubbledown(list, 0, i, compareFunction, lookup, equal);
+        swapOrdList(list, 0, i); //troca o primeiro elemento com o útimo da heap
+        bubbledown(list, 0, i, compareFunction, lookup, equal); //faz bubbledown desse elemento e decrementa o tamanho da heap
     }
 }
 
-//função de partição recebe uma lista os indices inferiores e superiores onde se pretende fazer uma partição
-//um elemento pivô uma função que compara dois elementos da lista e o valor de retorno dessa função caso sejam iguais
-int partitionOrdList(OrdList *list, int lower, int higher, void *pivotData, int (*compareFunction)(void*,void*,void*), void *lookup, int equal) {
-    void *data = getDataOrdList(list, lower); //obtem o elemento do indice inferior da lista
-    //enquanto os indices inferior e superior não se cruzarem
-    while (higher > lower) {
-        //enquanto o elemento do indice inferior for menor que o pivô
-        while (compareFunction(data, pivotData, lookup) < equal) {
-            lower++; //incrementa o indice inferior
-            data = getDataOrdList(list, lower);
-        }
-        data = getDataOrdList(list, higher); //obtem o elemento do indice superior
-        //enquanto o elemento do indice superior for maior ou igual que o pivô
-        while (higher-1 >= lower && compareFunction(data, pivotData, lookup) > equal) {
-            higher--; //decrementa o indice superior
-            data = getDataOrdList(list, higher);
-        }
-        if (lower < higher) //caso os indices inferior e superior não se cruzaram
-            swapOrdList(list, lower, higher); //troca a posição dos elementos
-    }
-
-    return lower; //devolve o indice onde os elementos são todos menores à esquerda e maiores à direita que o pivô
-}
-////quicksort recebe uma lista os indices inferiores e superiores para ordenar uma função que compara
-////dois elementos da lista e o valor que a função retorna caso os elementos sejam iguais
-//void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void*,void*,void*), void *lookup, int equal) {
-//    if (higher - lower > 1) { //se a sublista tiver apenas um elemento está ordenada
-//        int pivot = (lower + higher) / 2; //escolhe elemento central como pivô
-//        swapOrdList(list, pivot, higher); //move pivô para o fim da sublista
-//        void *pivotData = getDataOrdList(list, higher); //obtem a data do pivô
-//        //faz uma partição da sublista fazendo swaps até obter o indice para o qual
-//        //todos os elementos da sublista à esquerda do indice são menores que o pivô e à direita maiores
-//        int partition = partitionOrdList(list, lower, higher-1, pivotData, compareFunction, lookup, equal);
-//        swapOrdList(list, partition, higher); //move pivô para a posição da partição
-//        quickSort(list, lower, partition, compareFunction, lookup, equal); //chamada recursiva para a metade esquerda da sublista
-//        quickSort(list, partition, higher, compareFunction, lookup, equal); //chamada recursiva para a metade direita da sublista
-//    }
-//}
 //quicksort recebe uma lista os indices inferiores e superiores para ordenar uma função que compara
 //dois elementos da lista e o valor que a função retorna caso os elementos sejam iguais
 void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void*,void*,void*), void *lookup, int equal) {
@@ -207,20 +165,8 @@ void quickSort(OrdList* list, int lower, int higher, int (*compareFunction)(void
         if (i < higher) quickSort(list, i, higher, compareFunction, lookup, equal); //chamada recursiva para a metade direita da sublista
     }
 }
-//função que inverte a posição de todos os elementos de uma lista
-void reverseOrdList(OrdList* list){
-    int size = list->size;
-    int i = 0;
-    int j = size-1;
-    while(i<j){
-        swapOrdList(list, i, j);
-        i++; j--;
-    }
-}
 
-//void quickSortUserNames(OrdList *list) {
-//    qSort(list->data, list->size, strcmp);
-//}
+//gets
 //função que devolve o elemento de uma lista dado um indice
 void *getDataOrdList(OrdList *ordList, int index) {
     return ordList->data[index];
@@ -243,15 +189,7 @@ void setDataOrdList (OrdList *ordList, int index, void* data) {
 void setOrdListOrd (OrdList *ordList, bool ord) {
     ordList->ord = ord;
 }
-//função que imprime todos os elementos de uma lista, para efeitos de teste
-void printOrdList(OrdList *ordList, void (*printFunction)(void*)) {
-    int size = ordList->size;
-    void **data = ordList->data;
-    for (int i=0; i<size; i++) {
-        (*printFunction)(data[i]);
-    }
-    printf(")");
-}
+
 //função que liberta toda a memória alocada de uma lista
 void destroyOrdList(OrdList *ordlist, void (*destroyDataFunction)(void*)) {
     if (ordlist == NULL) return;
@@ -275,6 +213,7 @@ void swap (OrdList *ordlist, int i, int j) {
     ordlist->data[j] = data_i;
 }
 
+//lista ordenada de inteiros
 //função que cria uma nova lista vazia com um certo tamanho
 OrdList *createOrdListInt() {
     OrdList *ordList = malloc(sizeof(OrdList));
@@ -313,21 +252,17 @@ int searchValueOrdList(OrdList *list, unsigned long int value, int (*compareFunc
     if (higher == -1) return -2;
     int i = (higher + lower) / 2, compare; //indice central para comparar elementos
     unsigned long int compareValue = list->value[i]; //elemento a comparar
-    //enquanto os elementos não forem iguais e os limites não se cruzarem
-//    printf("Prefix: %s\n", (char*) data);
     while ((compare = compareFunction(value, compareValue, lookup)) != equal && (higher - lower) > 1) {
         if (compare < equal) higher = i; //se o elemento for menor o limite superior passa a ser o indice do elemento
         else lower = i; //caso contrário o limite inferior passa a ser o indice do elemento
         i = (higher + lower) / 2; //novo indice central entre os dois limites
         compareValue = list->value[i]; //novo elemento a comparar
-//        printf("\t%s\n", getName(compareData));
     }
     if (first) return (lower + higher) / 2;
     if (higher - lower == 1 && compare != equal) return -1; //se o elemento nao existir na lista
     while (i > 0 && compare <= equal) { //compara com o anterior até encontrar um elemento diferente
         compareValue = list->value[i-1];
         compare = searchBackFunction(value, compareValue, lookup);
-//        printf("\t%s\n", getName(compareData));
         i--;
     }
     if (compare != equal && i != 0) i++; //quando a comparação não dá igual incrementa indice para apontar para o último elemento que deu igual
@@ -368,6 +303,7 @@ void swapOrdListInt(OrdList *list, int i, int j) {
     list->value[j] = aux;
 }
 
+//função bubbledown que faz trocas sucessivas de um elemento na heap com os filhos, até este se encontrar numa posição válida
 void bubbledownInt(OrdList *list, int i, int size, int (*compareFunction)(unsigned long int,unsigned long int,void*), void *lookup, int equal) {
     int left = (2 * i) + 1, right = (2 * i) + 2;
     int max;
@@ -385,6 +321,9 @@ void bubbledownInt(OrdList *list, int i, int size, int (*compareFunction)(unsign
     }
 }
 
+//função heapsort que ordena um array fazendo uso de uma heap, começa por transformar o array
+//numa heap e depois troca o elemento que se encontra em primeiro na heap com o último fazendo
+//bubbledown deste, diminuindo o tamanho da heap e repetindo o processo até o array estar ordenado
 void heapsortInt(OrdList *list, int (*compareFunction)(unsigned long int,unsigned long int,void*), void *lookup, int equal) {
     int size = list->size;
     int i;
