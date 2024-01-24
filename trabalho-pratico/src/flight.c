@@ -10,10 +10,10 @@ struct flight {
     char *airplane;
     char origin[4];
     char destination[4];
-    Date scheduleDeparture;
-    Date scheduleArrival;
-    Date realDeparture;
-    Date realArrival;
+    Date *scheduleDeparture;
+    Date *scheduleArrival;
+    Date *realDeparture;
+    Date *realArrival;
     OrdList *passengers;
 };
 //função que cria um novo voo
@@ -23,10 +23,14 @@ Flight *createFlight(char *airline, char *airplane, char *origin, char *destinat
     flight->airplane = strdup(airplane);
     memcpy(flight->origin, origin, 4);
     memcpy(flight->destination, destination, 4);
-    stringToDateHours(&(flight->scheduleDeparture), scheduleDeparture);
-    stringToDateHours(&(flight->scheduleArrival), scheduleArrival);
-    stringToDateHours(&(flight->realDeparture), realDeparture);
-    stringToDateHours(&(flight->realArrival), realArrival);
+    flight->scheduleDeparture = string_to_date_hours(scheduleDeparture);
+    flight->scheduleArrival = string_to_date_hours(scheduleArrival);
+    flight->realDeparture = string_to_date_hours(realDeparture);
+    flight->realArrival = string_to_date_hours(realArrival);
+//    stringToDateHours(&(flight->scheduleDeparture), scheduleDeparture);
+//    stringToDateHours(&(flight->scheduleArrival), scheduleArrival);
+//    stringToDateHours(&(flight->realDeparture), realDeparture);
+//    stringToDateHours(&(flight->realArrival), realArrival);
     flight->passengers = createOrdList(); //cria uma lista de passageiros desse voo
 
     return flight;
@@ -63,53 +67,53 @@ char *getFlightDestination(Flight *flight) {
 
 //datas do voo
 Date *getFlightScheduleDeparture(Flight *flight) {
-    return dupDate(&(flight->scheduleDeparture));
+    return dupDate(flight->scheduleDeparture);
 }
 
 Date *getFlightScheduleArrival(Flight *flight) {
-    return dupDate(&(flight->scheduleArrival));
+    return dupDate(flight->scheduleArrival);
 }
 
 Date *getFlightRealDeparture(Flight *flight) {
-    return dupDate(&(flight->realDeparture));
+    return dupDate(flight->realDeparture);
 }
 
 Date *getFlightRealArrival(Flight *flight) {
-    return dupDate(&(flight->realArrival));
+    return dupDate(flight->realArrival);
 }
 
 int getDepartureDay(void *flight, void *lookup) {
-    return getDay(&(((Flight*)flight)->scheduleDeparture));
+    return getDay((((Flight*)flight)->scheduleDeparture));
 }
 
 int getDepartureMonth(void *flight, void *lookup) {
-    return getMonth(&((Flight*)flight)->scheduleDeparture);
+    return getMonth(((Flight*)flight)->scheduleDeparture);
 }
 
 int getDepartureYear(void *flight, void *lookup) {
-    return getYear(&((Flight*)flight)->scheduleDeparture);
+    return getYear(((Flight*)flight)->scheduleDeparture);
 }
 
 int getFlightSD(int time, Flight *flight) {
     int res;
     switch (time) {
         case TIME_DAY:
-            res = getDay(&(flight->scheduleDeparture));
+            res = getDay((flight->scheduleDeparture));
             break;
         case TIME_MONTH:
-            res = getMonth(&(flight->scheduleDeparture));
+            res = getMonth((flight->scheduleDeparture));
             break;
         case TIME_YEAR:
-            res = getYear(&(flight->scheduleDeparture));
+            res = getYear((flight->scheduleDeparture));
             break;
         case TIME_SECONDS:
-            res = getSeconds(&(flight->scheduleDeparture));
+            res = getSeconds((flight->scheduleDeparture));
             break;
         case TIME_MINUTES:
-            res = getMinutes(&(flight->scheduleDeparture));
+            res = getMinutes((flight->scheduleDeparture));
             break;
         case TIME_HOURS:
-            res = getHours(&(flight->scheduleDeparture));
+            res = getHours((flight->scheduleDeparture));
             break;
         default:
             res = 0;
@@ -118,7 +122,7 @@ int getFlightSD(int time, Flight *flight) {
 }
 
 char *getStringFlightDateNoHours(Flight *flight) {
-    return dateToStringNoHours(&(flight->scheduleDeparture));
+    return dateToStringNoHours((flight->scheduleDeparture));
 }
 
 //passageiros do voo

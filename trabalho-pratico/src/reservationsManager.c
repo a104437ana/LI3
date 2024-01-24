@@ -194,10 +194,7 @@ char * reservation_catalog_compute_Q1 (char *id, int* price_per_night, int* nigh
 int getReservationsQ10(int year, int month, int day, ReservationsManager * reservations){
     int res = 0;
     OrdList * list = reservations->reservationsByBeginDate;
-    Date * date = malloc(sizeof(Date));
-    date->year = year;
-    date->month = month;
-    date->day = day;
+    Date * date = createDate(day, month, year);
     if (day!=-1){ //se a data tiver dia
         int i = searchDataOrdList(list, date, compareDates_reservation, reservations, 0, compareDates_reservation); //primeira reserva nessa data
         if (i>=0){ //se existir alguma reserva nessa data

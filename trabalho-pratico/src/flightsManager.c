@@ -189,10 +189,7 @@ OrdList* getFlightsDataQ10(int year, int month, int day, FlightsManager * flight
     OrdList* list_passengers = createOrdList();
     (*flights) = 0; (*passengers) = 0; (*unique_passengers) = 0;
     OrdList * list = flightsCatalog->flightsByDepartureDate;
-    Date * date = malloc(sizeof(Date));
-    date->year = year;
-    date->month = month;
-    date->day = day;
+    Date * date = createDate(day, month, year);
     if (day!=-1){ //se a data tiver dia
         int i = searchDataOrdList(list, date, compareDates_flight, flightsCatalog, 0, compareDates_flight); //primeiro voo nessa data
         if (i>=0){ //se existir algum voo nessa data

@@ -18,8 +18,8 @@ struct user {
     Gender gender;
     char country[3];
     char *passport;
-    Date birth;
-    Date accountCreation;
+    Date *birth;
+    Date *accountCreation;
     bool accounStatus;          
     OrdList *flightsReservationsByDate;
     double totalSpent;
@@ -35,8 +35,10 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
     user->gender = gender;
     memcpy(user->country, country, 3);
     user->passport = strdup(passport);
-    stringToDate(&(user->birth), birth);
-    stringToDate(&(user->accountCreation), accountCreation);
+    user->birth = string_to_date(birth);
+    user->accountCreation = string_to_date(accountCreation);
+//    stringToDate(&(user->birth), birth);
+//    stringToDate(&(user->accountCreation), accountCreation);
     user->accounStatus = accountStatus;
     user->totalSpent = 0;
     user->flightsReservationsByDate = createOrdList(); //cria a lista de voos e reservas do utilizador
@@ -103,11 +105,11 @@ char *getPassport(User *user) {
 }
 
 Date *getBirth(User *user) {
-    return dupDate(&user->birth);
+    return dupDate(user->birth);
 }
 
 Date *getAccountCreation(User *user) {
-    return dupDate(&(user->accountCreation));
+    return dupDate((user->accountCreation));
 }
 
 bool getUserAccountStatus(User* user){
@@ -156,15 +158,16 @@ int getIndice (User* user) {
 int getAge(User* user){
   Date *birthdate = getBirth(user);
   bool birthday; //se o aniversário do utilizador é ou não antes da data atual
-  if(MONTH<birthdate->month) birthday=false;
-  else if(MONTH>birthdate->month) birthday=true;
+  int day = getDay(birthdate), month = getMonth(birthdate), year = getYear(birthdate);
+  if(MONTH<month) birthday=false;
+  else if(MONTH>month) birthday=true;
   else{
-    if(DAY<birthdate->day) birthday=false;
+    if(DAY<day) birthday=false;
     else birthday=true;
   }
   int r = 0;
-  if(birthday==true) r = YEAR-birthdate->year;
-  else r = YEAR-birthdate->year-1;
+  if(birthday==true) r = YEAR-year;
+  else r = YEAR-year-1;
   destroyDate(birthdate);
   return r;
 }
@@ -264,15 +267,15 @@ int getBeginHours(void* data, void *catalog) {
 
 //devolve o dia da criação da conta
 int getAccountCreationDay(void *user, void *lookup) {
-    return ((User*)user)->accountCreation.day;
+    return getDay(((User*)user)->accountCreation);
 }
 
 //devolve o mês da criação da conta
 int getAccountCreationMonth(void *user, void *lookup) {
-    return ((User*)user)->accountCreation.month;
+    return getMonth(((User*)user)->accountCreation);
 }
 
 //devolve o ano da criação da conta
 int getAccountCreationYear(void *user, void *lookup) {
-    return ((User*)user)->accountCreation.year;
+    return getYear(((User*)user)->accountCreation);
 }

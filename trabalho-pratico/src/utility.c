@@ -4,6 +4,15 @@
 #include "utility.h"
 #include <dirent.h>
 
+struct date {
+    int year;
+    char month;
+    char day;
+    char hours;
+    char minutes;
+    char seconds;
+};
+
 int exist_directory (char* directory) {
     DIR *dir = opendir(directory);
     if (dir != NULL) {

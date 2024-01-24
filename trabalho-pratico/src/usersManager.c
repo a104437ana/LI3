@@ -370,10 +370,7 @@ void user_catalog_compute_Q9 (char *prefix, UsersManager* usersCatalog, QueryRes
 //calcula o número de utilizadores que criaram conta numa data para a query 10
 int getNewUsers(int year, int month, int day, UsersManager * users){
     int res = 0;
-    Date * date = malloc(sizeof(Date));
-    date->year = year;
-    date->month = month;
-    date->day = day;
+    Date * date = createDate(day, month, year);
     OrdList * list = users->usersByAccountCreation;
     if (day!=-1){ //se a data tiver dia
         int i = searchDataOrdList(list, date, compareDates_user, users, 0, compareDates_user); //primeiro utilizador nessa data

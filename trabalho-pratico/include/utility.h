@@ -14,14 +14,7 @@
 #define TIME_MINUTES 4
 #define TIME_HOURS 5
 
-typedef struct date {
-    int year;
-    char month;
-    char day;
-    char hours;
-    char minutes;
-    char seconds;
-} Date;
+typedef struct date Date;
 
 typedef enum gender {
     MALE,

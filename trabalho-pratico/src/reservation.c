@@ -9,8 +9,8 @@
 struct reservation {
     char *id_user;
     char *id_hotel;
-    Date begin;
-    Date end;
+    Date *begin;
+    Date *end;
     int pricePerNight;
     bool includesBreakfast;
     char userClassification;
@@ -20,8 +20,10 @@ Reservation *createReservation(char *id_user, char *id_hotel, char *begin, char 
     Reservation *reservation = malloc(sizeof(Reservation)); //aloca espaço em memória para a reserva
     reservation->id_user = strdup(id_user);
     reservation->id_hotel = strdup(id_hotel);
-    stringToDate(&(reservation->begin), begin);
-    stringToDate(&(reservation->end), end);
+    reservation->begin = string_to_date(begin);
+    reservation->end = string_to_date(end);
+//    stringToDate(&(reservation->begin), begin);
+//    stringToDate(&(reservation->end), end);
     reservation->pricePerNight = pricePerNight;
     reservation->includesBreakfast = includesBreakfast;
     reservation->userClassification = userClassification;
@@ -51,27 +53,27 @@ int getReservUserClassification(Reservation *reservation) {
 }
 
 Date *getReservBegin(Reservation *reservation) {
-    Date *date = dupDate(&(reservation->begin));
+    Date *date = dupDate((reservation->begin));
     return date;
 }
 
 Date *getReservEnd(Reservation *reservation) {
-    Date *date = dupDate(&(reservation->end));
+    Date *date = dupDate((reservation->end));
     return date;
 }
 
 int getReservBeginDay(void *reservation, void *lookup) {
-    int res = getDay(&(((Reservation*)reservation)->begin));
+    int res = getDay((((Reservation*)reservation)->begin));
     return res;
 }
 
 int getReservBeginMonth(void *reservation, void *lookup) {
-    int res = getMonth(&(((Reservation*)reservation)->begin));
+    int res = getMonth((((Reservation*)reservation)->begin));
     return res;
 }
 
 int getReservBeginYear(void *reservation, void *lookup) {
-    int res = getYear(&(((Reservation*)reservation)->begin));
+    int res = getYear((((Reservation*)reservation)->begin));
     return res;
 }
 
@@ -79,13 +81,13 @@ int getReservationBegin_reservation(int time, Reservation *reservation) {
     int res;
     switch (time) {
         case 0:
-            res = getDay(&(reservation->begin));
+            res = getDay((reservation->begin));
             break;
         case 1:
-            res = getMonth(&(reservation->begin));
+            res = getMonth((reservation->begin));
             break;
         case 2:
-            res = getYear(&(reservation->begin));
+            res = getYear((reservation->begin));
             break;
         default:
             res = 0;
@@ -94,17 +96,17 @@ int getReservationBegin_reservation(int time, Reservation *reservation) {
 }
 
 int getReservEndDay(void *reservation) {
-    int res = getDay(&(((Reservation*)reservation)->end));
+    int res = getDay((((Reservation*)reservation)->end));
     return res;
 }
 
 int getReservEndMonth(void *reservation) {
-    int res = getMonth(&(((Reservation*)reservation)->end));
+    int res = getMonth((((Reservation*)reservation)->end));
     return res;
 }
 
 int getReservEndYear(void *reservation) {
-    int res = getYear(&(((Reservation*)reservation)->end));
+    int res = getYear((((Reservation*)reservation)->end));
     return res;
 }
 
@@ -132,7 +134,7 @@ int getReservNightsWithLimits(Reservation* reservation, Date *limitBegin, Date *
 }
 
 char *getStringReservDate(Reservation *reservation) {
-    char *date = dateToStringNoHours(&(reservation->begin));
+    char *date = dateToStringNoHours((reservation->begin));
     return date;
 }
 
@@ -146,6 +148,6 @@ void destroyReservation(void *reservation) {
 
 //sort
 int compareReservDates(Reservation *reservation, Date *date) {
-    Date *reservDate = &(reservation->end);
+    Date *reservDate = (reservation->end);
     return compareDates(reservDate, date);
 }
