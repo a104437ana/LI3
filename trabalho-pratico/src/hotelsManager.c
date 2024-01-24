@@ -63,6 +63,8 @@ void sortHotelReservationsByDate_hotelsCatalog(char *id, HotelsManager *hotelsCa
 }
 
 //queries
+
+//calcula dados para a query 1
 int hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryResult* result) {
     if (hotel_id == NULL) {
         return -1;
@@ -87,6 +89,7 @@ int hotel_catalog_compute_Q1(char* hotel_id,HotelsManager* hotel_catalog,QueryRe
     }
 }
 
+//calcula a classificação de um hotel para a query 3
 void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, QueryResult* result) {
     if (id_hotel==NULL) return;
     Hotel* hotel = getData(hotel_catalog->hotels,id_hotel);

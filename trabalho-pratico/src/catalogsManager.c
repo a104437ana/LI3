@@ -346,23 +346,10 @@ int getUserListSize(int type, char *id, Catalogs *catalogs) {
 unsigned long int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
     return getIdUserList_usersCatalog(type, id_user, index, catalogs->usersCatalog);
 }
-/*
-int getUsersByNameSize_catalog(Catalogs *catalogs) {
-    return getUsersByNameSize(catalogs->usersCatalog);
-}
 
-int searchPrefix_catalog(char *prefix, Catalogs *catalogs) {
-    return searchPrefix(prefix, catalogs->usersCatalog);
-}
-*/
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs) {
     return (isPrefixUser(firstLetterCheck, prefix, index, catalogs->usersCatalog));
 }
-/*
-void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *catalogs) {
-    getIdNameUsersByName(index, id, name, catalogs->usersCatalog);
-}
-*/
 
 //flights
 

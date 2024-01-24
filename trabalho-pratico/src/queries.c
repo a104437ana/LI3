@@ -98,10 +98,12 @@ void Q3 (char* id_hotel, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q3(id_hotel,catalogs,result);
 }
 
+//query 4
 void Q4 (char* id_hotel, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q4(id_hotel,catalogs,result);
 }
 
+//query 5
 void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q5(airport,begin,end,catalogs,result);
 }
@@ -138,6 +140,7 @@ void addPair(int value, char *string, struct pairIntString *pair) {
   pair->string = string;
 }
 
+//query 6
 void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
   if (N <= 0) return;
   int passengers, numberAirports = getNumberAirports_catalog(catalogs);
@@ -170,35 +173,19 @@ void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
   free(field0); free(field1);
 }
 
+//query 7
 void Q7 (int n, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q7(n,catalogs,result);
 }
 
-//pesquisa lista ordenada por data inicial e corte quando data inicial > data final limite
-//4576.99 MB 13.2175 seg (4)
-
-//pesquisa binária data final
-//4625.19 MB 13.9375 seg (4)
-
-//percorrer lista toda e ir calculando o preço de cada reserva entre as datas limite
-//4576.99 MB 1.9325 seg (4)
-
-//quey 8 - devolve a receita total de um hotel entre duas datas limites dadas
+//query 8 - devolve a receita total de um hotel entre duas datas limites dadas
 void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResult *result) {
   if (doesHotelExist(id, catalogs) == 0) return; //se o hotel não existir
   Date *begin = string_to_date(beginDate);
   Date *end = string_to_date(endDate);
-//  sortHotelReservationsByDate(id, catalogs); //nlog(n)
-//  sortHotelReservationsByEndDate(id, catalogs); //nlog(n)
   int size = getHotelReservationsSize(id, catalogs);
   int total = 0, price = 0;
-//  int lower = searchHotelDates_catalog(begin, id, catalogs); //log(n)
 
-//  if (lower < 0) {
-//    destroyDate(begin);
-//    destroyDate(end);
-//    return;
-//  } //reservas dentro datas + extras limites (n - k (limites corte) se k pequeno aprox n se k grande aprox k) melhor caso k pior n
   for (int i=0; i<size && getHotelReservPriceBetweenDates(id, i, &price, begin, end, catalogs); i++) { //enquanto dia limite maior ou igual a dia atual
     total += price;
     price = 0;
@@ -221,6 +208,7 @@ void Q9 (char *prefix, Catalogs* catalogs, QueryResult* result) {
   catalogs_compute_Q9(prefix,catalogs,result);
 }
 
+//query 10
 void Q10 (int year, int month, Catalogs* catalogs, QueryResult* qresult) {
   if(year==-1){ //se a query for executada sem argumentos
      int begin = getYearFirstResults(catalogs);
