@@ -1,20 +1,25 @@
 #include "results.h"
 
+//lista de resultados de uma query
 struct queryResult{
     int number_of_results;
     int max_results;
     Result ** results;
 };
 
+//resultado
 struct result{
      int number_of_fields;
      Result_Field ** fields;
 };
 
+//nome de um campo do resultado e o seu valor
 struct result_field{
     char * field_name;
     char * data;
 };
+
+//funções para alocar espaço e inicializar resultados
 
 Result_Field * createField() {
     Result_Field * field = malloc(sizeof(Result_Field));
@@ -37,6 +42,8 @@ QueryResult * createQResult() {
     qresult->results = malloc(sizeof(Result*)*2);
     return qresult;
 }
+
+//funções que libertam o espaço ocupado pelos resultados
 
 void destroyField (Result_Field * field){
     if (field==NULL) return;
@@ -65,6 +72,8 @@ void destroyQResult (QueryResult* qresult) {
     free(qresult);
 }
 
+//limpa os campos de um resultado
+
 void clearResult (Result* result){
     if (result==NULL) return;
     int i;
@@ -75,6 +84,7 @@ void clearResult (Result* result){
     result->number_of_fields = 0;
 }
 
+//limpa o qresult e cria o número de resultados pedido
 
 void setNumberResults (QueryResult* qresult, int n){
     int i;
@@ -103,6 +113,8 @@ void setNumberFields (Result* result, int n){
     }
 }
 
+//adiciona um resultado vazio a qresult, se qresult já tiver o número máximo de resultados, duplica o máximo
+
 void addResult (QueryResult * qresult, int i){
     if (i>=qresult->max_results){
         qresult->results = realloc(qresult->results, (sizeof(Result*)*(qresult->max_results)*2));
@@ -115,6 +127,8 @@ void addResult (QueryResult * qresult, int i){
         qresult->number_of_results = i+1;
     }
 }
+
+//adiciona um resultado já preenchido a qresult, se qresult já tiver o número máximo de resultados, duplica o máximo
 
 void addSetResult (QueryResult * qresult, int i, Result * result){
     if (i>=qresult->max_results){
@@ -154,6 +168,8 @@ void setField (Result * result, int i, char * name, char * data){
 void setFieldQ (QueryResult * result, int r, int i, char * name, char * data){
     setField(result->results[r], i, name, data);
 }
+
+//gets
 
 int getNumberResults (QueryResult* qresult){
     return (qresult->number_of_results);
