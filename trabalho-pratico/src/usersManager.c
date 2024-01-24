@@ -15,6 +15,7 @@ UsersManager *createUsersCatalog(int size) {
     usersManager->users = createHashtable(size, hashString, strcmpVoid, strdupVoid, destroyUser); //cria uma hastable para os utilizadores
     usersManager->usersByName = createOrdList(); //cria uma lista para os utilizadores
     usersManager->usersByAccountCreation = createOrdList();
+    usersManager->passengers_list = NULL;
     return usersManager;
 }
 
