@@ -444,6 +444,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
         refresh();
         Command* c = parseCommandLine(command);
         processCommand(c,0,result,catalogs);
+        free(c);
     }
     else proceed = 0;
     free(command);
