@@ -259,6 +259,10 @@ void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result){
     airport_calalog_compute_Q7(n,catalogs->airportsCatalog,result);
 }
 
+void catalogs_compute_Q9 (char *prefix, Catalogs* catalogs, QueryResult* result) {
+    user_catalog_compute_Q9(prefix,catalogs->usersCatalog,result);
+}
+
 //calcula a informação de uma data para a query 10
 Result * catalogs_compute_Q10(int year, int month, int day, Catalogs* catalogs){
     int new_users = getNewUsers(year, month, day, catalogs->usersCatalog); //número de utilizadores que criaram conta nessa data
@@ -341,12 +345,15 @@ int getUserListSize(int type, char *id, Catalogs *catalogs) {
 unsigned long int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
     return getIdUserList_usersCatalog(type, id_user, index, catalogs->usersCatalog);
 }
+/*
 int getUsersByNameSize_catalog(Catalogs *catalogs) {
     return getUsersByNameSize(catalogs->usersCatalog);
 }
+
 int searchPrefix_catalog(char *prefix, Catalogs *catalogs) {
     return searchPrefix(prefix, catalogs->usersCatalog);
 }
+*/
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs) {
     return (isPrefixUser(firstLetterCheck, prefix, index, catalogs->usersCatalog));
 }
@@ -356,9 +363,11 @@ char *getIdUsersByName_catalog(int index, Catalogs *catalogs) {
 char *getNameUsersByName_catalog(int index, Catalogs *catalogs) {
     return getNameUsersByName(index, catalogs->usersCatalog);
 }
+/*
 void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *catalogs) {
     getIdNameUsersByName(index, id, name, catalogs->usersCatalog);
 }
+*/
 
 //flights
 

@@ -216,56 +216,9 @@ void Q8(char *id, char *beginDate, char *endDate, Catalogs *catalogs, QueryResul
   free(field0); free(revenue);
 }
 
-int sameFirstLetterString(char *string1, char *string2) {
-  int compare = 1;
-  char c1 = string1[0], c2 = string2[0];
-  if (c1 == c2) compare = 0;
-  else if (c1 == 'A' || c1 == 'E' || c1 == 'I' || c1 == 'O' || c1 == 'U' ||
-           c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U') compare = 0;
-  return compare;
-}
-int isNamePrefix(int *firstLetterCheck, char *prefix, char *name) {
-    int nameSize = strlen(name);
-    int prefixSize = strlen(prefix);
-    char *namePrefix;
-    if (nameSize > prefixSize) {
-        namePrefix = malloc(sizeof(char) * (prefixSize + 1));
-        namePrefix = strncpy(namePrefix, name, prefixSize); //prefixo do utilizador com o mesmo tamanho do prefixo a comparar
-        namePrefix[prefixSize] = '\0';
-    }
-    else
-        namePrefix = strdup(name);
-    int compare = strcoll(prefix, namePrefix); //compara os dois prefixos
-    *firstLetterCheck = sameFirstLetterString(prefix, name);
-    free(namePrefix); //liberta o prefixo do utilizador
-    return compare;
-}
-
 //query 9 - devolve a lista de nomes de utilizadores que começam com um prefixo dado ordenada por nome e id
-void Q9(char *prefix, Catalogs* catalogs, QueryResult* result) {
-  int size = getUsersByNameSize_catalog(catalogs);
-  int i = searchPrefix_catalog(prefix, catalogs);
-  if (i < 0) return; //se não existir nomes começados pelo prefixo dado
-  int firstLetterCheck = 0, validPrefix = 0;
-  int j = 0;
-  char* field0 = strdup("id"), *id = NULL;
-  char* field1 = strdup("name"), *name = NULL;
-  while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado ou primeira letra for a mesma
-    getIdNameUsersByName_catalog(i, &id, &name, catalogs);
-    validPrefix = isNamePrefix(&firstLetterCheck, prefix, name);
-    if (validPrefix == 0) {
-      addResult(result, j);
-      setNumberFieldsQ(result,j, 2);
-      setFieldQ(result,j,0,field0,id);
-      setFieldQ(result,j,1,field1,name);
-      j++;
-    }
-    free(id); free(name);
-    i++;
-  }
-  free(field0); free(field1); 
-
-  return;
+void Q9 (char *prefix, Catalogs* catalogs, QueryResult* result) {
+  catalogs_compute_Q9(prefix,catalogs,result);
 }
 
 void Q10 (int year, int month, Catalogs* catalogs, QueryResult* qresult) {

@@ -35,10 +35,10 @@ Hashtable *getHashtableUserCatalog(UsersManager *usersManager);
 OrdList *getUsersByName (UsersManager *usersManager);
 int getSizeUserList(int type, char *id, UsersManager *usersCatalog);
 unsigned long int getIdUserList_usersCatalog(int *type, char *id_user, int index, UsersManager *usersCatalog);
-int getUsersByNameSize(UsersManager *usersCatalog);
+//int getUsersByNameSize(UsersManager *usersCatalog);
 char *getIdUsersByName(int index, UsersManager *usersCatalog);
 char *getNameUsersByName(int index, UsersManager *usersCatalog);
-void getIdNameUsersByName(int index, char **id, char **name, UsersManager *usersCatalog);
+//void getIdNameUsersByName(int index, char **id, char **name, UsersManager *usersCatalog);
 
 //compara uma data com a criação de conta de um utilizador
 int compareDates_user(void *date, void *user, void *usersCatalog);
@@ -56,7 +56,7 @@ int count_unique_passengers (UsersManager* usersCatalog, OrdList* list);
 char *sameLenPrefix(char *prefix, char *name);
 int prefixSearch(void *prefixVoid, void *user, void *lookup);
 int prefixSearchBack(void *prefixVoid, void *user, void *lookup);
-int searchPrefix(char *prefix, UsersManager *usersCatalog);
+//int searchPrefix(char *prefix, UsersManager *usersCatalog);
 int sameFirstLetterUser(char *string1, char *string2);
 int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *usersCatalog);
 
@@ -66,6 +66,7 @@ void destroyUsersCatalog(UsersManager *usersManager);
 //queries
 //calcula os dados de um utilizador para a query 1
 void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, QueryResult* result);
+void user_catalog_compute_Q9 (char *prefix, UsersManager* usersManager, QueryResult* result);
 //calcula o número de utilizadores que criaram conta numa data
 int getNewUsers(int year, int month, int day, UsersManager * users);
 

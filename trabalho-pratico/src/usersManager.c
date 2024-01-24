@@ -111,9 +111,11 @@ unsigned long int getIdUserList_usersCatalog(int *type, char *id_user, int index
     return getIdUserList_user(type, user, index);
 }
 
+/*
 int getUsersByNameSize(UsersManager *usersCatalog) {
     return getOrdListSize(usersCatalog->usersByName);
 }
+*/
 char *getIdUsersByName(int index, UsersManager *usersCatalog) {
     char *id = getDataOrdList(usersCatalog->usersByName, index);
     return strdup(id);
@@ -124,11 +126,12 @@ char *getNameUsersByName(int index, UsersManager *usersCatalog) {
     char *name = getName(user);
     return name;
 }
+/*
 void getIdNameUsersByName(int index, char **id, char **name, UsersManager *usersCatalog) {
     User *user = getDataOrdList(usersCatalog->usersByName, index);
     *id = getUserId(user);
     *name = getName(user);
-}
+}*/
 
 //compara uma data com a criação de conta de um utilizador
 int compareDates_user(void *date, void *user, void *usersCatalog) {
@@ -253,9 +256,10 @@ int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
   free(name);
   return compare;
 }
+/*
 int searchPrefix(char *prefix, UsersManager *usersCatalog) {
     return searchDataOrdList(usersCatalog->usersByName, prefix, prefixSearch, usersCatalog->users, 0, prefixSearchBack);
-}
+}*/
 int sameFirstLetterUser(char *string1, char *string2) {
   int compare = 1;
   char c1 = string1[0], c2 = string2[0];
@@ -340,6 +344,59 @@ void user_catalog_compute_Q1 (char *id, UsersManager* usersManager, QueryResult*
         }
         else return;
     }
+}
+
+int sameFirstLetterString(char *string1, char *string2) {
+  int compare = 1;
+  char c1 = string1[0], c2 = string2[0];
+  if (c1 == c2) compare = 0;
+  else if (c1 == 'A' || c1 == 'E' || c1 == 'I' || c1 == 'O' || c1 == 'U' ||
+           c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U') compare = 0;
+  return compare;
+}
+int isNamePrefix(int *firstLetterCheck, char *prefix, char *name) {
+    int nameSize = strlen(name);
+    int prefixSize = strlen(prefix);
+    char *namePrefix;
+    if (nameSize > prefixSize) {
+        namePrefix = malloc(sizeof(char) * (prefixSize + 1));
+        namePrefix = strncpy(namePrefix, name, prefixSize); //prefixo do utilizador com o mesmo tamanho do prefixo a comparar
+        namePrefix[prefixSize] = '\0';
+    }
+    else
+        namePrefix = strdup(name);
+    int compare = strcoll(prefix, namePrefix); //compara os dois prefixos
+    *firstLetterCheck = sameFirstLetterString(prefix, name);
+    free(namePrefix); //liberta o prefixo do utilizador
+    return compare;
+}
+
+void user_catalog_compute_Q9 (char *prefix, UsersManager* usersCatalog, QueryResult* result) {
+  int size = getOrdListSize(usersCatalog->usersByName);
+  int i = searchDataOrdList(usersCatalog->usersByName, prefix, prefixSearch, usersCatalog->users, 0, prefixSearchBack);
+  if (i < 0) return; //se não existir nomes começados pelo prefixo dado
+  int firstLetterCheck = 0, validPrefix = 0;
+  int j = 0;
+  char* field0 = strdup("id"), *id = NULL;
+  char* field1 = strdup("name"), *name = NULL;
+  while (i < size && (validPrefix == 0 || firstLetterCheck == 0)) { //enquanto um nome começar pelo prefixo dado ou primeira letra for a mesma
+    User *user = getDataOrdList(usersCatalog->usersByName, i);
+    id = getUserId(user);
+    name = getName(user);
+    validPrefix = isNamePrefix(&firstLetterCheck, prefix, name);
+    if (validPrefix == 0) {
+      addResult(result, j);
+      setNumberFieldsQ(result,j, 2);
+      setFieldQ(result,j,0,field0,id);
+      setFieldQ(result,j,1,field1,name);
+      j++;
+    }
+    free(id); free(name);
+    i++;
+  }
+  free(field0); free(field1); 
+
+  return;
 }
 
 //calcula o número de utilizadores que criaram conta numa data para a query 10

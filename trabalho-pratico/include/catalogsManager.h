@@ -86,6 +86,8 @@ void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,
 //calcula a informação dos aeroportos para a query 7
 void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result);
 
+void catalogs_compute_Q9 (char *prefix, Catalogs* catalogs, QueryResult* result);
+
 //calcula a informação de uma data para a query 10
 Result * catalogs_compute_Q10(int year, int month, int day, Catalogs* catalogs);
 
@@ -103,8 +105,8 @@ int getYearLastResults(Catalogs * catalogs);
 int getAccountStatus(char *id, Catalogs *catalogs);
 int getUserListSize(int type, char *id, Catalogs *catalogs);
 unsigned long int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs);
-int getUsersByNameSize_catalog(Catalogs *catalogs);
-int searchPrefix_catalog(char *prefix, Catalogs *catalogs);
+//int getUsersByNameSize_catalog(Catalogs *catalogs);
+//int searchPrefix_catalog(char *prefix, Catalogs *catalogs);
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs);
 char *getIdUsersByName_catalog(int index, Catalogs *catalogs);
 char *getNameUsersByName_catalog(int index, Catalogs *catalogs);
