@@ -49,27 +49,7 @@ int main (int argc, char** argv) {
     if (argc == 1) {
     printf("Attention: This program requires a minimum window size of 154x26. Please adjust the window size now to meet the requirements and your preferences. Note that resizing won't be supported after this adjustment, so choose wisely. After adjusting, press Enter to continue...");
     getchar();
-    //setlocale(LC_ALL,""); //permite a utilização de caracteres especiais da nossa localidade
-    initscr(); //inicia ncurses
-
-    noecho(); //para não escrever as teclas que são pressionadas no teclado
-
-    keypad(stdscr, TRUE); //permite a interpretação de caracteres especiais
-
-    int max_row, max_col;
-    getmaxyx(stdscr, max_row, max_col);
-    
-    if (max_row < 26 || max_col < 154) {
-        mvprintw(0,0,"The window is too small.\nExiting the program...");
-        refresh();
-        sleep(5);
-        endwin();
-    }
-    else {
-    interactive_mode(max_row,max_col,catalogs);
-    endwin();
-    }
-
+    interactive_mode(catalogs);
     }
     else printf("Error: This program requires either exactly 3 or 1 argument(s).\n");
     }

@@ -16,6 +16,6 @@ void printResultPage_CSV (int page, int max_row,int j, QueryResult* result);
 void printResultPage_Field (int page, int max_row,int j, QueryResult* result);
 void firstByPage (QueryResult* result, int max_row, int firstResult[], int format);
 int pagesNumber (QueryResult* result, int max_row,int format);
-void interactive_mode(int max_row, int max_col, Catalogs* catalogs);
+void interactive_mode(Catalogs* catalogs);
 
 #endif

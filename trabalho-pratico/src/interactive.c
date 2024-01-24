@@ -536,7 +536,22 @@ int pagesNumber (QueryResult* result, int max_row, int format) {
     return page;
 }
 
-void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
+void interactive_mode(Catalogs* catalogs) {
+    initscr(); //inicia ncurses
+
+    noecho(); //para não escrever as teclas que são pressionadas no teclado
+
+    keypad(stdscr, TRUE); //permite a interpretação de caracteres especiais
+
+    int max_row, max_col;
+    getmaxyx(stdscr, max_row, max_col);
+    
+    if (max_row < 26 || max_col < 154) {
+        mvprintw(0,0,"The window is too small.\nExiting the program...");
+        refresh();
+        sleep(5);
+    }
+    else {
     int proceed = 1;
     int* pointer = &proceed;
     mvprintw(0, 0, "Welcome to Interactive Mode!\n\nWARNING: From now on, please keep the window size unchanged.\nThis program cannot handle window resizing.\nIf you resize the window, the program will end immediately.\n\nEnter the path of the dataset: ");
@@ -545,6 +560,7 @@ void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
     int n = 0;
     int not_error = 4;
     while (!valid_directory_dataset(path) && n<2 && proceed == 1) {
+        free(path);
         not_error = 0;
         clear();
         mvprintw(0,0,"Invalid path for the dataset. Please try again!");
@@ -558,7 +574,6 @@ void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
     mvprintw(4 + not_error,0, "Parsing files and sorting data. Please wait...");
     refresh();
     parse_all_files(path,catalogs);
-    free(path);
     sortCatalogs(catalogs);
     QueryResult * result = createQResult();
     proceed = get_querie(max_row,max_col,catalogs,result);
@@ -621,8 +636,11 @@ void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
     }
     destroyQResult(result);
     }
-    //clear();
-    //mvprintw(0,0,"Exiting program...");
-    //refresh();
-    //sleep(1);
+    free(path);
+    clear();
+    mvprintw(0,0,"Exiting program...");
+    refresh();
+    sleep(1);
+    }
+    endwin();
 }
