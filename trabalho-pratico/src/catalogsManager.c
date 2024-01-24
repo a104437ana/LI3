@@ -249,6 +249,7 @@ void catalogs_compute_Q4(char* id, Catalogs* catalogs, QueryResult* result){
 
 //calcula a informação de um aeroporto para a query 5
 void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,QueryResult* result) {
+    toUpperS(airport);
     HashtableInt *lookup = getHashtableFlightsCatalog(catalogs->flightsCatalog);
     sortAirportFlightsByDepartureDate(airport, catalogs);
     airport_catalog_compute_Q5(airport,begin,end,catalogs->airportsCatalog,result,lookup);

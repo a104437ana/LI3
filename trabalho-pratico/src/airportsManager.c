@@ -60,7 +60,9 @@ void sortAirports (AirportsManager* airportsCatalog) {
 //ordena a lista de voos de um aeroporto
 void sortAirportFlightsByDepartureDate_airportsCatalog(char *id, AirportsManager *airportsCatalog, void (*sortFunction)(void*,void*), void *lookup) {
     Airport *airport = getData(airportsCatalog->airports, id);
-    sortAirportFlightsByDepartureDate_airport(airport, sortFunction, lookup);
+    if (airport!=NULL){
+        sortAirportFlightsByDepartureDate_airport(airport, sortFunction, lookup);
+    }
 }
 
 //compara os atrasos de dois aeroportos
@@ -108,7 +110,6 @@ void destroyAirportsCatalog(AirportsManager *airportsManager) {
 
 //queries
 void airport_catalog_compute_Q5(char* id,Date* begin,Date* end,AirportsManager* airports, QueryResult* result,HashtableInt* lookup) {
-    toUpperS(id);
     Airport* airport = getData(airports->airports,id);
     if (airport != NULL) {
         OrdList* airportsByDate = getAirportOriginOrdList(airport);
