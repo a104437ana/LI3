@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "utility.h"
 #include <dirent.h>
 
@@ -89,6 +92,7 @@ void remove_new_line (char* string) {
     string[i] = '\0';
 }
 
+//datas
 //função que cria uma nova data sem horas
 Date *createDate(char day, char month, int year) {
     Date *date = malloc(sizeof(Date)); //aloca espaço para a estrutura data
@@ -163,6 +167,27 @@ Date* string_to_date_hours (char* string) {
     return date;
 }
 
+//Transforma um tipo date numa string
+char* dateToString(Date *date){
+    char* res = 0;
+    if (date->hours == 0 && date->minutes ==0 && date->seconds==0) {
+        res = malloc(11); //hhu short short unsigned output numerico tamanho 8 bits
+        sprintf(res, "%04d/%02hhu/%02hhu", date->year, date->month, date->day);
+    }
+    else {
+        res = malloc(20);
+        sprintf(res, "%04d/%02hhu/%02hhu %02hhu:%02hhu:%02hhu", date->year, date->month, date->day, date->hours, date->minutes, date->seconds);
+    }
+    return res;
+}
+
+char* dateToStringNoHours(Date *date){
+    char* res = 0;
+    res = malloc(11);
+    sprintf(res, "%04d/%02hhu/%02hhu", date->year, date->month, date->day);
+    return res;
+}
+
 //gets
 int getDay(void *date) {
     return (int) ((Date *) date)->day;
@@ -188,55 +213,34 @@ char getHours(Date *date) {
     return date->hours;
 }
 
+Date *dupDate(Date *date) {
+    Date *newDate = malloc(sizeof(Date));
+    newDate->day = date->day;
+    newDate->month = date->month;
+    newDate->year = date->year;
+    newDate->hours = date->hours;
+    newDate->minutes = date->minutes;
+    newDate->seconds = date->seconds;
+    return newDate;
+}
+
 //sets
 
-
-char* dateToString(Date *date){
-    char* res = 0;
-    if (date->hours == 0 && date->minutes ==0 && date->seconds==0) {
-        res = malloc(11); //hhu short short unsigned output numerico tamanho 8 bits
-        sprintf(res, "%04d/%02hhu/%02hhu", date->year, date->month, date->day);
-    }
-    else {
-        res = malloc(20);
-        sprintf(res, "%04d/%02hhu/%02hhu %02hhu:%02hhu:%02hhu", date->year, date->month, date->day, date->hours, date->minutes, date->seconds);
-    }
-    return res;
+void setDate(Date *date, char day, char month, int year, char hours, char minutes, char seconds) {
+    date->day = day;
+    date->month = month;
+    date->year = year;
+    date->hours = hours;
+    date->minutes = minutes;
+    date->seconds = seconds;
 }
 
-char* dateToStringNoHours(Date *date){
-    char* res = 0;
-    res = malloc(11);
-    sprintf(res, "%04d/%02hhu/%02hhu", date->year, date->month, date->day);
-    return res;
+//função que liberta o espaço em memória alocado por uma data
+void destroyDate(Date *date) {
+    if (date == NULL) return; //se não existir a data
+    free(date);
 }
 
-//funçaõ que calcula o total de anos bissextos de uma data
-int totalLeapYears(int year, int month) {
-  if (month <= 2) year--; //se o mês for menor que 3 não precisa de contar ano atual
-  return (year / 4) - (year / 100) + (year / 400); //total de anos bissextos
-  //um ano é bissexto se for multiplo de 4 mas não de 100 ou se for multiplo de 400
-}
-//função que calcula o total de dias dos meses dessa data
-int totalDaysInMonths(int month) {
-  int nDays = 0, daysOfMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-  for (int i=0; i <month-1; i++) //conta numero de dias até ao mês anterior ao atual
-    nDays += daysOfMonth[i];
-  return nDays;
-}
-//função que calcula o total de dias entre duas datas
-int daysBetweenDates(Date *begin, Date *end) {
-  int beginDay = getDay(begin), beginMonth = getMonth(begin), beginYear = getYear(begin);
-  int endDay = getDay(end), endMonth = getMonth(end), endYear = getYear(end);
-  int nDays;
-  unsigned int totalDaysBegin, totalDaysEnd;
-  //total de dias =  dia  +  dias de cada mês + dias de cada ano + um dia por cada ano bissexto
-  totalDaysBegin = beginDay + totalDaysInMonths(beginMonth) + (365 * beginYear) + totalLeapYears(beginYear, beginMonth);
-  totalDaysEnd = endDay + totalDaysInMonths(endMonth) + (365 * endYear) + totalLeapYears(endYear, endMonth);
-  nDays = totalDaysEnd - totalDaysBegin;
-
-  return nDays;
-}
 //função que compara duas datas
 int compareDates(Date *date1, Date *date2) {
   int second1 = getSeconds(date1), minute1 = getMinutes(date1), hour1 = getHours(date1), day1 = getDay(date1), month1 = getMonth(date1), year1 = getYear(date1);
@@ -277,6 +281,33 @@ int compareDatesNoHours(Date *date1, Date *date2) {
   return result;
 }
 
+//funçaõ que calcula o total de anos bissextos de uma data
+int totalLeapYears(int year, int month) {
+  if (month <= 2) year--; //se o mês for menor que 3 não precisa de contar ano atual
+  return (year / 4) - (year / 100) + (year / 400); //total de anos bissextos
+  //um ano é bissexto se for multiplo de 4 mas não de 100 ou se for multiplo de 400
+}
+//função que calcula o total de dias dos meses dessa data
+int totalDaysInMonths(int month) {
+  int nDays = 0, daysOfMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  for (int i=0; i <month-1; i++) //conta numero de dias até ao mês anterior ao atual
+    nDays += daysOfMonth[i];
+  return nDays;
+}
+//função que calcula o total de dias entre duas datas
+int daysBetweenDates(Date *begin, Date *end) {
+  int beginDay = getDay(begin), beginMonth = getMonth(begin), beginYear = getYear(begin);
+  int endDay = getDay(end), endMonth = getMonth(end), endYear = getYear(end);
+  int nDays;
+  unsigned int totalDaysBegin, totalDaysEnd;
+  //total de dias =  dia  +  dias de cada mês + dias de cada ano + um dia por cada ano bissexto
+  totalDaysBegin = beginDay + totalDaysInMonths(beginMonth) + (365 * beginYear) + totalLeapYears(beginYear, beginMonth);
+  totalDaysEnd = endDay + totalDaysInMonths(endMonth) + (365 * endYear) + totalLeapYears(endYear, endMonth);
+  nDays = totalDaysEnd - totalDaysBegin;
+
+  return nDays;
+}
+
 //calcula o numero de dias (noites) que estão dentro de duas datas limites
 int daysInsideDates(Date *limitBegin, Date *limitEnd, Date *begin, Date *end) {
   int nDays = 0;
@@ -303,32 +334,8 @@ int daysInsideDates(Date *limitBegin, Date *limitEnd, Date *begin, Date *end) {
   return nDays;
 }
 
-int strcoll_names(char *name1, char *name2) {
-    char c1 = name1[0], c2 = name2[0];
-    char *n1 = malloc(sizeof(char) * 2), *n2 = malloc(sizeof(char) * 2);
-    memcpy(n1, name1, 2); n1[1] = '\0';
-    memcpy(n2, name2, 2); n2[1] = '\0';
-    int compare = strcoll(n1, n2);
-    char *f1 = malloc(sizeof(char) * strlen(name1)), *f2 = malloc(sizeof(char) * strlen(name2));
-    sscanf(name1, " %s", f1);
-    sscanf(name2, " %s", f2);
-    int len = strlen(f1) - strlen(f2);
-    if (len != 0 && compare == 0)
-        compare = strcoll(f1, f2);
-    else if (compare == 1 && (c1 == 'A' || c1 == 'E' || c1 == 'I' || c1 == 'O' || c1 == 'U'))
-        compare = 1;
-    else if (compare == -1 && (c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U'))
-        compare = -1;
-    else
-        compare = strcoll(name1, name2);
-    free(n1);
-    free(n2);
-    free(f1);
-    free(f2);
-
-    return compare;
-}
-
+//strings
+//transforma letras minúsculas de uma string em maiústuculas
 void toUpperS (char *word){
     int s = strlen(word);
     int i;
@@ -339,72 +346,45 @@ void toUpperS (char *word){
     }
 }
 
+//compara strings
 int strcmpVoid(void *s1, void *s2) {
     return strcmp((const char *) s1, (const char *) s2);
 }
 
+//duplica string
 void *strdupVoid(void *s) {
     return (void *) strdup((char *) s);
 }
 
-int intcmpVoid(void *n1, void *n2) {
-    int res = 0;
-    int i = *((int *) n1), j = *((int *) n2);
-    if (i < j) res--;
-    else if (j < i) res++;
-    return res;
-}
-
-int intcmpReverseVoid(void *n1, void *n2, void* lookup) {
-    int res = 0;
-    int i = *((int *) n1), j = *((int *) n2);
-    if (i < j) res++;
-    else if (j < i) res--;
-    return res;
-}
-
-int intcmp(unsigned long int n1, unsigned long int n2) {
-    int res = 0;
-    if (n1 < n2) res--;
-    else if (n2 < n1) res++;
-    return res;
-}
-
-int intcmpReverse(unsigned long int n1, unsigned long int n2, void* lookup) {
-    int res = 0;
-    if (n1 < n2) res++;
-    else if (n2 < n1) res--;
-    return res;
-}
-
-void *intdupVoid(void *n) {
-    int *res = malloc(sizeof(int));
-    *res = *((int *) n);
-    return (void *) res;
-}
-
+//id de uma flight de inteiro para string
 char *flightIdToString(unsigned long int id) {
     char *s = malloc(sizeof(char)*11);
     sprintf(s, "%010ld", id);
     return s;
 }
 
+//id de uma reserva de inteiro para string
 char *reservIdToString(unsigned long int id) {
     char *s = malloc(sizeof(char)*15);
     sprintf(s, "Book%010ld", id);
     return s;
 }
 
+//id de uma flight de string para inteiro
 unsigned long int flightIdToInt(char *id) {
     return atoi(id);
 }
 
+//id de uma reserva de string para inteiro
 unsigned long int reservIdToInt(char *id) {
     return atoi(id+4);
 }
 
-//função que liberta o espaço em memória alocado por uma data
-void destroyDate(Date *date) {
-    if (date == NULL) return; //se não existir a data
-    free(date);
+//inteiros
+//compara inteiros em ordem reversa
+int intcmpReverse(unsigned long int n1, unsigned long int n2, void* lookup) {
+    int res = 0;
+    if (n1 < n2) res++;
+    else if (n2 < n1) res--;
+    return res;
 }

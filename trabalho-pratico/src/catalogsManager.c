@@ -61,7 +61,7 @@ void sortUserList(char *id, Catalogs *catalogs) {
     User *user = getUserCatalog(catalogs->usersCatalog, id);
     OrdList *list = getUserList(user);
     if (!isOrdered(list)) {
-        quickSort(list, 0, getOrdListSize(list)-1, compareFlightReservsIds, NULL, 0);
+        heapsort(list, compareFlightReservsIds, NULL, 0);
         radixSortUserList(list, catalogs);
         setOrdListOrd(list, 1);
     }
@@ -372,7 +372,7 @@ void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *c
 //flights
 
 int getFlightScheduleDepartureTime(int time, unsigned long int id, Catalogs *catalogs) {
-    return getSDFlight(time, id, catalogs->flightsCatalog);
+    return getFlightSD_flightscatalog(time, id, catalogs->flightsCatalog);
 }
 char *getStringFlightDate(unsigned long int id, Catalogs *catalogs) {
     return getSFlightDate(id, catalogs->flightsCatalog);

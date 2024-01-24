@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "airport.h"
-#include "flight.h"
-#include "orderedList.h"
 #include "utility.h"
 
 struct airport {
@@ -52,28 +50,35 @@ void sortAirportFlightsByDepartureDate_airport(Airport *airport, void (*radixsor
     OrdList *origin = airport->originFlights;
     OrdList *destination = airport->destinationFlights;
     if (!isOrdered(origin)) {
-//        quickSort(origin, 0, getOrdListSize(origin)-1, compareFlightsIds, NULL, 0); //ordena por ids
-        heapsortInt(origin, intcmpReverse, NULL, 0);
-//        reverseOrdList(origin);
+        heapsortInt(origin, intcmpReverse, NULL, 0); //ordena por ids
         radixsortFlightsDate(origin, lookup); //ordena por datas
         setOrdListOrd(origin, 1);
     }
     if (!isOrdered(destination)) {
-//        quickSort(destination, 0, getOrdListSize(destination)-1, compareFlightsIds, NULL, 0); //ordena por ids
-        heapsortInt(destination, intcmpReverse, NULL, 0);
-//        reverseOrdList(destination);
+        heapsortInt(destination, intcmpReverse, NULL, 0); //ordena por ids
         radixsortFlightsDate(destination, lookup); //ordena por datas
         setOrdListOrd(destination, 1);
     }
 }
 
-//obtem a lista de voos do aeroporto
-OrdList *getAirportOriginOrdList(Airport *airport) {
-    return airport->originFlights;
-}
-
-OrdList *getAirportDestinationOrdList(Airport *airport) {
-    return airport->destinationFlights;
+//ordena a lista de atrasos de um aeroporto
+int sortAirportDelays (Airport* airport) {
+    int size = airport->size_list;
+    if (size == 0) return -1;
+    qsortL(airport->listOfDelays,size);
+    if (size % 2 == 0) {
+        int indice1 = size / 2;
+        int indice2 = indice1 - 1;
+        int mediana1 = airport->listOfDelays[indice1];
+        int mediana2 = airport->listOfDelays[indice2];
+        double mediana = ((double) mediana1) + ((double) mediana2);
+        airport->median = (double) (mediana/2.0);
+    }
+    else {
+        int indice = size / 2;
+        airport->median = airport->listOfDelays[indice];
+    }
+    return airport->median;
 }
 
 //gets
@@ -90,10 +95,19 @@ int getAirportListSize(Airport *airport) {
     return getOrdListSize(airport->originFlights);
 }
 
+//obtem a lista de voos do aeroporto
+OrdList *getAirportOriginOrdList(Airport *airport) {
+    return airport->originFlights;
+}
+
+OrdList *getAirportDestinationOrdList(Airport *airport) {
+    return airport->destinationFlights;
+}
+
+//obtem o número de passageiros do aeroporto num dado ano
 int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(unsigned long int,unsigned long int,void*), int equal, void *lookup, int (*getFunction)(unsigned long int,void*)) {
     OrdList *origin = airport->originFlights; //voos de origem do aeroporto
     OrdList *destination = airport->destinationFlights; //voos de destino do aeroporto
-//    void *data = (void *) &year;
     int i = searchValueOrdList(origin, year, compareFunction, lookup, equal, compareFunction, 0);
     int passengers = 0, size, exit;
     if (i >= 0) { //se não houver voos nesse ano
@@ -124,6 +138,9 @@ int getAirportPassengersYear(int year, Airport *airport, int (*compareFunction)(
     return passengers;
 }
 
+//sets
+
+//sort
 void swapL(int a[], int i, int j) {
     int temp = a[i];
     a[i] = a[j];
@@ -148,26 +165,6 @@ void qsortL (int a[], int n) {
     qsortL(a, p);
     qsortL(a+p+1, n-p-1);
 }
-
-int sortAirportDelays (Airport* airport) {
-    int size = airport->size_list;
-    if (size == 0) return -1;
-    qsortL(airport->listOfDelays,size);
-    if (size % 2 == 0) {
-        int indice1 = size / 2;
-        int indice2 = indice1 - 1;
-        int mediana1 = airport->listOfDelays[indice1];
-        int mediana2 = airport->listOfDelays[indice2];
-        double mediana = ((double) mediana1) + ((double) mediana2);
-        airport->median = (double) (mediana/2.0);
-    }
-    else {
-        int indice = size / 2;
-        airport->median = airport->listOfDelays[indice];
-    }
-    return airport->median;
-}
-//sets
 
 //liberta espaço em memória do aeroporto
 void destroyAirport(void *airport) {

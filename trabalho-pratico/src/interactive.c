@@ -12,6 +12,17 @@
 #include "output.h"
 #include <ctype.h>
 
+void tiraAspas(char* s) {
+   int i, len = strlen(s);
+   for (i=0; i<len-1; i++)
+      if (s[i] == '\"') {
+         memmove(&s[i], &s[i+1], len-i);
+         len--;
+      }
+   if (s[i] == '\"')
+      memmove(&s[i], &s[i+1], len-i);
+}
+
 char* get_string (int max_row, int max_col,int min_row,int min_col, int n, int *proceed) {
     char* path = malloc(n);
     int row;

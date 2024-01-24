@@ -2,11 +2,7 @@
 #define _FLIGHT_
 
 #include "utility.h"
-#include "passenger.h"
-#include "hashtable.h"
 #include "orderedList.h"
-
-#define PASSENGER_LIST_INI_SIZE 100
 
 typedef struct flight Flight;
 //cria um novo voo
@@ -15,45 +11,33 @@ Flight *createFlight(char *airline, char *airplane, char *origin, char *destinat
 void addPassengerToFlight(Flight *flight, char *id_user);
 
 //gets
+//strings
 char *getFlightAirline(Flight *flight);
 char *getFlightAirplane(Flight *flight);
-//int getFlightTotalSeats(Flight *flight);
 char *getFlightOrigin(Flight *flight);
 char *getFlightDestination(Flight *flight);
+//datas do voo
 Date *getFlightScheduleDeparture(Flight *flight);
 Date *getFlightScheduleArrival(Flight *flight);
 Date *getFlightRealDeparture(Flight *flight);
 Date *getFlightRealArrival(Flight *flight);
-int getFlightScheduleDepartureDay(void *id, void *lookupTable);
-int getFlightScheduleDepartureMonth(void *id, void *lookupTable);
-int getFlightScheduleDepartureYear(void *id, void *lookupTable);
-int getFlightScheduleDepartureSeconds(void *id, void *lookupTable);
-int getFlightScheduleDepartureMinutes(void *id, void *lookupTable);
-int getFlightScheduleDepartureHours(void *id, void *lookupTable);
 int getDepartureDay(void *flight, void *lookup);
 int getDepartureMonth(void *flight, void *lookup);
 int getDepartureYear(void *flight, void *lookup);
-
 int getFlightSD(int time, Flight *flight);
 char *getStringFlightDateNoHours(Flight *flight);
-char *getFlightId(Flight *flight);
+//passageiros
 OrdList * getPassengers(Flight* flight);
+//numero de passageiros
 int getNumberPassengers(Flight* flight);
+//atraso do voo
 int getDelay(Flight* flight);
 
 //sets
 void setFlightAirline(Flight *flight, char *airline);
 void setFlightAirplane(Flight *flight, char *airplane);
-//void setFlightTotalSeats(Flight *flight, int totalSeats);
 void setFlightOrigin(Flight *flight, char origin[4]);
 void setFlightDestination(Flight *flight, char destination[4]);
-void setFlightScheduleDeparture(Flight *flight, Date *scheduleDeparture);
-void setFlightScheduleArrival(Flight *flight, Date *scheduleArrival);
-void setFlightRealDeparture(Flight *flight, Date *realDeparture);
-void setFlightRealArrival(Flight *flight, Date *realArrival);
-//void setFlightPilot(Flight *flight, char *pilot);
-//void setFlightCopilot(Flight *flight, char *copilot);
-//void setFlightNotes(Flight *flight, char *notes);
 
 //liberta espaço em memória de um voo
 void destroyFlight(void *flight);
