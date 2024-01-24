@@ -176,6 +176,10 @@ void destroyFlight(void *flight) {
     if (flight == NULL) return; //se o voo não existir
     free(((Flight *) flight)->airplane); //liberta as strings
     free(((Flight *) flight)->airline);
+    destroyDate(((Flight *)flight)->scheduleDeparture);
+    destroyDate(((Flight *)flight)->scheduleArrival);
+    destroyDate(((Flight *)flight)->realDeparture);
+    destroyDate(((Flight *)flight)->realArrival);
     destroyOrdList(((Flight *) flight)->passengers,free); //liberta a lista de passageiros
     free(flight); //liberta o voo
 }

@@ -218,6 +218,8 @@ void destroyUser(void *user) {
     free(((User *) user)->passport); //liberta as strings
     free(((User *) user)->name);
     free(((User *) user)->id);
+    destroyDate(((User *)user)->birth);
+    destroyDate(((User *)user)->accountCreation);
     destroyOrdList(((User *) user)->flightsReservationsByDate, destroyResultQ2);
     free(user);
 }

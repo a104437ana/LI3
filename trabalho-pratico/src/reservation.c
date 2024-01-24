@@ -143,6 +143,8 @@ void destroyReservation(void *reservation) {
     if (reservation == NULL) return; //se a reserva não existir
     free(((Reservation *) reservation)->id_hotel);
     free(((Reservation *) reservation)->id_user);
+    destroyDate(((Reservation *)reservation)->begin);
+    destroyDate(((Reservation *)reservation)->end);
     free(reservation);
 }
 
