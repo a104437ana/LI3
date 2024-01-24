@@ -51,7 +51,6 @@ OrdList *getUsersByAccountCreation (UsersManager *usersManager);
 int getYearFirstResults_usersCatalog(UsersManager *usersCatalog);
 int getYearLastResults_usersCatalog(UsersManager *usersCatalog);
 
-int count_passenger (UsersManager* usersCatalog, char* id_user);
 int count_unique_passengers (UsersManager* usersCatalog, OrdList* list);
 
 char *sameLenPrefix(char *prefix, char *name);

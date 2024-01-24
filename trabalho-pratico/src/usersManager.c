@@ -182,28 +182,20 @@ int getYearLastResults_usersCatalog(UsersManager *usersCatalog) {
     return getAccountCreationYear(user, NULL);
 }
 
-int count_passenger (UsersManager* usersCatalog, char* id_user) {
-    User* user =  getData(usersCatalog->users, id_user);
-    int indice = getIndice(user);
-    if (usersCatalog->passengers_list[indice] == 0) {
-        usersCatalog->passengers_list[indice] = 1;
-        return 1;
-    }
-    else return 0;
-}
-
 int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
     int size_list = getOrdListSize(list);
     char* id;
     int  unique_passengers = 0;
     for (int i = 0; i < size_list; i++) {
         id = getDataOrdList(list,i);
-        unique_passengers += count_passenger(usersCatalog,id);
+        User* user =  getData(usersCatalog->users, id);
+        int indice = getIndice(user);
+        if (usersCatalog->passengers_list[indice] == 0) {
+            unique_passengers++;
+            usersCatalog->passengers_list[indice] = 1;
+        }
     }
-
-    int size = usersCatalog->size;
-    memset(usersCatalog->passengers_list, 0, size * sizeof(bool));
-    
+    memset(usersCatalog->passengers_list, 0, usersCatalog->size * sizeof(bool));
     return unique_passengers;
 }
 

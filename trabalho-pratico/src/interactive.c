@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "interpreter.h"
 #include "results.h"
+#include "output.h"
 #include <ctype.h>
 
 char* get_string (int max_row, int max_col,int min_row,int min_col, int n, int *proceed) {
@@ -431,39 +432,13 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
     return proceed;
 }
 
-void printResultP_CSV (int line,int j,int x,QueryResult* result) {
-    move(line,0);
-    int i;
-    for (i = 1; i<x; i++) {
-        char * data = getFieldData(result,j,i-1);
-        printw("%s;",data);
-        refresh();
-        free(data);
-    }
-    char * data = getFieldData(result,j,i-1);
-    printw("%s",data);
-    refresh();
-    free(data);
-}
-
 void printResultPage_CSV (int page, int max_row,int j, QueryResult* result) {
     int nResults = getNumberResults(result);
-    int x = getNumberFieldsQ(result,j-1);
     for (int i = 2; i < max_row && j <= nResults; i++) {
-        printResultP_CSV(i,j-1,x,result);
+        char* print = printResult(result,j-1);
+        mvprintw(i,0,"%s",print);
+        free(print);
         j++;
-        if (j<=nResults) x = getNumberFieldsQ(result,j-1);
-        else break;
-    }
-}
-
-void printResultP_Field (int line,int j,int x,QueryResult* result) {
-    for (int i = 1; i<=x; i++) {
-        char * name = getFieldName(result,j,i-1);
-        char * data = getFieldData(result,j,i-1);
-        mvprintw(line+i,0,"%s: %s",name,data);
-        refresh();
-        free(name); free(data);
     }
 }
 
@@ -471,9 +446,11 @@ void printResultPage_Field (int page, int max_row,int j, QueryResult* result) {
     int nResults = getNumberResults(result);
     int x = getNumberFieldsQ(result,j-1);
     for (int i = 2; i+(x+2) <= max_row; i+=x+2) {
-        mvprintw(i,0,"--- %d ---\n",j);
+        char* print = printResultF(result,j-1);
+        if (j-1 == nResults) print[strlen(print)-1] = '\0'; //retira o último newline
+        mvprintw(i,0,"%s",print);
         refresh();
-        printResultP_Field(i,j-1,x,result);
+        free(print);
         j++;
         if (j<=nResults) x = getNumberFieldsQ(result,j-1);
         else break;
