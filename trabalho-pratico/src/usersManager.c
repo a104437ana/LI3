@@ -44,54 +44,16 @@ void addFlightToUser(char *id_user, unsigned long int id_flight, UsersManager *u
     addToUserList(user, id_flight, 'F', 0);
 }
 
-//função que compara o nome de dois utilizadores
-int compareUsersNames(void *user1, void *user2, void *lookup) {
-    return compareUsersNames_user((User *) user1, (User *) user2);
-}
-
-void sortUsersByName(UsersManager *usersCatalog) {
-    OrdList *usersByName = usersCatalog->usersByName;
-    heapsort(usersByName, compareUsersNames, NULL, 0);
-}
-
-void radixSortAccountCreation(OrdList *list, void *lookupTable) {
-    radixSort(list, getAccountCreationDay, lookupTable, 31, 0);
-    radixSort(list, getAccountCreationMonth, lookupTable, 12, 0);
-    radixSort(list, getAccountCreationYear, lookupTable, N_YEARS, BEGIN_YEAR);
-}
-
-void sortUsersByAccountCreation(UsersManager *usersCatalog) {
-    OrdList * list = usersCatalog->usersByAccountCreation;
-    if(!isOrdered(list)) {
-        radixSortAccountCreation(list, NULL); //ordena as reservas por data
-        setOrdListOrd(list, 1);
-    }
-}
-
 //gets
-
 //função que verifica se um utilizador já existe no catálogo de utilizadores
 int existsUser(UsersManager *usersManager, char *id) {
     return existsData(usersManager->users, id);
-}
-
-User *getUserCatalog(UsersManager *usersManager, char *id) {
-    User *user = (User*) getData(usersManager->users, id);
-    return user;
 }
 
 int getAccountStatusUser(char *id, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id);
     if (user == NULL) return -1;
     return getUserAccountStatus(user);
-}
-
-Hashtable *getHashtableUserCatalog(UsersManager *usersManager) {
-    return usersManager->users;
-}
-
-OrdList *getUsersByName (UsersManager *usersManager) {
-    return usersManager->usersByName;
 }
 
 int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
@@ -106,32 +68,84 @@ int getSizeUserList(int type, char *id, UsersManager *usersCatalog) {
     return res;
 }
 
+//retorna o id que se encontra numa certa posição da lista de voos e reservas do utilizador
 unsigned long int getIdUserList_usersCatalog(int *type, char *id_user, int index, UsersManager *usersCatalog) {
     User *user = getData(usersCatalog->users, id_user);
     return getIdUserList_user(type, user, index);
 }
 
-/*
-int getUsersByNameSize(UsersManager *usersCatalog) {
-    return getOrdListSize(usersCatalog->usersByName);
+//retorna o ano do primeiro utilizador na lista de criação de contas
+int getYearFirstResults_usersCatalog(UsersManager *usersCatalog) {
+    User *user = getDataOrdList(usersCatalog->usersByAccountCreation, 0);
+    return getAccountCreationYear(user, NULL);
 }
-*/
-char *getIdUsersByName(int index, UsersManager *usersCatalog) {
-    char *id = getDataOrdList(usersCatalog->usersByName, index);
-    return strdup(id);
+
+//retorna o ano do último utilizador na lista de criação de contas
+int getYearLastResults_usersCatalog(UsersManager *usersCatalog) {
+    OrdList *list = usersCatalog->usersByAccountCreation;
+    User *user = getDataOrdList(list, getOrdListSize(list)-1);
+    return getAccountCreationYear(user, NULL);
 }
-char *getNameUsersByName(int index, UsersManager *usersCatalog) {
-    char *id = getDataOrdList(usersCatalog->usersByName, index);
-    User *user = getData(usersCatalog->users, id);
-    char *name = getName(user);
-    return name;
+
+User *getUserCatalog(UsersManager *usersManager, char *id) {
+    User *user = (User*) getData(usersManager->users, id);
+    return user;
 }
-/*
-void getIdNameUsersByName(int index, char **id, char **name, UsersManager *usersCatalog) {
-    User *user = getDataOrdList(usersCatalog->usersByName, index);
-    *id = getUserId(user);
-    *name = getName(user);
-}*/
+
+//conta o número de passageiros únicos
+int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
+    int size_list = getOrdListSize(list);
+    char* id;
+    int  unique_passengers = 0;
+    for (int i = 0; i < size_list; i++) {
+        id = getDataOrdList(list,i);
+        User* user =  getData(usersCatalog->users, id);
+        int indice = getIndice(user);
+        if (usersCatalog->passengers_list[indice] == 0) {
+            unique_passengers++;
+            usersCatalog->passengers_list[indice] = 1;
+        }
+    }
+    memset(usersCatalog->passengers_list, 0, usersCatalog->size * sizeof(bool));
+    return unique_passengers;
+}
+
+//função que liberta o espaço em memória alocado pelo catálogo de utilizadores
+void destroyUsersCatalog(UsersManager *usersManager) {
+    if (usersManager == NULL) return; //se o catálogo não existir
+    destroyHashtable(usersManager->users); //liberta a hashtable de utilizadores
+    destroyOnlyOrdList(usersManager->usersByName); //liberta a lista de utilizadores
+    destroyOnlyOrdList(usersManager->usersByAccountCreation);
+    free(usersManager->passengers_list);
+    free(usersManager);
+}
+
+//sort
+//função que compara o nome de dois utilizadores
+int compareUsersNames(void *user1, void *user2, void *lookup) {
+    return compareUsersNames_user((User *) user1, (User *) user2);
+}
+
+//ordena a lista de utilizadores por nome
+void sortUsersByName(UsersManager *usersCatalog) {
+    OrdList *usersByName = usersCatalog->usersByName;
+    heapsort(usersByName, compareUsersNames, NULL, 0);
+}
+
+void radixSortAccountCreation(OrdList *list, void *lookupTable) {
+    radixSort(list, getAccountCreationDay, lookupTable, 31, 0);
+    radixSort(list, getAccountCreationMonth, lookupTable, 12, 0);
+    radixSort(list, getAccountCreationYear, lookupTable, N_YEARS, BEGIN_YEAR);
+}
+
+//ordena a lista de utilizadores por data de criação de conta
+void sortUsersByAccountCreation(UsersManager *usersCatalog) {
+    OrdList * list = usersCatalog->usersByAccountCreation;
+    if(!isOrdered(list)) {
+        radixSortAccountCreation(list, NULL); //ordena os utilizadores por data de criação de conta
+        setOrdListOrd(list, 1);
+    }
+}
 
 //compara uma data com a criação de conta de um utilizador
 int compareDates_user(void *date, void *user, void *usersCatalog) {
@@ -170,38 +184,7 @@ int compareYears_user(void *date, void *user, void *usersCatalog) {
     return res;
 }
 
-OrdList *getUsersByAccountCreation (UsersManager *usersManager) {
-    return usersManager->usersByAccountCreation;
-}
-
-int getYearFirstResults_usersCatalog(UsersManager *usersCatalog) {
-    User *user = getDataOrdList(usersCatalog->usersByAccountCreation, 0);
-    return getAccountCreationYear(user, NULL);
-}
-
-int getYearLastResults_usersCatalog(UsersManager *usersCatalog) {
-    OrdList *list = usersCatalog->usersByAccountCreation;
-    User *user = getDataOrdList(list, getOrdListSize(list)-1);
-    return getAccountCreationYear(user, NULL);
-}
-
-int count_unique_passengers (UsersManager* usersCatalog, OrdList* list) {
-    int size_list = getOrdListSize(list);
-    char* id;
-    int  unique_passengers = 0;
-    for (int i = 0; i < size_list; i++) {
-        id = getDataOrdList(list,i);
-        User* user =  getData(usersCatalog->users, id);
-        int indice = getIndice(user);
-        if (usersCatalog->passengers_list[indice] == 0) {
-            unique_passengers++;
-            usersCatalog->passengers_list[indice] = 1;
-        }
-    }
-    memset(usersCatalog->passengers_list, 0, usersCatalog->size * sizeof(bool));
-    return unique_passengers;
-}
-
+//retorna um prefixo do nome do utilizador com o mesmo tamanho do prefixo dado
 char *sameLenPrefix(char *prefix, char *name) {
   unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
   int i = 0, j = 0, p = 0, n = 0, e = 0;
@@ -218,7 +201,6 @@ char *sameLenPrefix(char *prefix, char *name) {
   else if (i < j) {
     if (n > p) {i += n;}
     namePrefix = malloc(sizeof(char) * (i + 1));
-    //namePrefix = 
     strncpy(namePrefix, name, i);
     namePrefix[i] = '\0';
   }
@@ -227,13 +209,13 @@ char *sameLenPrefix(char *prefix, char *name) {
     if (n > p) len = i + (n - p);
     else len = i;
     namePrefix = malloc(sizeof(char) * (len + 1));
-    //namePrefix = 
     strncpy(namePrefix, name, len);
     namePrefix[len] = '\0';
   }
 
   return namePrefix;
 }
+//compara o nome de um utilizador com um prefixo
 int prefixSearch(void *prefixVoid, void *user, void *lookup) {
   int compare;
   char *prefix = (char *) prefixVoid;
@@ -256,10 +238,6 @@ int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
   free(name);
   return compare;
 }
-/*
-int searchPrefix(char *prefix, UsersManager *usersCatalog) {
-    return searchDataOrdList(usersCatalog->usersByName, prefix, prefixSearch, usersCatalog->users, 0, prefixSearchBack);
-}*/
 int sameFirstLetterUser(char *string1, char *string2) {
   int compare = 1;
   char c1 = string1[0], c2 = string2[0];
@@ -286,17 +264,6 @@ int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *u
     free(namePrefix); //liberta o prefixo do utilizador
     free(name);
     return compare;
-}
-
-//função que liberta o espaço em memória alocado pelo catálogo de utilizadores
-void destroyUsersCatalog(UsersManager *usersManager) {
-    if (usersManager == NULL) return; //se o catálogo não existir
-    destroyHashtable(usersManager->users); //liberta a hashtable de utilizadores
-    //destroyOrdList(usersManager->usersId,destroyUserId);
-    destroyOnlyOrdList(usersManager->usersByName); //liberta a lista de utilizadores
-    destroyOnlyOrdList(usersManager->usersByAccountCreation);
-    free(usersManager->passengers_list);
-    free(usersManager);
 }
 
 //queries

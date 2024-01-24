@@ -7,7 +7,6 @@
 #include "hashtable.h"
 
 struct reservation {
-//    char *id;
     char *id_user;
     char *id_hotel;
     Date begin;
@@ -19,15 +18,10 @@ struct reservation {
 //função que cria uma nova reserva dados os dados da mesma
 Reservation *createReservation(char *id_user, char *id_hotel, char *begin, char *end, int pricePerNight, bool includesBreakfast, char userClassification) {
     Reservation *reservation = malloc(sizeof(Reservation)); //aloca espaço em memória para a reserva
-//    reservation->id = strdup(id); //aloca espaço para os diferentes campos da reserva
     reservation->id_user = strdup(id_user);
     reservation->id_hotel = strdup(id_hotel);
     stringToDate(&(reservation->begin), begin);
     stringToDate(&(reservation->end), end);
-//    Date *beginDate = string_to_date(begin);
-//    reservation->begin = beginDate;
-//    Date *endDate = string_to_date(end);
-//    reservation->end = endDate;
     reservation->pricePerNight = pricePerNight;
     reservation->includesBreakfast = includesBreakfast;
     reservation->userClassification = userClassification;
@@ -36,33 +30,16 @@ Reservation *createReservation(char *id_user, char *id_hotel, char *begin, char 
 }
 
 //gets dos campos da reserva
-Reservation *getReservCatalog(HashtableInt *reservations, char *id) {
-    Reservation *reservation = (Reservation *) getDataInt(reservations, *((int *)id));
-    return reservation;
-}
-
-//char *getReservId(Reservation *reservation) {
-//    return strdup(reservation->id); //falta encapsulamento
-//}
-
 char *getReservUserId(Reservation *reservation) {
-    return strdup(reservation->id_user); //encapsulamento
+    return strdup(reservation->id_user);
 }
 
 char *getReservHotelId(Reservation *reservation) {
     return strdup(reservation->id_hotel);
 }
 
-int getReservUserKey(Reservation *reservation) {
-    return hashString(reservation->id_user);
-}
-/*
-char *getReservHotelName(Reservation *reservation, Hashtable *hotels) {
-    return getHotelName(reservation->id_hotel, hotels);
-}
-*/
 int getReservCityTax(Reservation *reservation, Hashtable *hotels) {
-    return getHotelCityTax2(reservation->id_hotel, hotels);
+    return getHotelCityTaxId(reservation->id_hotel, hotels);
 }
 
 int getReservPricePerNight(Reservation *reservation) {
@@ -74,49 +51,28 @@ int getReservUserClassification(Reservation *reservation) {
 }
 
 Date *getReservBegin(Reservation *reservation) {
-    Date * res = malloc(sizeof(Date));
-    res->day = reservation->begin.day;
-    res->month = reservation->begin.month;
-    res->year = reservation->begin.year;
-    res->hours = 0;
-    res->minutes = 0;
-    res->seconds = 0;
-    return res;
+    Date *date = dupDate(&(reservation->begin));
+    return date;
 }
 
 Date *getReservEnd(Reservation *reservation) {
-    Date * res = malloc(sizeof(Date));
-    res->day = reservation->end.day;
-    res->month = reservation->end.month;
-    res->year = reservation->end.year;
-    res->hours = 0;
-    res->minutes = 0;
-    res->seconds = 0;
-    return res;
+    Date *date = dupDate(&(reservation->end));
+    return date;
 }
 
 int getReservBeginDay(void *reservation, void *lookup) {
-    return ((Reservation*)reservation)->begin.day;
+    int res = getDay(&(((Reservation*)reservation)->begin));
+    return res;
 }
 
 int getReservBeginMonth(void *reservation, void *lookup) {
-    return ((Reservation*)reservation)->begin.month;
+    int res = getMonth(&(((Reservation*)reservation)->begin));
+    return res;
 }
 
 int getReservBeginYear(void *reservation, void *lookup) {
-    return ((Reservation*)reservation)->begin.year;
-}
-
-int getReservEndDay(void *reservation) {
-    return ((Reservation*)reservation)->end.day;
-}
-
-int getReservEndMonth(void *reservation) {
-    return ((Reservation*)reservation)->end.month;
-}
-
-int getReservEndYear(void *reservation) {
-    return ((Reservation*)reservation)->end.year;
+    int res = getYear(&(((Reservation*)reservation)->begin));
+    return res;
 }
 
 int getReservationBegin_reservation(int time, Reservation *reservation) {
@@ -137,6 +93,21 @@ int getReservationBegin_reservation(int time, Reservation *reservation) {
     return res;
 }
 
+int getReservEndDay(void *reservation) {
+    int res = getDay(&(((Reservation*)reservation)->end));
+    return res;
+}
+
+int getReservEndMonth(void *reservation) {
+    int res = getMonth(&(((Reservation*)reservation)->end));
+    return res;
+}
+
+int getReservEndYear(void *reservation) {
+    int res = getYear(&(((Reservation*)reservation)->end));
+    return res;
+}
+
 bool getReservIncludesBreakfast(Reservation *reservation) {
     return reservation->includesBreakfast;
 }
@@ -145,7 +116,7 @@ bool getReservIncludesBreakfast(Reservation *reservation) {
 int getReservNights(Reservation* reservation){
      Date* begin = getReservBegin(reservation);
      Date* end = getReservEnd(reservation);
-     int res = (end->day) - (begin->day);
+     int res = getDay(end) - getDay(begin);
      free(end);
      free(begin);
      return res;
@@ -161,89 +132,20 @@ int getReservNightsWithLimits(Reservation* reservation, Date *limitBegin, Date *
 }
 
 char *getStringReservDate(Reservation *reservation) {
-    return dateToStringNoHours(&(reservation->begin));
+    char *date = dateToStringNoHours(&(reservation->begin));
+    return date;
 }
 
-int compareReservDates(Reservation *reservation, Date *date) {
-    Date *reservDate = &(reservation->end);
-    return compareDates(reservDate, date);
-}
-
-int compareReservationsBeginDates(Reservation *r1, Reservation *r2) {
-    Date *d1 = &(r1->begin);
-    Date *d2 = &(r2->begin);
-    return compareDates(d1, d2);
-}
-
-//sets dos campos da reserva
-//void setUserId(Hashtable *hashtable, unsigned int key, char *id_user, char *reservId) {
-//    Reservation *data = getData(hashtable, key, reservId);
-//    char *oldUserId = data->id_user;
-//    data->id_user = strdup(id_user);
-//    free(oldUserId);
-//}
-
-//void setHotelId(Hashtable *hashtable, unsigned int key, char *id_hotel, char* id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    removeHId(data->hotel);
-//    setHId(data->hotel, id_hotel);
-//}
-
-//void setHotelName(Hashtable *hashtable, unsigned int key, char *hotelName, char* id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    removeHName(data->hotel);
-//    setHName(data->hotel, hotelName);
-//}
-
-//void setHotelStars(Hashtable *hashtable, unsigned int key, char hotelStars, char *id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    setHStars(data->hotel, hotelStars);
-//}
-
-//void setCityTax(Hashtable *hashtable, unsigned int key, int cityTax, char *id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    setHCityTax(data->hotel, cityTax);
-//}
-
-//void setBeginDate(Hashtable *hashtable, unsigned int key, Date *begin, char *id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    data->begin = begin;
-//}
-
-//void setEndDate(Hashtable *hashtable, unsigned int key, Date *end, char *id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    data->end = end;
-//}
-
-//void setPricePerNight(Hashtable *hashtable, unsigned int key, int pricePerNight, char *id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    data->pricePerNight = pricePerNight;
-//}
-
-//void setIncludesBreakfast(Hashtable *hashtable, unsigned int key, bool includesBreakfast, char *id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    data->includesBreakfast = includesBreakfast;
-//}
-
-//void setUserClassification(Hashtable *hashtable, unsigned int key, char userClassification, char *id) {
-//    Reservation *data = getData(hashtable, key, id);
-//    data->userClassification = userClassification;
-//}
-
-Date *getBeginDateReservation(void *reservation) {
-    return &(((Reservation*)reservation)->begin);
-}
 //função que liberta o espaço em memória alocado pela reserva
 void destroyReservation(void *reservation) {
     if (reservation == NULL) return; //se a reserva não existir
-//    free(((Reservation *) reservation)->hotel);
-//    destroyHotel(((Reservation *) reservation)->hotel);
-//    destroyDate(((Reservation *) reservation)->begin); //liberta espaço em memória dos diferentes campos
-//    destroyDate(((Reservation *) reservation)->end);
-    //free(((Reservation *) reservation)->userComment);
-    //free(((Reservation *) reservation)->roomDetails);
     free(((Reservation *) reservation)->id_hotel);
     free(((Reservation *) reservation)->id_user);
-//    free(((Reservation *) reservation)->id);
     free(reservation);
+}
+
+//sort
+int compareReservDates(Reservation *reservation, Date *date) {
+    Date *reservDate = &(reservation->end);
+    return compareDates(reservDate, date);
 }

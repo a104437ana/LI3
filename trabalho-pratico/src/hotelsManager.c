@@ -24,9 +24,29 @@ void updateHotelCatalog(char *id, char *name, char stars, int cityTax, char user
     addReservationToHotel(hotel, id_reserv, userClassification); //adiciona reserva às reservas do hotel e atualiza classificação do hotel
 }
 
-void sortHotelReservationsByDate_hotelsCatalog(char *id, HotelsManager *hotelsCatalog, void (*sortFunction)(void*,void*), void *lookup) {
+//gets
+int hotelExists(char *id, HotelsManager *hotelsCatalog) {
+    return existsData(hotelsCatalog->hotels, id);
+}
+
+int getCityTax(char *id, HotelsManager *hotelsCatalog) {
     Hotel *hotel = getData(hotelsCatalog->hotels, id);
-    sortHotelReservationsByDate_hotel(hotel, sortFunction, lookup);
+    int cityTax = getHotelCityTax(hotel);
+    return cityTax;
+}
+
+int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog) {
+    Hotel *hotel = getData(hotelsCatalog->hotels, id);
+    return getHotelNumberOfReservations(hotel);
+}
+
+unsigned long int getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
+    Hotel *hotel = getData(hotelsCatalog->hotels, id);
+    return getHotelReservId(hotel, index);
+}
+
+Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager) {
+    return hotelsManager->hotels;
 }
 
 //função que liberta a memória alocada do catálogo de hoteis
@@ -34,6 +54,12 @@ void destroyHotelsCatalog(HotelsManager *hotelsManager) {
     if (hotelsManager == NULL) return; //se o catálogo não existir
     destroyHashtable(hotelsManager->hotels); //liberta a hashtable de hoteis
     free(hotelsManager);
+}
+
+//sort
+void sortHotelReservationsByDate_hotelsCatalog(char *id, HotelsManager *hotelsCatalog, void (*sortFunction)(void*,void*), void *lookup) {
+    Hotel *hotel = getData(hotelsCatalog->hotels, id);
+    sortHotelReservationsByDate_hotel(hotel, sortFunction, lookup);
 }
 
 //queries
@@ -82,34 +108,3 @@ void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, Quer
         free(field0);
     }
 }
-
-//gets
-Hashtable *getHashtableHotelsCatalog(HotelsManager *hotelsManager) {
-    return hotelsManager->hotels;
-}
-
-int getCityTax(char *id, HotelsManager *hotelsCatalog) {
-    Hotel *hotel = getData(hotelsCatalog->hotels, id);
-    int cityTax = getHotelCityTax(hotel);
-    return cityTax;
-}
-Hotel *getHotelCatalog(HotelsManager *hotelsCatalog, char *id) {
-    Hotel *hotel = (Hotel *) getData(hotelsCatalog->hotels, id);
-    return hotel;
-}
-int getHotelSizeReservations(char *id, HotelsManager *hotelsCatalog) {
-    Hotel *hotel = getData(hotelsCatalog->hotels, id);
-    return getHotelNumberOfReservations(hotel);
-}
-
-int hotelExists(char *id, HotelsManager *hotelsCatalog) {
-    return existsData(hotelsCatalog->hotels, id);
-}
-unsigned long int getHotelReservationId(char *id, int index, HotelsManager *hotelsCatalog) {
-    Hotel *hotel = getData(hotelsCatalog->hotels, id);
-    return getHotelReservId(hotel, index);
-}
-//int searchHotelDates_hotelsCatalog(Date *date, char *id, int (*compareDate)(void*,void*,void*), void *lookup, HotelsManager *hotelsCatalog) {
-//    Hotel *hotel = getData(hotelsCatalog->hotels, id);
-//    return searchHotelDates(date, compareDate, lookup, hotel);
-//}

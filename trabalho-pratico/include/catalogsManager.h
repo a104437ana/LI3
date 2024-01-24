@@ -108,8 +108,6 @@ unsigned long int getUserListId(int *type, char *id_user, int index, Catalogs *c
 //int getUsersByNameSize_catalog(Catalogs *catalogs);
 //int searchPrefix_catalog(char *prefix, Catalogs *catalogs);
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs);
-char *getIdUsersByName_catalog(int index, Catalogs *catalogs);
-char *getNameUsersByName_catalog(int index, Catalogs *catalogs);
 void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *catalogs);
 
 //flights

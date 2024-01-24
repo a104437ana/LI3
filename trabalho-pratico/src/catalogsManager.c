@@ -358,12 +358,6 @@ int searchPrefix_catalog(char *prefix, Catalogs *catalogs) {
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs) {
     return (isPrefixUser(firstLetterCheck, prefix, index, catalogs->usersCatalog));
 }
-char *getIdUsersByName_catalog(int index, Catalogs *catalogs) {
-    return getIdUsersByName(index, catalogs->usersCatalog);
-}
-char *getNameUsersByName_catalog(int index, Catalogs *catalogs) {
-    return getNameUsersByName(index, catalogs->usersCatalog);
-}
 /*
 void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *catalogs) {
     getIdNameUsersByName(index, id, name, catalogs->usersCatalog);

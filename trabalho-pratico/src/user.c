@@ -37,10 +37,6 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
     user->passport = strdup(passport);
     stringToDate(&(user->birth), birth);
     stringToDate(&(user->accountCreation), accountCreation);
-//    Date *birthDate = string_to_date(birth);
-//    user->birth = birthDate;
-//    Date *accountCreationDate = string_to_date(accountCreation);
-//    user->accountCreation = accountCreationDate;
     user->accounStatus = accountStatus;
     user->totalSpent = 0;
     user->flightsReservationsByDate = createOrdList(); //cria a lista de voos e reservas do utilizador
@@ -53,12 +49,12 @@ User *createUser(char *id, char *name, int gender, char *country, char *passport
 //adiciona um voo ou reserva à lista de voos e ereservas de um utilizador
 void addToUserList(User *user, unsigned long int id, char type, double totalSpent) {
     ResultQ2 *res = malloc(sizeof(ResultQ2));
-    if (type == 'R') {
+    if (type == 'R') { //se for uma reserva
         res->resultType = RESERVATIONS;
         user->nReservations++;
         user->totalSpent += totalSpent;
     }
-    else if (type == 'F'){
+    else if (type == 'F'){ //se for um voo
         res->resultType = FLIGHTS;
         user->nFlights++;
     }
@@ -74,6 +70,10 @@ int compareUsersNames_user(User *user1, User *user2) {
 }
 
 //gets
+char *getUserId(User *user) {
+    return strdup(user->id);
+}
+
 char *getName(User *user) {
     char *name;
     name = strdup(user->name);
@@ -94,14 +94,7 @@ char *getCountry(User *user) {
 
     return country;
 }
-/*
-char *getAdress(User *user) {
-    char *address;
-    address = user->address; //falta encapsulamento
 
-    return address;
-}
-*/
 char *getPassport(User *user) {
     char *passport;
     passport = strdup(user->passport);
@@ -110,14 +103,53 @@ char *getPassport(User *user) {
 }
 
 Date *getBirth(User *user) {
-    Date *birth = malloc(sizeof(Date));
-    birth->day = user->birth.day;
-    birth->month = user->birth.month;
-    birth->year = user->birth.year;
-    birth->hours = 0;
-    birth->minutes = 0;
-    birth->seconds = 0;
-    return birth;
+    return dupDate(&user->birth);
+}
+
+Date *getAccountCreation(User *user) {
+    return dupDate(&(user->accountCreation));
+}
+
+bool getUserAccountStatus(User* user){
+    return(user->accounStatus);
+}
+
+double getTotalSpent(User* user) {
+    return user->totalSpent;
+}
+
+//número de voos
+int getNumberFlights(User* user){
+    return(user->nFlights);
+}
+
+//número de reservas
+int getNumberReservations(User* user){
+    return (user->nReservations);
+}
+
+//tamanho total da lista
+int getUListSize(User * user) {
+    return getOrdListSize(user->flightsReservationsByDate);
+}
+
+OrdList * getUserList(User* user){
+     OrdList* list = user->flightsReservationsByDate;
+     return(list);
+}
+
+//retorna o id que se encontra numa certa posição da lista
+unsigned long int getIdUserList_user(int *type, User *user, int index) {
+    OrdList *list = user->flightsReservationsByDate;
+    ResultQ2 *res = (ResultQ2 *) getDataOrdList(list, index);
+    *type = res->resultType;
+    unsigned long int id = res->id;
+    return id;
+}
+
+//retorna o índice do utilizador
+int getIndice (User* user) {
+    return user->indice;
 }
 
 //calcula a idade de um utilizador em anos
@@ -137,6 +169,57 @@ int getAge(User* user){
   return r;
 }
 
+//devolve o id de uma reserva ou voo
+int getIdResultQ2(ResultQ2* data){
+  return data->id;
+}
+
+//devolve se é um voo ou reserva
+Q2Type getResultType(ResultQ2 *data) {
+  return data->resultType;
+}
+
+//liberta dados do tipo ResultQ2
+void destroyResultQ2(void * data){
+  free((ResultQ2*)data);
+}
+
+//sets
+void setName(Hashtable *hashtable, char *name, char *id) {
+    User *data = getData(hashtable, id);
+    char *oldName = data->name;
+    data->name = strdup(name);
+    free(oldName);
+}
+
+void setGender(Hashtable *hashtable, Gender gender, char *id) {
+    User *data = getData(hashtable, id);
+    data->gender = gender;
+}
+
+void setCountry(Hashtable *hashtable, char *country, char *id) {
+    User *data = getData(hashtable, id);
+    memcpy(data->country, country, 2);
+}
+
+void setPassport(Hashtable *hashtable, char *passport, char *id) {
+    User *data = getData(hashtable, id);
+    char *oldPassport = data->passport;
+    data->passport = strdup(passport);
+    free(oldPassport);
+}
+
+//função que liberto o espaço em memória de um utilizador
+void destroyUser(void *user) {
+    if (user == NULL) return; //se o utilizador não existir
+    free(((User *) user)->passport); //liberta as strings
+    free(((User *) user)->name);
+    free(((User *) user)->id);
+    destroyOrdList(((User *) user)->flightsReservationsByDate, destroyResultQ2);
+    free(user);
+}
+
+//sorts
 //devolve o dia de início de uma reserva ou de um voo
 int getBeginDay(void* data, void *catalog){
   ResultQ2* res = (ResultQ2*) data;
@@ -179,152 +262,17 @@ int getBeginHours(void* data, void *catalog) {
   else return (0);
 }
 
-//devolve o id de uma reserva ou voo
-int getIdResultQ2(ResultQ2* data){
-  return data->id;
-}
-
-Q2Type getResultType(ResultQ2 *data) {
-  return data->resultType;
-}
-
-//liberta dados do tipo ResultQ2
-void destroyResultQ2(void * data){
-  free((ResultQ2*)data);
-}
-
-Date * getUserAccountCreation(void *id, void *lookupTable) {
-    User *user = getData((Hashtable *) lookupTable,id);
-    return (&(user->accountCreation));
-}
-
-Date *getAccountCreation(User *user) {
-    Date *accountCreation = malloc(sizeof(Date));
-    accountCreation->day = user->accountCreation.day;
-    accountCreation->month = user->accountCreation.month;
-    accountCreation->year = user->accountCreation.year;
-    return accountCreation;
-}
-
+//devolve o dia da criação da conta
 int getAccountCreationDay(void *user, void *lookup) {
     return ((User*)user)->accountCreation.day;
 }
 
+//devolve o mês da criação da conta
 int getAccountCreationMonth(void *user, void *lookup) {
     return ((User*)user)->accountCreation.month;
 }
 
+//devolve o ano da criação da conta
 int getAccountCreationYear(void *user, void *lookup) {
     return ((User*)user)->accountCreation.year;
-}
-
-
-char *getUserId(User *user) {
-    return strdup(user->id); //falta encapsulamento
-}
-
-double getTotalSpent(User* user) {
-    return user->totalSpent;
-}
-
-OrdList * getUserList(User* user){
-     OrdList* list = user->flightsReservationsByDate;
-     return(list);
-}
-
-bool getUserAccountStatus(User* user){
-    return(user->accounStatus);
-}
-
-int getUListSize(User * user) {
-    return getOrdListSize(user->flightsReservationsByDate);
-}
-
-int getNumberFlights(User* user){
-    return(user->nFlights);
-}
-
-int getNumberReservations(User* user){
-    return (user->nReservations);
-}
-
-unsigned long int getIdUserList_user(int *type, User *user, int index) {
-    OrdList *list = user->flightsReservationsByDate;
-    ResultQ2 *res = (ResultQ2 *) getDataOrdList(list, index);
-    *type = res->resultType;
-    unsigned long int id = res->id;
-    return id;
-}
-
-int getIndice (User* user) {
-    return user->indice;
-}
-//sets
-void setName(Hashtable *hashtable, char *name, char *id) {
-    User *data = getData(hashtable, id);
-    char *oldName = data->name;
-    data->name = strdup(name);
-    free(oldName);
-}
-
-void setGender(Hashtable *hashtable, Gender gender, char *id) {
-    User *data = getData(hashtable, id);
-    data->gender = gender;
-}
-
-void setCountry(Hashtable *hashtable, char *country, char *id) {
-    User *data = getData(hashtable, id);
-    memcpy(data->country, country, 2);
-//    char oldCountry[2];
-//    oldCountry[0] = data->country[0];
-//    oldCountry[1] = data->country[1];
-//    data->country[0] = country[0];
-//    data->country[1] = country[1];
-}
-/*
-void setAdress(Hashtable *hashtable, unsigned int key, char *address, char *id) {
-    User *data = getData(hashtable, key, id);
-    char *oldAddress = data->address;
-    data->address = strdup(address);
-    free(oldAddress);
-}
-*/
-void setPassport(Hashtable *hashtable, char *passport, char *id) {
-    User *data = getData(hashtable, id);
-    char *oldPassport = data->passport;
-    data->passport = strdup(passport);
-    free(oldPassport);
-}
-
-/*
-void setEmail(Hashtable *hashtable, unsigned int key, char *email, char *id) {
-    User *data = getData(hashtable, key, id);
-    char *oldEmail = data->email;
-    data->email = strdup(email);
-    free(oldEmail);
-}
-
-
-void setPhoneNumber(Hashtable *hashtable, unsigned int key, PhoneNumber *phoneNumber, char *id) {
-    User *data = getData(hashtable, key, id);
-    destroyPhoneNumber(data->phoneNumber);
-    data->phoneNumber = phoneNumber;
-}
-*/
-
-//função que liberto o espaço em memória de um utilizador
-void destroyUser(void *user) {
-    if (user == NULL) return; //se o utilizador não existir
-//    destroyDate(((User *)user)->birth); //liberta as datas
-//    destroyDate(((User *) user)->accountCreation);
-    //destroyPhoneNumber(((User *) user)->phoneNumber);
-    //free(((User *) user)->paymentMethod);
-    //free(((User *) user)->email);
-    free(((User *) user)->passport); //liberta as strings
-    //free(((User *) user)->address);
-//    free(((User *) user)->country);
-    free(((User *) user)->name);
-    free(((User *) user)->id);
-    destroyOrdList(((User *) user)->flightsReservationsByDate, destroyResultQ2);
-    free(user);
 }
