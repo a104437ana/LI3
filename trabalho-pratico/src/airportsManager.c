@@ -4,6 +4,7 @@
 #include "airportsManager.h"
 #include "orderedList.h"
 #include "flight.h"
+#include "utility.h"
 
 struct airportsManager {
     Hashtable *airports;

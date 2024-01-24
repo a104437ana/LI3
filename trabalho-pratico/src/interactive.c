@@ -12,17 +12,6 @@
 #include "output.h"
 #include <ctype.h>
 
-void tiraAspas(char* s) {
-   int i, len = strlen(s);
-   for (i=0; i<len-1; i++)
-      if (s[i] == '\"') {
-         memmove(&s[i], &s[i+1], len-i);
-         len--;
-      }
-   if (s[i] == '\"')
-      memmove(&s[i], &s[i+1], len-i);
-}
-
 char* get_string (int max_row, int max_col,int min_row,int min_col, int n, int *proceed) {
     char* path = malloc(n);
     int row;
@@ -35,7 +24,7 @@ char* get_string (int max_row, int max_col,int min_row,int min_col, int n, int *
             break;
         }
         if (key == KEY_BACKSPACE || key == KEY_DC) {
-            if (col == min_col) {
+            if (col == 0) {
                 if (row != min_row) {
                     move(row-1,max_col-1);
                     printw(" ");
@@ -61,7 +50,7 @@ char* get_string (int max_row, int max_col,int min_row,int min_col, int n, int *
             }
             else {
                 if (key != KEY_UP && key != KEY_DOWN && key != KEY_LEFT && key != KEY_RIGHT && key != 27 && key != '\t') {
-                    if ((col != max_col || row != max_row) && i<n) {
+                    if ((col != max_col || row != max_row) && i<n-1) {
                         printw("%c",key);
                         char key_char = key;
                         path[i] = key_char;
@@ -72,6 +61,27 @@ char* get_string (int max_row, int max_col,int min_row,int min_col, int n, int *
         }
     }
     path[i] = '\0';
+
+    int inicial = -1;
+    int final = -1;
+    i = 0;
+    int len = strlen(path) - 1;
+
+    while (path[i] == ' ') i++;
+        if (path[i] == '\"') {
+        inicial = i;
+        while (path[len] == ' ') len--;
+        if (path[len] == '\"') final = len;
+    }
+
+    if (inicial != -1 && final != -1 && final - inicial > 1) {
+        char* string = malloc(final-inicial);
+        strncpy(string,path+inicial+1,final-inicial);
+        string[final-inicial-1] = '\0';
+        free(path);
+        path = string;
+    }
+
     return path;
 }
 
@@ -221,7 +231,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                 break;
         case 5: mvprintw(0, 0, "Query 5 - Lists the flights with origin at a given airport, between two dates, sorted by estimated departure date (from the most recent to the oldest).");
                 mvprintw(2, 0, "Enter the name of the airport: ");
-                string1 = get_string(max_row,max_col,2,31,3,pointer);
+                string1 = get_string(max_row,max_col,2,31,10,pointer);
                 if (proceed == 0) {
                     free(command);
                     free(string1);
@@ -230,7 +240,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                     return 0;
                 }
                 mvprintw(4,0, "Enter the begin date in this format yyyy/MM/dd hh:mm:ss (e.g. 2023/01/31 23:59:59): ");
-                string2 = get_string(max_row,max_col,4,84,19,pointer);
+                string2 = get_string(max_row,max_col,4,84,29,pointer);
                 if (proceed == 0) {
                     free(command);
                     free(string1);
@@ -240,7 +250,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                 }
                 mvprintw(6,0, "Enter the end date in this format yyyy/MM/dd hh:mm:ss (e.g. 2023/01/31 23:59:59): ");
                 x = 8;
-                string3 = get_string(max_row,max_col,6,82,19,pointer);
+                string3 = get_string(max_row,max_col,6,82,29,pointer);
                 if (proceed == 0) {
                     free(command);
                     free(string1);
@@ -253,7 +263,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                 break;
         case 6: mvprintw(0, 0, "Query 6 - Lists the top N airports with the most passengers for a given year.");
                 mvprintw(2, 0, "Enter the year: ");
-                string1 = get_string(max_row,max_col,2,16,6,pointer);
+                string1 = get_string(max_row,max_col,2,16,10,pointer);
                 if (proceed == 0) {
                     free(command);
                     free(string1);
@@ -331,7 +341,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                     return 0;
                 }
                 mvprintw(4,0, "Enter the begin date in this format yyyy/MM/dd (e.g. 2023/01/31): ");
-                string2 = get_string(max_row,max_col,4,66,10,pointer);
+                string2 = get_string(max_row,max_col,4,66,20,pointer);
                 if (proceed == 0) {
                     free(command);
                     free(string1);
@@ -341,7 +351,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                 }
                 mvprintw(6,0, "Enter the end date int this format yyyy/MM/dd (e.g. 2023/01/31): ");
                 x = 8;
-                string3 = get_string(max_row,max_col,6,64,10,pointer);
+                string3 = get_string(max_row,max_col,6,64,20,pointer);
                 if (proceed == 0) {
                     free(command);
                     free(string1);
@@ -381,7 +391,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                 }
                 if (option != 1) {
                     mvprintw(10,0, "Enter the year: ");
-                    string1 = get_string(max_row,max_col,10,16,4,pointer);
+                    string1 = get_string(max_row,max_col,10,16,14,pointer);
                     if (proceed == 0) {
                         free(command);
                         free(string1);
@@ -392,7 +402,7 @@ int get_querie (int max_row, int max_col,Catalogs* catalogs,QueryResult* result)
                     if (option == 3) {
                         mvprintw(11,0, "Enter the month: ");
                         x = 13;
-                        string2 = get_string(max_row,max_col,11,17,2,pointer);
+                        string2 = get_string(max_row,max_col,11,17,12,pointer);
                         if (proceed == 0) {
                             free(command);
                             free(string1);
@@ -537,7 +547,7 @@ void interactive_mode(int max_row, int max_col,Catalogs* catalogs) {
     while (!valid_directory_dataset(path) && n<2 && proceed == 1) {
         not_error = 0;
         clear();
-        mvprintw(0,0,"Invalid path for the dataset. Please try again! Note: Do not surround the text with double quotation marks (\").");
+        mvprintw(0,0,"Invalid path for the dataset. Please try again!");
         refresh();
         mvprintw(2,0,"Enter the path of the dataset: ");
         refresh();

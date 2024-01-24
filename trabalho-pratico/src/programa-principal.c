@@ -63,10 +63,13 @@ int main (int argc, char** argv) {
         mvprintw(0,0,"The window is too small.\nExiting the program...");
         refresh();
         sleep(5);
+        endwin();
     }
-    else interactive_mode(max_row,max_col,catalogs);
+    else {
+    interactive_mode(max_row,max_col,catalogs);
+    endwin();
+    }
 
-    endwin(); //termina ncurses
     }
     else printf("Error: This program requires either exactly 3 or 1 argument(s).\n");
     }
