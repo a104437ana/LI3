@@ -70,7 +70,7 @@ void hotel_catalog_compute_Q3 (char* id_hotel,HotelsManager* hotel_catalog, Quer
     else {
         setNumberResults(result,1);
         setNumberFieldsQ(result, 0, 1);
-        int numberClassifications = getHotelNumberOfReservations(hotel);
+        int numberClassifications = getHotelNumberRatings(hotel);
         double rating = getHotelRatingsSum(hotel);
         rating /= numberClassifications;
         char * ratingS = malloc(sizeof(char)*6);
