@@ -397,3 +397,51 @@ int intcmpReverse(unsigned long int n1, unsigned long int n2, void* lookup) {
     else if (n2 < n1) res--;
     return res;
 }
+
+//par inteiro string
+struct pairIntString {int value; char *string;};
+
+PairIntString *createPairIntString(int value, char *string) {
+    PairIntString *p = malloc(sizeof(PairIntString));
+    p->value = value;
+    p->string = string;
+    return p;
+}
+
+void addPair(int value, char *string, PairIntString *pair) {
+  pair->value = value;
+  pair->string = string;
+}
+
+int getPairValue(PairIntString *p) {
+    return p->value;
+}
+
+char *getPairString(PairIntString *p) {
+    return strdup(p->string);
+}
+
+int comparePair(void *pair1, void *pair2, void *lookup) {
+  struct pairIntString *p1 = (struct pairIntString *) pair1;
+  struct pairIntString *p2 = (struct pairIntString *) pair2;
+  int res = 0;
+  if (p1->value > p2->value) res++;
+  else if (p1->value < p2->value) res--;
+  else res = strcmp(p1->string,p2->string) * (-1);
+  return res;
+}
+
+int comparePairAdd(void *pair1, void *pair2, void *lookup) {
+  struct pairIntString *p1 = (struct pairIntString *) pair1;
+  struct pairIntString *p2 = (struct pairIntString *) pair2;
+  int res = 0;
+  if (p1->value > p2->value) res++;
+  else if (p1->value < p2->value) res--;
+  else res = strcmp(p1->string,p2->string);
+  return res;
+}
+
+void destroyPair(void *pair) {
+  free(((struct pairIntString *) pair)->string);
+  free((struct pairIntString *) pair);
+}

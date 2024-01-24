@@ -80,4 +80,15 @@ unsigned long int reservIdToInt(char *id);
 //compara inteiros em ordem reversa
 int intcmpReverse(unsigned long int n1, unsigned long int n2, void *lookup);
 
+typedef struct pairIntString PairIntString;
+
+//par inteiro string
+PairIntString *createPairIntString(int value, char *string);
+void addPair(int value, char *string, PairIntString *pair);
+int getPairValue(PairIntString *p);
+char *getPairString(PairIntString *p);
+int comparePair(void *pair1, void *pair2, void *lookup);
+int comparePairAdd(void *pair1, void *pair2, void *lookup);
+void destroyPair(void *pair);
+
 #endif

@@ -108,39 +108,7 @@ void Q5 (char* airport, Date *begin, Date *end, Catalogs* catalogs, QueryResult*
   catalogs_compute_Q5(airport,begin,end,catalogs,result);
 }
 
-struct pairIntString {int value; char *string;};
-
-void destroyPair(void *pair) {
-  free(((struct pairIntString *) pair)->string);
-  free((struct pairIntString *) pair);
-}
-
-int comparePair(void *pair1, void *pair2, void *lookup) {
-  struct pairIntString *p1 = (struct pairIntString *) pair1;
-  struct pairIntString *p2 = (struct pairIntString *) pair2;
-  int res = 0;
-  if (p1->value > p2->value) res++;
-  else if (p1->value < p2->value) res--;
-  else res = strcmp(p1->string,p2->string) * (-1);
-  return res;
-}
-
-int comparePairAdd(void *pair1, void *pair2, void *lookup) {
-  struct pairIntString *p1 = (struct pairIntString *) pair1;
-  struct pairIntString *p2 = (struct pairIntString *) pair2;
-  int res = 0;
-  if (p1->value > p2->value) res++;
-  else if (p1->value < p2->value) res--;
-  else res = strcmp(p1->string,p2->string);
-  return res;
-}
-
-void addPair(int value, char *string, struct pairIntString *pair) {
-  pair->value = value;
-  pair->string = string;
-}
-
-//query 6
+//query 6 - devolve os top N aeroportos com mais passageiros num dado ano
 void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
   if (N <= 0) return;
   int passengers, numberAirports = getNumberAirports_catalog(catalogs);
@@ -150,8 +118,7 @@ void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
     char *id = getNextAirportId_catalog(i, catalogs);
     sortAirportFlightsByDepartureDate(id, catalogs);
     passengers = getAirportPassengersYear_catalog(year, id, catalogs);
-    struct pairIntString *airport = malloc(sizeof(struct pairIntString));
-    addPair(passengers, id, airport);
+    PairIntString *airport = createPairIntString(passengers, id);
     if (addHeap(airport, h) == -1) destroyPair(airport);
     i++;
   }
@@ -159,13 +126,16 @@ void Q6 (int year, int N, Catalogs* catalogs, QueryResult* result) {
   setNumberResults(result, i+1);
   char *field0 = strdup("name"), *field1 = strdup("passengers");
   while (i >= 0) {
-    struct pairIntString *res = removeHeap(h);
+    PairIntString *res = removeHeap(h);
     char *p = malloc(sizeof(char)*10);
-    sprintf(p, "%d", res->value);
+    int value = getPairValue(res);
+    char *string = getPairString(res);
+    sprintf(p, "%d", value);
     setNumberFieldsQ(result, i, 2);
-    setFieldQ(result, i, 0, field0, res->string);
+    setFieldQ(result, i, 0, field0, string);
     setFieldQ(result, i, 1, field1, p);
     destroyPair(res);
+    free(string);
     free(p);
     i--;
   }
