@@ -14,12 +14,9 @@
 #include <sys/resource.h>
 #include "results.h"
 
-//#define USERS_HASHTABLE_INI_SIZE 100000
-//#define RESERVATIONS_HASHTABLE_INI_SIZE 40000
-//#define HOTELS_HASHTABLE_INI_SIZE 100
-//#define FLIGHTS_HASHTABLE_INI_SIZE 1000
-//#define AIRPORTS_HASHTABLE_INI_SIZE 100
-
+/* A função compare_files verifica se dois ficheiros são iguais. Se forem iguais, retorna 0. Se forem diferentes,
+retorna o número da linha onde a primeira incongruência foi encontrada. Esta função recebe os caminhos absolutos
+de dois ficheiros, que serão comparados.*/
 int compare_files (char* file_path1, char* file_path2) {
     int equal = 0;
     int current_line = 1;
@@ -58,29 +55,25 @@ int compare_files (char* file_path1, char* file_path2) {
 
 int main (int argc, char** argv) {
     if (argc == 4) {
+
     if (valid_directory_dataset(argv[1])) {
+
     if (exist_file(argv[2])) {
+
     if (exist_directory(argv[3])) {
+
     //inicialização de variáveis para medição de tempo
     struct timespec start, end;
-    //, interm;
     double elapsed;
-    //, cat, par, sor, com, des;
     clock_gettime(CLOCK_REALTIME, &start);
     setlocale(LC_ALL, "en_US.UTF-8");
-    //setlocale(LC_COLLATE, "en_US.UTF-8");
-    //inicialização dos catalogos
-    Catalogs *catalogs = createCatalogs();
-        //clock_gettime(CLOCK_REALTIME, &interm);
-        //cat = (interm.tv_sec - start.tv_sec) + (interm.tv_nsec - start.tv_nsec) / 1e9;
 
-    parse_all_files(argv[1],catalogs);
-        //clock_gettime(CLOCK_REALTIME, &end);
-        //par = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
+    //inicialização dos catalogos
+    Catalogs *catalogs = createCatalogs();  
+
+    parse_all_files(argv[1],catalogs); 
 
     sortCatalogs(catalogs);
-        //clock_gettime(CLOCK_REALTIME, &interm);
-        //sor = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     FILE *commands_file;
     char *command = NULL;
@@ -102,69 +95,13 @@ int main (int argc, char** argv) {
     free(command);
     parseCommandFile(argv[2],catalogs,1,commands_time,qTime);
 
-        //clock_gettime(CLOCK_REALTIME, &end);
-        //com = (end.tv_sec - interm.tv_sec) + (end.tv_nsec - interm.tv_nsec) / 1e9;
-
-
-//    printFullList(getUsersByName(getUsersCatalog(catalogs)));
-
     //liberta o espaço em memória dos catalogos
     destroyCatalogs(catalogs);
-        //clock_gettime(CLOCK_REALTIME, &interm);
-        //des = (interm.tv_sec - end.tv_sec) + (interm.tv_nsec - end.tv_nsec) / 1e9;
 
     //imprime tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);
     elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-    /*
-    printf("Elapsed time: %.6f seconds\n", elapsed);
-        printf(" catalogs:\t %.6f seconds (%5.2f%%)\n", cat, (cat/elapsed)*100);
-        printf(" parser:\t %.6f seconds (%5.2f%%)\n", par, (par/elapsed)*100);
-        printf(" sort:\t\t %.6f seconds (%5.2f%%)\n", sor, (sor/elapsed)*100);
-        printf(" commands:\t %.6f seconds (%5.2f%%)\n", com, (com/elapsed)*100);
-        printf(" destroy:\t %.6f seconds (%5.2f%%)\n", des, (des/elapsed)*100);
-
-    printf("Memory usage: %ld KB\n", r_usage.ru_maxrss);
-
-    nao apagar este codigo!
-
-    int size2 = strlen(argv[3]) + 25;
-    char* correct_error_file = malloc(size2);
-    char* our_error_file = malloc(35);
-    int equal_file = 0;
-
-    strcpy(correct_error_file,argv[3]);
-    strcat(correct_error_file,"/users_errors.csv");
-    strcpy(our_error_file,"Resultados/users_errors.csv");
-    equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 0) printf("O ficheiro users_errors.csv está correto.✅\n");
-    else printf("O ficheiro users_errors.csv não está correto.❌\n");
-
-    strcpy(correct_error_file,argv[3]);
-    strcat(correct_error_file,"/reservations_errors.csv");
-    strcpy(our_error_file,"Resultados/reservations_errors.csv");
-    equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 0) printf("O ficheiro reservations_errors.csv está correto.✅\n");
-    else printf("O ficheiro reservations_errors.csv não está correto.❌\n");
-
-    strcpy(correct_error_file,argv[3]);
-    strcat(correct_error_file,"/flights_errors.csv");
-    strcpy(our_error_file,"Resultados/flights_errors.csv");
-    equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 0) printf("O ficheiro flights_errors.csv está correto.✅\n");
-    else printf("O ficheiro flights_errors.csv não está correto.❌\n");
-
-    strcpy(correct_error_file,argv[3]);
-    strcat(correct_error_file,"/passengers_errors.csv");
-    strcpy(our_error_file,"Resultados/passengers_errors.csv");
-    equal_file = compare_files(correct_error_file,our_error_file);
-    if (equal_file == 0) printf("O ficheiro passengers_errors.csv está correto.✅\n");
-    else printf("O ficheiro passengers_errors.csv não está correto.❌\n");
     
-    free(correct_error_file);
-    free(our_error_file);
-
-    */
     printf("Running the test with the assumption that the input file and the output directory paths are correct:\n\n");
     int size = strlen(argv[3]) + 23;
     char* correct_output_file = malloc(size);
@@ -229,23 +166,6 @@ int main (int argc, char** argv) {
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
     printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
-//    Hashtable *uH, *fH, *rH, *hH, *aH;
-//    uH = getUsers_catalog(catalogs);
-//    fH = getFlights_catalog(catalogs);
-//    rH = getReservations_catalog(catalogs);
-//    hH = getHotels_catalog(catalogs);
-//    aH = getAirports_catalog(catalogs);
-//    printf("\nUser:\n");
-//    printHashtableUsage(uH);
-//    printf("\nFlight:\n");
-//    printHashtableUsage(fH);
-//    printf("\nReservation:\n");
-//    printHashtableUsage(rH);
-//    printf("\nHotel:\n");
-//    printHashtableUsage(hH);
-//    printf("\nAirport:\n");
-//    printHashtableUsage(aH);
-//    destroyCatalogs(catalogs);
     }
     else printf("Error: The second provided directory path does not match any existing directory.\n");
     }

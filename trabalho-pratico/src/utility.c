@@ -13,8 +13,10 @@ struct date {
     char seconds;
 };
 
+/* A função exist_directory verifica se uma diretoria existe ou não, dado um caminho relativo ou absoluto para a diretoria.
+Se a diretoria existir, a função retorna 1. Se não, a função retorna 0. */
 int exist_directory (char* directory) {
-    DIR *dir = opendir(directory);
+    DIR *dir = opendir(directory); //se a diretoria não exixtir, dir será NULL
     if (dir != NULL) {
         closedir(dir);
         return 1;
@@ -26,7 +28,7 @@ int exist_directory (char* directory) {
 Se o ficheiro existir, a função retorna 1. Se não, a função restorna 0. */
 int exist_file (char* file_path) {
     int exist = 0;
-    if (!exist_directory(file_path)) { //se não for diretoria
+    if (!exist_directory(file_path)) { //se não for diretoria (fopen apenas serve para lidar com ficheiros então temos que garantir que não é uma diretoria primeiro)
         FILE *file;
 	    file = fopen(file_path,"r"); //abertura do ficheiro em modo de leitura. O ficheiro deve existir senão file será NULL.
 	    if (file != NULL) {
@@ -37,21 +39,21 @@ int exist_file (char* file_path) {
     return exist;
 }
 
-/* A função valid_directory_dataset verifica se um dada pasta tem ficheiro users.csv, reservations.csv, flights.csv, passengers.csv,
-ou seja, verifica se  é uma pasta válida para o dataset. Se sim, retorna 1. Se não, retorna 0.*/
+/* A função valid_directory_dataset verifica se um caminho dado corresponde a uma diretoria com os ficheiros users.csv, reservations.csv, flights.csv, passengers.csv,
+ou seja, verifica se é uma diretoria válida para o dataset. Se sim, retorna 1. Se não, retorna 0.*/
 int valid_directory_dataset (char* directory) {
     int r = 0;
-    if (exist_directory(directory)) {
+    if (exist_directory(directory)) { //se for uma diretoria
         int size = strlen(directory) + 18;
         char* file_path = malloc(size);
         sprintf(file_path,"%s/users.csv",directory);
-        if (exist_file(file_path)) {
+        if (exist_file(file_path)) { //se users.csv existir
             sprintf(file_path,"%s/reservations.csv",directory);
-            if (exist_file(file_path)) {
+            if (exist_file(file_path)) { //se reservations.csv existir
                 sprintf(file_path,"%s/flights.csv",directory);
-                if (exist_file(file_path)) {
+                if (exist_file(file_path)) { //se flights.csv existir
                     sprintf(file_path,"%s/passengers.csv",directory);
-                    if (exist_file(file_path)) {
+                    if (exist_file(file_path)) { //se passengers.csv existir
                         r = 1;
                     }
                 }
