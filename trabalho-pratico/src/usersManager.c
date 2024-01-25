@@ -185,7 +185,7 @@ int compareYears_user(void *date, void *user, void *usersCatalog) {
     return res;
 }
 
-//retorna um prefixo do nome do utilizador com o mesmo tamanho do prefixo dado
+//utilizado para comparação e pesquisa bunária na query 9 - retorna um prefixo do nome do utilizador com o mesmo tamanho do prefixo dado
 char *sameLenPrefix(char *prefix, char *name) {
   unsigned char *up = (unsigned char *) prefix, *un = (unsigned char *) name;
   int i = 0, j = 0, p = 0, n = 0, e = 0;
@@ -216,7 +216,7 @@ char *sameLenPrefix(char *prefix, char *name) {
 
   return namePrefix;
 }
-//compara o nome de um utilizador com um prefixo
+//utilizado para pesquisa binária na query 9 - compara o nome de um utilizador com um prefixo
 int prefixSearch(void *prefixVoid, void *user, void *lookup) {
   int compare;
   char *prefix = (char *) prefixVoid;
@@ -231,6 +231,7 @@ int prefixSearch(void *prefixVoid, void *user, void *lookup) {
   free(name);
   return compare;
 }
+//utilizado para pesquisa binária na query 9 - compara o nome de um utilizador com um prefixo
 int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
   int compare;
   char *prefix = (char *) prefixVoid;
@@ -239,6 +240,7 @@ int prefixSearchBack(void *prefixVoid, void *user, void *lookup) {
   free(name);
   return compare;
 }
+//utilizado na pesquisa da query 9 - verifica se duas strings têm a mesma vogal inicial ignorando acentos
 int sameFirstLetterUser(char *string1, char *string2) {
   int compare = 1;
   char c1 = string1[0], c2 = string2[0];
@@ -247,6 +249,7 @@ int sameFirstLetterUser(char *string1, char *string2) {
            c2 == 'A' || c2 == 'E' || c2 == 'I' || c2 == 'O' || c2 == 'U') compare = 0;
   return compare;
 }
+//para a pesquisa da query 9 - verifica se o nome de um utilizador tem como prefixo o prefixo dado
 int isPrefixUser(int *firstLetterCheck, char *prefix, int index, UsersManager *usersCatalog) {
     char *id = getDataOrdList(usersCatalog->usersByName, index);
     User *user = getData(usersCatalog->users, id);
@@ -339,6 +342,7 @@ int isNamePrefix(int *firstLetterCheck, char *prefix, char *name) {
     return compare;
 }
 
+//calcula os nomes dos utilizadores com o prefixo dado para a query 9
 void user_catalog_compute_Q9 (char *prefix, UsersManager* usersCatalog, QueryResult* result) {
   int size = getOrdListSize(usersCatalog->usersByName);
   int i = searchDataOrdList(usersCatalog->usersByName, prefix, prefixSearch, usersCatalog->users, 0, prefixSearchBack);

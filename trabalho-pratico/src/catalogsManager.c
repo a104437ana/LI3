@@ -346,7 +346,7 @@ int getUserListSize(int type, char *id, Catalogs *catalogs) {
 unsigned long int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs) {
     return getIdUserList_usersCatalog(type, id_user, index, catalogs->usersCatalog);
 }
-
+//para a pesquisa da query 9 - verifica se o nome de um utilizador tem como prefixo o prefixo dado
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs) {
     return (isPrefixUser(firstLetterCheck, prefix, index, catalogs->usersCatalog));
 }
@@ -387,13 +387,13 @@ char *getStringReservationDate(int id, Catalogs *catalogs) {
     return getSReservDate(id, catalogs->reservationsCatalog);
 }
 int getReservationBeginDay(unsigned long int id, void *catalogs){
-    return getBeginDayReservation(id, ((Catalogs *) catalogs)->reservationsCatalog);
+    return getReservationBegin_reservationsCatalog(TIME_DAY, id, ((Catalogs *) catalogs)->reservationsCatalog);
 }
 int getReservationBeginMonth(unsigned long int id, void *catalogs){
-    return getBeginMonthReservation(id, ((Catalogs *) catalogs)->reservationsCatalog);
+    return getReservationBegin_reservationsCatalog(TIME_MONTH, id, ((Catalogs *) catalogs)->reservationsCatalog);
 }
 int getReservationBeginYear(unsigned long int id, void *catalogs){
-    return getBeginYearReservation(id, ((Catalogs *) catalogs)->reservationsCatalog);
+    return getReservationBegin_reservationsCatalog(TIME_YEAR, id, ((Catalogs *) catalogs)->reservationsCatalog);
 }
 
 //hotels
@@ -404,6 +404,7 @@ int getHotelReservationsSize(char *id, Catalogs *catalogs) {
 int doesHotelExist(char *id, Catalogs *catalogs) {
     return hotelExists(id, catalogs->hotelsCatalog);
 }
+//para o cálculo da query 8 - calcula o preço da reserva de um hotel entre duas datas dadas
 int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date *begin, Date *end, Catalogs *catalogs) {
     int id_reserv = getHotelReservationId(id_hotel, index, catalogs->hotelsCatalog);
     int p = getReservPriceLimits(id_reserv, catalogs->reservationsCatalog, begin, end);
@@ -414,6 +415,7 @@ int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date 
 
 //airports
 
+//para o cálculo da query 6 - calcula o número de passageiros de um aeroporto num dadu
 int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs) {
     return getAirportPassengersYear_airportsCatalog(year, id, compareFlightYear_flightsCatalog, 0, (void *) catalogs->flightsCatalog, getNumberPassengers_flightsCatalog, catalogs->airportsCatalog);
 }

@@ -25,14 +25,6 @@ int getReservPriceLimits(unsigned long int id, ReservationsManager *reservations
 int getReservationBegin_reservationsCatalog(int time, unsigned long int id, ReservationsManager *reservationsCatalog);
 //retorna o incício da reserva em string
 char *getSReservDate(unsigned long int id, ReservationsManager *reservationsCatalog);
-//data de início
-int getBeginDayReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
-int getBeginMonthReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
-int getBeginYearReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
-//data de fim
-int getEndDayReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
-int getEndMonthReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
-int getEndYearReservation(unsigned long int id, ReservationsManager *reservationsCatalog);
 HashtableInt *getHashtableReservCatalog(ReservationsManager *reservationsManager);
 
 //função que liberta o espaço em memória alocado pelo catálogo de reservas

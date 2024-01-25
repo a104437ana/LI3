@@ -86,6 +86,7 @@ void catalogs_compute_Q5(char* airport,Date* begin,Date* end,Catalogs* catalogs,
 //calcula a informação dos aeroportos para a query 7
 void catalogs_compute_Q7(int n, Catalogs* catalogs, QueryResult* result);
 
+//calcula a informação para a query 9
 void catalogs_compute_Q9 (char *prefix, Catalogs* catalogs, QueryResult* result);
 
 //calcula a informação de uma data para a query 10
@@ -105,10 +106,8 @@ int getYearLastResults(Catalogs * catalogs);
 int getAccountStatus(char *id, Catalogs *catalogs);
 int getUserListSize(int type, char *id, Catalogs *catalogs);
 unsigned long int getUserListId(int *type, char *id_user, int index, Catalogs *catalogs);
-//int getUsersByNameSize_catalog(Catalogs *catalogs);
-//int searchPrefix_catalog(char *prefix, Catalogs *catalogs);
+//para a pesquisa da query 9 - verifica se o nome de um utilizador tem como prefixo o prefixo dado
 int isPrefix_catalog(int *firstLetterCheck, char *prefix, int index, Catalogs *catalogs);
-void getIdNameUsersByName_catalog(int index, char **id, char **name, Catalogs *catalogs);
 
 //flights
 
@@ -133,10 +132,12 @@ int getReservationBeginYear(unsigned long int id, void *catalogs);
 
 int getHotelReservationsSize(char *id, Catalogs *catalogs);
 int doesHotelExist(char *id, Catalogs *catalogs);
+//para o cálculo da query 8 - calcula o preço da reserva de um hotel entre duas datas dadas
 int getHotelReservPriceBetweenDates(char *id_hotel, int index, int *price, Date *begin, Date *end, Catalogs *catalogs);
 
 //airports
 
+//para o cálculo da query 6 - calcula o número de passageiros de um aeroporto num dadu
 int getAirportPassengersYear_catalog(int year, char *id, Catalogs *catalogs);
 char *getNextAirportId_catalog(int index, Catalogs *catalogs);
 int getNumberAirports_catalog(Catalogs *catalogs);

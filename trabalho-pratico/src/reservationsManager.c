@@ -47,7 +47,7 @@ int getReservPriceLimits(unsigned long int id, ReservationsManager *reservations
     if (nights < 0) return nights;
     return ppn * nights;
 }
-//retorna o tempo de início da reserva
+//retorna um campo do tempo de início da reserva
 int getReservationBegin_reservationsCatalog(int time, unsigned long int id, ReservationsManager *reservationsCatalog) {
     Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getReservationBegin_reservation(time, reservation);
@@ -56,32 +56,6 @@ int getReservationBegin_reservationsCatalog(int time, unsigned long int id, Rese
 char *getSReservDate(unsigned long int id, ReservationsManager *reservationsCatalog) {
     Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
     return getStringReservDate(reservation);
-}
-//data de início
-int getBeginDayReservation(unsigned long int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
-    return getReservBeginDay(reservation, NULL);
-}
-int getBeginMonthReservation(unsigned long int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
-    return getReservBeginMonth(reservation, NULL);
-}
-int getBeginYearReservation(unsigned long int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
-    return getReservBeginYear(reservation, NULL);
-}
-//data de fim
-int getEndDayReservation(unsigned long int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
-    return getReservEndDay(reservation);
-}
-int getEndMonthReservation(unsigned long int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
-    return getReservEndMonth(reservation);
-}
-int getEndYearReservation(unsigned long int id, ReservationsManager *reservationsCatalog) {
-    Reservation *reservation = getDataInt(reservationsCatalog->reservations, id);
-    return getReservEndYear(reservation);
 }
 
 HashtableInt *getHashtableReservCatalog(ReservationsManager *reservationsManager) {
