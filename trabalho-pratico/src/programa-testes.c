@@ -75,57 +75,59 @@ int main (int argc, char** argv) {
 
     sortCatalogs(catalogs);
 
+    //ler input file
     FILE *commands_file;
     char *command = NULL;
     size_t command_len;
     ssize_t command_read;
     int nCommands = 0;
     double *commands_time = NULL;
-    double qTime[11] = {0.0};
+    double qTime[11] = {0.0}; // inicializar array com os tempos de cada query
     commands_file = fopen(argv[2], "r");
     while ((command_read = getline(&command, &command_len, commands_file)) != -1) {
-        nCommands++;
+        nCommands++; //contar número de comandos
     }
-    commands_time = malloc(sizeof(double)*nCommands);
+    commands_time = malloc(sizeof(double)*nCommands); //inicializar array com os tempos de cada comando
     for (int w = 0; w < nCommands; w++) {
         commands_time[w] = 0.0;
     }
     fclose(commands_file);
     
     free(command);
+
+    //faz o parsing do ficheiro de input, executa os comandos e registra o tempo dos mesmos em commands_time e o tempo das queries em qTime
     parseCommandFile(argv[2],catalogs,1,commands_time,qTime);
 
     //liberta o espaço em memória dos catalogos
     destroyCatalogs(catalogs);
 
-    //imprime tempo de execução
     clock_gettime(CLOCK_REALTIME, &end);
     elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     
     printf("Running the test with the assumption that the input file and the output directory paths are correct:\n\n");
     int size = strlen(argv[3]) + 23;
     char* correct_output_file = malloc(size);
-    char* output_file = malloc(30); //-O2
-    char* our_output_file = malloc(40); //-O2
+    char* output_file = malloc(30);
+    char* our_output_file = malloc(40);
     int equal_files = 0;
 
     int i = 1;
     int j;
-    float queries[10][3] = {{0.0f, 0.0f, 0.0f}};
-    commands_file = fopen(argv[2], "r");
+    float queries[10][3] = {{0.0f, 0.0f, 0.0f}}; //inicializar uma matriz que para cada querie indica se passou o teste, o número de comandos que passaram o teste e o número de comandos totais dessa querie
+    commands_file = fopen(argv[2], "r"); //para ler o input file
     command = NULL;
     
     strcpy(correct_output_file,argv[3]);
     sprintf(output_file, "/command%d_output.txt", i);
     strcat(correct_output_file,output_file);
-    while (exist_file(correct_output_file) && (command_read = getline(&command, &command_len, commands_file)) != -1) {
-        sscanf(command, " %d", &j);
-        printf("Command %d (query %d): %s",i,j,command);
-        printf("Time taken for this command to complete: %.6f seconds\n",commands_time[i-1]);
+    while (exist_file(correct_output_file) && (command_read = getline(&command, &command_len, commands_file)) != -1) { //enquanto existir outputs esperados
+        sscanf(command, " %d", &j);                                                                                    // e enquanto existir comandos no input file
+        printf("Command %d (query %d): %s",i,j,command); //imprime o número do comando, o número da query e o comando em si
+        printf("Time taken for this command to complete: %.6f seconds\n",commands_time[i-1]); //imprime o tempo que o comando demorou
         sprintf(our_output_file, "Resultados/command%d_output.txt", i);
         equal_files = compare_files(correct_output_file,our_output_file);
         if (j > 0 && j < 11) queries[j-1][2] += 1;
-        if (equal_files == 0) {
+        if (equal_files == 0) { //se o nosso ficheiro for igual ao ficheiro de outputs esperados
             printf("Command %d passed the test",i);
             if (i<10) printf("   ✅\n\n");
             if (i>=10 && i<100) printf("  ✅\n\n");
@@ -148,8 +150,8 @@ int main (int argc, char** argv) {
         strcat(correct_output_file,output_file);
     }
     for (j=0; j<10; j++) {
-        printf("Query %2d total duration: %.6f\n",j+1,qTime[j+1]);
-        if (queries[j][0] == 0)
+        printf("Query %2d total duration: %.6f\n",j+1,qTime[j+1]); //imprime o tempo que demorou cada query no total (conjunto de comandos dessa query)
+        if (queries[j][0] == 0) //se todos os ficheiros desta query são iguais aos ficheiros esperados
             printf("Query %2d passed the tests ........... (%3.0f/%3.0f %3.0f%%) ✅\n", j+1, queries[j][1], queries[j][2], (queries[j][2] == 0) ? 100 : (queries[j][1] / queries[j][2]) * 100);
         else {
             printf("Query %2d failed the tests ........... (%3.0f/%3.0f %3.0f%%) ❌\n", j+1, queries[j][1], queries[j][2], (queries[j][2] == 0) ? 100 : (queries[j][1] / queries[j][2]) * 100);
@@ -162,9 +164,11 @@ int main (int argc, char** argv) {
     free(command);
     fclose(commands_file);
     free(commands_time);
+    //imprime o tempo de execução total do programa
     printf("\nElapsed time: %4.2f seconds\n", elapsed);
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
+    //imprime a memória total usada pelo programa
     printf("Memory usage: %4.2f MB\n", ((float) r_usage.ru_maxrss) / 1e3);
     }
     else printf("Error: The second provided directory path does not match any existing directory.\n");
