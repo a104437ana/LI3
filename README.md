@@ -4,11 +4,11 @@
 
 Aplicação desenvolvida em C por nós no âmbito da Unidade Curricular de **Laboratórios de Informática III** (**LI3**) no ano letivo de 2023/2024. Esta aplicação permite consultar e analisar dados de **voos**, **reservas de hotéis** e **clientes**, a partir dos **datasets** fornecidos.
 
-![Aplicação de Voos e Reservas](readme/2.png)
-
 ### Nota final: 19/20 ✅
 - Fase 1: **18.1/20** ✅
 - Fase 2: **19.5/20** ✅
+
+![Aplicação de Voos e Reservas](readme/2.png)
 
 ## Como utilizar?
 
