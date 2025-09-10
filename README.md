@@ -119,7 +119,7 @@ Na pasta [trabalho-pratico/Resultados](trabalho-pratico/Resultados) temos os res
 ![Aplicação de Voos e Reservas](readme/4.png)
 
 > [!TIP]
-> No dataset 1 não existe nenhuma Ana Oliveira, mas existe pessoas chamadas Ana. Podes fazer a query 9 com o nome Ana apenas para já teres resultados.
+> No dataset 1 não existe nenhuma Ana Oliveira, mas existe pessoas chamadas Ana. Podes fazer a query 9 com o nome Ana apenas para já teres resultados com o dataset 1.
 
 ### Exemplo de Testes (dataset 2)
 ![Programa testes](readme/6.png)
