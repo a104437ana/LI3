@@ -130,4 +130,4 @@ Na pasta [trabalho-pratico/Resultados](trabalho-pratico/Resultados) temos os res
 
 - a104263 - Inês Silva Marques - a104263 
 
-- a76350 - José Rafael De Oliveira Vilas Boas - rafael-vilasboas
+- a76350 - José Rafael de Oliveira Vilas Boas - rafael-vilasboas
