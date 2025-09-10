@@ -111,7 +111,7 @@ Na pasta [dataset1](dataset1) temos o dataset 1, o dataset menor usado no projet
 
 Na pasta [trabalho-pratico/Resultados](trabalho-pratico/Resultados) temos os resultados das queries realizadas e as entradas inválidas dos ficheiros CSV.
 
-### Exemplo do Programa principal no Modo Interativo (dataset 2)
+### Exemplo do Programa principal no Modo Interativo (com o dataset 2)
 ![Aplicação de Voos e Reservas](readme/0.png)
 ![Aplicação de Voos e Reservas](readme/1.png)
 ![Aplicação de Voos e Reservas](readme/2.png)
@@ -121,7 +121,7 @@ Na pasta [trabalho-pratico/Resultados](trabalho-pratico/Resultados) temos os res
 > [!TIP]
 > No dataset 1 não existe nenhuma Ana Oliveira, mas existe pessoas chamadas Ana. Podes fazer a query 9 com o nome Ana apenas para já teres resultados com o dataset 1.
 
-### Exemplo de Testes (dataset 2)
+### Exemplo de Testes (com o dataset 2)
 ![Programa testes](readme/6.png)
 
 ## Autores
