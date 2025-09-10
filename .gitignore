@@ -1,7 +1,7 @@
 programa-principal
 programa-testes
-*.csv
-Resultados/*
+trabalho-pratico/Resultados/*
+dataset2
 
 # Para testes manuais
 src/testes/*
